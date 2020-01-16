@@ -25,3 +25,8 @@ format.dist_normal <- function(x, digits = 2, ...){
     format(x[["sigma"]], digits = digits, ...)
   )
 }
+
+#' @export
+quantile.dist_normal <- function(x, p){
+  qnorm(p, x[["mu"]], x[["sigma"]])
+}
