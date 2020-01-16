@@ -46,6 +46,7 @@ generate.dist_normal <- function(x, times, ...){
   rnorm(times, x[["mu"]], x[["sigma"]])
 }
 
+#' @export
 mean.dist_normal <- function(x, ...){
   x[["mu"]]
 }

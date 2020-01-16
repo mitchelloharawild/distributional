@@ -46,6 +46,14 @@ generate.distribution <- function(x, times, ...){
   lapply(vec_data(x), generate, times = times, ...)
 }
 
+#' @export
 mean.distribution <- function(x, ...){
   vapply(vec_data(x), mean, double(1L), ...)
+}
+
+#' @export
+hilo.distribution <- function(x, size = 0.95, ...){
+  lower <- quantile(x, 0.5-size/2)
+  upper <- quantile(x, 0.5+size/2)
+  new_hilo(lower, upper, size)
 }
