@@ -19,4 +19,5 @@ Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate',
 RoxygenNote: 7.0.2
 Imports: 
     vctrs,
-    rlang
+    rlang,
+    generics

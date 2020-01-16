@@ -1,7 +1,7 @@
 #' @export
 dist_normal <- function(mu = 0, sigma = 1){
-  vec_cast(mu, double())
-  vec_cast(sigma, double())
+  mu <- vec_cast(mu, double())
+  sigma <- vec_cast(sigma, double())
   if(any(sigma < 0)){
     abort("Standard deviation of a normal distribution must be non-negative")
   }
@@ -34,4 +34,9 @@ density.dist_normal <- function(x, at, ...){
 #' @export
 quantile.dist_normal <- function(x, p, ...){
   qnorm(p, x[["mu"]], x[["sigma"]])
+}
+
+#' @export
+generate.dist_normal <- function(x, times, ...){
+  rnorm(times, x[["mu"]], x[["sigma"]])
 }

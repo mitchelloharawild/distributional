@@ -28,3 +28,10 @@ quantile.distribution <- function(x, p, ...){
   vec_is(p, double(), 1L)
   vapply(vec_data(x), quantile, double(1L), p = p, ...)
 }
+
+#' @importFrom generics generate
+#' @export
+generate.distribution <- function(x, times, ...){
+  times <- vec_cast(times, integer())
+  lapply(vec_data(x), generate, times = times, ...)
+}
