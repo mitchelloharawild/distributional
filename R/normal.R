@@ -37,6 +37,15 @@ quantile.dist_normal <- function(x, p, ...){
 }
 
 #' @export
+cdf.dist_normal <- function(x, q, ...){
+  pnorm(q, x[["mu"]], x[["sigma"]])
+}
+
+#' @export
 generate.dist_normal <- function(x, times, ...){
   rnorm(times, x[["mu"]], x[["sigma"]])
+}
+
+mean.dist_normal <- function(x, ...){
+  x[["mu"]]
 }

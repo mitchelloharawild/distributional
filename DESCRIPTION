@@ -20,4 +20,5 @@ RoxygenNote: 7.0.2
 Imports: 
     vctrs,
     rlang,
-    generics
+    generics,
+    ellipsis

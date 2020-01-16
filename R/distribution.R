@@ -30,7 +30,22 @@ quantile.distribution <- function(x, p, ...){
 }
 
 #' @export
+cdf <- function (x, q, ...){
+  ellipsis::check_dots_used()
+  UseMethod("cdf")
+}
+#' @export
+cdf.distribution <- function(x, q, ...){
+  vec_is(q, double(), 1L)
+  vapply(vec_data(x), cdf, double(1L), q = q, ...)
+}
+
+#' @export
 generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   lapply(vec_data(x), generate, times = times, ...)
+}
+
+mean.distribution <- function(x, ...){
+  vapply(vec_data(x), mean, double(1L), ...)
 }
