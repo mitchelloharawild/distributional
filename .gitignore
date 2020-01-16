@@ -1,1 +1,8 @@
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+Makefile
+inst/doc
+tests/testthat/Rplots.pdf
+revdep
