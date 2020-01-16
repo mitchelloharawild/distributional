@@ -27,6 +27,11 @@ format.dist_normal <- function(x, digits = 2, ...){
 }
 
 #' @export
-quantile.dist_normal <- function(x, p){
+density.dist_normal <- function(x, at, ...){
+  dnorm(at, x[["mu"]], x[["sigma"]])
+}
+
+#' @export
+quantile.dist_normal <- function(x, p, ...){
   qnorm(p, x[["mu"]], x[["sigma"]])
 }

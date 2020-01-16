@@ -18,6 +18,12 @@ format.distribution <- function(x, ...){
 }
 
 #' @export
+density.distribution <- function(x, at, ...){
+  vec_is(at, double(), 1L)
+  vapply(vec_data(x), density, double(1L), at = at, ...)
+}
+
+#' @export
 quantile.distribution <- function(x, p, ...){
   vec_is(p, double(), 1L)
   vapply(vec_data(x), quantile, double(1L), p = p, ...)
