@@ -9,7 +9,7 @@
 Allows distributions to be used alongside data using vectors.
 }
 \author{
-\strong{Maintainer}: Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (https://orcid.org/0000-0001-6729-7695)
+\strong{Maintainer}: Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (\href{https://orcid.org/https://orcid.org/0000-0001-6729-7695}{ORCID})
 
 }
 \keyword{internal}

@@ -6,4 +6,5 @@
 ## usethis namespace: start
 ## usethis namespace: end
 #' @import vctrs
+#' @import rlang
 NULL

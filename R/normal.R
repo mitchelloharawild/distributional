@@ -2,7 +2,7 @@
 dist_normal <- function(mu = 0, sigma = 1){
   vec_cast(mu, double())
   vec_cast(sigma, double())
-  if(any(sigma <= 0)){
+  if(any(sigma < 0)){
     abort("Standard deviation of a normal distribution must be greater than 0")
   }
   normal <- new_rcrd(
