@@ -1,11 +1,10 @@
 #' @export
-new_dist <- function(x, ..., class = NULL){
-  vctrs::new_vctr(list(x), class = "distribution")
-}
-
-#' @export
-vec_size.distribution <- function(x){
-  sum(lapply(vec_data(x), vec_size))
+new_dist <- function(..., class = NULL){
+  args <- transpose(vctrs::vec_recycle_common(...))
+  vctrs::new_vctr(
+    lapply(args, structure, class = class),
+    class = "distribution"
+  )
 }
 
 #' @export
