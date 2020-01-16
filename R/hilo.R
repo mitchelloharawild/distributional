@@ -95,6 +95,12 @@ vec_arith.hilo <- function(op, x, y, ...){
     out[["lower"]] <- get(op)(dt_x[["lower"]], dt_y[["lower"]])
     out[["upper"]] <- get(op)(dt_x[["upper"]], dt_y[["upper"]])
   }
+  else if(is_empty(y)){
+    if(op == "-"){
+      out[["upper"]] <- get(op)(dt_x[["lower"]])
+      out[["lower"]] <- get(op)(dt_x[["upper"]])
+    }
+  }
   else{
     out[["lower"]] <- get(op)(dt_x[["lower"]], y)
     out[["upper"]] <- get(op)(dt_x[["upper"]], y)
