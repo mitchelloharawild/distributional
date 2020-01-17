@@ -2,7 +2,7 @@
 new_dist <- function(..., class = NULL){
   args <- transpose(vctrs::vec_recycle_common(...))
   vctrs::new_vctr(
-    lapply(args, structure, class = class),
+    lapply(args, structure, class = c(class)),
     class = "distribution"
   )
 }
@@ -56,4 +56,18 @@ hilo.distribution <- function(x, size = 0.95, ...){
   lower <- quantile(x, 0.5-size/2)
   upper <- quantile(x, 0.5+size/2)
   new_hilo(lower, upper, size)
+}
+
+#' @export
+vec_arith.distribution <- function(op, x, y, ...){
+  if(is_empty(y)){
+    out <- lapply(x, get(op))
+  }
+  else {
+    x <- vec_recycle_common(x = x, y = y)
+    y <- x[["y"]]
+    x <- x[["x"]]
+    out <- mapply(get(op), x = x, y = y, SIMPLIFY = FALSE)
+  }
+  vec_restore(out, x)
 }
