@@ -22,7 +22,7 @@ format.dist_normal <- function(x, digits = 2, ...){
   sprintf(
     "N(%s, %s)",
     format(x[["mu"]], digits = digits, ...),
-    format(x[["sigma"]], digits = digits, ...)
+    format(x[["sigma"]]^2, digits = digits, ...)
   )
 }
 
