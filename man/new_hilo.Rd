@@ -9,7 +9,7 @@ new_hilo(lower, upper, size)
 \arguments{
 \item{lower, upper}{A numeric vector of values for lower and upper limits.}
 
-\item{size}{Size of the interval between \link{0, 1}.}
+\item{size}{Size of the interval between [0, 1].}
 }
 \value{
 A "hilo" vector

@@ -1,7 +1,7 @@
 #' Construct hilo intervals
 #'
 #' @param lower,upper A numeric vector of values for lower and upper limits.
-#' @param size Size of the interval between [0, 1].
+#' @param size Size of the interval between \[0, 1\].
 #'
 #' @return A "hilo" vector
 #'
@@ -33,7 +33,8 @@ new_hilo <- function(lower, upper, size) {
 #' Used to extract a specified prediction interval at a particular confidence
 #' level from a distribution.
 #'
-#' @param x Object to create hilo from
+#' @param x Object to create hilo from.
+#' @param ... Additional arguments used by methods.
 #'
 #' @export
 hilo <- function(x, ...){

@@ -7,7 +7,9 @@
 hilo(x, ...)
 }
 \arguments{
-\item{x}{Object to create hilo from}
+\item{x}{Object to create hilo from.}
+
+\item{...}{Additional arguments used by methods.}
 }
 \description{
 Used to extract a specified prediction interval at a particular confidence
