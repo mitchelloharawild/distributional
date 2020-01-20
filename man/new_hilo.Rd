@@ -4,7 +4,7 @@
 \alias{new_hilo}
 \title{Construct hilo intervals}
 \usage{
-new_hilo(lower, upper, size)
+new_hilo(lower = double(), upper = double(), size = double())
 }
 \arguments{
 \item{lower, upper}{A numeric vector of values for lower and upper limits.}

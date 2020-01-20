@@ -11,7 +11,7 @@
 #' new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 0.95)
 #'
 #' @export
-new_hilo <- function(lower, upper, size) {
+new_hilo <- function(lower = double(), upper = double(), size = double()) {
   vec_assert(lower, double())
   vec_assert(upper, double())
   vec_assert(size, double())
