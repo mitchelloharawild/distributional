@@ -64,6 +64,20 @@ mean.distribution <- function(x, ...){
   vapply(vec_data(x), mean, double(1L), ...)
 }
 
+#' Distribution variance
+#'
+#' @param x A distribution
+#' @param ... Additional arguments used by methods.
+#'
+#' @export
+variance <- function(x, ...){
+  UseMethod("variance")
+}
+#' @export
+variance.distribution <- function(x, ...){
+  vapply(vec_data(x), variance, double(1L), ...)
+}
+
 #' @export
 hilo.distribution <- function(x, size = 0.95, ...){
   lower <- quantile(x, 0.5-size/2)

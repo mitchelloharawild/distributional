@@ -87,4 +87,5 @@ Additionally, some distributions may support other methods such as mathematical 
 my_dist
 my_dist*3 + 2
 mean(my_dist)
+variance(my_dist)
 ```

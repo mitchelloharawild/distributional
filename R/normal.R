@@ -60,6 +60,11 @@ mean.dist_normal <- function(x, ...){
 }
 
 #' @export
+variance.dist_normal <- function(x, ...){
+  x[["sigma"]]^2
+}
+
+#' @export
 Ops.dist_normal <- function(e1, e2){
   ok <- switch(.Generic, `+` = , `-` = , `*` = , `/` = TRUE, FALSE)
   if (!ok) {
