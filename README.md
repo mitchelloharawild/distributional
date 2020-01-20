@@ -7,10 +7,12 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/distributional)](https://CRAN.R-project.org/package=distributional)
 [![R build
 status](https://github.com/mitchelloharawild/distributional/workflows/ghci/badge.svg)](https://github.com/mitchelloharawild/distributional)
+[![Coverage
+Status](https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg)](https://codecov.io/github/mitchelloharawild/distributional?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/distributional)](https://CRAN.R-project.org/package=distributional)
 <!-- badges: end -->
 
 The distributional package allows distributions to be used in a data
