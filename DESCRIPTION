@@ -10,7 +10,8 @@ Authors@R:
 Description: Allows distributions to be used alongside data using vectors.
 License: GPL-3
 Suggests: 
-    testthat
+    testthat,
+    tibble
 Encoding: UTF-8
 Language: en-GB
 LazyData: true

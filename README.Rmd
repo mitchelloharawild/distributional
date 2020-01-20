@@ -39,8 +39,41 @@ remotes::install_github("mitchelloharawild/distributional")
 ```
 ## Example
 
-Currently this package has no examples to show for itself!
+Distributions are created using `dist_*()` functions.
+Currently only the normal distribution is supported for testing purposes.
 
-```{r example, eval = FALSE}
+```{r object}
 library(distributional)
+my_dist <- dist_normal(mu = 1:10, sigma = 1)
+my_dist
+```
+
+The resulting object is a [vctrs](https://vctrs.r-lib.org/) vector, so it should play nicely with the tidyverse.
+
+```{r tidyverse}
+library(tibble)
+tibble(my_dist)
+```
+
+The standard four distribution functions in R are usable via these generics:
+
+```{r}
+density(my_dist, 0) # dnorm(0, mean = 1:10, sd = 1)
+cdf(my_dist, 5) # pnorm(5, mean = 1:10, sd = 1)
+quantile(my_dist, 0.1) # qnorm(0.1, mean = 1:10, sd = 1)
+generate(my_dist, 10) # lapply(1:10, function(mu) rnorm(10, mean = mu, sd = 1))
+```
+
+You can also compute intervals using `hilo()`
+
+```{r hilo}
+hilo(my_dist, 0.95)
+```
+
+Additionally, some distributions may support other methods such as mathematical operations and summary measures.
+
+```{r math}
+my_dist
+my_dist*3 + 2
+mean(my_dist)
 ```
