@@ -13,10 +13,6 @@ dist_normal <- function(mu = 0, sigma = 1){
   if(any(sigma < 0)){
     abort("Standard deviation of a normal distribution must be non-negative")
   }
-  # normal <- new_rcrd(
-  #   list(mu = mu, sigma = sigma),
-  #   class = "dist_normal"
-  # )
   new_dist(mu = mu, sigma = sigma, class = "dist_normal")
 }
 
