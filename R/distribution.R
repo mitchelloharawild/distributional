@@ -22,6 +22,7 @@ format.distribution <- function(x, ...){
   do.call(vec_c, lapply(vec_data(x), format, ...))
 }
 
+#' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ...){
   vec_is(at, double(), 1L)

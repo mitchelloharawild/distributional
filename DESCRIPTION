@@ -22,4 +22,5 @@ Imports:
     vctrs,
     rlang,
     generics,
-    ellipsis
+    ellipsis,
+    stats
