@@ -169,3 +169,12 @@ mean(my_dist)
 variance(my_dist)
 #>  [1] 1 1 1 1 1 1 1 1 1 1
 ```
+
+You can also visualise the distribution(s) using `autoplot()`.
+
+``` r
+library(ggplot2)
+autoplot(my_dist)
+```
+
+<img src="man/figures/README-plot-1.png" width="100%" />

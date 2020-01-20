@@ -90,3 +90,11 @@ my_dist*3 + 2
 mean(my_dist)
 variance(my_dist)
 ```
+
+You can also visualise the distribution(s) using `autoplot()`.
+
+```{r plot}
+library(ggplot2)
+autoplot(my_dist)
+```
+
