@@ -34,6 +34,41 @@ The development version can be installed from
 remotes::install_github("mitchelloharawild/distributional")
 ```
 
+## Brief background
+
+The [fabletools](https://github.com/tidyverts/fabletools) package
+produces distributional forecasts. Returning distributions for
+predictions isn’t particularly new (see `predict.lm()` for instance),
+however it is unique in how it represents the distributions. Unlike
+other packages which return the distribution’s parameters (expecting
+users to use the parameters appropriately), fabletools returns a classed
+distribution object.
+
+This package aims to generalise the crude distribution objects developed
+for fabletools, into light-weight and general distribution classes for
+use in prediction outputs of models. There are several packages which
+implement distributions for R:
+
+  - stats provides functions to work with possibly multiple
+    distributions (comparisons made below).
+  - [distributions3](https://cran.r-project.org/package=distributions3)
+    represents singular distributions using S3, with particularly nice
+    documentation.
+  - [distr](https://cran.r-project.org/package=distr) represents
+    singular distributions using S4.
+  - [distr6](https://cran.r-project.org/package=distr6) represents
+    singular distributions using R6.
+  - Many more in the [CRAN task
+    view](https://cran.r-project.org/view=Distributions)
+
+This package differs from the above libraries by storing the
+distributions in a vectorised format. It does this using
+[vctrs](https://vctrs.r-lib.org/), so it should play nicely with the
+tidyverse (try putting distributions into a tibble\!).
+
+Additionally, this package aims to support modifiers on distributions
+such as transformations (such as `log`), zero-inflation, and truncation.
+
 ## Example
 
 Distributions are created using `dist_*()` functions. Currently only the
@@ -46,27 +81,6 @@ my_dist
 #> <distribution[10]>
 #>  [1] N(1, 1)  N(2, 1)  N(3, 1)  N(4, 1)  N(5, 1)  N(6, 1)  N(7, 1)  N(8, 1) 
 #>  [9] N(9, 1)  N(10, 1)
-```
-
-The resulting object is a [vctrs](https://vctrs.r-lib.org/) vector, so
-it should play nicely with the tidyverse.
-
-``` r
-library(tibble)
-tibble(my_dist)
-#> # A tibble: 10 x 1
-#>     my_dist
-#>      <dist>
-#>  1  N(1, 1)
-#>  2  N(2, 1)
-#>  3  N(3, 1)
-#>  4  N(4, 1)
-#>  5  N(5, 1)
-#>  6  N(6, 1)
-#>  7  N(7, 1)
-#>  8  N(8, 1)
-#>  9  N(9, 1)
-#> 10 N(10, 1)
 ```
 
 The standard four distribution functions in R are usable via these
