@@ -6,11 +6,14 @@ density.dist_default <- function(x, ...){
   )
 }
 #' @export
-quantile.dist_default <- function(x, ...){
-  abort(
-    sprintf("The distribution class `%s` does not support `quantile()`",
-            class(x)[1])
-  )
+quantile.dist_default <- function(x, p, ...){
+  # abort(
+  #   sprintf("The distribution class `%s` does not support `quantile()`",
+  #           class(x)[1])
+  # )
+  optim(0, function(pos){
+    (p - cdf(x, pos, ...))^2
+  })$par
 }
 #' @export
 cdf.dist_default <- function(x, ...){
