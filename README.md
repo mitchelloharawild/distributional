@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/distributional)](https://CRAN.R-project.org/package=distributional)
 [![R build
-status](https://github.com/mitchelloharawild/distributional/workflows/main/badge.svg)](https://github.com/mitchelloharawild/distributional)
+status](https://github.com/mitchelloharawild/distributional/workflows/ghci/badge.svg)](https://github.com/mitchelloharawild/distributional)
 <!-- badges: end -->
 
 The distributional package allows distributions to be used in a data
