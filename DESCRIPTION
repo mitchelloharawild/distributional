@@ -10,7 +10,8 @@ Authors@R:
 Description: Allows distributions to be used alongside data using vectors.
 License: GPL-3
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    covr
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
