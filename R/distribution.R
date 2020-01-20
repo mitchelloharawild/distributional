@@ -7,7 +7,7 @@
 new_dist <- function(..., class = NULL){
   args <- transpose(vctrs::vec_recycle_common(...))
   vctrs::new_vctr(
-    lapply(args, structure, class = c(class)),
+    lapply(args, structure, class = c(class, "dist_default")),
     class = "distribution"
   )
 }
