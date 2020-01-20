@@ -1,3 +1,8 @@
+#' Create a new distribution
+#'
+#' @param ... Parameters of the distribution (named)
+#' @param class The class for S3 dispatch
+#'
 #' @export
 new_dist <- function(..., class = NULL){
   args <- transpose(vctrs::vec_recycle_common(...))
@@ -29,6 +34,11 @@ quantile.distribution <- function(x, p, ...){
   vapply(vec_data(x), quantile, double(1L), p = p, ...)
 }
 
+#' Cumulative distribution function
+#'
+#' @param x A distribution.
+#' @param q The quantile at which the cdf is calculated.
+#'
 #' @export
 cdf <- function (x, q, ...){
   ellipsis::check_dots_used()

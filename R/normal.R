@@ -1,3 +1,11 @@
+#' The Normal distribution
+#'
+#' @param mu The mean (location parameter) of the distribution.
+#' @param sigma The standard deviation (scale parameter) of the distribution.
+#'
+#' @examples
+#' dist_normal(mu = 1:5, sigma = 3)
+#'
 #' @export
 dist_normal <- function(mu = 0, sigma = 1){
   mu <- vec_cast(mu, double())
