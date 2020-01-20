@@ -3,7 +3,8 @@ autoplot.distribution <- function(x, type = c("pdf", "cdf"), n = 100,
   type <- match.arg(type)
   lower <- quantile(x, quantile_range[1])
   upper <- quantile(x, quantile_range[2])
-  x_pos <- mapply(function(l, u) seq(l, u, length.out = n), l = lower, u = upper, SIMPLIFY = FALSE)
+  # x_pos <- mapply(function(l, u) seq(l, u, length.out = n), l = lower, u = upper, SIMPLIFY = FALSE)
+  x_pos <- rep(list(seq(min(lower), max(upper), length.out = n)), length(x))
   if(type == "pdf"){
     y_val <- mapply(
       function(d, x){
