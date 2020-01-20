@@ -11,6 +11,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v1
       - uses: r-lib/actions/setup-r@master
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update && apt-get install -y --no-install-recommends \
+          libssl-dev
       - name: Install package dependencies
         run: Rscript -e "install.packages(c('remotes', 'rcmdcheck', 'pkgdown', 'covr'))" -e "remotes::install_deps(dependencies = TRUE)"
       - name: Check
