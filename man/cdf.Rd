@@ -10,6 +10,8 @@ cdf(x, q, ...)
 \item{x}{A distribution.}
 
 \item{q}{The quantile at which the cdf is calculated.}
+
+\item{...}{Additional arguments used by methods.}
 }
 \description{
 Cumulative distribution function

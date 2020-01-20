@@ -36,22 +36,22 @@ format.dist_normal <- function(x, digits = 2, ...){
 
 #' @export
 density.dist_normal <- function(x, at, ...){
-  dnorm(at, x[["mu"]], x[["sigma"]])
+  stats::dnorm(at, x[["mu"]], x[["sigma"]])
 }
 
 #' @export
 quantile.dist_normal <- function(x, p, ...){
-  qnorm(p, x[["mu"]], x[["sigma"]])
+  stats::qnorm(p, x[["mu"]], x[["sigma"]])
 }
 
 #' @export
 cdf.dist_normal <- function(x, q, ...){
-  pnorm(q, x[["mu"]], x[["sigma"]])
+  stats::pnorm(q, x[["mu"]], x[["sigma"]])
 }
 
 #' @export
 generate.dist_normal <- function(x, times, ...){
-  rnorm(times, x[["mu"]], x[["sigma"]])
+  stats::rnorm(times, x[["mu"]], x[["sigma"]])
 }
 
 #' @export

@@ -29,6 +29,7 @@ density.distribution <- function(x, at, ...){
   vapply(vec_data(x), density, double(1L), at = at, ...)
 }
 
+#' @importFrom stats quantile
 #' @export
 quantile.distribution <- function(x, p, ...){
   vec_is(p, double(), 1L)
@@ -39,6 +40,7 @@ quantile.distribution <- function(x, p, ...){
 #'
 #' @param x A distribution.
 #' @param q The quantile at which the cdf is calculated.
+#' @param ... Additional arguments used by methods.
 #'
 #' @export
 cdf <- function (x, q, ...){
