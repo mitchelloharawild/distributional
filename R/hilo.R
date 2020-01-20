@@ -108,3 +108,14 @@ vec_arith.hilo <- function(op, x, y, ...){
   }
   vec_restore(out, x)
 }
+
+#' @export
+vec_arith.numeric.hilo <- function(op, x, y, ...){
+  out <- hl <- vec_data(y)
+  out[["lower"]] <- get(op)(x, hl[["lower"]])
+  out[["upper"]] <- get(op)(x, hl[["upper"]])
+  if(x < 0 && op %in% c("*", "/")){
+    out[c("lower", "upper")] <- out[c("upper", "lower")]
+  }
+  vec_restore(out, y)
+}
