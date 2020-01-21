@@ -98,3 +98,19 @@ vec_arith.distribution <- function(op, x, y, ...){
   }
   vec_restore(out, x)
 }
+
+#' @export
+vec_ptype2.distribution <- function(x, y, ...) UseMethod("vec_ptype2.distribution", y)
+#' @export
+vec_ptype2.distribution.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+#' @export
+vec_ptype2.distribution.distribution <- function(x, y, ...) new_dist()
+
+#' @export
+vec_cast.distribution <- function(x, to, ...) UseMethod("vec_cast.distribution")
+#' @export
+vec_cast.distribution.default <- function(x, to, ...) vec_default_cast(x, to)
+#' @export
+vec_cast.distribution.distribution <- function(x, to, ...) x
