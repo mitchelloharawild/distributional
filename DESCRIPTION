@@ -24,4 +24,5 @@ Imports:
     rlang,
     generics,
     ellipsis,
-    stats
+    stats,
+    numDeriv
