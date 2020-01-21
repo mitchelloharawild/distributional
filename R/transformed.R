@@ -28,3 +28,8 @@ cdf.dist_transformed <- function(x, q, ...){
 quantile.dist_transformed <- function(x, p, ...){
   x[["transform"]](quantile(x[["dist"]], p, ...))
 }
+
+#' @export
+generate.dist_transformed <- function(x, ...){
+  x[["transform"]](generate(x[["dist"]], ...))
+}
