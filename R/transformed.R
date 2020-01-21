@@ -33,3 +33,17 @@ quantile.dist_transformed <- function(x, p, ...){
 generate.dist_transformed <- function(x, ...){
   x[["transform"]](generate(x[["dist"]], ...))
 }
+
+#' @export
+mean.dist_transformed <- function(x, ...){
+  mu <- mean(x[["dist"]])
+  sigma2 <- variance(x[["dist"]])
+  x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu)/2*sigma2
+}
+
+#' @export
+variance.dist_transformed <- function(x, ...){
+  mu <- mean(x[["dist"]])
+  sigma2 <- variance(x[["dist"]])
+  numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu)*sigma2)^2/2
+}
