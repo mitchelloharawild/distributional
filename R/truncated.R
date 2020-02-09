@@ -1,4 +1,5 @@
 dist_truncated <- function(dist, lower, upper){
+  vec_is(dist, new_dist())
   vec_is(lower, numeric())
   vec_is(upper, numeric())
   if(any(lower >= upper)){
