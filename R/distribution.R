@@ -86,6 +86,29 @@ hilo.distribution <- function(x, size = 0.95, ...){
 }
 
 #' @export
+hdr.distribution <- function(x, size = 0.95, n = 512, ...){
+  dist_x <- purrr::map_dbl(seq(0.5/n, 1 - 0.5/n, length.out = n), quantile, x = x)
+  dist_y <- purrr::map_dbl(dist_x, density, x = x)
+  alpha <- quantile(dist_y, probs = size)
+
+  crossing_alpha <- function(alpha, x, y){
+    it <- seq_len(length(y) - 1)
+    dd <- y - alpha
+    dd <- dd[it + 1] * dd[it]
+    index <- it[dd <= 0]
+    # unique() removes possible duplicates if sequential dd has same value.
+    # More robust approach is required.
+    unique(purrr::map_dbl(index, ~ approx(y[.x + c(0,1)], x[.x + c(0,1)], xout = alpha)$y))
+  }
+
+  # purrr::map(alpha, crossing_alpha, dist_x, dist_y)
+  hdr <- crossing_alpha(alpha, dist_x, dist_y)
+  lower_hdr <- seq_along(hdr)%%2==1
+  hdr <- new_hilo(hdr[lower_hdr], hdr[!lower_hdr], size = size)
+  new_hdr(list(hdr))
+}
+
+#' @export
 vec_arith.distribution <- function(op, x, y, ...){
   if(is_empty(y)){
     out <- lapply(x, get(op))
