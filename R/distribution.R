@@ -78,6 +78,12 @@ variance.distribution <- function(x, ...){
   vapply(vec_data(x), variance, double(1L), ...)
 }
 
+#' @importFrom stats median
+#' @export
+median.distribution <- function(x, na.rm = FALSE, ...){
+  quantile(x, p = 0.5, na.rm = na.rm, ...)
+}
+
 #' @export
 hilo.distribution <- function(x, size = 0.95, ...){
   lower <- quantile(x, 0.5-size/2)

@@ -12,7 +12,7 @@ new_hdr(x = list())
 \item{size}{Size of the interval between [0, 1].}
 }
 \value{
-A "hilo" vector
+A "hdr" vector
 }
 \description{
 Construct hdr intervals
@@ -22,5 +22,5 @@ new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 0.95)
 
 }
 \author{
-Earo Wang & Mitchell O'Hara-Wild
+Mitchell O'Hara-Wild
 }
