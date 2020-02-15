@@ -19,21 +19,32 @@ vec_ptype_abbr.distribution <- function(x, ...){
 
 #' @export
 format.distribution <- function(x, ...){
-  do.call(vec_c, lapply(vec_data(x), format, ...))
+  x <- vec_data(x)
+  out <- vapply(x, format, character(1L), ...)
+  out[vapply(x, is.null, logical(1L))] <- "?"
+  out
 }
 
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ...){
   vec_is(at, double(), 1L)
-  vapply(vec_data(x), density, double(1L), at = at, ...)
+  x <- vec_data(x)
+  out <- rep_len(NA_real_, length(x))
+  is_dist <- !vapply(x, is.null, logical(1L))
+  out[is_dist] <- vapply(x[is_dist], density, double(1L), at = at, ...)
+  out
 }
 
 #' @importFrom stats quantile
 #' @export
 quantile.distribution <- function(x, p, ...){
   vec_is(p, double(), 1L)
-  vapply(vec_data(x), quantile, double(1L), p = p, ...)
+  x <- vec_data(x)
+  out <- rep_len(NA_real_, length(x))
+  is_dist <- !vapply(x, is.null, logical(1L))
+  out[is_dist] <- vapply(x[is_dist], quantile, double(1L), p = p, ...)
+  out
 }
 
 #' Cumulative distribution function
@@ -50,7 +61,11 @@ cdf <- function (x, q, ...){
 #' @export
 cdf.distribution <- function(x, q, ...){
   vec_is(q, double(), 1L)
-  vapply(vec_data(x), cdf, double(1L), q = q, ...)
+  x <- vec_data(x)
+  out <- rep_len(NA_real_, length(x))
+  is_dist <- !vapply(x, is.null, logical(1L))
+  out[is_dist] <- vapply(x[is_dist], cdf, double(1L), q = q, ...)
+  out
 }
 
 #' @export
@@ -61,7 +76,11 @@ generate.distribution <- function(x, times, ...){
 
 #' @export
 mean.distribution <- function(x, ...){
-  vapply(vec_data(x), mean, double(1L), ...)
+  x <- vec_data(x)
+  out <- rep_len(NA_real_, length(x))
+  is_dist <- !vapply(x, is.null, logical(1L))
+  out[is_dist] <- vapply(x[is_dist], mean, double(1L), ...)
+  out
 }
 
 #' Distribution variance
@@ -75,7 +94,11 @@ variance <- function(x, ...){
 }
 #' @export
 variance.distribution <- function(x, ...){
-  vapply(vec_data(x), variance, double(1L), ...)
+  x <- vec_data(x)
+  out <- rep_len(NA_real_, length(x))
+  is_dist <- !vapply(x, is.null, logical(1L))
+  out[is_dist] <- vapply(x[is_dist], variance, double(1L), ...)
+  out
 }
 
 #' @importFrom stats median
