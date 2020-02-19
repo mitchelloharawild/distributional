@@ -1,29 +1,29 @@
 #' Construct hilo intervals
 #'
 #' @param lower,upper A numeric vector of values for lower and upper limits.
-#' @param size Size of the interval between \[0, 1\].
+#' @param size Size of the interval between \[0, 100\].
 #'
 #' @return A "hilo" vector
 #'
 #' @author Earo Wang & Mitchell O'Hara-Wild
 #'
 #' @examples
-#' new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 0.95)
+#' new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 95)
 #'
 #' @export
 new_hilo <- function(lower = double(), upper = double(), size = double()) {
   vec_assert(lower, double())
   vec_assert(upper, double())
   vec_assert(size, double())
-  if (any(size < 0 | size > 1, na.rm = TRUE))
-    abort("'size' must be between [0, 1].")
+  if (any(size < 0 | size > 100, na.rm = TRUE))
+    abort("'size' must be between [0, 100].")
 
   out <- vec_recycle_common(lower = lower, upper = upper)
   if (any(out[["upper"]] < out[["lower"]], na.rm = TRUE)) {
     abort("`upper` can't be lower than `lower`.")
   }
   len <- length(out[[1]])
-  out[["level"]] <- vctrs::vec_recycle(size, len)*100
+  out[["level"]] <- vctrs::vec_recycle(size, len)
 
   vctrs::new_rcrd(out, class = "hilo")
 }

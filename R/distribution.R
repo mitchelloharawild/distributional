@@ -108,17 +108,17 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 }
 
 #' @export
-hilo.distribution <- function(x, size = 0.95, ...){
-  lower <- quantile(x, 0.5-size/2)
-  upper <- quantile(x, 0.5+size/2)
+hilo.distribution <- function(x, size = 95, ...){
+  lower <- quantile(x, 0.5-size/200)
+  upper <- quantile(x, 0.5+size/200)
   new_hilo(lower, upper, size)
 }
 
 #' @export
-hdr.distribution <- function(x, size = 0.95, n = 512, ...){
+hdr.distribution <- function(x, size = 95, n = 512, ...){
   dist_x <- vapply(seq(0.5/n, 1 - 0.5/n, length.out = n), quantile, numeric(1L), x = x)
   dist_y <- vapply(dist_x, density, numeric(1L), x = x)
-  alpha <- quantile(dist_y, probs = size)
+  alpha <- quantile(dist_y, probs = size/100)
 
   crossing_alpha <- function(alpha, x, y){
     it <- seq_len(length(y) - 1)

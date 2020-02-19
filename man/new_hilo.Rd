@@ -9,7 +9,7 @@ new_hilo(lower = double(), upper = double(), size = double())
 \arguments{
 \item{lower, upper}{A numeric vector of values for lower and upper limits.}
 
-\item{size}{Size of the interval between [0, 1].}
+\item{size}{Size of the interval between [0, 100].}
 }
 \value{
 A "hilo" vector
@@ -18,7 +18,7 @@ A "hilo" vector
 Construct hilo intervals
 }
 \examples{
-new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 0.95)
+new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 95)
 
 }
 \author{
