@@ -125,12 +125,8 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>lower, upper</th>
-      <td><p>A numeric vector of values for lower and upper limits.</p></td>
-    </tr>
-    <tr>
-      <th>size</th>
-      <td><p>Size of the interval between [0, 1].</p></td>
+      <th>x</th>
+      <td><p>A list of <code><a href='hilo.html'>hilo()</a></code> objects.</p></td>
     </tr>
     </table>
 
@@ -138,21 +134,12 @@
 
     <p>A "hdr" vector</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='new_hilo.html'>new_hilo</a></span>(<span class='kw'>lower</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10</span>), <span class='kw'>upper</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10</span>) + <span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</div><div class='output co'>#&gt; &lt;hilo[10]&gt;
-#&gt;  [1] [-1.400043517, 4.446301]95 [ 0.255317055, 5.628982]95
-#&gt;  [3] [-2.437263611, 7.065025]95 [-0.005571287, 3.369011]95
-#&gt;  [5] [ 0.621552721, 5.512427]95 [ 1.148411606, 3.136989]95
-#&gt;  [7] [-1.821817661, 4.477987]95 [-0.247325302, 4.947398]95
-#&gt;  [9] [-0.244199607, 5.542996]95 [-0.282705449, 4.085925]95</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
