@@ -127,7 +127,7 @@ hdr.distribution <- function(x, size = 0.95, n = 512, ...){
     index <- it[dd <= 0]
     # unique() removes possible duplicates if sequential dd has same value.
     # More robust approach is required.
-    unique(vapply(index, function(.x) approx(y[.x + c(0,1)], x[.x + c(0,1)], numeric(1L), xout = alpha)$y))
+    unique(vapply(index, function(.x) stats::approx(y[.x + c(0,1)], x[.x + c(0,1)], numeric(1L), xout = alpha)$y))
   }
 
   # purrr::map(alpha, crossing_alpha, dist_x, dist_y)
@@ -137,7 +137,7 @@ hdr.distribution <- function(x, size = 0.95, n = 512, ...){
   new_hdr(list(hdr))
 }
 
-#' @rdname vctrs-compat
+#' @method vec_arith distribution
 #' @export
 vec_arith.distribution <- function(op, x, y, ...){
   if(is_empty(y)){
@@ -152,28 +152,24 @@ vec_arith.distribution <- function(op, x, y, ...){
   vec_restore(out, x)
 }
 
-#' vctrs compatibility functions
-#'
-#' These methods allow distributional objects to work with vctrs.
-#'
-#' @rdname vctrs-compat
+#' @method vec_ptype2 distribution
 #' @export
 vec_ptype2.distribution <- function(x, y, ...) UseMethod("vec_ptype2.distribution", y)
-#' @rdname vctrs-compat
+#' @method vec_ptype2.distribution default
 #' @export
 vec_ptype2.distribution.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
 }
-#' @rdname vctrs-compat
+#' @method vec_ptype2.distribution distribution
 #' @export
 vec_ptype2.distribution.distribution <- function(x, y, ...) new_dist()
 
-#' @rdname vctrs-compat
+#' @method vec_cast distribution
 #' @export
 vec_cast.distribution <- function(x, to, ...) UseMethod("vec_cast.distribution")
-#' @rdname vctrs-compat
+#' @method vec_cast.distribution default
 #' @export
 vec_cast.distribution.default <- function(x, to, ...) vec_default_cast(x, to)
-#' @rdname vctrs-compat
+#' @method vec_cast.distribution distribution
 #' @export
 vec_cast.distribution.distribution <- function(x, to, ...) x

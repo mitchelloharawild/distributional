@@ -76,7 +76,7 @@ is.na.hilo <- function(x) {
   is.na(x$lower) & is.na(x$upper)
 }
 
-#' @rdname vctrs-compat
+#' @method vec_math hilo
 #' @export
 vec_math.hilo <- function(.fn, .x, ...){
   out <- vec_data(.x)
@@ -90,6 +90,7 @@ vec_math.hilo <- function(.fn, .x, ...){
 }
 
 #' @rdname vctrs-compat
+#' @method vec_arith hilo
 #' @export
 vec_arith.hilo <- function(op, x, y, ...){
   out <- dt_x <- vec_data(x)
@@ -111,7 +112,7 @@ vec_arith.hilo <- function(op, x, y, ...){
   vec_restore(out, x)
 }
 
-#' @rdname vctrs-compat
+#' @method vec_arith.numeric hilo
 #' @export
 vec_arith.numeric.hilo <- function(op, x, y, ...){
   out <- hl <- vec_data(y)
