@@ -1,14 +1,11 @@
 #' Construct hdr intervals
 #'
-#' @param lower,upper A numeric vector of values for lower and upper limits.
-#' @param size Size of the interval between \[0, 1\].
+#' @param x A list of [`hilo()`] objects.
 #'
 #' @return A "hdr" vector
 #'
 #' @author Mitchell O'Hara-Wild
 #'
-#' @examples
-#' new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 0.95)
 #'
 #' @export
 new_hdr <- function(x = list()) {

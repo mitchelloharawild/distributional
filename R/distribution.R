@@ -137,6 +137,7 @@ hdr.distribution <- function(x, size = 0.95, n = 512, ...){
   new_hdr(list(hdr))
 }
 
+#' @rdname vctrs-compat
 #' @export
 vec_arith.distribution <- function(op, x, y, ...){
   if(is_empty(y)){
@@ -151,18 +152,28 @@ vec_arith.distribution <- function(op, x, y, ...){
   vec_restore(out, x)
 }
 
+#' vctrs compatibility functions
+#'
+#' These methods allow distributional objects to work with vctrs.
+#'
+#' @rdname vctrs-compat
 #' @export
 vec_ptype2.distribution <- function(x, y, ...) UseMethod("vec_ptype2.distribution", y)
+#' @rdname vctrs-compat
 #' @export
 vec_ptype2.distribution.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
 }
+#' @rdname vctrs-compat
 #' @export
 vec_ptype2.distribution.distribution <- function(x, y, ...) new_dist()
 
+#' @rdname vctrs-compat
 #' @export
 vec_cast.distribution <- function(x, to, ...) UseMethod("vec_cast.distribution")
+#' @rdname vctrs-compat
 #' @export
 vec_cast.distribution.default <- function(x, to, ...) vec_default_cast(x, to)
+#' @rdname vctrs-compat
 #' @export
 vec_cast.distribution.distribution <- function(x, to, ...) x

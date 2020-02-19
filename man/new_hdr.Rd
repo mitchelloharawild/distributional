@@ -7,19 +7,13 @@
 new_hdr(x = list())
 }
 \arguments{
-\item{lower, upper}{A numeric vector of values for lower and upper limits.}
-
-\item{size}{Size of the interval between [0, 1].}
+\item{x}{A list of \code{\link[=hilo]{hilo()}} objects.}
 }
 \value{
 A "hdr" vector
 }
 \description{
 Construct hdr intervals
-}
-\examples{
-new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 0.95)
-
 }
 \author{
 Mitchell O'Hara-Wild
