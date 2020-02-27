@@ -47,3 +47,25 @@ variance.dist_transformed <- function(x, ...){
   sigma2 <- variance(x[["dist"]])
   numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu)*sigma2)^2/2
 }
+
+#' @method Math dist_transformed
+#' @export
+Math.dist_transformed <- function(x, ...) {
+  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x))))
+  dist_transformed(wrap_dist(list(x[["dist"]])), trans, invert_fail)
+}
+
+#' @method Ops dist_transformed
+#' @export
+Ops.dist_transformed <- function(e1, e2) {
+  is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
+  if(all(is_dist)) stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
+
+  trans <- if(is_dist[1]){
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
+  } else {
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e1$transform)(x))))
+  }
+
+  dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)]][["dist"]])), trans, invert_fail)
+}
