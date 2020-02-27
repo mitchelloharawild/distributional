@@ -143,6 +143,11 @@ hdr.distribution <- function(x, size = 95, n = 512, ...){
 #' @method vec_arith distribution
 #' @export
 vec_arith.distribution <- function(op, x, y, ...){
+  UseMethod("vec_arith.distribution", y)
+}
+#' @method vec_arith.distribution default
+#' @export
+vec_arith.distribution.default <- function(op, x, y, ...){
   if(is_empty(y)){
     out <- lapply(x, get(op))
   }
@@ -153,6 +158,16 @@ vec_arith.distribution <- function(op, x, y, ...){
     out <- mapply(get(op), x = x, y = y, SIMPLIFY = FALSE)
   }
   vec_restore(out, x)
+}
+
+#' @method vec_arith.numeric distribution
+#' @export
+vec_arith.numeric.distribution <- function(op, x, y, ...){
+  x <- vec_recycle_common(x = x, y = y)
+  y <- x[["y"]]
+  x <- x[["x"]]
+  out <- mapply(get(op), x = x, y = y, SIMPLIFY = FALSE)
+  vec_restore(out, y)
 }
 
 #' @method vec_math distribution

@@ -22,4 +22,9 @@ test_that("handling of transformation arguments", {
     hilo(logb(dist_normal(5, 1), base = 10)),
     logb(hilo(dist_normal(5, 1)), base = 10)
   )
+
+  expect_identical(
+    hilo(10^logb(dist_normal(5, 1), base = 10)),
+    10^logb(hilo(dist_normal(5, 1)), base = 10)
+  )
 })

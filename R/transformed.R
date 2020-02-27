@@ -64,7 +64,7 @@ Ops.dist_transformed <- function(e1, e2) {
   trans <- if(is_dist[1]){
     new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
   } else {
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e1$transform)(x))))
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
   }
 
   dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)]][["dist"]])), trans, invert_fail)
