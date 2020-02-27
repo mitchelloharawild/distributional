@@ -48,3 +48,25 @@ variance.dist_default <- function(x, ...){
 format.dist_default <- function(x, ...){
   rep_along("?", x)
 }
+
+invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported")
+
+#' @method Math dist_default
+#' @export
+Math.dist_default <- function(x, ...) {
+  dist_transformed(wrap_dist(list(x)), get(.Generic), invert_fail)
+}
+
+#' @method Ops dist_default
+#' @export
+Ops.dist_default <- function(e1, e2) {
+  is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
+  if(all(is_dist)) stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
+
+  trans <- if(is_dist[1]){
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
+  } else {
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
+  }
+  dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, invert_fail)
+}

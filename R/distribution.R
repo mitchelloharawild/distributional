@@ -6,10 +6,13 @@
 #' @export
 new_dist <- function(..., class = NULL){
   args <- transpose(vctrs::vec_recycle_common(...))
-  vctrs::new_vctr(
-    lapply(args, structure, class = c(class, "dist_default")),
-    class = "distribution"
+  wrap_dist(
+    lapply(args, structure, class = c(class, "dist_default"))
   )
+}
+
+wrap_dist <- function(x){
+  vctrs::new_vctr(x, class = "distribution")
 }
 
 #' @export
@@ -150,6 +153,13 @@ vec_arith.distribution <- function(op, x, y, ...){
     out <- mapply(get(op), x = x, y = y, SIMPLIFY = FALSE)
   }
   vec_restore(out, x)
+}
+
+#' @method vec_math distribution
+#' @export
+vec_math.distribution <- function(.fn, .x, ...) {
+  out <- lapply(.x, get(.fn), ...)
+  vec_restore(out, .x)
 }
 
 #' @method vec_ptype2 distribution
