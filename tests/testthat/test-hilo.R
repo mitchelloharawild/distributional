@@ -5,14 +5,14 @@ test_that("hilo", {
 
   # display
   expect_output(print(hl), "<hilo\\[0\\]>")
-  expect_output(print(new_hilo(0,1,0.95)), "\\[0, 1\\]95")
+  expect_output(print(new_hilo(0,1,95)), "\\[0, 1\\]95")
 
   dist <- dist_normal()
 
   # hilo.distribution
-  hl <- hilo(dist, 0.95)
+  hl <- hilo(dist, 95)
   expect_length(hl, 1)
-  expect_equal(hl, new_hilo(qnorm(0.025), qnorm(0.975), 0.95))
+  expect_equal(hl, new_hilo(qnorm(0.025), qnorm(0.975), 95))
 
   # vec_math.hilo
   expect_equal(is.na(hl), FALSE)
@@ -21,7 +21,7 @@ test_that("hilo", {
   # vec_arith.hilo
   expect_equal(
     hl*3+1,
-    new_hilo(qnorm(0.025)*3+1, qnorm(0.975)*3+1, 0.95)
+    new_hilo(qnorm(0.025)*3+1, qnorm(0.975)*3+1, 95)
   )
   expect_equal(-hl, hl)
   expect_equal(-3*hl, hl/(1/3))
