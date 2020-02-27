@@ -17,3 +17,9 @@ test_that("chains of transformations", {
   )
 })
 
+test_that("handling of transformation arguments", {
+  expect_identical(
+    hilo(logb(dist_normal(5, 1), base = 10)),
+    logb(hilo(dist_normal(5, 1)), base = 10)
+  )
+})

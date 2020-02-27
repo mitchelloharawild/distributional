@@ -51,7 +51,7 @@ variance.dist_transformed <- function(x, ...){
 #' @method Math dist_transformed
 #' @export
 Math.dist_transformed <- function(x, ...) {
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x))))
+  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
   dist_transformed(wrap_dist(list(x[["dist"]])), trans, invert_fail)
 }
 

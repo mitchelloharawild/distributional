@@ -54,7 +54,8 @@ invert_fail <- function(...) stop("Inverting transformations for distributions i
 #' @method Math dist_default
 #' @export
 Math.dist_default <- function(x, ...) {
-  dist_transformed(wrap_dist(list(x)), get(.Generic), invert_fail)
+  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
+  dist_transformed(wrap_dist(list(x)), trans, invert_fail)
 }
 
 #' @method Ops dist_default
