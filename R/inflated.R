@@ -14,7 +14,7 @@ dist_inflated <- function(dist, p, x = 0){
 format.dist_inflated <- function(x, ...){
   sprintf(
     "%i+%s",
-    format(x[["dist"]]),
-    x[["x"]]
+    x[[2]][["dist"]][["x"]],
+    format(x[[1]][["dist"]])
   )
 }
