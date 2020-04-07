@@ -11,7 +11,7 @@ transpose <- function(.l) {
 dist_apply <- function(x, .f, ...){
   x <- vec_data(x)
   # TODO: Use better approach to quieten vec_rbind
-  capture.output(out <- do.call(vctrs::vec_rbind, lapply(x, .f, ...)), type = "message")
+  suppressMessages(out <- do.call(vctrs::vec_rbind, lapply(x, .f, ...)))
   if(ncol(out) == 1)
     out[[1]]
   else
