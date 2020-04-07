@@ -161,6 +161,8 @@ vec_arith.numeric.distribution <- function(op, x, y, ...){
 #' @method vec_math distribution
 #' @export
 vec_math.distribution <- function(.fn, .x, ...) {
+  if(.fn %in% c("is.nan", "is.infinite")) return(rep_len(FALSE, length(.x)))
+  if(.fn == "is.finite") return(rep_len(TRUE, length(.x)))
   out <- lapply(.x, get(.fn), ...)
   vec_restore(out, .x)
 }
