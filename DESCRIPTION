@@ -25,4 +25,5 @@ Imports:
     generics,
     ellipsis,
     stats,
-    numDeriv
+    numDeriv,
+    mvtnorm
