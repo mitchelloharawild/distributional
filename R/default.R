@@ -45,6 +45,13 @@ variance.dist_default <- function(x, ...){
 }
 
 #' @export
+hilo.dist_default <- function(x, size = 95, ...){
+  lower <- quantile(x, 0.5-size/200)
+  upper <- quantile(x, 0.5+size/200)
+  new_hilo(lower, upper, size)
+}
+
+#' @export
 format.dist_default <- function(x, ...){
   rep_along("?", x)
 }

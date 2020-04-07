@@ -112,9 +112,8 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
-  lower <- quantile(x, 0.5-size/200)
-  upper <- quantile(x, 0.5+size/200)
-  new_hilo(lower, upper, size)
+  x <- vec_data(x)
+  vctrs::vec_c(!!!lapply(x, hilo, size = size, ...))
 }
 
 #' @export
