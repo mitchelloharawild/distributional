@@ -31,17 +31,11 @@ generate.dist_default <- function(x, ...){
 }
 #' @export
 mean.dist_default <- function(x, ...){
-  abort(
-    sprintf("The distribution class `%s` does not support `mean()`",
-            class(x)[1])
-  )
+  mean(generate(x, times = 1000), na.rm = TRUE)
 }
 #' @export
 variance.dist_default <- function(x, ...){
-  abort(
-    sprintf("The distribution class `%s` does not support `variance()`",
-            class(x)[1])
-  )
+  var(generate(x, times = 1000), na.rm = TRUE)
 }
 
 #' @export
