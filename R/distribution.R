@@ -32,22 +32,14 @@ format.distribution <- function(x, ...){
 #' @export
 density.distribution <- function(x, at, ...){
   vec_is(at, double(), 1L)
-  x <- vec_data(x)
-  out <- rep_len(NA_real_, length(x))
-  is_dist <- !vapply(x, is.null, logical(1L))
-  out[is_dist] <- vapply(x[is_dist], density, double(1L), at = at, ...)
-  out
+  dist_apply(x, density, at = at, ...)
 }
 
 #' @importFrom stats quantile
 #' @export
 quantile.distribution <- function(x, p, ...){
   vec_is(p, double(), 1L)
-  x <- vec_data(x)
-  out <- rep_len(NA_real_, length(x))
-  is_dist <- !vapply(x, is.null, logical(1L))
-  out[is_dist] <- vapply(x[is_dist], quantile, double(1L), p = p, ...)
-  out
+  dist_apply(x, quantile, p = p, ...)
 }
 
 #' Cumulative distribution function
@@ -64,26 +56,28 @@ cdf <- function (x, q, ...){
 #' @export
 cdf.distribution <- function(x, q, ...){
   vec_is(q, double(), 1L)
-  x <- vec_data(x)
-  out <- rep_len(NA_real_, length(x))
-  is_dist <- !vapply(x, is.null, logical(1L))
-  out[is_dist] <- vapply(x[is_dist], cdf, double(1L), q = q, ...)
-  out
+  dist_apply(x, cdf, q = q, ...)
 }
 
 #' @export
 generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   lapply(vec_data(x), generate, times = times, ...)
+  # dist_apply(x, generate, times = times, ...)
+  # Needs work to structure MV appropriately.
 }
 
 #' @export
 mean.distribution <- function(x, ...){
-  x <- vec_data(x)
-  out <- rep_len(NA_real_, length(x))
-  is_dist <- !vapply(x, is.null, logical(1L))
-  out[is_dist] <- vapply(x[is_dist], mean, double(1L), ...)
-  out
+  dist_apply(x, mean, ...)
+  # x <- vec_data(x)
+  # out <- do.call("rbind", lapply(x, mean, ...))
+  # if(ncol(out) == 1)
+  #   drop(out)
+  # else {
+  #   colnames(out) <- vctrs::vec_as_names(character(ncol(out)), repair = "unique", quiet = TRUE)
+  #   as.data.frame(out)
+  # }
 }
 
 #' Distribution variance
@@ -97,11 +91,7 @@ variance <- function(x, ...){
 }
 #' @export
 variance.distribution <- function(x, ...){
-  x <- vec_data(x)
-  out <- rep_len(NA_real_, length(x))
-  is_dist <- !vapply(x, is.null, logical(1L))
-  out[is_dist] <- vapply(x[is_dist], variance, double(1L), ...)
-  out
+  dist_apply(x, variance, ...)
 }
 
 #' @importFrom stats median
@@ -112,8 +102,7 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
-  x <- vec_data(x)
-  vctrs::vec_c(!!!lapply(x, hilo, size = size, ...))
+  dist_apply(x, hilo, size = size, ...)
 }
 
 #' @export

@@ -6,3 +6,13 @@ transpose <- function(.l) {
   })
   set_names(result, inner_names)
 }
+
+
+dist_apply <- function(x, .f, ...){
+  x <- vec_data(x)
+  out <- do.call(vctrs::vec_rbind, lapply(x, .f, ...))
+  if(ncol(out) == 1)
+    out[[1]]
+  else
+    out
+}
