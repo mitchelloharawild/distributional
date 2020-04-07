@@ -43,15 +43,8 @@ quantile.dist_percentile <- function(x, p, ...){
 cdf.dist_percentile <- function(x, q, ...){
   approx(x = x[["x"]], y = x[["percentile"]]/100, xout = q)$y
 }
-#
-# #' @export
-# generate.dist_percentile <- function(x, times, ...){
-# }
-#
-# #' @export
-# mean.dist_percentile <- function(x, ...){
-# }
-#
-# #' @export
-# variance.dist_percentile <- function(x, ...){
-# }
+
+#' @export
+generate.dist_percentile <- function(x, times, ...){
+  approx(x[["percentile"]]/100, x[["x"]], xout=runif(times,0,1))$y
+}
