@@ -30,8 +30,8 @@ format.dist_sample <- function(x, ...){
 #
 
 #' @export
-quantile.dist_sample <- function(x, p, ...){
-  vapply(x, quantile, numeric(1L), probs = p, ...)
+quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
+  vapply(x, quantile, numeric(1L), probs = p, ..., na.rm = na.rm)
 }
 
 # #' @export
