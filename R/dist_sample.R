@@ -7,6 +7,14 @@
 #'
 #' @export
 dist_sample <- function(x){
+  has_NA <- FALSE
+  x <- lapply(x, function(.) if(any(na_pos <- is.na(.))){
+    has_NA<<-TRUE
+    .[!na_pos]
+  })
+  if(has_NA){
+    warn("Missing sampled values have been removed from the sample distribution.")
+  }
   x <- as_list_of(x, .ptype = double())
   new_dist(x = x, class = "dist_sample")
 }
