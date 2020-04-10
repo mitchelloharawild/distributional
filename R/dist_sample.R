@@ -11,7 +11,7 @@ dist_sample <- function(x){
   x <- lapply(x, function(.) if(any(na_pos <- is.na(.))){
     has_NA<<-TRUE
     .[!na_pos]
-  })
+  } else .)
   if(has_NA){
     warn("Missing sampled values have been removed from the sample distribution.")
   }
