@@ -62,7 +62,8 @@ cdf.distribution <- function(x, q, ...){
 #' @export
 generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
-  lapply(vec_data(x), generate, times = times, ...)
+  times <- vec_recycle(times, size = length(x))
+  mapply(generate, vec_data(x), times = times, ..., SIMPLIFY = FALSE)
   # dist_apply(x, generate, times = times, ...)
   # Needs work to structure MV appropriately.
 }
