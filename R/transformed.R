@@ -2,7 +2,7 @@ dist_transformed <- function(dist, transform, inverse){
   vec_is(dist, new_dist())
   stopifnot(is.function(transform))
   stopifnot(is.function(inverse))
-  new_dist(dist = dist, transform = list(transform), inverse = list(inverse),
+  new_dist(dist = vec_data(dist), transform = list(transform), inverse = list(inverse),
            class = "dist_transformed")
 }
 
