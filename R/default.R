@@ -70,7 +70,7 @@ Math.dist_default <- function(x, ...) {
 Ops.dist_default <- function(e1, e2) {
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
   if(all(is_dist)) stop(sprintf("The %s operation is not supported for <%s> and <%s>.", .Generic, class(e1)[1], class(e2)[1]))
-  if(dim(list(e1, e2)[[is_dist]]) > 1) stop("Transformations of multivariate distributions are not yet supported.")
+  if(dim(list(e1, e2)[[which(is_dist)]]) > 1) stop("Transformations of multivariate distributions are not yet supported.")
 
   trans <- if(is_dist[1]){
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
