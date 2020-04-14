@@ -64,7 +64,7 @@ variance.dist_normal <- function(x, ...){
 Ops.dist_normal <- function(e1, e2){
   ok <- switch(.Generic, `+` = , `-` = , `*` = , `/` = TRUE, FALSE)
   if (!ok) {
-    abort(sprintf("`%s` not meaningful for normal distributions", .Generic))
+    return(NextMethod())
   }
   if(.Generic == "/" && inherits(e2, "dist_normal")){
     abort(sprintf("Cannot divide by a normal distribution"))
