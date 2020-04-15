@@ -59,13 +59,16 @@ Math.dist_transformed <- function(x, ...) {
 #' @export
 Ops.dist_transformed <- function(e1, e2) {
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
-  if(all(is_dist)) stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
-
-  trans <- if(is_dist[1]){
+  trans <- if(all(is_dist)) {
+    if(identical(e1$dist, e2$dist)){
+      new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
+    } else {
+      stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
+    }
+  } else if(is_dist[1]){
     new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
   } else {
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
   }
-
-  dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)]][["dist"]])), trans, invert_fail)[[1]]
+  dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, invert_fail)[[1]]
 }

@@ -69,13 +69,21 @@ Math.dist_default <- function(x, ...) {
 #' @export
 Ops.dist_default <- function(e1, e2) {
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
-  if(all(is_dist)) stop(sprintf("The %s operation is not supported for <%s> and <%s>.", .Generic, class(e1)[1], class(e2)[1]))
-  if(dim(list(e1, e2)[[which(is_dist)]]) > 1) stop("Transformations of multivariate distributions are not yet supported.")
-
-  trans <- if(is_dist[1]){
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
-  } else {
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
+  if(any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
+    stop("Transformations of multivariate distributions are not yet supported.")
   }
+
+  trans <- if(all(is_dist)) {
+    if(identical(e1$dist, e2$dist)){
+      new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
+    } else {
+      stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
+    }
+  } else if(is_dist[1]){
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
+  } else {
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
+  }
+
   dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, invert_fail)[[1]]
 }
