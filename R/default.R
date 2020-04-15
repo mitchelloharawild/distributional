@@ -62,7 +62,7 @@ invert_fail <- function(...) stop("Inverting transformations for distributions i
 Math.dist_default <- function(x, ...) {
   if(dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
-  dist_transformed(wrap_dist(list(x)), trans, invert_fail)
+  dist_transformed(wrap_dist(list(x)), trans, invert_fail)[[1]]
 }
 
 #' @method Ops dist_default
@@ -77,5 +77,5 @@ Ops.dist_default <- function(e1, e2) {
   } else {
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
   }
-  dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, invert_fail)
+  dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, invert_fail)[[1]]
 }
