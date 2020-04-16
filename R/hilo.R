@@ -129,11 +129,11 @@ vec_arith.numeric.hilo <- function(op, x, y, ...){
 #' @importFrom ggplot2 scale_type
 #' @export
 scale_type.hilo <- function(x){
-  "hilo"
+  "continuous"
 }
 
 #' @export
-scale_y_hilo <- function(name = waiver(), breaks = waiver(),
+scale_hilo_continuous <- function(name = waiver(), breaks = waiver(),
                          minor_breaks = waiver(), n.breaks = NULL,
                          labels = waiver(), limits = NULL,
                          expand = waiver(), oob = censor,
@@ -150,7 +150,7 @@ scale_y_hilo <- function(name = waiver(), breaks = waiver(),
 
   ggplot2::ggproto(
     NULL, sc,
-    aesthetics = c("y"),
+    aesthetics = c("hilo"),
     map = function(self, x, limits = self$get_limits()) {
       scaled <- self$oob(x, limits)
       scaled[is.na(scaled)] <- self$na.value
