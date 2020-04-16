@@ -84,7 +84,7 @@ vec_math.hilo <- function(.fn, .x, ...){
     abort("Cannot compute the mean of hilo intervals.")
   out[["lower"]] <- get(.fn)(out[["lower"]], ...)
   out[["upper"]] <- get(.fn)(out[["upper"]], ...)
-  if(.fn %in% c("is.nan", "is.finie", "is.infinite"))
+  if(.fn %in% c("is.nan", "is.finite", "is.infinite"))
     return(out[["lower"]] | out[["upper"]])
   vec_restore(out, .x)
 }
