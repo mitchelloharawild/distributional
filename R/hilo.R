@@ -123,3 +123,67 @@ vec_arith.numeric.hilo <- function(op, x, y, ...){
   }
   vec_restore(out, y)
 }
+
+# Graphics ---------------------------------------------------------------------
+
+#' @importFrom ggplot2 scale_type
+#' @export
+scale_type.hilo <- function(x){
+  "hilo"
+}
+
+#' @export
+scale_y_hilo <- function(name = waiver(), breaks = waiver(),
+                         minor_breaks = waiver(), n.breaks = NULL,
+                         labels = waiver(), limits = NULL,
+                         expand = waiver(), oob = censor,
+                         na.value = NA, trans = "identity",
+                         guide = waiver(), position = "left",
+                         sec.axis = waiver()) {
+
+  sc <- scale_y_continuous(
+    name = name, breaks = breaks, minor_breaks = minor_breaks, n.breaks = n.breaks,
+    labels = labels, limits = limits, expand = expand, oob = oob,
+    na.value = na.value, trans = trans, guide = guide, position = position,
+    sec.axis = sec.axis
+  )
+
+  ggplot2::ggproto(
+    NULL, sc,
+    aesthetics = c("y"),
+    map = function(self, x, limits = self$get_limits()) {
+      scaled <- self$oob(x, limits)
+      scaled[is.na(scaled)] <- self$na.value
+      scaled
+    },
+    oob = function(x, range = c(0, 1), only.finite = TRUE){
+      force(range)
+      finite <- if (only.finite)
+        is.finite(x)
+      else TRUE
+      dt <- vec_data(x)
+      x[finite & dt$lower < range[1]] <- NA
+      x[finite & dt$upper > range[2]] <- NA
+      x
+    },
+    clone = function(self) {
+      new <- ggproto(NULL, self)
+      new$range <- hilo_range()
+      new
+    },
+    range = hilo_range()
+  )
+}
+
+RangeHilo <- ggplot2::ggproto("RangeHilo", NULL,
+                              train = function(self, x) {
+                                self$range <- scales::train_continuous(c(vec_data(x)$lower, vec_data(x)$upper), self$range)
+                              },
+                              reset = function(self) {
+                                self$range <- NULL
+                              }
+)
+
+hilo_range <- function() {
+  ggplot2::ggproto(NULL, RangeHilo)
+}
