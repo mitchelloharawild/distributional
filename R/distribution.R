@@ -179,6 +179,18 @@ vec_ptype2.distribution.default <- function(x, y, ..., x_arg = "x", y_arg = "y")
 #' @method vec_ptype2.distribution distribution
 #' @export
 vec_ptype2.distribution.distribution <- function(x, y, ...) new_dist()
+#' @method vec_ptype2.double distribution
+#' @export
+vec_ptype2.double.distribution <- function(x, y, ...) new_dist()
+#' @method vec_ptype2.distribution double
+#' @export
+vec_ptype2.distribution.double <- function(x, y, ...) new_dist()
+#' @method vec_ptype2.integer distribution
+#' @export
+vec_ptype2.integer.distribution <- function(x, y, ...) new_dist()
+#' @method vec_ptype2.distribution integer
+#' @export
+vec_ptype2.distribution.integer <- function(x, y, ...) new_dist()
 
 #' @method vec_cast distribution
 #' @export
@@ -189,3 +201,9 @@ vec_cast.distribution.default <- function(x, to, ...) vec_default_cast(x, to)
 #' @method vec_cast.distribution distribution
 #' @export
 vec_cast.distribution.distribution <- function(x, to, ...) x
+#' @method vec_cast.distribution double
+#' @export
+vec_cast.distribution.double <- function(x, to, ...) dist_degenerate(x)
+#' @method vec_cast.distribution integer
+#' @export
+vec_cast.distribution.integer <- vec_cast.distribution.double
