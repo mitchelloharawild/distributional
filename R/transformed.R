@@ -1,3 +1,10 @@
+#' Modify a distribution with a transformation
+#'
+#' @param dist A distribution vector
+#' @param transform A function used to transform the distribution
+#' @param inverse The inverse of the `transform` function
+#'
+#' @export
 dist_transformed <- function(dist, transform, inverse){
   vec_is(dist, new_dist())
   stopifnot(is.function(transform))
