@@ -45,6 +45,7 @@ generate.dist_transformed <- function(x, ...){
 mean.dist_transformed <- function(x, ...){
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
+  if(is.na(sigma2)) return(x[["transform"]](mu))
   x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu)/2*sigma2
 }
 
