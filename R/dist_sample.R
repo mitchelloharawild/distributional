@@ -57,5 +57,5 @@ mean.dist_sample <- function(x, ...){
 
 #' @export
 variance.dist_sample <- function(x, ...){
-  vapply(x, variance, numeric(1L), ...)
+  vapply(x, var, numeric(1L), ...)
 }
