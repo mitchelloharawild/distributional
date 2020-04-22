@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • distributional</title>
+<title>Modify a distribution with a transformation — dist_transformed • distributional</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Modify a distribution with a transformation — dist_transformed" />
+<meta property="og:description" content="Modify a distribution with a transformation" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -64,7 +66,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,132 +108,44 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Modify a distribution with a transformation</h1>
+    
+    <div class="hidden name"><code>dist_transformed.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Modify a distribution with a transformation</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>dist_transformed</span>(<span class='no'>dist</span>, <span class='no'>transform</span>, <span class='no'>inverse</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="cdf.html">cdf()</a></code> </p>
-        </td>
-        <td><p>Cumulative distribution function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_degenerate.html">dist_degenerate()</a></code> </p>
-        </td>
-        <td><p>The degenerate distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_multivariate_normal.html">dist_multivariate_normal()</a></code> </p>
-        </td>
-        <td><p>The multivariate normal distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_negative_binomial.html">dist_negative_binomial()</a></code> </p>
-        </td>
-        <td><p>The Negative Binomial distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_normal.html">dist_normal()</a></code> </p>
-        </td>
-        <td><p>The Normal distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_percentile.html">dist_percentile()</a></code> </p>
-        </td>
-        <td><p>Percentile distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_sample.html">dist_sample()</a></code> </p>
-        </td>
-        <td><p>Sampling distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dist_transformed.html">dist_transformed()</a></code> </p>
-        </td>
-        <td><p>Modify a distribution with a transformation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hdr.html">hdr()</a></code> </p>
-        </td>
-        <td><p>Compute highest density regions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hilo.html">hilo()</a></code> </p>
-        </td>
-        <td><p>Compute intervals</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="is_hdr.html">is_hdr()</a></code> </p>
-        </td>
-        <td><p>Is the object a hdr</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="is_hilo.html">is_hilo()</a></code> </p>
-        </td>
-        <td><p>Is the object a hilo</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="new_dist.html">new_dist()</a></code> </p>
-        </td>
-        <td><p>Create a new distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="new_hdr.html">new_hdr()</a></code> </p>
-        </td>
-        <td><p>Construct hdr intervals</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="new_hilo.html">new_hilo()</a></code> </p>
-        </td>
-        <td><p>Construct hilo intervals</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="variance.html">variance()</a></code> </p>
-        </td>
-        <td><p>Distribution variance</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dist</th>
+      <td><p>A distribution vector</p></td>
+    </tr>
+    <tr>
+      <th>transform</th>
+      <td><p>A function used to transform the distribution</p></td>
+    </tr>
+    <tr>
+      <th>inverse</th>
+      <td><p>The inverse of the <code>transform</code> function</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
     </ul>
+
   </div>
 </div>
 
