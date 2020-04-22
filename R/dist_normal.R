@@ -10,7 +10,7 @@
 dist_normal <- function(mu = 0, sigma = 1){
   mu <- vec_cast(mu, double())
   sigma <- vec_cast(sigma, double())
-  if(any(sigma < 0)){
+  if(any(sigma[!is.na(sigma)] < 0)){
     abort("Standard deviation of a normal distribution must be non-negative")
   }
   new_dist(mu = mu, sigma = sigma, class = "dist_normal")
