@@ -1,3 +1,11 @@
+#' The degenerate distribution
+#'
+#' @param x The value of the distribution
+#'
+#' @examples
+#' dist_degenerate(x = 1:5)
+#'
+#' @export
 dist_degenerate <- function(x){
   vec_is(x, numeric())
   new_dist(x = x, class = "dist_degenerate")
