@@ -132,16 +132,20 @@ scale_type.hilo <- function(x){
   "continuous"
 }
 
+#' Hilo interval scales
+#'
+#' @inheritParams ggplot2::scale_y_continuous
+#'
 #' @export
 scale_hilo_continuous <- function(name = waiver(), breaks = waiver(),
                          minor_breaks = waiver(), n.breaks = NULL,
                          labels = waiver(), limits = NULL,
-                         expand = waiver(), oob = censor,
+                         expand = waiver(), oob = identity,
                          na.value = NA, trans = "identity",
                          guide = waiver(), position = "left",
                          sec.axis = waiver()) {
 
-  sc <- scale_y_continuous(
+  sc <- ggplot2::scale_y_continuous(
     name = name, breaks = breaks, minor_breaks = minor_breaks, n.breaks = n.breaks,
     labels = labels, limits = limits, expand = expand, oob = oob,
     na.value = na.value, trans = trans, guide = guide, position = position,
@@ -167,7 +171,7 @@ scale_hilo_continuous <- function(name = waiver(), breaks = waiver(),
       x
     },
     clone = function(self) {
-      new <- ggproto(NULL, self)
+      new <- ggplot2::ggproto(NULL, self)
       new$range <- hilo_range()
       new
     },

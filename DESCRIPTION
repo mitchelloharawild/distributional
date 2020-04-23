@@ -11,8 +11,7 @@ Description: Allows distributions to be used alongside data using vectors.
 License: GPL-3
 Suggests: 
     testthat (>= 2.1.0),
-    covr,
-    ggplot2
+    covr
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
@@ -26,4 +25,8 @@ Imports:
     ellipsis,
     stats,
     numDeriv,
-    mvtnorm
+    mvtnorm,
+    ggplot2,
+    scales,
+    farver,
+    digest
