@@ -63,7 +63,7 @@ guide_level <- function(title = waiver(), max_discrete = 5, ...) {
 #'
 #' @export
 #' @rdname guide-helpers
-#' @importFrom ggplot2 guide_colourbar guide_train
+#' @importFrom ggplot2 guide_colourbar guide_legend guide_train
 #' @keywords internal
 guide_train.level_guide <- function(guide, scale, aesthetic) {
   args <- append(guide[!(names(guide)%in%c("max_discrete", "args"))], guide$args)
@@ -115,7 +115,7 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
     guide$hash <- with(guide, digest::digest(list(title, key$.label,
                                                   bar, name)))
   }
-  if(guide$title == "vec_data(hilo)$level") guide$title <- "level"
+  if(guide$title == "vctrs::vec_data(hilo)$level") guide$title <- "level"
   guide
 }
 
