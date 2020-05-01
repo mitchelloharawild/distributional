@@ -29,4 +29,5 @@ Imports:
     ggplot2,
     scales,
     farver,
-    digest
+    digest,
+    utils

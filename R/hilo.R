@@ -124,6 +124,17 @@ vec_arith.numeric.hilo <- function(op, x, y, ...){
   vec_restore(out, y)
 }
 
+#' @importFrom utils .DollarNames
+#' @export
+.DollarNames.hilo <- function(x, pattern){
+  utils::.DollarNames(vec_data(x), pattern)
+}
+
+#' @export
+`$.hilo` <- function(x, name){
+  vec_data(x)[[name]]
+}
+
 # Graphics ---------------------------------------------------------------------
 
 #' @importFrom ggplot2 scale_type
