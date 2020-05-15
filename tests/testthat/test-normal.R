@@ -14,10 +14,6 @@ test_that("Normal distribution", {
     dist_normal(0, -1),
     "non-negative"
   )
-  expect_error(
-    dist_normal("zero"),
-    class = "vctrs_error_cast_lossy"
-  )
   expect_silent(
     dist_normal(mu = 0L, sigma = 1L)
   )
