@@ -9,10 +9,14 @@ transpose <- function(.l) {
 
 
 dist_apply <- function(x, .f, ...){
+  dn <- dimnames(x)
   x <- vec_data(x)
   # TODO: Use better approach to quieten vec_rbind
   out <- mapply(.f, x, ..., SIMPLIFY = FALSE)
   suppressMessages(out <- do.call(vctrs::vec_rbind, out))
+  if(!is.null(dn)){
+    colnames(out) <- dn
+  }
   if(ncol(out) == 1)
     out[[1]]
   else

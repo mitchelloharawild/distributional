@@ -28,6 +28,16 @@ format.distribution <- function(x, ...){
   out
 }
 
+#' @export
+`dimnames<-.distribution` <- function(x, value){
+  attr(x, "vars") <- value
+  x
+}
+#' @export
+dimnames.distribution <- function(x){
+  attr(x, "vars")
+}
+
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ...){
@@ -178,7 +188,12 @@ vec_ptype2.distribution.default <- function(x, y, ..., x_arg = "x", y_arg = "y")
 }
 #' @method vec_ptype2.distribution distribution
 #' @export
-vec_ptype2.distribution.distribution <- function(x, y, ...) new_dist()
+vec_ptype2.distribution.distribution <- function(x, y, ...){
+  if(!identical(dimnames(x), dimnames(y))){
+    abort("Distributions must have the same `dimnames` to be combined.")
+  }
+  x[0]
+}
 #' @method vec_ptype2.double distribution
 #' @export
 vec_ptype2.double.distribution <- function(x, y, ...) new_dist()
@@ -200,10 +215,17 @@ vec_cast.distribution <- function(x, to, ...) UseMethod("vec_cast.distribution")
 vec_cast.distribution.default <- function(x, to, ...) vec_default_cast(x, to)
 #' @method vec_cast.distribution distribution
 #' @export
-vec_cast.distribution.distribution <- function(x, to, ...) x
+vec_cast.distribution.distribution <- function(x, to, ...){
+  dimnames(x) <- dimnames(to)
+  x
+}
 #' @method vec_cast.distribution double
 #' @export
-vec_cast.distribution.double <- function(x, to, ...) dist_degenerate(x)
+vec_cast.distribution.double <- function(x, to, ...){
+  x <- dist_degenerate(x)
+  dimnames(x) <- dimnames(to)
+  x
+}
 #' @method vec_cast.distribution integer
 #' @export
 vec_cast.distribution.integer <- vec_cast.distribution.double
