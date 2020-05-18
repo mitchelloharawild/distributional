@@ -39,7 +39,7 @@ GeomHiloRibbon <- ggplot2::ggproto(
   required_aes = c(ggplot2::GeomRibbon$required_aes),
   optional_aes = c("hilo", "level"),
   default_aes = ggplot2::aes(
-    colour = "grey20", fill = "blue", size = .5,
+    colour = "grey20", fill = "grey60", size = .5,
     linetype = 1, weight = 1, alpha = 1, level = NA
   ),
   draw_key = function(data, params, size) {
