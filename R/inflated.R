@@ -7,7 +7,8 @@ dist_inflated <- function(dist, p, x = 0){
   }
   infl <- dist_scaled(dist_degenerate(x), p)
   dist <- dist_scaled(dist, 1-p)
-  new_dist(dist, infl, class = c("dist_inflated", "dist_mixture"))
+  new_dist(dist, infl,
+           dimnames = dimnames(dist), class = c("dist_inflated", "dist_mixture"))
 }
 
 #' @export

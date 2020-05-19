@@ -1,6 +1,7 @@
 dist_scaled <- function(dist, scale){
   vec_is(dist, new_dist())
-  new_dist(dist = dist, scale = scale, class = "dist_scaled")
+  new_dist(dist = dist, scale = scale,
+           dimnames = dimnames(dist), class = "dist_scaled")
 }
 
 #' @export

@@ -4,15 +4,16 @@
 #' @param class The class for S3 dispatch
 #'
 #' @export
-new_dist <- function(..., class = NULL){
+new_dist <- function(..., class = NULL, dimnames = NULL){
   args <- transpose(vctrs::vec_recycle_common(...))
   wrap_dist(
-    lapply(args, structure, class = c(class, "dist_default"))
+    lapply(args, structure, class = c(class, "dist_default")),
+    dimnames = dimnames
   )
 }
 
-wrap_dist <- function(x){
-  vctrs::new_vctr(x, class = "distribution")
+wrap_dist <- function(x, dimnames = NULL){
+  vctrs::new_vctr(x, vars = dimnames, class = "distribution")
 }
 
 #' @export

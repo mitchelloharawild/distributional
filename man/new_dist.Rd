@@ -4,7 +4,7 @@
 \alias{new_dist}
 \title{Create a new distribution}
 \usage{
-new_dist(..., class = NULL)
+new_dist(..., class = NULL, dimnames = NULL)
 }
 \arguments{
 \item{...}{Parameters of the distribution (named)}
