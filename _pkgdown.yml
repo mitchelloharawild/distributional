@@ -28,6 +28,7 @@ reference:
   desc: >
     Probability distributions.
   contents:
+    - dist_bernoulli
     - dist_beta
     - dist_binomial
     - dist_cauchy
