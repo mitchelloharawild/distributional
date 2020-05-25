@@ -48,6 +48,7 @@ reference:
     - dist_sample
     - dist_student_t
     - dist_uniform
+    - dist_weibull
 - title: Distribution modifiers
   desc: >
     Modifiers which change the nature of a distribution.
