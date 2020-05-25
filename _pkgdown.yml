@@ -30,6 +30,7 @@ reference:
   contents:
     - dist_beta
     - dist_binomial
+    - dist_cauchy
     - dist_degenerate
     - dist_multivariate_normal
     - dist_negative_binomial
