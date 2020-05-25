@@ -1,3 +1,17 @@
+#' Plot a distribution
+#'
+#' Visualise a distribution by plotting its probability density function
+#' ([`density()`]) or cumulative density function ([`cdf()`]).
+#' Note: This function currently only works for continuous distributions.
+#'
+#' @param x The distribution(s) to plot.
+#' @param type The type of plot to make (must be either `"pdf"` or `"cdf"`).
+#' @param n The resolution (number of points) used to display the distribution.
+#' @param quantile_range The range of the distribution (specified as quantiles).
+#' @param ... Unused.
+#'
+#' @importFrom ggplot2 autoplot
+#' @export
 autoplot.distribution <- function(x, type = c("pdf", "cdf"), n = 100,
                                   quantile_range = c(0.001, 0.999), ...){
   type <- match.arg(type)
