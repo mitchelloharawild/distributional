@@ -37,6 +37,7 @@ reference:
     - dist_f
     - dist_gamma
     - dist_geometric
+    - dist_hypergeometric
     - dist_multivariate_normal
     - dist_negative_binomial
     - dist_normal
