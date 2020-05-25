@@ -83,11 +83,13 @@ quantile.distribution <- function(x, p, ...){
 #' @param q The quantile at which the cdf is calculated.
 #' @param ... Additional arguments used by methods.
 #'
+#' @name cdf
 #' @export
 cdf <- function (x, q, ...){
   ellipsis::check_dots_used()
   UseMethod("cdf")
 }
+#' @rdname cdf
 #' @export
 cdf.distribution <- function(x, q, ...){
   vec_is(q, double(), 1L)

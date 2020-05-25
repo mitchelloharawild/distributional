@@ -2,9 +2,12 @@
 % Please edit documentation in R/distribution.R
 \name{cdf}
 \alias{cdf}
+\alias{cdf.distribution}
 \title{Cumulative distribution function}
 \usage{
 cdf(x, q, ...)
+
+\method{cdf}{distribution}(x, q, ...)
 }
 \arguments{
 \item{x}{The distribution(s).}
