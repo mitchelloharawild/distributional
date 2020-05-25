@@ -13,7 +13,7 @@ dist_bernoulli <- function(prob){
   if(any((prob < 0) | (prob > 1))){
     abort("The probability of success must be between 0 and 1.")
   }
-  new_dist(n = size, p = prob, class = "dist_bernoulli")
+  new_dist(p = prob, class = "dist_bernoulli")
 }
 
 #' @export
