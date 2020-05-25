@@ -33,6 +33,7 @@ reference:
     - dist_cauchy
     - dist_chisq
     - dist_degenerate
+    - dist_exponential
     - dist_multivariate_normal
     - dist_negative_binomial
     - dist_normal
