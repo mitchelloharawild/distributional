@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Uniform distribution — dist_uniform • distributional</title>
+<title>The Weibull distribution — dist_weibull • distributional</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="The Uniform distribution — dist_uniform" />
+<meta property="og:title" content="The Weibull distribution — dist_weibull" />
 <meta property="og:description" content="" />
 <meta name="twitter:card" content="summary" />
 
@@ -110,37 +110,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The Uniform distribution</h1>
+    <h1>The Weibull distribution</h1>
     
-    <div class="hidden name"><code>dist_uniform.Rd</code></div>
+    <div class="hidden name"><code>dist_weibull.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_uniform</span>(<span class='no'>min</span>, <span class='no'>max</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_weibull</span>(<span class='no'>shape</span>, <span class='no'>scale</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>min</th>
-      <td><p>lower and upper limits of the distribution.  Must be finite.</p></td>
+      <th>shape</th>
+      <td><p>shape and scale parameters, the latter defaulting to 1.</p></td>
     </tr>
     <tr>
-      <th>max</th>
-      <td><p>lower and upper limits of the distribution.  Must be finite.</p></td>
+      <th>scale</th>
+      <td><p>shape and scale parameters, the latter defaulting to 1.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>dunif</p></div>
+    <div class='dont-index'><p>dweibull</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dist_uniform</span>(<span class='kw'>min</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, -<span class='fl'>2</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>4</span>))</div><div class='output co'>#&gt; &lt;distribution[2]&gt;
-#&gt; [1] U(3, 5)  U(-2, 4)</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>dist_weibull</span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>5</span>,<span class='fl'>9</span>,<span class='fl'>7.5</span>,<span class='fl'>0.5</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0.5</span>,<span class='fl'>0.5</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))</div><div class='output co'>#&gt; &lt;distribution[7]&gt;
+#&gt; [1] Weibull(1, 0.5) Weibull(2, 0.5) Weibull(3, 0.5) Weibull(5, 1)  
+#&gt; [5] Weibull(9, 2)   Weibull(7.5, 1) Weibull(0.5, 1)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
