@@ -44,6 +44,7 @@ reference:
     - dist_negative_binomial
     - dist_normal
     - dist_percentile
+    - dist_poisson
     - dist_sample
 - title: Distribution modifiers
   desc: >
