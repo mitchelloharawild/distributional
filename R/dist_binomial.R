@@ -32,7 +32,7 @@ format.dist_binomial <- function(x, digits = 2, ...){
   sprintf(
     "B(%s, %s)",
     format(x[["n"]], digits = digits, ...),
-    format(x[["p"]]^2, digits = digits, ...)
+    format(x[["p"]], digits = digits, ...)
   )
 }
 
