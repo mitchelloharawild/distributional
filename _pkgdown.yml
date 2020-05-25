@@ -39,6 +39,7 @@ reference:
     - dist_geometric
     - dist_hypergeometric
     - dist_logistic
+    - dist_multinomial
     - dist_multivariate_normal
     - dist_negative_binomial
     - dist_normal
