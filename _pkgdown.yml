@@ -46,6 +46,7 @@ reference:
     - dist_percentile
     - dist_poisson
     - dist_sample
+    - dist_student_t
 - title: Distribution modifiers
   desc: >
     Modifiers which change the nature of a distribution.
