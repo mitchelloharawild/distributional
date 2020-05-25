@@ -47,6 +47,7 @@ reference:
     - dist_poisson
     - dist_sample
     - dist_student_t
+    - dist_studentized_range
     - dist_uniform
     - dist_weibull
 - title: Distribution modifiers
