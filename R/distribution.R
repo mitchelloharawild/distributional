@@ -1,7 +1,8 @@
 #' Create a new distribution
 #'
-#' @param ... Parameters of the distribution (named)
-#' @param class The class for S3 dispatch
+#' @param ... Parameters of the distribution (named).
+#' @param class The class of the distribution for S3 dispatch.
+#' @param dimnames The names of the variables in the distribution (optional).
 #'
 #' @export
 new_dist <- function(..., class = NULL, dimnames = NULL){

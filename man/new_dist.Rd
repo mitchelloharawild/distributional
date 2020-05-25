@@ -7,9 +7,11 @@
 new_dist(..., class = NULL, dimnames = NULL)
 }
 \arguments{
-\item{...}{Parameters of the distribution (named)}
+\item{...}{Parameters of the distribution (named).}
 
-\item{class}{The class for S3 dispatch}
+\item{class}{The class of the distribution for S3 dispatch.}
+
+\item{dimnames}{The names of the variables in the distribution (optional).}
 }
 \description{
 Create a new distribution

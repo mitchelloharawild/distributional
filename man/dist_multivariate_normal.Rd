@@ -7,7 +7,9 @@
 dist_multivariate_normal(mu = 0, sigma = diag(1))
 }
 \arguments{
-\item{mu}{alternative parametrization via mean: see \sQuote{Details}.}
+\item{mu}{A list of numeric vectors for the distribution's mean.}
+
+\item{sigma}{A list of matrices for the distribution's variance-covariance matrix.}
 }
 \description{
 The multivariate normal distribution

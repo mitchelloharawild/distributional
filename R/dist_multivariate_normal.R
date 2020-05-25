@@ -1,6 +1,7 @@
 #' The multivariate normal distribution
 #'
-#' @inheritParams stats::NegBinomial
+#' @param mu A list of numeric vectors for the distribution's mean.
+#' @param sigma A list of matrices for the distribution's variance-covariance matrix.
 #'
 #' @examples
 #' dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,3), ncol=2)))
