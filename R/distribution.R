@@ -93,16 +93,24 @@ mean.distribution <- function(x, ...){
   # }
 }
 
-#' Distribution variance
+#' Variance
 #'
-#' @param x A distribution
+#' A generic function for computing the variance of an object. The default
+#' method will use [`stats::var()`] to compute the variance.
+#'
+#' @param x An object.
 #' @param ... Additional arguments used by methods.
+#'
+#' @seealso variance.distribution
 #'
 #' @export
 variance <- function(x, ...){
   UseMethod("variance")
 }
 #' @export
+variance.default <- function(x, ...){
+  stats::var(x, ...)
+}
 variance.distribution <- function(x, ...){
   dist_apply(x, variance, ...)
 }

@@ -2,15 +2,19 @@
 % Please edit documentation in R/distribution.R
 \name{variance}
 \alias{variance}
-\title{Distribution variance}
+\title{Variance}
 \usage{
 variance(x, ...)
 }
 \arguments{
-\item{x}{A distribution}
+\item{x}{An object.}
 
 \item{...}{Additional arguments used by methods.}
 }
 \description{
-Distribution variance
+A generic function for computing the variance of an object. The default
+method will use \code{\link[stats:var]{stats::var()}} to compute the variance.
+}
+\seealso{
+variance.distribution
 }
