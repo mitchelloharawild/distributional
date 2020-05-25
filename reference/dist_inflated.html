@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Normal distribution — dist_normal • distributional</title>
+<title>Inflate a value of a probability distribution — dist_inflated • distributional</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="The Normal distribution — dist_normal" />
+<meta property="og:title" content="Inflate a value of a probability distribution — dist_inflated" />
 <meta property="og:description" content="" />
 <meta name="twitter:card" content="summary" />
 
@@ -110,41 +110,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The Normal distribution</h1>
+    <h1>Inflate a value of a probability distribution</h1>
     
-    <div class="hidden name"><code>dist_normal.Rd</code></div>
+    <div class="hidden name"><code>dist_inflated.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_normal</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_inflated</span>(<span class='no'>dist</span>, <span class='no'>prob</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mu</th>
-      <td><p>The mean (location parameter) of the distribution.</p></td>
+      <th>dist</th>
+      <td><p>The distribution(s) to inflate.</p></td>
     </tr>
     <tr>
-      <th>sigma</th>
-      <td><p>The standard deviation (scale parameter) of the distribution.</p></td>
+      <th>prob</th>
+      <td><p>The added probability of observing <code>x</code>.</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>The value to inflate. The default of <code>x = 0</code> is for zero-inflation.</p></td>
     </tr>
     </table>
 
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dist_normal</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; &lt;distribution[5]&gt;
-#&gt; [1] N(1, 9) N(2, 9) N(3, 9) N(4, 9) N(5, 9)</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
