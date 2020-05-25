@@ -26,13 +26,11 @@ format.dist_mixture <- function(x, ...){
   )
 }
 
-#' @rdname dist_mixture
 #' @export
 density.dist_mixture <- function(x, ...){
   sum(vapply(x, density, numeric(1L), ...))
 }
 
-#' @rdname dist_mixture
 #' @export
 cdf.dist_mixture <- function(x, ...){
   sum(vapply(x, cdf, numeric(1L), ...))

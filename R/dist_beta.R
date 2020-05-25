@@ -5,7 +5,7 @@
 #' @seealso dbeta
 #'
 #' @examples
-#' dist_beta(shape1 = c(-0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))
+#' dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))
 #'
 #' @name dist_beta
 #' @export
@@ -32,37 +32,31 @@ format.dist_beta <- function(x, digits = 2, ...){
   )
 }
 
-#' @rdname dist_beta
 #' @export
 density.dist_beta <- function(x, at, ...){
   stats::dbeta(at, x[["shape1"]], x[["shape2"]])
 }
 
-#' @rdname dist_beta
 #' @export
 quantile.dist_beta <- function(x, p, ...){
   stats::qbeta(p, x[["shape1"]], x[["shape2"]])
 }
 
-#' @rdname dist_beta
 #' @export
 cdf.dist_beta <- function(x, q, ...){
   stats::pbeta(q, x[["shape1"]], x[["shape2"]])
 }
 
-#' @rdname dist_beta
 #' @export
 generate.dist_beta <- function(x, times, ...){
   stats::rbeta(times, x[["shape1"]], x[["shape2"]])
 }
 
-#' @rdname dist_beta
 #' @export
 mean.dist_beta <- function(x, ...){
   x[["shape1"]]/(x[["shape1"]] + x[["shape2"]])
 }
 
-#' @rdname dist_beta
 #' @export
 variance.dist_beta <- function(x, ...){
   a <- x[["shape1"]]

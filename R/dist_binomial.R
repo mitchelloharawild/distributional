@@ -34,37 +34,31 @@ format.dist_binomial <- function(x, digits = 2, ...){
   )
 }
 
-#' @rdname dist_bimonial
 #' @export
 density.dist_binomial <- function(x, at, ...){
   stats::dbinom(at, x[["n"]], x[["p"]])
 }
 
-#' @rdname dist_bimonial
 #' @export
 quantile.dist_binomial <- function(x, p, ...){
   stats::qbinom(p, x[["n"]], x[["p"]])
 }
 
-#' @rdname dist_bimonial
 #' @export
 cdf.dist_binomial <- function(x, q, ...){
   stats::pbinom(q, x[["n"]], x[["p"]])
 }
 
-#' @rdname dist_bimonial
 #' @export
 generate.dist_binomial <- function(x, times, ...){
   stats::rbinom(times, x[["n"]], x[["p"]])
 }
 
-#' @rdname dist_bimonial
 #' @export
 mean.dist_binomial <- function(x, ...){
   x[["n"]]*x[["p"]]
 }
 
-#' @rdname dist_bimonial
 #' @export
 variance.dist_binomial <- function(x, ...){
   x[["n"]]*x[["p"]]*(1-x[["p"]])

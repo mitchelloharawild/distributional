@@ -2,15 +2,9 @@
 % Please edit documentation in R/mixture.R
 \name{dist_mixture}
 \alias{dist_mixture}
-\alias{density.dist_mixture}
-\alias{cdf.dist_mixture}
 \title{Create a mixture of distributions}
 \usage{
 dist_mixture(..., weights = numeric())
-
-\method{density}{dist_mixture}(x, ...)
-
-\method{cdf}{dist_mixture}(x, ...)
 }
 \arguments{
 \item{...}{Distributions to be used in the mixture.}

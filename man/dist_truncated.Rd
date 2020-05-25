@@ -2,15 +2,9 @@
 % Please edit documentation in R/truncated.R
 \name{dist_truncated}
 \alias{dist_truncated}
-\alias{density.dist_truncated}
-\alias{cdf.dist_truncated}
 \title{Truncate a distribution}
 \usage{
 dist_truncated(dist, lower = -Inf, upper = Inf)
-
-\method{density}{dist_truncated}(x, at, ...)
-
-\method{cdf}{dist_truncated}(x, q, ...)
 }
 \arguments{
 \item{dist}{The distribution(s) to truncate.}

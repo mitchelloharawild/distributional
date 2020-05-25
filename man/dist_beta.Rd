@@ -2,27 +2,9 @@
 % Please edit documentation in R/dist_beta.R
 \name{dist_beta}
 \alias{dist_beta}
-\alias{density.dist_beta}
-\alias{quantile.dist_beta}
-\alias{cdf.dist_beta}
-\alias{generate.dist_beta}
-\alias{mean.dist_beta}
-\alias{variance.dist_beta}
 \title{The Beta distribution}
 \usage{
 dist_beta(shape1, shape2)
-
-\method{density}{dist_beta}(x, at, ...)
-
-\method{quantile}{dist_beta}(x, p, ...)
-
-\method{cdf}{dist_beta}(x, q, ...)
-
-\method{generate}{dist_beta}(x, times, ...)
-
-\method{mean}{dist_beta}(x, ...)
-
-\method{variance}{dist_beta}(x, ...)
 }
 \arguments{
 \item{shape1, shape2}{The non-negative shape parameters of the Beta distribution.}
@@ -31,7 +13,7 @@ dist_beta(shape1, shape2)
 The Beta distribution
 }
 \examples{
-dist_beta(shape1 = c(-0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))
+dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))
 
 }
 \seealso{

@@ -26,7 +26,6 @@ format.dist_truncated <- function(x, ...){
   )
 }
 
-#' @rdname dist_truncated
 #' @export
 density.dist_truncated <- function(x, at, ...){
   if(at < x[["lower"]] || at > x[["upper"]]) return(0)
@@ -35,7 +34,6 @@ density.dist_truncated <- function(x, at, ...){
   density(x[["dist"]], at = at, ...)/(cdf_upr - cdf_lwr)
 }
 
-#' @rdname dist_truncated
 #' @export
 cdf.dist_truncated <- function(x, q, ...){
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])

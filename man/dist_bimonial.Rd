@@ -3,27 +3,9 @@
 \name{dist_bimonial}
 \alias{dist_bimonial}
 \alias{dist_binomial}
-\alias{density.dist_binomial}
-\alias{quantile.dist_binomial}
-\alias{cdf.dist_binomial}
-\alias{generate.dist_binomial}
-\alias{mean.dist_binomial}
-\alias{variance.dist_binomial}
 \title{The Binomial distribution}
 \usage{
 dist_binomial(size, prob)
-
-\method{density}{dist_binomial}(x, at, ...)
-
-\method{quantile}{dist_binomial}(x, p, ...)
-
-\method{cdf}{dist_binomial}(x, q, ...)
-
-\method{generate}{dist_binomial}(x, times, ...)
-
-\method{mean}{dist_binomial}(x, ...)
-
-\method{variance}{dist_binomial}(x, ...)
 }
 \arguments{
 \item{size}{The number of trials.}
