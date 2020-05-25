@@ -8,7 +8,7 @@
 #' @examples
 #' dist_binomial(size = 1:5, prob = c(0.05, 0.5, 0.3, 0.9, 0.1))
 #'
-#' @name dist_bimonial
+#' @name dist_binomial
 #' @export
 dist_binomial <- function(size, prob){
   size <- vec_cast(size, integer())

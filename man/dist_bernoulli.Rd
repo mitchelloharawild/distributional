@@ -6,6 +6,9 @@
 \usage{
 dist_bernoulli(prob)
 }
+\arguments{
+\item{prob}{The probability of success on each trial.}
+}
 \description{
 \lifecycle{stable}
 }
