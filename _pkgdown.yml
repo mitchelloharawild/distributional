@@ -35,6 +35,7 @@ reference:
     - dist_degenerate
     - dist_exponential
     - dist_f
+    - dist_gamma
     - dist_multivariate_normal
     - dist_negative_binomial
     - dist_normal
