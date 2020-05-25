@@ -14,7 +14,7 @@
 dist_chisq <- function(df, ncp = 0){
   df <- vec_cast(df, double())
   ncp <- vec_cast(ncp, double())
-  if(any(df <= 0)){
+  if(any(df < 0)){
     abort("The degrees of freedom parameter of a Chi-Squared distribution must be non-negative.")
   }
   new_dist(df = df, ncp = ncp, class = "dist_chisq")
