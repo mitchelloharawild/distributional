@@ -1,4 +1,11 @@
-dist_truncated <- function(dist, lower, upper){
+#' Truncate a distribution
+#'
+#' @param dist The distribution(s) to truncate.
+#' @param lower,upper The range of values to keep from a distribution.
+#'
+#' @name dist_truncated
+#' @export
+dist_truncated <- function(dist, lower = -Inf, upper = Inf){
   vec_is(dist, new_dist())
   vec_is(lower, numeric())
   vec_is(upper, numeric())
@@ -19,6 +26,7 @@ format.dist_truncated <- function(x, ...){
   )
 }
 
+#' @rdname dist_truncated
 #' @export
 density.dist_truncated <- function(x, at, ...){
   if(at < x[["lower"]] || at > x[["upper"]]) return(0)
@@ -27,6 +35,7 @@ density.dist_truncated <- function(x, at, ...){
   density(x[["dist"]], at = at, ...)/(cdf_upr - cdf_lwr)
 }
 
+#' @rdname dist_truncated
 #' @export
 cdf.dist_truncated <- function(x, q, ...){
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
