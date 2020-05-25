@@ -204,7 +204,10 @@ hilo.distribution <- function(x, size = 95, ...){
 #'
 #' \lifecycle{experimental}
 #'
-#' This function is highly experimental and will change in the future.
+#' This function is highly experimental and will change in the future. In
+#' particular, improved functionality for object classes and visualisation tools
+#' will be added in a future release.
+#'
 #' Computes minimally sized probability intervals highest density regions.
 #'
 #' @param x The distribution(s).
@@ -225,7 +228,13 @@ hdr.distribution <- function(x, size = 95, n = 512, ...){
     index <- it[dd <= 0]
     # unique() removes possible duplicates if sequential dd has same value.
     # More robust approach is required.
-    unique(vapply(index, function(.x) stats::approx(y[.x + c(0,1)], x[.x + c(0,1)], numeric(1L), xout = alpha)$y))
+    unique(
+      vapply(
+        index,
+        function(.x) stats::approx(y[.x + c(0,1)], x[.x + c(0,1)], xout = alpha)$y,
+        numeric(1L)
+      )
+    )
   }
 
   # purrr::map(alpha, crossing_alpha, dist_x, dist_y)

@@ -19,6 +19,9 @@
 \lifecycle{experimental}
 }
 \details{
-This function is highly experimental and will change in the future.
+This function is highly experimental and will change in the future. In
+particular, improved functionality for object classes and visualisation tools
+will be added in a future release.
+
 Computes minimally sized probability intervals highest density regions.
 }
