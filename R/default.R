@@ -35,7 +35,7 @@ mean.dist_default <- function(x, ...){
 }
 #' @export
 variance.dist_default <- function(x, ...){
-  var(generate(x, times = 1000), na.rm = TRUE)
+  stats::var(generate(x, times = 1000), na.rm = TRUE)
 }
 
 #' @export

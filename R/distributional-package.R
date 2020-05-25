@@ -8,3 +8,6 @@
 #' @import vctrs
 #' @import rlang
 NULL
+
+# Used for generating transformation function expressions
+globalVariables("x")

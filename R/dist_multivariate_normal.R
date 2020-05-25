@@ -34,7 +34,7 @@ density.dist_mvnorm <- function(x, at, ...){
 quantile.dist_mvnorm <- function(x, p, type = c("univariate", "equicoordinate"), ...){
   type <- match.arg(type)
   if (type == "univariate") {
-    qnorm(p, x[["mu"]], sd = diag(sqrt(x[["sigma"]])))
+    stats::qnorm(p, x[["mu"]], sd = diag(sqrt(x[["sigma"]])))
   } else {
     mvtnorm::qmvnorm(p, mean = x[["mu"]], sigma = x[["sigma"]])$quantile
   }

@@ -36,15 +36,15 @@ format.dist_percentile <- function(x, ...){
 
 #' @export
 quantile.dist_percentile <- function(x, p, ...){
-  approx(x = x[["percentile"]]/100, y = x[["x"]], xout = p)$y
+  stats::approx(x = x[["percentile"]]/100, y = x[["x"]], xout = p)$y
 }
 
 #' @export
 cdf.dist_percentile <- function(x, q, ...){
-  approx(x = x[["x"]], y = x[["percentile"]]/100, xout = q)$y
+  stats::approx(x = x[["x"]], y = x[["percentile"]]/100, xout = q)$y
 }
 
 #' @export
 generate.dist_percentile <- function(x, times, ...){
-  approx(x[["percentile"]]/100, x[["x"]], xout=runif(times,0,1))$y
+  stats::approx(x[["percentile"]]/100, x[["x"]], xout=stats::runif(times,0,1))$y
 }
