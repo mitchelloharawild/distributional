@@ -247,6 +247,11 @@ hdr.distribution <- function(x, size = 95, n = 512, ...){
   new_hdr(list(hdr))
 }
 
+#' @export
+sum.distribution <- function(x, ...){
+  Reduce("+", x)
+}
+
 #' @method vec_arith distribution
 #' @export
 vec_arith.distribution <- function(op, x, y, ...){
