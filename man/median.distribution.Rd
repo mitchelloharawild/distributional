@@ -9,6 +9,9 @@
 \arguments{
 \item{x}{The distribution(s).}
 
+\item{na.rm}{a logical value indicating whether \code{NA}
+    values should be stripped before the computation proceeds.}
+
 \item{...}{Additional arguments used by methods.}
 }
 \description{

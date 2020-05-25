@@ -169,6 +169,7 @@ variance.distribution <- function(x, ...){
 #' Returns the median (50th percentile) of a probability distribution. This is
 #' equivalent to `quantile(x, p=0.5)`.
 #'
+#' @inheritParams stats::median
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
 #'

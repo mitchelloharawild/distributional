@@ -2,7 +2,7 @@
 #'
 #' \lifecycle{stable}
 #'
-#' @inheritParams stats::dchisq
+#' @inheritParams stats::df
 #'
 #' @seealso df
 #'
