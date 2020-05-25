@@ -4,10 +4,15 @@
 \name{distributional-package}
 \alias{distributional}
 \alias{distributional-package}
-\title{distributional: Vectorised Distributions}
+\title{distributional: Vectorised Probability Distributions}
 \description{
-Allows distributions to be used alongside data
-    using vectors.
+Vectorised distribution objects with tools for manipulating, 
+    visualising, and using probability distributions. Designed to allow model
+    prediction outputs to return distributions rather than their parameters, 
+    allowing users to directly interact with predictive distributions in a
+    data-oriented workflow. In addition to providing generic replacements for
+    p/d/q/r functions, other useful statistics can be computed including means,
+    variances, intervals, and highest density regions.
 }
 \author{
 \strong{Maintainer}: Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (\href{https://orcid.org/0000-0001-6729-7695}{ORCID})

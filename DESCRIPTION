@@ -1,5 +1,5 @@
 Package: distributional
-Title: Vectorised Distributions
+Title: Vectorised Probability Distributions
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Mitchell",
@@ -7,8 +7,13 @@ Authors@R:
            role = c("aut", "cre"),
            email = "mail@mitchelloharawild.com",
            comment = c(ORCID = "https://orcid.org/0000-0001-6729-7695"))
-Description: Allows distributions to be used alongside data
-    using vectors.
+Description: Vectorised distribution objects with tools for manipulating, 
+    visualising, and using probability distributions. Designed to allow model
+    prediction outputs to return distributions rather than their parameters, 
+    allowing users to directly interact with predictive distributions in a
+    data-oriented workflow. In addition to providing generic replacements for
+    p/d/q/r functions, other useful statistics can be computed including means,
+    variances, intervals, and highest density regions.
 License: GPL-3
 Imports: 
     vctrs,
@@ -32,6 +37,5 @@ RdMacros:
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate',
-    'namespace'))
+Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate', 'namespace'))
 RoxygenNote: 7.1.0
