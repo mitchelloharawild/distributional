@@ -28,7 +28,7 @@ print.dist_cauchy <- function(x, ...){
 #' @export
 format.dist_cauchy <- function(x, digits = 2, ...){
   sprintf(
-    "cauchy(%s, %s)",
+    "Cauchy(%s, %s)",
     format(x[["location"]], digits = digits, ...),
     format(x[["scale"]], digits = digits, ...)
   )
