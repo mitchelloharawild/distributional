@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Variance — variance • distributional</title>
+<title>Highest density regions of probability distributions — hdr.distribution • distributional</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,8 @@
 
 
 
-<meta property="og:title" content="Variance — variance" />
-<meta property="og:description" content="A generic function for computing the variance of an object. The default
-method will use stats::var() to compute the variance." />
+<meta property="og:title" content="Highest density regions of probability distributions — hdr.distribution" />
+<meta property="og:description" content="" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,24 +110,32 @@ method will use stats::var() to compute the variance." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Variance</h1>
+    <h1>Highest density regions of probability distributions</h1>
     
-    <div class="hidden name"><code>variance.Rd</code></div>
+    <div class="hidden name"><code>hdr.distribution.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A generic function for computing the variance of an object. The default
-method will use <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code> to compute the variance.</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>variance</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for distribution</span>
+<span class='fu'><a href='hdr.html'>hdr</a></span>(<span class='no'>x</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>95</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>512</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object.</p></td>
+      <td><p>The distribution(s).</p></td>
+    </tr>
+    <tr>
+      <th>size</th>
+      <td><p>The size of the interval (between 0 and 100).</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>The resolution used to estimate the distribution's density.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -136,16 +143,17 @@ method will use <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <div class='dont-index'><p>variance.distribution</p></div>
+    <p>This function is highly experimental and will change in the future.
+Computes minimally sized probability intervals highest density regions.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>
