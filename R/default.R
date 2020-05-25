@@ -23,11 +23,8 @@ cdf.dist_default <- function(x, ...){
   )
 }
 #' @export
-generate.dist_default <- function(x, ...){
-  abort(
-    sprintf("The distribution class `%s` does not support `generate()`",
-            class(x)[1])
-  )
+generate.dist_default <- function(x, times, ...){
+  vapply(stats::runif(times,0,1), quantile, numeric(1L), x = x, ...)
 }
 #' @export
 mean.dist_default <- function(x, ...){

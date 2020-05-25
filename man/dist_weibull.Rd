@@ -15,7 +15,7 @@ dist_weibull(shape, scale)
 \lifecycle{stable}
 }
 \examples{
-dist_weibull(shape = c(1,2,3,5,9,7.5,0.5), scale = c(0.5,0.5,0.5,1,2,1,1))
+dist_weibull(shape = c(0.5, 1, 1.5, 5), scale = rep(1, 4))
 
 }
 \seealso{
