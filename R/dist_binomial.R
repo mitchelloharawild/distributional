@@ -1,5 +1,7 @@
 #' The Binomial distribution
 #'
+#' \lifecycle{stable}
+#'
 #' @param size The number of trials.
 #' @param prob The probability of success on each trial.
 #'

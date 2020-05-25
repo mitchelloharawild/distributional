@@ -12,5 +12,5 @@ dist_mixture(..., weights = numeric())
 \item{weights}{The weight of each distribution passed to \code{...}.}
 }
 \description{
-Create a mixture of distributions
+\lifecycle{experimental}
 }

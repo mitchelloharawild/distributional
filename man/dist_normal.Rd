@@ -12,7 +12,7 @@ dist_normal(mu = 0, sigma = 1)
 \item{sigma}{The standard deviation (scale parameter) of the distribution.}
 }
 \description{
-The Normal distribution
+\lifecycle{stable}
 }
 \examples{
 dist_normal(mu = 1:5, sigma = 3)

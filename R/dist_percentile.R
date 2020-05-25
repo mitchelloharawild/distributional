@@ -1,5 +1,7 @@
 #' Percentile distribution
 #'
+#' \lifecycle{maturing}
+#'
 #' @param x A list of values
 #' @param percentile A list of percentiles
 #'

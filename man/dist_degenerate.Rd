@@ -7,10 +7,10 @@
 dist_degenerate(x)
 }
 \arguments{
-\item{x}{The value of the distribution}
+\item{x}{The value of the distribution.}
 }
 \description{
-The degenerate distribution
+\lifecycle{stable}
 }
 \examples{
 dist_degenerate(x = 1:5)

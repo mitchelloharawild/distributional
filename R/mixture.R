@@ -1,5 +1,7 @@
 #' Create a mixture of distributions
 #'
+#' \lifecycle{experimental}
+#'
 #' @param ... Distributions to be used in the mixture.
 #' @param weights The weight of each distribution passed to `...`.
 #'

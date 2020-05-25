@@ -1,5 +1,7 @@
 #' The Negative Binomial distribution
 #'
+#' \lifecycle{stable}
+#'
 #' @inheritParams stats::NegBinomial
 #'
 #' @examples

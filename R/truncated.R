@@ -1,5 +1,7 @@
 #' Truncate a distribution
 #'
+#' \lifecycle{experimental}
+#'
 #' @param dist The distribution(s) to truncate.
 #' @param lower,upper The range of values to keep from a distribution.
 #'

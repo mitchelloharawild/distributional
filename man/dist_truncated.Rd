@@ -12,5 +12,5 @@ dist_truncated(dist, lower = -Inf, upper = Inf)
 \item{lower, upper}{The range of values to keep from a distribution.}
 }
 \description{
-Truncate a distribution
+\lifecycle{experimental}
 }

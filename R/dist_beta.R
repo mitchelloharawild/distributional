@@ -1,5 +1,7 @@
 #' The Beta distribution
 #'
+#' \lifecycle{maturing}
+#'
 #' @param shape1,shape2 The non-negative shape parameters of the Beta distribution.
 #'
 #' @seealso dbeta

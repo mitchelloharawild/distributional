@@ -1,5 +1,7 @@
 #' Sampling distribution
 #'
+#' \lifecycle{stable}
+#'
 #' @param x A list of sampled values.
 #'
 #' @examples

@@ -14,7 +14,7 @@ dist_negative_binomial(size, prob)
 \item{prob}{probability of success in each trial. \code{0 < prob <= 1}.}
 }
 \description{
-The Negative Binomial distribution
+\lifecycle{stable}
 }
 \examples{
 dist_negative_binomial(size = 10, prob = 0.5)

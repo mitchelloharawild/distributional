@@ -1,5 +1,7 @@
 #' Inflate a value of a probability distribution
 #'
+#' \lifecycle{maturing}
+#'
 #' @param dist The distribution(s) to inflate.
 #' @param prob The added probability of observing `x`.
 #' @param x The value to inflate. The default of `x = 0` is for zero-inflation.

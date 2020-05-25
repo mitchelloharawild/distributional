@@ -14,5 +14,5 @@ dist_inflated(dist, prob, x = 0)
 \item{x}{The value to inflate. The default of \code{x = 0} is for zero-inflation.}
 }
 \description{
-Inflate a value of a probability distribution
+\lifecycle{maturing}
 }

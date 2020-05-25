@@ -1,5 +1,7 @@
 #' The Normal distribution
 #'
+#' \lifecycle{stable}
+#'
 #' @param mu The mean (location parameter) of the distribution.
 #' @param sigma The standard deviation (scale parameter) of the distribution.
 #'

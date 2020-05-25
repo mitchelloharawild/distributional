@@ -1,6 +1,8 @@
 #' The degenerate distribution
 #'
-#' @param x The value of the distribution
+#' \lifecycle{stable}
+#'
+#' @param x The value of the distribution.
 #'
 #' @examples
 #' dist_degenerate(x = 1:5)

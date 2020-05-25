@@ -10,7 +10,7 @@ dist_beta(shape1, shape2)
 \item{shape1, shape2}{The non-negative shape parameters of the Beta distribution.}
 }
 \description{
-The Beta distribution
+\lifecycle{maturing}
 }
 \examples{
 dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))

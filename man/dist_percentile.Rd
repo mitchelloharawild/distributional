@@ -12,7 +12,7 @@ dist_percentile(x, percentile)
 \item{percentile}{A list of percentiles}
 }
 \description{
-Percentile distribution
+\lifecycle{maturing}
 }
 \examples{
 dist <- dist_normal()

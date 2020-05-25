@@ -13,7 +13,7 @@ dist_binomial(size, prob)
 \item{prob}{The probability of success on each trial.}
 }
 \description{
-The Binomial distribution
+\lifecycle{stable}
 }
 \examples{
 dist_binomial(size = 1:5, prob = c(0.05, 0.5, 0.3, 0.9, 0.1))

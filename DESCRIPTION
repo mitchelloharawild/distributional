@@ -7,17 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "mail@mitchelloharawild.com",
            comment = c(ORCID = "https://orcid.org/0000-0001-6729-7695"))
-Description: Allows distributions to be used alongside data using vectors.
+Description: Allows distributions to be used alongside data
+    using vectors.
 License: GPL-3
-Suggests: 
-    testthat (>= 2.1.0),
-    covr
-Encoding: UTF-8
-Language: en-GB
-LazyData: true
-Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate',
-    'namespace'))
-RoxygenNote: 7.1.0
 Imports: 
     vctrs,
     rlang,
@@ -30,4 +22,16 @@ Imports:
     scales,
     farver,
     digest,
-    utils
+    utils,
+    lifecycle
+Suggests: 
+    testthat (>= 2.1.0),
+    covr
+RdMacros: 
+    lifecycle
+Encoding: UTF-8
+Language: en-GB
+LazyData: true
+Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate',
+    'namespace'))
+RoxygenNote: 7.1.0

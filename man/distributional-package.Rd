@@ -6,7 +6,8 @@
 \alias{distributional-package}
 \title{distributional: Vectorised Distributions}
 \description{
-Allows distributions to be used alongside data using vectors.
+Allows distributions to be used alongside data
+    using vectors.
 }
 \author{
 \strong{Maintainer}: Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (\href{https://orcid.org/0000-0001-6729-7695}{ORCID})

@@ -10,7 +10,7 @@ dist_sample(x)
 \item{x}{A list of sampled values.}
 }
 \description{
-Sampling distribution
+\lifecycle{stable}
 }
 \examples{
 dist_sample(x = list(rnorm(100), rnorm(100, 10)))
