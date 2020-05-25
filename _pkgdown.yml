@@ -5,3 +5,42 @@ template:
 
 development:
   mode: auto
+
+reference:
+- title: Methods
+  desc: >
+    Methods for interacting with distributions.
+  contents:
+    - density.distribution
+    - cdf.distribution
+    - generate.distribution
+    - quantile.distribution
+    - hilo.distribution
+    - mean.distribution
+    - variance.distribution
+- title: Graphics
+  desc: >
+    Tools for visualising distributions and intervals.
+  contents:
+    - autoplot.distribution
+    - geom_hilo_ribbon
+- title: Distributions
+  desc: >
+    Probability distributions.
+  contents:
+    - dist_beta
+    - dist_binomial
+    - dist_degenerate
+    - dist_multivariate_normal
+    - dist_negative_binomial
+    - dist_normal
+    - dist_percentile
+    - dist_sample
+- title: Distribution modifiers
+  desc: >
+    Modifiers which change the nature of a distribution.
+  contents:
+    - dist_inflated
+    - dist_mixture
+    - dist_transformed
+    - dist_truncated
