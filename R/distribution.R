@@ -40,6 +40,17 @@ dimnames.distribution <- function(x){
   attr(x, "vars")
 }
 
+#' The probability density/mass function
+#'
+#' \lifecycle{stable}
+#'
+#' Computes the probability density function for a continuous distribution, or
+#' the probability mass function for a discrete distribution.
+#'
+#' @param x The distribution(s).
+#' @param at The point at which to compute the density/mass.
+#' @param ... Additional arguments passed to methods.
+#'
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ...){
@@ -47,6 +58,16 @@ density.distribution <- function(x, at, ...){
   dist_apply(x, density, at = at, ...)
 }
 
+#' Distribution Quantiles
+#'
+#' \lifecycle{stable}
+#'
+#' Computes the quantiles of a distribution.
+#'
+#' @param x The distribution(s).
+#' @param p The probability of the quantile.
+#' @param ... Additional arguments passed to methods.
+#'
 #' @importFrom stats quantile
 #' @export
 quantile.distribution <- function(x, p, ...){
@@ -56,7 +77,9 @@ quantile.distribution <- function(x, p, ...){
 
 #' Cumulative distribution function
 #'
-#' @param x A distribution.
+#' \lifecycle{stable}
+#'
+#' @param x The distribution(s).
 #' @param q The quantile at which the cdf is calculated.
 #' @param ... Additional arguments used by methods.
 #'
@@ -71,6 +94,16 @@ cdf.distribution <- function(x, q, ...){
   dist_apply(x, cdf, q = q, ...)
 }
 
+#' Randomly sample values from a distribution
+#'
+#' \lifecycle{stable}
+#'
+#' Generate random samples from probability distributions.
+#'
+#' @param x The distribution(s).
+#' @param times The number of samples.
+#' @param ... Additional arguments used by methods.
+#'
 #' @export
 generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
@@ -80,17 +113,19 @@ generate.distribution <- function(x, times, ...){
   # Needs work to structure MV appropriately.
 }
 
+#' Mean of a probability distribution
+#'
+#' \lifecycle{stable}
+#'
+#' Returns the emperical mean of the probability distribution. If the method
+#' does not exist, the mean of a random sample will be returned.
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
 #' @export
 mean.distribution <- function(x, ...){
   dist_apply(x, mean, ...)
-  # x <- vec_data(x)
-  # out <- do.call("rbind", lapply(x, mean, ...))
-  # if(ncol(out) == 1)
-  #   drop(out)
-  # else {
-  #   colnames(out) <- vctrs::vec_as_names(character(ncol(out)), repair = "unique", quiet = TRUE)
-  #   as.data.frame(out)
-  # }
 }
 
 #' Variance
@@ -111,21 +146,72 @@ variance <- function(x, ...){
 variance.default <- function(x, ...){
   stats::var(x, ...)
 }
+
+#' Variance of a probability distribution
+#'
+#' \lifecycle{stable}
+#'
+#' Returns the emperical mean of the probability distribution. If the method
+#' does not exist, the mean of a random sample will be returned.
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @export
 variance.distribution <- function(x, ...){
   dist_apply(x, variance, ...)
 }
 
+#' Median of a probability distribution
+#'
+#' \lifecycle{stable}
+#'
+#' Returns the median (50th percentile) of a probability distribution. This is
+#' equivalent to `quantile(x, p=0.5)`.
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @seealso median.distribution
+#'
 #' @importFrom stats median
 #' @export
 median.distribution <- function(x, na.rm = FALSE, ...){
   quantile(x, p = 0.5, na.rm = na.rm, ...)
 }
 
+#' Probability intervals of a probability distribution
+#'
+#' \lifecycle{maturing}
+#'
+#' Returns a `hilo` central probability interval with probability coverage of
+#' `size`. By default, the distribution's [`quantile()`] will be used to compute
+#' the lower and upper bound for a centered interval
+#'
+#' @param x The distribution(s).
+#' @param size The size of the interval (between 0 and 100).
+#' @param ... Additional arguments used by methods.
+#'
+#' @seealso hdr.distribution
+#'
+#' @importFrom stats median
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
   dist_apply(x, hilo, size = size, ...)
 }
 
+#' Highest density regions of probability distributions
+#'
+#' \lifecycle{experimental}
+#'
+#' This function is highly experimental and will change in the future.
+#' Computes minimally sized probability intervals highest density regions.
+#'
+#' @param x The distribution(s).
+#' @param size The size of the interval (between 0 and 100).
+#' @param n The resolution used to estimate the distribution's density.
+#' @param ... Additional arguments used by methods.
+#'
 #' @export
 hdr.distribution <- function(x, size = 95, n = 512, ...){
   dist_x <- vapply(seq(0.5/n, 1 - 0.5/n, length.out = n), quantile, numeric(1L), x = x)

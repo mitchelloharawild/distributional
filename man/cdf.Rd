@@ -7,12 +7,12 @@
 cdf(x, q, ...)
 }
 \arguments{
-\item{x}{A distribution.}
+\item{x}{The distribution(s).}
 
 \item{q}{The quantile at which the cdf is calculated.}
 
 \item{...}{Additional arguments used by methods.}
 }
 \description{
-Cumulative distribution function
+\lifecycle{stable}
 }
