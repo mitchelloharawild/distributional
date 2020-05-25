@@ -2,7 +2,7 @@
 #'
 #' \lifecycle{maturing}
 #'
-#' @inheritParams dcauchy
+#' @inheritParams stats::dcauchy
 #'
 #' @seealso dcauchy
 #'

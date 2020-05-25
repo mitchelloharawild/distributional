@@ -6,6 +6,11 @@
 \usage{
 dist_cauchy(location, scale)
 }
+\arguments{
+\item{location}{location and scale parameters.}
+
+\item{scale}{location and scale parameters.}
+}
 \description{
 \lifecycle{maturing}
 }
