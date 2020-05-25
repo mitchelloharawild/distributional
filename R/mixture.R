@@ -1,3 +1,10 @@
+#' Create a mixture of distributions
+#'
+#' @param ... Distributions to be used in the mixture.
+#' @param weights The weight of each distribution passed to `...`.
+#'
+#' @name dist_mixture
+#' @export
 dist_mixture <- function(..., weights = numeric()){
   dist <- dots_list(...)
   vec_is(weights, numeric(), length(dist))
@@ -19,11 +26,13 @@ format.dist_mixture <- function(x, ...){
   )
 }
 
+#' @rdname dist_mixture
 #' @export
 density.dist_mixture <- function(x, ...){
   sum(vapply(x, density, numeric(1L), ...))
 }
 
+#' @rdname dist_mixture
 #' @export
 cdf.dist_mixture <- function(x, ...){
   sum(vapply(x, cdf, numeric(1L), ...))
