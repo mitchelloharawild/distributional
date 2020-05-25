@@ -46,6 +46,7 @@ reference:
     - dist_normal
     - dist_percentile
     - dist_poisson
+    - dist_poisson_inverse_gaussian
     - dist_sample
     - dist_student_t
     - dist_studentized_range

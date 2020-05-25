@@ -31,7 +31,8 @@ Imports:
     lifecycle
 Suggests: 
     testthat (>= 2.1.0),
-    covr
+    covr,
+    actuar
 RdMacros: 
     lifecycle
 Encoding: UTF-8
