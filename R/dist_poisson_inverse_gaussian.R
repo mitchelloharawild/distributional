@@ -7,7 +7,7 @@
 #' @seealso actuar::dpoisinvgauss
 #'
 #' @examples
-#' dist_poisson_inverse_gaussian(mean = c(1), shape = c(0.4))
+#' dist_poisson_inverse_gaussian(mean = rep(0.1, 3), shape = c(0.4, 0.8, 1))
 #'
 #' @name dist_poisson_inverse_gaussian
 #' @export
