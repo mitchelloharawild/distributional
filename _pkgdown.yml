@@ -24,37 +24,46 @@ reference:
   contents:
     - autoplot.distribution
     - geom_hilo_ribbon
-- title: Distributions
+- title: Continuous distributions
   desc: >
-    Probability distributions.
+    Continuous probability distributions.
   contents:
-    - dist_bernoulli
     - dist_beta
-    - dist_binomial
+    - dist_burr
     - dist_cauchy
     - dist_chisq
-    - dist_degenerate
     - dist_exponential
     - dist_f
     - dist_gamma
-    - dist_geometric
     - dist_hypergeometric
     - dist_inverse_exponential
     - dist_inverse_gamma
     - dist_inverse_gaussian
     - dist_logistic
-    - dist_multinomial
     - dist_multivariate_normal
-    - dist_negative_binomial
     - dist_normal
-    - dist_percentile
-    - dist_poisson
     - dist_poisson_inverse_gaussian
-    - dist_sample
     - dist_student_t
     - dist_studentized_range
     - dist_uniform
     - dist_weibull
+- title: Discrete distributions
+  desc: >
+    Discrete probability distributions.
+  contents:
+    - dist_bernoulli
+    - dist_binomial
+    - dist_geometric
+    - dist_multinomial
+    - dist_negative_binomial
+    - dist_poisson
+- title: Miscellaneous distributions
+  desc: >
+    Degenerate and non-standard probability distributions.
+  contents:
+    - dist_degenerate
+    - dist_percentile
+    - dist_sample
 - title: Distribution modifiers
   desc: >
     Modifiers which change the nature of a distribution.
