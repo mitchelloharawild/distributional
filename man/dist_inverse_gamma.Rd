@@ -17,7 +17,7 @@ dist_inverse_gamma(shape, rate = 1/scale, scale)
 \lifecycle{stable}
 }
 \examples{
-dist_inverse_gamma(shape = c(1,1,1,3,3), rate = c(0.2, 1, 3, 0.2, 1))
+dist_inverse_gamma(shape = c(1,2,3,3), rate = c(1,1,1,2))
 
 }
 \seealso{
