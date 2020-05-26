@@ -11,16 +11,17 @@ transpose <- function(.l) {
 dist_apply <- function(x, .f, ...){
   dn <- dimnames(x)
   x <- vec_data(x)
-  # TODO: Use better approach to quieten vec_rbind
   out <- mapply(.f, x, ..., SIMPLIFY = FALSE)
-  suppressMessages(out <- do.call(vctrs::vec_rbind, out))
-  if(!is.null(dn)){
+  if(is.list(out)){
+    out <- suppressMessages(vctrs::vec_rbind(!!!out))
+  } else {
+    out <- vctrs::vec_c(!!!out)
+  }
+  if(is.data.frame(out) && !is.null(dn)){
+    # Set dimension names
     colnames(out) <- dn
   }
-  if(ncol(out) == 1)
-    out[[1]]
-  else
-    out
+  out
 }
 
 # inlined from https://github.com/r-lib/cli/blob/master/R/utf8.R
