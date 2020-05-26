@@ -12,7 +12,7 @@ dist_apply <- function(x, .f, ...){
   dn <- dimnames(x)
   x <- vec_data(x)
   out <- mapply(.f, x, ..., SIMPLIFY = FALSE)
-  if(is.list(out)){
+  if(length(out[[1]]) > 1){
     out <- suppressMessages(vctrs::vec_rbind(!!!out))
   } else {
     out <- vctrs::vec_c(!!!out)
