@@ -17,7 +17,7 @@ dist_inverse_gaussian(mean, shape)
 \lifecycle{stable}
 }
 \examples{
-dist_inverse_gaussian(mean = rep(0.1, 3), shape = c(0.4, 0.8, 1))
+dist_inverse_gaussian(mean = c(1,1,1,3,3), shape = c(0.2, 1, 3, 0.2, 1))
 
 }
 \seealso{
