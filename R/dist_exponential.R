@@ -27,7 +27,7 @@ print.dist_exponential <- function(x, ...){
 #' @export
 format.dist_exponential <- function(x, digits = 2, ...){
   sprintf(
-    "exp(%s)",
+    "Exp(%s)",
     format(x[["rate"]], digits = digits, ...)
   )
 }
