@@ -15,10 +15,10 @@ dist_weibull <- function(shape, scale){
   shape <- vec_cast(shape, double())
   scale <- vec_cast(scale, double())
   if(any(shape[!is.na(shape)] < 0)){
-    abort("The shape parameter of a Gamma distribution must be non-negative.")
+    abort("The shape parameter of a Weibull distribution must be non-negative.")
   }
   if(any(scale[!is.na(scale)] <= 0)){
-    abort("The scale parameter of a Gamma distribution must be strictly positive.")
+    abort("The scale parameter of a Weibull distribution must be strictly positive.")
   }
   new_dist(shape = shape, scale = scale, class = "dist_weibull")
 }
