@@ -1,9 +1,9 @@
 ## Test environments
-* local ubuntu 18.04 install, R 3.5.3, R 3.6.0
-* ubuntu 14.04 (on travis-ci), R-devel, R 3.6.0, R 3.5.3
-* macOS 10.13 (on travis-ci), R 3.6.1
-* windows server 2012 R2 (on AppVeyor), R 3.6.1
-* win-builder, R-devel, R 3.6.1
+* local ubuntu 18.04 install, R 3.6.2
+* ubuntu 16.04 (on GitHub actions), R 4.0.0, R 3.6.3, R 3.5.3
+* macOS (on GitHub actions), R-devel, R 4.0.0
+* windows (on GitHub actions), R 4.0.0
+* win-builder, R-devel, R 4.0.0, R 3.6.3
 
 ## R CMD check results
 
