@@ -15,32 +15,58 @@ dist_inflated <- function(dist, prob, x = 0){
   if(prob < 0 || prob > 1){
     abort("The inflation probability must be between 0 and 1.")
   }
-  infl <- dist_scaled(dist_degenerate(x), prob)
-  dist <- dist_scaled(dist, 1-prob)
-  new_dist(dist, infl,
-           dimnames = dimnames(dist), class = c("dist_inflated", "dist_mixture"))
+  new_dist(dist = dist, x = x, p = prob,
+           dimnames = dimnames(dist), class = "dist_inflated")
 }
 
 #' @export
 format.dist_inflated <- function(x, ...){
   sprintf(
     "%i+%s",
-    x[[2]][["dist"]][["x"]],
-    format(x[[1]][["dist"]])
+    x[["x"]],
+    format(x[["dist"]])
   )
 }
 
 #' @export
+density.dist_inflated <- function(x, at, ...){
+  x[["p"]]*(at==x[["x"]]) + (1-x[["p"]])*density(x[["dist"]], at, ...)
+}
+
+#' @export
+quantile.dist_inflated <- function(x, p, ...){
+  qt <- quantile(x[["dist"]], pmax(0, (p - x[["p"]]) / (1-x[["p"]])), ...)
+  if(qt >= x[["x"]]) return(qt)
+  qt <- quantile(x[["dist"]], p, ...)
+  if(qt < x[["x"]]) qt else x[["x"]]
+}
+
+#' @export
+cdf.dist_inflated <- function(x, q, ...){
+  x[["p"]]*(q>x[["x"]]) + (1-x[["p"]])*cdf(x[["dist"]], q, ...)
+}
+
+#' @export
+generate.dist_inflated <- function(x, times, ...){
+  p <- x[["p"]]
+  inf <- runif(times) < p
+  r <- numeric(times)
+  r[inf] <- p*x[["x"]]
+  r[!inf] <- generate(x[["dist"]], sum(!inf))
+  r
+}
+
+#' @export
 mean.dist_inflated <- function(x, ...){
-  p <- x[[2]][["scale"]]
-  p*x[[2]][["dist"]][["x"]] + (1-p)*mean(x[[1]][["dist"]])
+  p <- x[["p"]]
+  p*x[["x"]] + (1-p)*mean(x[["dist"]])
 }
 
 #' @export
 variance.dist_inflated <- function(x, ...){
-  m1 <- mean(x[[1]][["dist"]])
-  v <- variance(x[[1]][["dist"]])
+  m1 <- mean(x[["dist"]])
+  v <- variance(x[["dist"]])
   m2 <- v + m1^2
-  p <- x[[2]][["scale"]]
+  p <- x[["p"]]
   p*v + p*(1-p)*m1^2
 }
