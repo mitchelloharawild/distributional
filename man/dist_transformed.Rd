@@ -7,12 +7,13 @@
 dist_transformed(dist, transform, inverse)
 }
 \arguments{
-\item{dist}{A distribution vector}
+\item{dist}{A univariate distribution vector.}
 
-\item{transform}{A function used to transform the distribution}
+\item{transform}{A function used to transform the distribution. This
+transformation should be monotonic over appropriate domain.}
 
-\item{inverse}{The inverse of the \code{transform} function}
+\item{inverse}{The inverse of the \code{transform} function.}
 }
 \description{
-Modify a distribution with a transformation
+\lifecycle{experimental}
 }
