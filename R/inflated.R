@@ -49,7 +49,7 @@ cdf.dist_inflated <- function(x, q, ...){
 #' @export
 generate.dist_inflated <- function(x, times, ...){
   p <- x[["p"]]
-  inf <- runif(times) < p
+  inf <- stats::runif(times) < p
   r <- numeric(times)
   r[inf] <- p*x[["x"]]
   r[!inf] <- generate(x[["dist"]], sum(!inf))
