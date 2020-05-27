@@ -37,8 +37,8 @@ autoplot.distribution <- function(x, type = c("pdf", "cdf"), n = 100,
   y_val <- do.call("vec_c", y_val)
 
   ggplot2::ggplot(
-    data.frame(x = x_pos, y = y_val, dist = rep(seq_along(x), each = n)),
-    ggplot2::aes_string(x = "x", y = "y", group = "dist")
+    data.frame(x = x_pos, y = y_val, distribution = rep(format(x), each = n), id = rep(seq_along(x), each = n)),
+    ggplot2::aes_string(x = "x", y = "y", colour = "distribution", group = "id")
   ) +
     ggplot2::geom_line() +
     ggplot2::labs(y = type)
