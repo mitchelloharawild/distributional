@@ -53,10 +53,10 @@ generate.dist_negbin <- function(x, times, ...){
 
 #' @export
 mean.dist_negbin <- function(x, ...){
-  x[["prob"]]*x[["size"]] / (1 - x[["prob"]])
+  x[["size"]] * (1 - x[["prob"]]) / x[["prob"]]
 }
 
 #' @export
 variance.dist_negbin <- function(x, ...){
-  x[["prob"]]*x[["size"]] / (1 - x[["prob"]])^2
+  x[["size"]] * (1 - x[["prob"]]) / x[["prob"]]^2
 }
