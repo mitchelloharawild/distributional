@@ -51,7 +51,7 @@ generate.dist_inflated <- function(x, times, ...){
   p <- x[["p"]]
   inf <- stats::runif(times) < p
   r <- numeric(times)
-  r[inf] <- p*x[["x"]]
+  r[inf] <- x[["x"]]
   r[!inf] <- generate(x[["dist"]], sum(!inf))
   r
 }
@@ -64,6 +64,7 @@ mean.dist_inflated <- function(x, ...){
 
 #' @export
 variance.dist_inflated <- function(x, ...){
+  if(x[["x"]] != 0) return(NextMethod())
   m1 <- mean(x[["dist"]])
   v <- variance(x[["dist"]])
   m2 <- v + m1^2
