@@ -17,6 +17,7 @@ reference:
     - quantile.distribution
     - hilo.distribution
     - mean.distribution
+    - median.distribution
     - variance.distribution
 - title: Graphics
   desc: >
