@@ -68,5 +68,5 @@ variance.dist_inflated <- function(x, ...){
   v <- variance(x[["dist"]])
   m2 <- v + m1^2
   p <- x[["p"]]
-  p*v + p*(1-p)*m1^2
+  (1-p)*v + p*(1-p)*m1^2
 }
