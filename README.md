@@ -25,7 +25,7 @@ intervals with `hilo()`.
 The distributional nature of a model’s predictions is often understated,
 with defaults of `predict()` methods usually only producing point
 predictions. The `forecast()` function from the [forecast
-package](https://cloud.r-project.org/package=forecast) goes further in
+package](https://CRAN.R-project.org/package=forecast) goes further in
 illustrating uncertainty by producing point forecasts and intervals by
 default, however the user’s ability to interact with them is limited.
 This package vectorises distributions and provides methods for working
