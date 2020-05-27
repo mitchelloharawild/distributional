@@ -29,3 +29,18 @@ format.dist_inflated <- function(x, ...){
     format(x[[1]][["dist"]])
   )
 }
+
+#' @export
+mean.dist_inflated <- function(x, ...){
+  p <- x[[2]][["scale"]]
+  p*x[[2]][["dist"]][["x"]] + (1-p)*mean(x[[1]][["dist"]])
+}
+
+#' @export
+variance.dist_inflated <- function(x, ...){
+  m1 <- mean(x[[1]][["dist"]])
+  v <- variance(x[[1]][["dist"]])
+  m2 <- v + m1^2
+  p <- x[[2]][["scale"]]
+  p*v + p*(1-p)*m1^2
+}
