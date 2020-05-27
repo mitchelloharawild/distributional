@@ -43,7 +43,7 @@ quantile.dist_inflated <- function(x, p, ...){
 
 #' @export
 cdf.dist_inflated <- function(x, q, ...){
-  x[["p"]]*(q>x[["x"]]) + (1-x[["p"]])*cdf(x[["dist"]], q, ...)
+  x[["p"]]*(q>=x[["x"]]) + (1-x[["p"]])*cdf(x[["dist"]], q, ...)
 }
 
 #' @export
