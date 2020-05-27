@@ -14,6 +14,15 @@ Vectorised distribution objects with tools for manipulating,
     p/d/q/r functions, other useful statistics can be computed including means,
     variances, intervals, and highest density regions.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://pkg.mitchelloharawild.com/distributional/}
+  \item \url{https://github.com/mitchelloharawild/distributional}
+  \item Report bugs at \url{https://github.com/mitchelloharawild/distributional/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (\href{https://orcid.org/0000-0001-6729-7695}{ORCID})
 

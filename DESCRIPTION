@@ -35,6 +35,8 @@ Suggests:
     actuar
 RdMacros: 
     lifecycle
+URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional
+BugReports: https://github.com/mitchelloharawild/distributional/issues
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
