@@ -78,7 +78,7 @@ is.na.hilo <- function(x) {
 
 #' @export
 vec_ptype2.hilo.hilo <- function(x, y, ...){
-  x[0]
+  x
 }
 
 #' @method vec_math hilo

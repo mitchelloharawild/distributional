@@ -305,7 +305,7 @@ vec_ptype2.distribution.distribution <- function(x, y, ...){
   if(!identical(dimnames(x), dimnames(y))){
     abort("Distributions must have the same `dimnames` to be combined.")
   }
-  x[0]
+  x
 }
 #' @method vec_ptype2.double distribution
 #' @export
