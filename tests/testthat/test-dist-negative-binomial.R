@@ -16,7 +16,7 @@ test_that("Negative Binomial distribution", {
   expect_equal(cdf(dist, 1), stats::pnbinom(1, 10, 0.4))
 
   # F(Finv(a)) ~= a
-  expect_equal(cdf(dist, quantile(dist, 0.6)), 0.6, tolerance = 1e-3)
+  expect_equal(cdf(dist, quantile(dist, 0.6358)), 0.6358, tolerance = 1e-3)
 
   # stats
   expect_equal(mean(dist), 0.6*10/(1-0.6))
