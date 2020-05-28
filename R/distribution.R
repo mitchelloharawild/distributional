@@ -75,7 +75,7 @@ quantile.distribution <- function(x, p, ...){
   dist_apply(x, quantile, p = p, ...)
 }
 
-#' Cumulative distribution function
+#' The cumulative distribution function
 #'
 #' \lifecycle{stable}
 #'

@@ -27,8 +27,8 @@
 \lifecycle{experimental}
 }
 \details{
-Visualise a distribution by plotting its probability density function
-(\code{\link[=density]{density()}}) or cumulative density function (\code{\link[=cdf]{cdf()}}).
+Visualise distribution(s) by plotting its probability density function
+(\code{\link[=density]{density()}}) or cumulative distribution function (\code{\link[=cdf]{cdf()}}).
 Note: This function currently only works for continuous distributions.
 }
 \examples{

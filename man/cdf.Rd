@@ -3,7 +3,7 @@
 \name{cdf}
 \alias{cdf}
 \alias{cdf.distribution}
-\title{Cumulative distribution function}
+\title{The cumulative distribution function}
 \usage{
 cdf(x, q, ...)
 

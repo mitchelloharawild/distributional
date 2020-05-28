@@ -16,6 +16,7 @@ reference:
     - generate.distribution
     - quantile.distribution
     - hilo.distribution
+    - hdr.distribution
     - mean.distribution
     - median.distribution
     - variance.distribution

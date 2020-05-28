@@ -2,8 +2,8 @@
 #'
 #' \lifecycle{experimental}
 #'
-#' Visualise a distribution by plotting its probability density function
-#' ([`density()`]) or cumulative density function ([`cdf()`]).
+#' Visualise distribution(s) by plotting its probability density function
+#' ([`density()`]) or cumulative distribution function ([`cdf()`]).
 #' Note: This function currently only works for continuous distributions.
 #'
 #' @param x The distribution(s) to plot.
