@@ -2,10 +2,21 @@
 #'
 #' \lifecycle{experimental}
 #'
+#' The [`density()`], [`mean()`], and [`variance()`] methods are approximate as
+#' they are based on numerical derivatives.
+#'
 #' @param dist A univariate distribution vector.
 #' @param transform A function used to transform the distribution. This
 #' transformation should be monotonic over appropriate domain.
 #' @param inverse The inverse of the `transform` function.
+#'
+#' @examples
+#' # Create a log normal distribution
+#' dist <- dist_transformed(dist_normal(0, 0.5), exp, log)
+#' density(dist, 1) # dlnorm(1, 0, 0.5)
+#' cdf(dist, 4) # plnorm(4, 0, 0.5)
+#' quantile(dist, 0.1) # qlnorm(0.1, 0, 0.5)
+#' generate(dist, 10) # rlnorm(10, 0, 0.5)
 #'
 #' @export
 dist_transformed <- function(dist, transform, inverse){
