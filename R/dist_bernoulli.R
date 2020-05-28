@@ -25,7 +25,7 @@ print.dist_bernoulli <- function(x, ...){
 format.dist_bernoulli <- function(x, digits = 2, ...){
   sprintf(
     "Bernoulli(%s)",
-    format(1, digits = digits, ...)
+    format(x[["p"]], digits = digits, ...)
   )
 }
 
