@@ -27,7 +27,7 @@ print.dist_logarithmic <- function(x, ...){
 #' @export
 format.dist_logarithmic <- function(x, digits = 2, ...){
   sprintf(
-    "logarithmic(%s)",
+    "Logarithmic(%s)",
     format(x[["p"]], digits = digits, ...)
   )
 }
