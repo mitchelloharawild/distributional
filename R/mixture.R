@@ -37,7 +37,8 @@ density.dist_mixture <- function(x, ...){
 #' @export
 quantile.dist_mixture <- function(x, p, ...){
   # Find bounds for optimisation based on range of each quantile
-  dist_q <- vapply(x[["dist"]], quantile, numeric(1L), p, ...)
+  dist_q <- vapply(x[["dist"]], quantile, numeric(1L), p, ..., USE.NAMES = FALSE)
+  if(vctrs::vec_unique_count(dist_q) == 1) return(dist_q[1])
 
   # Search the cdf() for appropriate quantile
   stats::optimise(
