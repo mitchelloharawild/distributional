@@ -128,7 +128,7 @@ GeomHiloLinerange <- ggplot2::ggproto(
   draw_key = function(data, params, size) {
     lwd <- min(data$size, min(size) / 4)
     # Calculate and set colour
-    fillcol <- darken_fill(data$fill, 80)
+    fillcol <- darken_fill(data$colour, 80)
 
     grid::rectGrob(
       width = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
