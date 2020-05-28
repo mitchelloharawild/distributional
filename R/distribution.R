@@ -291,15 +291,6 @@ vec_math.distribution <- function(.fn, .x, ...) {
   vec_restore(out, .x)
 }
 
-#' @method vec_ptype2 distribution
-#' @export
-vec_ptype2.distribution <- function(x, y, ...) UseMethod("vec_ptype2.distribution", y)
-#' @method vec_ptype2.distribution default
-#' @export
-vec_ptype2.distribution.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-#' @method vec_ptype2.distribution distribution
 #' @export
 vec_ptype2.distribution.distribution <- function(x, y, ...){
   if(!identical(dimnames(x), dimnames(y))){
@@ -307,38 +298,25 @@ vec_ptype2.distribution.distribution <- function(x, y, ...){
   }
   x[0]
 }
-#' @method vec_ptype2.double distribution
 #' @export
 vec_ptype2.double.distribution <- function(x, y, ...) new_dist()
-#' @method vec_ptype2.distribution double
 #' @export
 vec_ptype2.distribution.double <- function(x, y, ...) new_dist()
-#' @method vec_ptype2.integer distribution
 #' @export
 vec_ptype2.integer.distribution <- function(x, y, ...) new_dist()
-#' @method vec_ptype2.distribution integer
 #' @export
 vec_ptype2.distribution.integer <- function(x, y, ...) new_dist()
 
-#' @method vec_cast distribution
-#' @export
-vec_cast.distribution <- function(x, to, ...) UseMethod("vec_cast.distribution")
-#' @method vec_cast.distribution default
-#' @export
-vec_cast.distribution.default <- function(x, to, ...) vec_default_cast(x, to)
-#' @method vec_cast.distribution distribution
 #' @export
 vec_cast.distribution.distribution <- function(x, to, ...){
   dimnames(x) <- dimnames(to)
   x
 }
-#' @method vec_cast.distribution double
 #' @export
 vec_cast.distribution.double <- function(x, to, ...){
   x <- dist_degenerate(x)
   dimnames(x) <- dimnames(to)
   x
 }
-#' @method vec_cast.distribution integer
 #' @export
 vec_cast.distribution.integer <- vec_cast.distribution.double
