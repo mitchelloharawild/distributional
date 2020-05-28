@@ -25,9 +25,10 @@ print.dist_studentized_range <- function(x, ...){
 #' @export
 format.dist_studentized_range <- function(x, digits = 2, ...){
   sprintf(
-    "StudentizedRange(%s, %s)",
+    "StudentizedRange(%s, %s, %s)",
     format(x[["nm"]], digits = digits, ...),
-    format(x[["df"]], digits = digits, ...)
+    format(x[["df"]], digits = digits, ...),
+    format(x[["nr"]], digits = digits, ...)
   )
 }
 
