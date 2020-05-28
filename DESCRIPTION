@@ -16,8 +16,8 @@ Description: Vectorised distribution objects with tools for manipulating,
     variances, intervals, and highest density regions.
 License: GPL-3
 Imports: 
-    vctrs,
-    rlang,
+    vctrs (>= 0.3.0),
+    rlang (>= 0.4.5),
     generics,
     ellipsis,
     stats,
