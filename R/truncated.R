@@ -49,6 +49,8 @@ quantile.dist_truncated <- function(x, p, ...){
 
 #' @export
 cdf.dist_truncated <- function(x, q, ...){
+  if(q < x[["lower"]]) return(0)
+  if(q > x[["upper"]]) return(1)
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
   cdf_lwr <- cdf(x[["dist"]], x[["lower"]])
   (cdf(x[["dist"]], q = q, ...) - cdf_lwr)/(cdf_upr - cdf_lwr)
