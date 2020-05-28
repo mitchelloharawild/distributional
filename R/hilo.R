@@ -76,6 +76,11 @@ is.na.hilo <- function(x) {
   is.na(x$lower) & is.na(x$upper)
 }
 
+#' @export
+vec_ptype2.hilo.hilo <- function(x, y, ...){
+  x[0]
+}
+
 #' @method vec_math hilo
 #' @export
 vec_math.hilo <- function(.fn, .x, ...){
