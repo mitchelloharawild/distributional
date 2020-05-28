@@ -30,7 +30,7 @@ quantile.dist_degenerate <- function(x, p, ...){
 
 #' @export
 cdf.dist_degenerate <- function(x, q, ...){
-  if(q > x[["x"]]) 1 else 0
+  if(q >= x[["x"]]) 1 else 0
 }
 
 #' @export
