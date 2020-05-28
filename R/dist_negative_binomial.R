@@ -4,6 +4,8 @@
 #'
 #' @inheritParams stats::NegBinomial
 #'
+#' @seealso stats::NegBinomial
+#'
 #' @examples
 #' dist_negative_binomial(size = 10, prob = 0.5)
 #'
