@@ -11,7 +11,7 @@ transpose <- function(.l) {
 dist_apply <- function(x, .f, ...){
   dn <- dimnames(x)
   x <- vec_data(x)
-  out <- mapply(.f, x, ..., SIMPLIFY = FALSE)
+  out <- mapply(.f, x, ..., SIMPLIFY = FALSE, USE.NAMES = FALSE)
   if(length(out[[1]]) > 1){
     out <- suppressMessages(vctrs::vec_rbind(!!!out))
   } else {
