@@ -34,13 +34,12 @@ model functions.
 
 ## Installation
 
-<!-- You can install the released version of distributional from [CRAN](https://CRAN.R-project.org) with: -->
+You can install the released version of distributional from
+[CRAN](https://CRAN.R-project.org/package=distributional) with:
 
-<!-- ```{r, eval = FALSE} -->
-
-<!-- install.packages("distributional") -->
-
-<!-- ``` -->
+``` r
+install.packages("distributional")
+```
 
 The development version can be installed from
 [GitHub](https://github.com/mitchelloharawild/distributional) with:
@@ -112,7 +111,6 @@ You can also visualise the distribution(s) using `autoplot()`.
 
 ``` r
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 3.6.3
 autoplot(my_dist, type = "pdf")
 ```
 

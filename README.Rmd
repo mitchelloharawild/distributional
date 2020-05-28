@@ -29,11 +29,11 @@ The distributional nature of a model's predictions is often understated, with de
 
 ## Installation
 
-<!-- You can install the released version of distributional from [CRAN](https://CRAN.R-project.org) with: -->
+You can install the released version of distributional from [CRAN](https://CRAN.R-project.org/package=distributional) with:
 
-<!-- ```{r, eval = FALSE} -->
-<!-- install.packages("distributional") -->
-<!-- ``` -->
+```{r, eval = FALSE}
+install.packages("distributional")
+```
 
 The development version can be installed from [GitHub](https://github.com/mitchelloharawild/distributional) with:
 
