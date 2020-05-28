@@ -45,7 +45,6 @@ reference:
     - dist_multivariate_normal
     - dist_normal
     - dist_pareto
-    - dist_poisson_inverse_gaussian
     - dist_student_t
     - dist_studentized_range
     - dist_uniform
@@ -61,6 +60,7 @@ reference:
     - dist_multinomial
     - dist_negative_binomial
     - dist_poisson
+    - dist_poisson_inverse_gaussian
 - title: Miscellaneous distributions
   desc: >
     Degenerate and non-standard probability distributions.
