@@ -12,6 +12,11 @@
 #' @param quantile_range The range of the distribution (specified as quantiles).
 #' @param ... Unused.
 #'
+#' @examples
+#' dist <- c(dist_normal(mu = 0, sigma = 1), dist_student_t(df = 3))
+#' autoplot(dist, type = "pdf")
+#' autoplot(dist, type = "cdf")
+#'
 #' @importFrom ggplot2 autoplot
 #' @export
 autoplot.distribution <- function(x, type = c("pdf", "cdf"), n = 100,

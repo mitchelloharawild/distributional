@@ -31,3 +31,9 @@ Visualise a distribution by plotting its probability density function
 (\code{\link[=density]{density()}}) or cumulative density function (\code{\link[=cdf]{cdf()}}).
 Note: This function currently only works for continuous distributions.
 }
+\examples{
+dist <- c(dist_normal(mu = 0, sigma = 1), dist_student_t(df = 3))
+autoplot(dist, type = "pdf")
+autoplot(dist, type = "cdf")
+
+}

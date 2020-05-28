@@ -25,6 +25,7 @@ reference:
   contents:
     - autoplot.distribution
     - geom_hilo_ribbon
+    - geom_hilo_linerange
 - title: Continuous distributions
   desc: >
     Continuous probability distributions.
