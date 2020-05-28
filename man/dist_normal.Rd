@@ -18,3 +18,6 @@ dist_normal(mu = 0, sigma = 1)
 dist_normal(mu = 1:5, sigma = 3)
 
 }
+\seealso{
+\link[stats:Normal]{stats::Normal}
+}

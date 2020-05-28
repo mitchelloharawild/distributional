@@ -5,6 +5,8 @@
 #' @param mu The mean (location parameter) of the distribution.
 #' @param sigma The standard deviation (scale parameter) of the distribution.
 #'
+#' @seealso [stats::Normal]
+#'
 #' @examples
 #' dist_normal(mu = 1:5, sigma = 3)
 #'
