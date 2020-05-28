@@ -6,8 +6,14 @@ test_that("Multivariate normal distribution", {
 
   expect_equal(format(dist), "MVN[2]")
 
+  # stats
+  expect_equal(mean(dist), data.frame(a = mu[1], b = mu[2]))
+  expect_equal(variance(dist), list(sigma))
+
   # quantiles
   expect_equal(quantile(dist, 0.1), data.frame(a=qnorm(0.1, mu[1], sqrt(sigma[1,1])), b=qnorm(0.1, mu[2], sqrt(sigma[2,2]))))
+
+  skip_if_not_installed("mvtnorm")
   expect_equal(quantile(dist, 0.1, type = "equicoordinate"), 0.131134182424683) # dput(mvtnorm::qmvnorm(0.1, mean = mu, sigma = sigma))
 
   # pdf
@@ -20,8 +26,4 @@ test_that("Multivariate normal distribution", {
 
   # F(Finv(a)) ~= a
   # expect_equal(cdf(dist, list(as.numeric(quantile(dist, 0.53)))), 0.53, tolerance = 1e-3)
-
-  # stats
-  expect_equal(mean(dist), data.frame(a = mu[1], b = mu[2]))
-  expect_equal(variance(dist), list(sigma))
 })

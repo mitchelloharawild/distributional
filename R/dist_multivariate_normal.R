@@ -29,6 +29,7 @@ format.dist_mvnorm <- function(x, digits = 2, ...){
 
 #' @export
 density.dist_mvnorm <- function(x, at, ...){
+  require_package("mvtnorm")
   mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]])
 }
 
@@ -38,17 +39,20 @@ quantile.dist_mvnorm <- function(x, p, type = c("univariate", "equicoordinate"),
   if (type == "univariate") {
     stats::qnorm(p, x[["mu"]], sd = diag(sqrt(x[["sigma"]])))
   } else {
+    require_package("mvtnorm")
     mvtnorm::qmvnorm(p, mean = x[["mu"]], sigma = x[["sigma"]])$quantile
   }
 }
 
 #' @export
 cdf.dist_mvnorm <- function(x, q, ...){
+  require_package("mvtnorm")
   mvtnorm::pmvnorm(q, mean = x[["mu"]], sigma = x[["sigma"]])[1]
 }
 
 #' @export
 generate.dist_mvnorm <- function(x, times, ...){
+  require_package("mvtnorm")
   mvtnorm::rmvnorm(times, x[["mu"]], x[["sigma"]])
 }
 

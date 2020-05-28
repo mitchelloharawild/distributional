@@ -22,7 +22,6 @@ Imports:
     ellipsis,
     stats,
     numDeriv,
-    mvtnorm,
     ggplot2,
     scales,
     farver,
@@ -32,6 +31,7 @@ Imports:
 Suggests: 
     testthat (>= 2.1.0),
     covr,
+    mvtnorm,
     actuar
 RdMacros: 
     lifecycle
