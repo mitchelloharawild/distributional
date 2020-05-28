@@ -2,6 +2,9 @@
 #'
 #' \lifecycle{experimental}
 #'
+#' Note that the samples are generated using inverse transform sampling, and the
+#' means and variances are estimated from samples.
+#'
 #' @param dist The distribution(s) to truncate.
 #' @param lower,upper The range of values to keep from a distribution.
 #'
@@ -34,6 +37,14 @@ density.dist_truncated <- function(x, at, ...){
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
   cdf_lwr <- cdf(x[["dist"]], x[["lower"]])
   density(x[["dist"]], at = at, ...)/(cdf_upr - cdf_lwr)
+}
+
+#' @export
+quantile.dist_truncated <- function(x, p, ...){
+  F_lwr <- cdf(x[["dist"]], x[["lower"]], ...)
+  F_upr <- cdf(x[["dist"]], x[["upper"]], ...)
+  qt <- quantile(x[["dist"]], F_lwr + p * ( F_upr - F_lwr), ...)
+  min(max(x[["lower"]], qt), x[["upper"]])
 }
 
 #' @export

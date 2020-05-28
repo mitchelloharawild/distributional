@@ -14,3 +14,7 @@ dist_truncated(dist, lower = -Inf, upper = Inf)
 \description{
 \lifecycle{experimental}
 }
+\details{
+Note that the samples are generated using inverse transform sampling, and the
+means and variances are estimated from samples.
+}
