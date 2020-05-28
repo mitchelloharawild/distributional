@@ -1,7 +1,7 @@
 test_that("Inverse Gamma distribution", {
   dist <- dist_inverse_gamma(3, 2)
 
-  expect_equal(format(dist), "InvGamma(3, 2)")
+  expect_equal(format(dist), "InvGamma(3, 0.5)")
 
   # quantiles
   expect_equal(quantile(dist, 0.1), 0.0939439883852355) # dput(actuar::qinvgamma(0.1, 3, 2))
