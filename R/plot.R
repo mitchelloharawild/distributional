@@ -13,6 +13,7 @@
 #' @param ... Unused.
 #'
 #' @examples
+#' library(ggplot2)
 #' dist <- c(dist_normal(mu = 0, sigma = 1), dist_student_t(df = 3))
 #' autoplot(dist, type = "pdf")
 #' autoplot(dist, type = "cdf")

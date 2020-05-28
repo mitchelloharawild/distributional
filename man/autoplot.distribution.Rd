@@ -32,6 +32,7 @@ Visualise a distribution by plotting its probability density function
 Note: This function currently only works for continuous distributions.
 }
 \examples{
+library(ggplot2)
 dist <- c(dist_normal(mu = 0, sigma = 1), dist_student_t(df = 3))
 autoplot(dist, type = "pdf")
 autoplot(dist, type = "cdf")
