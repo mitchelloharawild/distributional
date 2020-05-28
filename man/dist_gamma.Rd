@@ -20,5 +20,5 @@ dist_gamma(shape = c(1,2,3,5,9,7.5,0.5), rate = c(0.5,0.5,0.5,1,2,1,1))
 
 }
 \seealso{
-dgamma
+\link[stats:GammaDist]{stats::GammaDist}
 }

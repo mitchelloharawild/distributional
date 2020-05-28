@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dpoisinvgauss
 #'
-#' @seealso actuar::dpoisinvgauss
+#' @seealso [actuar::PoissonInverseGaussian]
 #'
 #' @examples
 #' dist_poisson_inverse_gaussian(mean = rep(0.1, 3), shape = c(0.4, 0.8, 1))

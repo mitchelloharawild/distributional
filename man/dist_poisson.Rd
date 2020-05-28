@@ -17,5 +17,5 @@ dist_poisson(lambda = c(1, 4, 10))
 
 }
 \seealso{
-dpois
+\link[stats:Poisson]{stats::Poisson}
 }

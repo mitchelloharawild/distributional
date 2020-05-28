@@ -4,7 +4,7 @@
 #'
 #' @param shape1,shape2 The non-negative shape parameters of the Beta distribution.
 #'
-#' @seealso dbeta
+#' @seealso [stats::Beta]
 #'
 #' @examples
 #' dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))

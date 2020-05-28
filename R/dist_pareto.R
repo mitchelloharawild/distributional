@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dpareto
 #'
-#' @seealso dpareto
+#' @seealso [actuar::Pareto]
 #'
 #' @examples
 #' dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))

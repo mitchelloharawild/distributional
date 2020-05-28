@@ -19,5 +19,5 @@ dist_gumbel(alpha = c(0.5, 1, 1.5, 3), scale = c(2, 2, 3, 4))
 
 }
 \seealso{
-actuar::dgumbel
+\link[actuar:Gumbel]{actuar::Gumbel}
 }

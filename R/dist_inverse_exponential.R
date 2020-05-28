@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dinvexp
 #'
-#' @seealso actuar::dinvexp
+#' @seealso [actuar::InverseExponential]
 #'
 #' @examples
 #' dist_inverse_exponential(rate = 1:5)

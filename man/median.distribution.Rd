@@ -21,6 +21,3 @@
 Returns the median (50th percentile) of a probability distribution. This is
 equivalent to \code{quantile(x, p=0.5)}.
 }
-\seealso{
-median.distribution
-}

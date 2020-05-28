@@ -15,6 +15,6 @@
 \lifecycle{stable}
 }
 \details{
-Returns the emperical mean of the probability distribution. If the method
+Returns the empirical mean of the probability distribution. If the method
 does not exist, the mean of a random sample will be returned.
 }

@@ -1,8 +1,8 @@
 #' Ribbon plots for hilo intervals
 #'
 #' `geom_hilo_ribbon()` displays the interval defined by a hilo object. The
-#' luminence of the shaded area indicates its confidence level. The shade colour
-#' can be controlled by the `fill` aesthetic, however the luminence will be
+#' luminance of the shaded area indicates its confidence level. The shade colour
+#' can be controlled by the `fill` aesthetic, however the luminance will be
 #' overwritten to represent the confidence level.
 #'
 #' @inheritParams ggplot2::geom_ribbon

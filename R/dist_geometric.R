@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dgeom
 #'
-#' @seealso dgeom
+#' @seealso [stats::Geometric]
 #'
 #' @examples
 #' dist_geometric(prob = c(0.2, 0.5, 0.8))

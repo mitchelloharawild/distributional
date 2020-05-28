@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dexp
 #'
-#' @seealso dexp
+#' @seealso [stats::Exponential]
 #'
 #' @examples
 #' dist_exponential(rate = c(2, 1, 2/3))

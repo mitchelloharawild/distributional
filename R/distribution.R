@@ -119,7 +119,7 @@ generate.distribution <- function(x, times, ...){
 #'
 #' \lifecycle{stable}
 #'
-#' Returns the emperical mean of the probability distribution. If the method
+#' Returns the empirical mean of the probability distribution. If the method
 #' does not exist, the mean of a random sample will be returned.
 #'
 #' @param x The distribution(s).
@@ -138,7 +138,7 @@ mean.distribution <- function(x, ...){
 #' @param x An object.
 #' @param ... Additional arguments used by methods.
 #'
-#' @seealso variance.distribution
+#' @seealso [`variance.distribution()`]
 #'
 #' @export
 variance <- function(x, ...){
@@ -153,7 +153,7 @@ variance.default <- function(x, ...){
 #'
 #' \lifecycle{stable}
 #'
-#' Returns the emperical mean of the probability distribution. If the method
+#' Returns the empirical mean of the probability distribution. If the method
 #' does not exist, the mean of a random sample will be returned.
 #'
 #' @param x The distribution(s).
@@ -175,8 +175,6 @@ variance.distribution <- function(x, ...){
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
 #'
-#' @seealso median.distribution
-#'
 #' @importFrom stats median
 #' @export
 median.distribution <- function(x, na.rm = FALSE, ...){
@@ -195,7 +193,7 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 #' @param size The size of the interval (between 0 and 100).
 #' @param ... Additional arguments used by methods.
 #'
-#' @seealso hdr.distribution
+#' @seealso [`hdr.distribution()`]
 #'
 #' @importFrom stats median
 #' @export

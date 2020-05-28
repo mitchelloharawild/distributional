@@ -17,5 +17,5 @@ dist_exponential(rate = c(2, 1, 2/3))
 
 }
 \seealso{
-dexp
+\link[stats:Exponential]{stats::Exponential}
 }

@@ -17,5 +17,5 @@ dist_inverse_exponential(rate = 1:5)
 
 }
 \seealso{
-actuar::dinvexp
+\link[actuar:InverseExponential]{actuar::InverseExponential}
 }

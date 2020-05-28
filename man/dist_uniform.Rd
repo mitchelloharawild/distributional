@@ -19,5 +19,5 @@ dist_uniform(min = c(3, -2), max = c(5, 4))
 
 }
 \seealso{
-dunif
+\link[stats:Uniform]{stats::Uniform}
 }

@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dinvgauss
 #'
-#' @seealso actuar::dinvgauss
+#' @seealso [actuar::InverseGaussian]
 #'
 #' @examples
 #' dist_inverse_gaussian(mean = c(1,1,1,3,3), shape = c(0.2, 1, 3, 0.2, 1))

@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dcauchy
 #'
-#' @seealso dcauchy
+#' @seealso [stats::Cauchy]
 #'
 #' @examples
 #' dist_cauchy(location = c(0, 0, 0, -2), scale = c(0.5, 1, 2, 1))

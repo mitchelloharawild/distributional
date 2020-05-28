@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dchisq
 #'
-#' @seealso dchisq
+#' @seealso [stats::Chisquare]
 #'
 #' @examples
 #' dist_chisq(df = c(1,2,3,4,6,9))

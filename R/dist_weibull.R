@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dweibull
 #'
-#' @seealso dweibull
+#' @seealso [stats::Weibull]
 #'
 #' @examples
 #' dist_weibull(shape = c(0.5, 1, 1.5, 5), scale = rep(1, 4))

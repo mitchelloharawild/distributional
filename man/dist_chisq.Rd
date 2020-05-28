@@ -19,5 +19,5 @@ dist_chisq(df = c(1,2,3,4,6,9))
 
 }
 \seealso{
-dchisq
+\link[stats:Chisquare]{stats::Chisquare}
 }

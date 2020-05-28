@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dpois
 #'
-#' @seealso dpois
+#' @seealso [stats::Poisson]
 #'
 #' @examples
 #' dist_poisson(lambda = c(1, 4, 10))

@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dlogis
 #'
-#' @seealso dlogis
+#' @seealso [stats::Logistic]
 #'
 #' @examples
 #' dist_logistic(location = c(5,9,9,6,2), scale = c(2,3,4,2,1))

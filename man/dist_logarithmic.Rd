@@ -17,5 +17,5 @@ dist_logarithmic(prob = c(0.33, 0.66, 0.99))
 
 }
 \seealso{
-actuar::dlogarithmic
+\link[actuar:Logarithmic]{actuar::Logarithmic}
 }

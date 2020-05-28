@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dlogarithmic
 #'
-#' @seealso actuar::dlogarithmic
+#' @seealso [actuar::Logarithmic]
 #'
 #' @examples
 #' dist_logarithmic(prob = c(0.33, 0.66, 0.99))

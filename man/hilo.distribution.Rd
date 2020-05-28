@@ -22,5 +22,5 @@ Returns a \code{hilo} central probability interval with probability coverage of
 the lower and upper bound for a centered interval
 }
 \seealso{
-hdr.distribution
+\code{\link[=hdr.distribution]{hdr.distribution()}}
 }

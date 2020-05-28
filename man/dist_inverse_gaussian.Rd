@@ -21,5 +21,5 @@ dist_inverse_gaussian(mean = c(1,1,1,3,3), shape = c(0.2, 1, 3, 0.2, 1))
 
 }
 \seealso{
-actuar::dinvgauss
+\link[actuar:InverseGaussian]{actuar::InverseGaussian}
 }

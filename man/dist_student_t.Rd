@@ -22,5 +22,5 @@ dist_student_t(df = c(1,2,5))
 
 }
 \seealso{
-dt
+\link[stats:TDist]{stats::TDist}
 }

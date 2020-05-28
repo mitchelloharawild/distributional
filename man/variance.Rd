@@ -16,5 +16,5 @@ A generic function for computing the variance of an object. The default
 method will use \code{\link[stats:var]{stats::var()}} to compute the variance.
 }
 \seealso{
-variance.distribution
+\code{\link[=variance.distribution]{variance.distribution()}}
 }

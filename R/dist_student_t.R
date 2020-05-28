@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dt
 #'
-#' @seealso dt
+#' @seealso [stats::TDist]
 #'
 #' @examples
 #' dist_student_t(df = c(1,2,5))

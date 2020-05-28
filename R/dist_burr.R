@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dburr
 #'
-#' @seealso actuar::dburr
+#' @seealso [actuar::Burr]
 #'
 #' @examples
 #' dist_burr(shape1 = c(1,1,1,2,3,0.5), shape2 = c(1,2,3,1,1,2))

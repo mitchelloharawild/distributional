@@ -21,5 +21,5 @@ dist_hypergeometric(m = rep(500, 3), n = c(50, 60, 70), k = c(100, 200, 300))
 
 }
 \seealso{
-dhyper
+\link[stats:Hypergeometric]{stats::Hypergeometric}
 }

@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::qtukey
 #'
-#' @seealso qtukey
+#' @seealso [stats::Tukey]
 #'
 #' @examples
 #' dist_studentized_range(nmeans = c(6, 2), df = c(5, 4), nranges = c(1, 1))

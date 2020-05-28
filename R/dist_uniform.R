@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dunif
 #'
-#' @seealso dunif
+#' @seealso [stats::Uniform]
 #'
 #' @examples
 #' dist_uniform(min = c(3, -2), max = c(5, 4))

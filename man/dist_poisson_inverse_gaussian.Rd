@@ -21,5 +21,5 @@ dist_poisson_inverse_gaussian(mean = rep(0.1, 3), shape = c(0.4, 0.8, 1))
 
 }
 \seealso{
-actuar::dpoisinvgauss
+\link[actuar:PoissonInverseGaussian]{actuar::PoissonInverseGaussian}
 }

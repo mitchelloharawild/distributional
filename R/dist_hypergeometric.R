@@ -6,7 +6,7 @@
 #' @param n The number of type II elements available.
 #' @param k The size of the sample taken.
 #'
-#' @seealso dhyper
+#' @seealso [stats::Hypergeometric]
 #'
 #' @examples
 #' dist_hypergeometric(m = rep(500, 3), n = c(50, 60, 70), k = c(100, 200, 300))

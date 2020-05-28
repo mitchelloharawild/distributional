@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::df
 #'
-#' @seealso df
+#' @seealso [stats::FDist]
 #'
 #' @examples
 #' dist_f(df1 = c(1,2,5,10,100), df2 = c(1,1,2,1,100))

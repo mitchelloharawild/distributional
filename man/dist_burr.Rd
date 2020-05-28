@@ -21,5 +21,5 @@ dist_burr(shape1 = c(1,1,1,2,3,0.5), shape2 = c(1,2,3,1,1,2))
 
 }
 \seealso{
-actuar::dburr
+\link[actuar:Burr]{actuar::Burr}
 }

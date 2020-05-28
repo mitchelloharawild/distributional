@@ -17,5 +17,5 @@ dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))
 
 }
 \seealso{
-dbeta
+\link[stats:Beta]{stats::Beta}
 }

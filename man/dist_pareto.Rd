@@ -19,5 +19,5 @@ dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))
 
 }
 \seealso{
-dpareto
+\link[actuar:Pareto]{actuar::Pareto}
 }

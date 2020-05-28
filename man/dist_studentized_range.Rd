@@ -22,5 +22,5 @@ dist_studentized_range(nmeans = c(6, 2), df = c(5, 4), nranges = c(1, 1))
 
 }
 \seealso{
-qtukey
+\link[stats:Tukey]{stats::Tukey}
 }

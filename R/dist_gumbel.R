@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dgumbel
 #'
-#' @seealso actuar::dgumbel
+#' @seealso [actuar::Gumbel]
 #'
 #' @examples
 #' dist_gumbel(alpha = c(0.5, 1, 1.5, 3), scale = c(2, 2, 3, 4))

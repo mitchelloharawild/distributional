@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actuar::dinvgamma
 #'
-#' @seealso actuar::dinvgamma
+#' @seealso [actuar::InverseGamma]
 #'
 #' @examples
 #' dist_inverse_gamma(shape = c(1,2,3,3), rate = c(1,1,1,2))
