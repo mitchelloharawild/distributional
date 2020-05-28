@@ -27,7 +27,9 @@ format.dist_transformed <- function(x, ...){
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  density(x[["dist"]], x[["inverse"]](at))*numDeriv::jacobian(x[["inverse"]], at)
+  drop(
+    density(x[["dist"]], x[["inverse"]](at))*numDeriv::jacobian(x[["inverse"]], at)
+  )
 }
 
 #' @export
@@ -53,7 +55,9 @@ mean.dist_transformed <- function(x, ...){
     # warning("Could not compute the transformed distribution's mean as the base distribution's variance is unknown. The transformed distribution's median has been returned instead.")
     return(x[["transform"]](mu))
   }
-  x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu)/2*sigma2
+  drop(
+    x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu)/2*sigma2
+  )
 }
 
 #' @export
@@ -61,7 +65,9 @@ variance.dist_transformed <- function(x, ...){
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
   if(is.na(sigma2)) return(NA_real_)
-  numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu)*sigma2)^2/2
+  drop(
+    numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu)*sigma2)^2/2
+  )
 }
 
 #' @method Math dist_transformed
