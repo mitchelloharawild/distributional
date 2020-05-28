@@ -41,7 +41,7 @@ format.dist_sample <- function(x, ...){
 
 #' @export
 quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
-  vapply(x, quantile, numeric(1L), probs = p, ..., na.rm = na.rm)
+  vapply(x, quantile, numeric(1L), probs = p, ..., na.rm = na.rm, USE.NAMES = FALSE)
 }
 
 # #' @export
@@ -54,10 +54,10 @@ quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
 
 #' @export
 mean.dist_sample <- function(x, ...){
-  vapply(x, mean, numeric(1L), ...)
+  vapply(x, mean, numeric(1L), ..., USE.NAMES = FALSE)
 }
 
 #' @export
 variance.dist_sample <- function(x, ...){
-  vapply(x, stats::var, numeric(1L), ...)
+  vapply(x, stats::var, numeric(1L), ..., USE.NAMES = FALSE)
 }
