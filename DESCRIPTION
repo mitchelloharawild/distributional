@@ -2,11 +2,15 @@ Package: distributional
 Title: Vectorised Probability Distributions
 Version: 0.1.0
 Authors@R: 
-    person(given = "Mitchell",
-           family = "O'Hara-Wild",
-           role = c("aut", "cre"),
-           email = "mail@mitchelloharawild.com",
-           comment = c(ORCID = "https://orcid.org/0000-0001-6729-7695"))
+    c(person(given = "Mitchell",
+             family = "O'Hara-Wild",
+             role = c("aut", "cre"),
+             email = "mail@mitchelloharawild.com",
+             comment = c(ORCID = "0000-0001-6729-7695")),
+      person(given = "Earo",
+             family = "Wang",
+             role = c("ctb"),
+             comment = c(ORCID = "0000-0001-6448-5260")))
 Description: Vectorised distribution objects with tools for manipulating, 
     visualising, and using probability distributions. Designed to allow model
     prediction outputs to return distributions rather than their parameters, 

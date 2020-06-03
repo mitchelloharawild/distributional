@@ -26,5 +26,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (\href{https://orcid.org/0000-0001-6729-7695}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Earo Wang (\href{https://orcid.org/0000-0001-6448-5260}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}
