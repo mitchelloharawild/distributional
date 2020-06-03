@@ -91,59 +91,56 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<!-- You can install the released version of distributional from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ```{r, eval = FALSE} -->
-<!-- install.packages("distributional") -->
-<!-- ``` -->
+<p>You can install the released version of distributional from <a href="https://CRAN.R-project.org/package=distributional">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"distributional"</span>)</span></code></pre></div>
 <p>The development version can be installed from <a href="https://github.com/mitchelloharawild/distributional">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># install.packages("remotes")</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>remotes<span class="op">::</span><span class="kw"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"mitchelloharawild/distributional"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>remotes<span class="op">::</span><span class="kw"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"mitchelloharawild/distributional"</span>)</span></code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
 <p>Distributions are created using <code>dist_*()</code> functions. Currently only the normal distribution is supported for testing purposes.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(distributional)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>my_dist &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="kw"><a href="reference/dist_student_t.html">dist_student_t</a></span>(<span class="dt">df =</span> <span class="dv">10</span>))</span>
-<span id="cb2-3"><a href="#cb2-3"></a>my_dist</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; &lt;distribution[2]&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; [1] N(0, 1) t(10)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(distributional)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>my_dist &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="kw"><a href="reference/dist_student_t.html">dist_student_t</a></span>(<span class="dt">df =</span> <span class="dv">10</span>))</span>
+<span id="cb3-3"><a href="#cb3-3"></a>my_dist</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; &lt;distribution[2]&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; [1] N(0, 1) t(10)</span></span></code></pre></div>
 <p>The standard four distribution functions in R are usable via these generics:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/stats/density.html">density</a></span>(my_dist, <span class="dv">0</span>) <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] 0.3989423 0.3891084</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="kw"><a href="reference/cdf.html">cdf</a></span>(my_dist, <span class="dv">5</span>) <span class="co"># c(pnorm(5, mean = 0, sd = 1), pt(5, df = 10))</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; [1] 0.9999997 0.9997313</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="kw"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span>(my_dist, <span class="fl">0.1</span>) <span class="co"># c(qnorm(0.1, mean = 0, sd = 1), qt(0.1, df = 10))</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; [1] -1.281552 -1.372184</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="kw"><a href="https://rdrr.io/pkg/generics/man/generate.html">generate</a></span>(my_dist, <span class="dv">10</span>) <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;  [1]  1.262954285 -0.326233361  1.329799263  1.272429321  0.414641434</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt;  [6] -1.539950042 -0.928567035 -0.294720447 -0.005767173  2.404653389</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; </span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;  [1]  0.99165484 -1.36999677 -0.40943004 -0.85261144 -1.37728388  0.81020460</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt;  [7] -1.82965813 -0.06142032 -1.33933588 -0.28491414</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/stats/density.html">density</a></span>(my_dist, <span class="dv">0</span>) <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] 0.3989423 0.3891084</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="reference/cdf.html">cdf</a></span>(my_dist, <span class="dv">5</span>) <span class="co"># c(pnorm(5, mean = 0, sd = 1), pt(5, df = 10))</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] 0.9999997 0.9997313</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span>(my_dist, <span class="fl">0.1</span>) <span class="co"># c(qnorm(0.1, mean = 0, sd = 1), qt(0.1, df = 10))</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; [1] -1.281552 -1.372184</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw"><a href="https://rdrr.io/pkg/generics/man/generate.html">generate</a></span>(my_dist, <span class="dv">10</span>) <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt;  [1]  1.262954285 -0.326233361  1.329799263  1.272429321  0.414641434</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt;  [6] -1.539950042 -0.928567035 -0.294720447 -0.005767173  2.404653389</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; </span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt;  [1]  0.99165484 -1.36999677 -0.40943004 -0.85261144 -1.37728388  0.81020460</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt;  [7] -1.82965813 -0.06142032 -1.33933588 -0.28491414</span></span></code></pre></div>
 <p>You can also compute intervals using <code><a href="reference/hilo.html">hilo()</a></code></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="reference/hilo.html">hilo</a></span>(my_dist, <span class="fl">0.95</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; &lt;hilo[2]&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1] [-0.01190677, 0.01190677]0.95 [-0.01220773, 0.01220773]0.95</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="reference/hilo.html">hilo</a></span>(my_dist, <span class="fl">0.95</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; &lt;hilo[2]&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [1] [-0.01190677, 0.01190677]0.95 [-0.01220773, 0.01220773]0.95</span></span></code></pre></div>
 <p>Additionally, some distributions may support other methods such as mathematical operations and summary measures. If the methods aren’t supported, a transformed distribution will be created.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>my_dist</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; &lt;distribution[2]&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [1] N(0, 1) t(10)</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>my_dist<span class="op">*</span><span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; &lt;distribution[2]&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; [1] N(2, 9)  t(t(10))</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(my_dist)</span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; [1] 0 0</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="kw"><a href="reference/variance.html">variance</a></span>(my_dist)</span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; [1] 1.00 1.25</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_dist</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; &lt;distribution[2]&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; [1] N(0, 1) t(10)</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>my_dist<span class="op">*</span><span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; &lt;distribution[2]&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] N(2, 9)  t(t(10))</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(my_dist)</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [1] 0 0</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="kw"><a href="reference/variance.html">variance</a></span>(my_dist)</span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; [1] 1.00 1.25</span></span></code></pre></div>
 <p>You can also visualise the distribution(s) using <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 3.6.3</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(my_dist, <span class="dt">type =</span> <span class="st">"pdf"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(my_dist, <span class="dt">type =</span> <span class="st">"pdf"</span>)</span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png" width="100%"></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(my_dist, <span class="dt">type =</span> <span class="st">"cdf"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(my_dist, <span class="dt">type =</span> <span class="st">"cdf"</span>)</span></code></pre></div>
 <p><img src="reference/figures/README-plot-2.png" width="100%"></p>
 </div>
 <div id="related-work" class="section level2">
@@ -193,7 +190,8 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Mitchell O'Hara-Wild <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/https://orcid.org/0000-0001-6729-7695" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Mitchell O'Hara-Wild <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6729-7695" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
