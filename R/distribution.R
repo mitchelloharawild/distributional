@@ -318,3 +318,7 @@ vec_cast.distribution.double <- function(x, to, ...){
 }
 #' @export
 vec_cast.distribution.integer <- vec_cast.distribution.double
+#' @export
+vec_cast.character.distribution <- function(x, to, ...){
+  format(x)
+}
