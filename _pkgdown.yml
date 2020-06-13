@@ -1,3 +1,5 @@
+url: https://pkg.mitchelloharawild.com/distributional
+
 template:
   params:
     bootswatch: cosmo
