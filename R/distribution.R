@@ -247,7 +247,7 @@ hdr.distribution <- function(x, size = 95, n = 512, ...){
 
 #' @export
 sum.distribution <- function(x, ...){
-  Reduce("+", x)
+  vec_restore(list(Reduce("+", x)), x)
 }
 
 #' @method vec_arith distribution
