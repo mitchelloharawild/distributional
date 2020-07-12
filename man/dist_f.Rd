@@ -21,5 +21,5 @@ dist_f(df1 = c(1,2,5,10,100), df2 = c(1,1,2,1,100))
 
 }
 \seealso{
-\link[stats:FDist]{stats::FDist}
+\link[stats:Fdist]{stats::FDist}
 }

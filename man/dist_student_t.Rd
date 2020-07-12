@@ -2,13 +2,18 @@
 % Please edit documentation in R/dist_student_t.R
 \name{dist_student_t}
 \alias{dist_student_t}
-\title{The (non-central) Student t Distribution}
+\title{The (non-central) location-scale Student t Distribution}
 \usage{
-dist_student_t(df, ncp = NULL)
+dist_student_t(df, mu = 0, sigma = 1, ncp = NULL)
 }
 \arguments{
 \item{df}{degrees of freedom (\eqn{> 0}, maybe non-integer).  \code{df
       = Inf} is allowed.}
+
+\item{mu}{The location parameter of the distribution.
+If \code{ncp == 0} (or \code{NULL}), this is the median.}
+
+\item{sigma}{The scale parameter of the distribution.}
 
 \item{ncp}{non-centrality parameter \eqn{\delta}{delta};
     currently except for \code{rt()}, only for \code{abs(ncp) <= 37.62}.
@@ -18,7 +23,7 @@ dist_student_t(df, ncp = NULL)
 \lifecycle{stable}
 }
 \examples{
-dist_student_t(df = c(1,2,5))
+dist_student_t(df = c(1,2,5), mu = c(0,1,2), sigma = c(1,2,3))
 
 }
 \seealso{
