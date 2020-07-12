@@ -22,7 +22,7 @@ dist_student_t <- function(df, mu = 0, sigma = 1, ncp = NULL){
   mu <- vec_cast(mu, double())
   sigma <- vec_cast(sigma, double())
   if(any(sigma[!is.na(sigma)] <= 0)){
-    abort("The scale parameter of a Student t distribution must be strictly positive.")
+    abort("The scale (sigma) parameter of a Student t distribution must be strictly positive.")
   }
   new_dist(df = df, mu = mu, sigma = sigma, ncp = ncp, class = "dist_student_t")
 }
