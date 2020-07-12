@@ -29,6 +29,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Earo Wang (\href{https://orcid.org/0000-0001-6448-5260}{ORCID}) [contributor]
+  \item Matthew Kay (\href{https://orcid.org/0000-0001-9446-0419}{ORCID}) [contributor]
 }
 
 }

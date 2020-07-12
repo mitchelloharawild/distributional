@@ -13,7 +13,7 @@ variance(x, ...)
 }
 \description{
 A generic function for computing the variance of an object. The default
-method will use \code{\link[stats:var]{stats::var()}} to compute the variance.
+method will use \code{\link[stats:cor]{stats::var()}} to compute the variance.
 }
 \seealso{
 \code{\link[=variance.distribution]{variance.distribution()}}
