@@ -191,8 +191,8 @@ If the purpose is to zoom, use the limit argument in the coordinate system
 </ul></p></dd>
     <dt><code>rescaler</code></dt><dd><p>A function used to scale the input values to the
 range [0, 1]. This is always <code><a href='https://scales.r-lib.org//reference/rescale.html'>scales::rescale()</a></code>, except for
-diverging and n colour gradients (i.e., <code><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_colour_gradient2()</a></code>,
-<code><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_colour_gradientn()</a></code>). The <code>rescaler</code> is ignored by position
+diverging and n colour gradients (i.e., <code>scale_colour_gradient2()</code>,
+<code>scale_colour_gradientn()</code>). The <code>rescaler</code> is ignored by position
 scales, which always use <code><a href='https://scales.r-lib.org//reference/rescale.html'>scales::rescale()</a></code>.</p></dd>
     <dt><code>oob</code></dt><dd><p>One of:
 <ul>
