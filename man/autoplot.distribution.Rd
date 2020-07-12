@@ -24,7 +24,7 @@
 \item{...}{Unused.}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{deprecated}
 }
 \details{
 Visualise distribution(s) by plotting its probability density function

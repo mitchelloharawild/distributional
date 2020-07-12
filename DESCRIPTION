@@ -40,7 +40,8 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     mvtnorm,
-    actuar
+    actuar,
+    ggdist
 RdMacros: 
     lifecycle
 URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional

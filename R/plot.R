@@ -1,6 +1,6 @@
 #' Plot a distribution
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{deprecated}
 #'
 #' Visualise distribution(s) by plotting its probability density function
 #' ([`density()`]) or cumulative distribution function ([`cdf()`]).
@@ -22,6 +22,8 @@
 #' @export
 autoplot.distribution <- function(x, type = c("pdf", "cdf"), n = 100,
                                   quantile_range = c(0.001, 0.999), ...){
+  lifecycle::deprecate_soft("0.2.0", "distributional::autoplot.distribution()", details = "The autoplot() method for distributions will be replaced by the {ggdist} package in an upcoming release.")
+
   type <- match.arg(type)
   lower <- quantile(x, quantile_range[1])
   upper <- quantile(x, quantile_range[2])
