@@ -1,7 +1,7 @@
 test_that("Student T distribution", {
   dist <- dist_student_t(5)
 
-  expect_equal(format(dist), "t(5)")
+  expect_equal(format(dist), "t(5, 0, 1)")
 
   # quantiles
   expect_equal(quantile(dist, 0.1), stats::qt(0.1, 5))
@@ -26,7 +26,7 @@ test_that("Student T distribution", {
 test_that("Noncentral Student t distribution", {
   dist <- dist_student_t(8, ncp = 6)
 
-  expect_equal(format(dist), "t(8)")
+  expect_equal(format(dist), "t(8, 0, 1, 6)")
 
   # quantiles
   expect_equal(quantile(dist, 0.1), stats::qt(0.1, 8, ncp = 6))

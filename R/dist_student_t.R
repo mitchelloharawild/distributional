@@ -11,16 +11,17 @@
 #'
 #' @name dist_student_t
 #' @export
-dist_student_t <- function(df, ncp = NULL){
+dist_student_t <- function(df, mu = 0, sigma = 1, ncp = NULL){
   df <- vec_cast(df, if(any(is.infinite(df))) numeric() else integer())
   if(any(df <= 0)){
     abort("The degrees of freedom parameter of a Student t distribution must be strictly positive.")
   }
-  if(is.null(ncp)){
-    new_dist(df = df, class = "dist_student_t")
-  } else {
-    new_dist(df = df, ncp = ncp, class = "dist_student_t")
+  mu <- vec_cast(mu, double())
+  sigma <- vec_cast(sigma, double())
+  if(any(sigma[!is.na(sigma)] <= 0)){
+    abort("The scale parameter of a Student t distribution must be strictly positive.")
   }
+  new_dist(df = df, mu = mu, sigma = sigma, ncp = ncp, class = "dist_student_t")
 }
 
 #' @export
@@ -30,46 +31,41 @@ print.dist_student_t <- function(x, ...){
 
 #' @export
 format.dist_student_t <- function(x, digits = 2, ...){
-  sprintf(
-    "t(%s)",
-    format(x[["df"]], digits = digits, ...)
+  out <- sprintf(
+    "t(%s, %s, %s%s)",
+    format(x[["df"]], digits = digits, ...),
+    format(x[["mu"]], digits = digits, ...),
+    format(x[["sigma"]], digits = digits, ...),
+    if(is.null(x[["ncp"]])) "" else paste(",", format(x[["ncp"]], digits = digits, ...))
   )
 }
 
 #' @export
 density.dist_student_t <- function(x, at, ...){
-  if(is.null(x[["ncp"]])){
-    stats::dt(at, x[["df"]])
-  } else {
-    stats::dt(at, x[["df"]], x[["ncp"]])
-  }
+  ncp <- x[["ncp"]] %||% missing_arg()
+
+  stats::dt(at, x[["df"]], ncp)
 }
 
 #' @export
 quantile.dist_student_t <- function(x, p, ...){
-  if(is.null(x[["ncp"]])){
-    stats::qt(p, x[["df"]])
-  } else {
-    stats::qt(p, x[["df"]], x[["ncp"]])
-  }
+  ncp <- x[["ncp"]] %||% missing_arg()
+
+  stats::qt(p, x[["df"]], ncp)
 }
 
 #' @export
 cdf.dist_student_t <- function(x, q, ...){
-  if(is.null(x[["ncp"]])){
-    stats::pt(q, x[["df"]])
-  } else {
-    stats::pt(q, x[["df"]], x[["ncp"]])
-  }
+  ncp <- x[["ncp"]] %||% missing_arg()
+
+  stats::pt(q, x[["df"]], ncp)
 }
 
 #' @export
 generate.dist_student_t <- function(x, times, ...){
-  if(is.null(x[["ncp"]])){
-    stats::rt(times, x[["df"]])
-  } else {
-    stats::rt(times, x[["df"]], x[["ncp"]])
-  }
+  ncp <- x[["ncp"]] %||% missing_arg()
+
+  stats::rt(times, x[["df"]], ncp)
 }
 
 #' @export
