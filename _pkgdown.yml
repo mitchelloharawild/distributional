@@ -79,4 +79,5 @@ reference:
     - dist_inflated
     - dist_mixture
     - dist_transformed
-    - dist_truncated
+    - dist_truncate
+    - dist_wrap

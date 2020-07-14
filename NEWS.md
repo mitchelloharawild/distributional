@@ -1,5 +1,11 @@
 # distributional (development version)
 
+## New features
+
+### Probability distributions
+
+* Added `dist_wrap()` for wrapping distributions not yet added in the package.
+
 # distributional 0.1.0
 
 First release. 
