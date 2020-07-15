@@ -4,7 +4,7 @@
 #'
 #' @inheritParams stats::dmultinom
 #'
-#' @seealso [stats::Multinom]
+#' @seealso [stats::Multinomial]
 #'
 #' @examples
 #' dist_multinomial(size = c(4, 3), prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
