@@ -58,6 +58,17 @@ density.distribution <- function(x, at, ...){
   dist_apply(x, density, at = at, ...)
 }
 
+#' @rdname density.distribution
+#' @export
+pdf <- function(x, at, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("pdf")
+}
+
+#' @rdname density.distribution
+#' @export
+pdf.distribution <- density.distribution
+
 #' Distribution Quantiles
 #'
 #' \lifecycle{stable}
