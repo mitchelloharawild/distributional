@@ -61,3 +61,9 @@ mean.dist_poisson <- function(x, ...){
 variance.dist_poisson <- function(x, ...){
   x[["l"]]
 }
+
+#' @export
+skewness.dist_poisson <- function(x, ...) 1 / sqrt(x[["l"]])
+
+#' @export
+kurtosis.dist_poisson <- function(x, ...) 1 / x[["l"]]

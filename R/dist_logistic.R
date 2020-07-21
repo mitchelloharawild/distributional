@@ -60,3 +60,9 @@ mean.dist_logistic <- function(x, ...){
 variance.dist_logistic <- function(x, ...){
   (x[["s"]]*pi)^2/3
 }
+
+#' @export
+skewness.dist_logistic <- function(x, ...) 0
+
+#' @export
+kurtosis.dist_logistic <- function(x, ...) 6 / 5

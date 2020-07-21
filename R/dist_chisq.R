@@ -62,3 +62,9 @@ mean.dist_chisq <- function(x, ...){
 variance.dist_chisq <- function(x, ...){
   2*(x[["df"]] + 2*x[["ncp"]])
 }
+
+#' @export
+skewness.dist_chisq <- function(x, ...) sqrt(8 / x[["df"]])
+
+#' @export
+kurtosis.dist_chisq <- function(x, ...) 12 / x[["df"]]

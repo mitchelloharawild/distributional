@@ -47,3 +47,9 @@ mean.dist_degenerate <- function(x, ...){
 variance.dist_degenerate <- function(x, ...){
   0
 }
+
+#' @export
+skewness.dist_degenerate <- function(x, ...) NA_real_
+
+#' @export
+kurtosis.dist_degenerate <- function(x, ...) NA_real_

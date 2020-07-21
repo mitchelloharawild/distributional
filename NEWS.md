@@ -6,6 +6,11 @@
 
 * Added `dist_wrap()` for wrapping distributions not yet added in the package.
 
+### Methods
+
+* Added `skewness()` for computing the skewness of a distribution.
+* Added `kurtosis()` for computing the kurtosis of a distribution.
+
 # distributional 0.1.0
 
 First release. 

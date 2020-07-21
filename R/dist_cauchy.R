@@ -63,3 +63,13 @@ mean.dist_cauchy <- function(x, ...){
 variance.dist_cauchy <- function(x, ...){
   NA_real_
 }
+
+#' @export
+skewness.dist_cauchy <- function(x, ...){
+  NA_real_
+}
+
+#' @export
+kurtosis.dist_cauchy <- function(x, ...){
+  NA_real_
+}

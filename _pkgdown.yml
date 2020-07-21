@@ -22,6 +22,8 @@ reference:
     - mean.distribution
     - median.distribution
     - variance.distribution
+    - skewness.distribution
+    - kurtosis.distribution
 - title: Graphics
   desc: >
     Tools for visualising distributions and intervals.

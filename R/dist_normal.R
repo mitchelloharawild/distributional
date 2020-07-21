@@ -65,6 +65,12 @@ variance.dist_normal <- function(x, ...){
 }
 
 #' @export
+skewness.dist_normal <- function(x, ...) 0
+
+#' @export
+kurtosis.dist_normal <- function(x, ...) 0
+
+#' @export
 Ops.dist_normal <- function(e1, e2){
   ok <- switch(.Generic, `+` = , `-` = , `*` = , `/` = TRUE, FALSE)
   if (!ok) {

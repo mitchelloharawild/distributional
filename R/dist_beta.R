@@ -65,3 +65,19 @@ variance.dist_beta <- function(x, ...){
   b <- x[["shape2"]]
   a*b/((a+b)^2*(a+b+1))
 }
+
+#' @export
+skewness.dist_beta <- function(x, ...) {
+  a <- x[["shape1"]]
+  b <- x[["shape2"]]
+  2 * (b - a) * sqrt(a + b + 1) / (a + b + 2) * sqrt(a * b)
+}
+
+#' @export
+kurtosis.dist_beta <- function(x, ...) {
+  a <- x[["shape1"]]
+  b <- x[["shape2"]]
+  num <- 6 * ((a - b)^2 * (a + b + 1) - (a * b) * (a + b + 2))
+  denom <- a * b * (a + b + 2) * (a + b + 3)
+  num / denom
+}

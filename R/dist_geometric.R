@@ -61,3 +61,9 @@ mean.dist_geometric <- function(x, ...){
 variance.dist_geometric <- function(x, ...){
   (1 - x[["p"]])/x[["p"]]^2
 }
+
+#' @export
+skewness.dist_geometric <- function(x, ...) (2 - x[["p"]]) / sqrt(1 - x[["p"]])
+
+#' @export
+kurtosis.dist_geometric <- function(x, ...) 6 + (x[["p"]]^2 / (1 - x[["p"]]))

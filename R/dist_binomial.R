@@ -65,3 +65,19 @@ mean.dist_binomial <- function(x, ...){
 variance.dist_binomial <- function(x, ...){
   x[["n"]]*x[["p"]]*(1-x[["p"]])
 }
+
+#' @export
+skewness.dist_binomial <- function(x, ...) {
+  n <- x[["n"]]
+  p <- x[["p"]]
+  q <- 1 - p
+  (1 - (2 * p)) / sqrt(n * p * q)
+}
+
+#' @export
+kurtosis.dist_binomial <- function(x, ...) {
+  n <- x[["n"]]
+  p <- x[["p"]]
+  q <- 1 - p
+  (1 - (6 * p * q)) / (n * p * q)
+}

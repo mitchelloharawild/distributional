@@ -66,3 +66,9 @@ mean.dist_gamma <- function(x, ...){
 variance.dist_gamma <- function(x, ...){
   x[["shape"]] / x[["rate"]]^2
 }
+
+#' @export
+skewness.dist_gamma <- function(x, ...) 2 / sqrt(x[["shape"]])
+
+#' @export
+kurtosis.dist_gamma <- function(x, ...) 6 / x[["shape"]]

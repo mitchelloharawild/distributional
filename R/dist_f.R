@@ -104,3 +104,31 @@ variance.dist_f <- function(x, ...){
     NA_real_
   }
 }
+
+#' @export
+skewness.dist_f <- function(x, ...) {
+  df1 <- x[["df1"]]
+  df2 <- x[["df2"]]
+  if(!is.null(x[["ncp"]])) return(NA_real_)
+  if (df2 > 6) {
+    a <- (2 * df1 + df2 - 2) * sqrt(8 * (df2 - 4))
+    b <- (df2 - 6) * sqrt(df1 * (df1 + df2 - 2))
+    a / b
+  } else {
+    NA_real_
+  }
+}
+
+#' @export
+kurtosis.dist_f <- function(x, ...) {
+  df1 <- x[["df1"]]
+  df2 <- x[["df2"]]
+  if(!is.null(x[["ncp"]])) return(NA_real_)
+  if (df2 > 8) {
+    a <- df1 * (5 * df2 - 22) * (df1 + df2 - 2) + (df2 - 4) * (df2 - 2)^2
+    b <- df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2)
+    12 * a / b
+  } else {
+    NA_real_
+  }
+}

@@ -69,3 +69,23 @@ variance.dist_hypergeometric <- function(x, ...){
   p <- m/(m + n)
   k * p * (1 - p) * ((m + n - k) / (m + n - 1))
 }
+
+#' @export
+skewness.dist_hypergeometric <- function(x, ...) {
+  N <- x[["n"]] + x[["m"]]
+  K <- x[["m"]]
+  n <- x[["k"]]
+
+  a <- (N - 2 * K) * (N - 1)^0.5 * (N - 2 * n)
+  b <- (n * K * (N - K) * (N - n))^0.5 * (N - 2)
+  a / b
+}
+
+#' @export
+kurtosis.dist_hypergeometric <- function(x, ...) {
+  N <- x[["n"]] + x[["m"]]
+  K <- x[["m"]]
+  n <- x[["k"]]
+
+  1 / (n * K * (N - K) * (N - n) * (N - 2) * (N - 3))
+}

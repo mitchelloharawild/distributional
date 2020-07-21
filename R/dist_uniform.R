@@ -63,3 +63,9 @@ mean.dist_uniform <- function(x, ...){
 variance.dist_uniform <- function(x, ...){
   (x[["u"]]-x[["l"]])^2/12
 }
+
+#' @export
+skewness.dist_uniform <- function(x, ...) 0
+
+#' @export
+kurtosis.dist_uniform <- function(x, ...) -6/5

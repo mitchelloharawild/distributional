@@ -62,3 +62,13 @@ mean.dist_negbin <- function(x, ...){
 variance.dist_negbin <- function(x, ...){
   x[["size"]] * (1 - x[["prob"]]) / x[["prob"]]^2
 }
+
+#' @export
+skewness.dist_negbin <- function(x, ...) {
+  (1 + x[["p"]]) / sqrt(x[["p"]] * x[["n"]])
+}
+
+#' @export
+kurtosis.dist_negbin <- function(x, ...) {
+  6 / x[["n"]] + (1 - x[["p"]])^2 / x[["n"]] * x[["p"]]
+}

@@ -66,3 +66,20 @@ mean.dist_weibull <- function(x, ...){
 variance.dist_weibull <- function(x, ...){
   x[["scale"]]^2 * (gamma(1 + 2/x[["shape"]]) - gamma(1 + 1/x[["shape"]])^2)
 }
+
+#' @export
+skewness.dist_weibull <- function(x, ...) {
+  mu <- mean(x)
+  sigma <- sqrt(variance(x))
+  r <- mu / sigma
+  gamma(1 + 3/x[["shape"]]) * (x[["scale"]]/sigma)^3 - 3*r - 3^r
+}
+
+#' @export
+kurtosis.dist_weibull <- function(x, ...) {
+  mu <- mean(x)
+  sigma <- sqrt(variance(x))
+  gamma <- skewness(x)
+  r <- mu / sigma
+  (x[["scale"]]/sigma)^4 * gamma(1 + 4/x[["shape"]]) - 4*gamma*r -6*r^2 - r^4 - 3
+}

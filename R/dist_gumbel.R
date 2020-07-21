@@ -67,3 +67,12 @@ mean.dist_gumbel <- function(x, ...){
 variance.dist_gumbel <- function(x, ...){
   (pi*x[["s"]])^2/6
 }
+
+#' @export
+skewness.dist_gumbel <- function(x, ...) {
+  zeta3 <- 1.20205690315959401459612
+  (12 * sqrt(6) * zeta3) / pi^3
+}
+
+#' @export
+kurtosis.dist_gumbel <- function(x, ...) 12/5

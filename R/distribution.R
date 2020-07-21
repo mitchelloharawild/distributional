@@ -175,6 +175,42 @@ variance.distribution <- function(x, ...){
   dist_apply(x, variance, ...)
 }
 
+#' Skewness of a probability distribution
+#'
+#' \lifecycle{stable}
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @export
+skewness <- function(x, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("skewness")
+}
+#' @rdname skewness
+#' @export
+skewness.distribution <- function(x, ...){
+  dist_apply(x, skewness, ...)
+}
+
+#' Kurtosis of a probability distribution
+#'
+#' \lifecycle{stable}
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @export
+kurtosis <- function(x, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("kurtosis")
+}
+#' @rdname kurtosis
+#' @export
+kurtosis.distribution <- function(x, ...){
+  dist_apply(x, kurtosis, ...)
+}
+
 #' Median of a probability distribution
 #'
 #' \lifecycle{stable}

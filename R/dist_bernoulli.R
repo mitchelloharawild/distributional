@@ -58,3 +58,17 @@ mean.dist_bernoulli <- function(x, ...){
 variance.dist_bernoulli <- function(x, ...){
   x[["p"]]*(1-x[["p"]])
 }
+
+#' @export
+skewness.dist_bernoulli <- function(x, ...) {
+  p <- x[["p"]]
+  q <- 1 - x[["p"]]
+  (1 - (2 * p)) / sqrt(p * q)
+}
+
+#' @export
+kurtosis.dist_bernoulli <- function(x, ...) {
+  p <- x[["p"]]
+  q <- 1 - x[["p"]]
+  (1 - (6 * p * q)) / (p * q)
+}

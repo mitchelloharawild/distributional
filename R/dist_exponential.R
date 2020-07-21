@@ -61,3 +61,9 @@ mean.dist_exponential <- function(x, ...){
 variance.dist_exponential <- function(x, ...){
   1/x[["rate"]]^2
 }
+
+#' @export
+skewness.dist_exponential <- function(x, ...) 2
+
+#' @export
+kurtosis.dist_exponential <- function(x, ...) 6
