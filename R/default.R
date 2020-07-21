@@ -5,6 +5,12 @@ density.dist_default <- function(x, ...){
             class(x)[1])
   )
 }
+
+#' @export
+log_pdf.dist_default <- function(x, ...){
+  log(density(x, ...))
+}
+
 #' @export
 quantile.dist_default <- function(x, p, ...){
   # abort(

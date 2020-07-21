@@ -6,11 +6,11 @@
 \alias{pdf.distribution}
 \title{The probability density/mass function}
 \usage{
-\method{density}{distribution}(x, at, ...)
+\method{density}{distribution}(x, at, ..., log = FALSE)
 
 pdf(x, at, ...)
 
-\method{pdf}{distribution}(x, at, ...)
+\method{pdf}{distribution}(x, at, ..., log = FALSE)
 }
 \arguments{
 \item{x}{The distribution(s).}
@@ -18,6 +18,8 @@ pdf(x, at, ...)
 \item{at}{The point at which to compute the density/mass.}
 
 \item{...}{Additional arguments passed to methods.}
+
+\item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
 \lifecycle{stable}

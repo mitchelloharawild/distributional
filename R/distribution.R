@@ -50,10 +50,12 @@ dimnames.distribution <- function(x){
 #' @param x The distribution(s).
 #' @param at The point at which to compute the density/mass.
 #' @param ... Additional arguments passed to methods.
+#' @param log If `TRUE`, probabilities will be given as log probabilities.
 #'
 #' @importFrom stats density
 #' @export
-density.distribution <- function(x, at, ...){
+density.distribution <- function(x, at, ..., log = FALSE){
+  if(log) return(log_pdf(x, at, ...))
   vec_is(at, double(), 1L)
   dist_apply(x, density, at = at, ...)
 }
@@ -68,6 +70,16 @@ pdf <- function(x, at, ...) {
 #' @rdname density.distribution
 #' @export
 pdf.distribution <- density.distribution
+
+log_pdf <- function(x, at, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("log_pdf")
+}
+#' @export
+log_pdf.distribution <- function(x, at, ...){
+  vec_is(at, double(), 1L)
+  dist_apply(x, log_pdf, at = at, ...)
+}
 
 #' Distribution Quantiles
 #'

@@ -11,6 +11,8 @@
 * Added `pdf()` as an alias for `density()`.
 * Added `skewness()` for computing the skewness of a distribution.
 * Added `kurtosis()` for computing the kurtosis of a distribution.
+* The `density()` method now accepts a `log` argument which will return log 
+  probabilities.
 
 # distributional 0.1.0
 
