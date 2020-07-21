@@ -41,6 +41,12 @@ density.dist_gumbel <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_gumbel <- function(x, at, ...){
+  require_package("actuar")
+  actuar::dgumbel(at, x[["a"]], x[["s"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_gumbel <- function(x, p, ...){
   require_package("actuar")
   actuar::qgumbel(p, x[["a"]], x[["s"]])

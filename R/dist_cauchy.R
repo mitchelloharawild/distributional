@@ -40,6 +40,11 @@ density.dist_cauchy <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_cauchy <- function(x, at, ...){
+  stats::dcauchy(at, x[["location"]], x[["scale"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_cauchy <- function(x, p, ...){
   stats::qcauchy(p, x[["location"]], x[["scale"]])
 }

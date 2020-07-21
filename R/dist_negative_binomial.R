@@ -39,6 +39,11 @@ density.dist_negbin <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_negbin <- function(x, at, ...){
+  stats::dnbinom(at, x[["size"]], x[["prob"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_negbin <- function(x, p, ...){
   stats::qnbinom(p, x[["size"]], x[["prob"]])
 }

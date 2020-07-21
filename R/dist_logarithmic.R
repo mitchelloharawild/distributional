@@ -39,6 +39,12 @@ density.dist_logarithmic <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_logarithmic <- function(x, at, ...){
+  require_package("actuar")
+  actuar::dlogarithmic(at, x[["p"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_logarithmic <- function(x, p, ...){
   require_package("actuar")
   actuar::qlogarithmic(p, x[["p"]])

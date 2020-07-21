@@ -38,6 +38,11 @@ density.dist_multinomial <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_multinomial <- function(x, at, ...){
+  stats::dmultinom(at, x[["s"]], x[["p"]], log = TRUE)
+}
+
+#' @export
 generate.dist_multinomial <- function(x, times, ...){
   t(stats::rmultinom(times, x[["s"]], x[["p"]]))
 }

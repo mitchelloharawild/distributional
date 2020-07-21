@@ -44,6 +44,12 @@ density.dist_poisson_inverse_gaussian <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_poisson_inverse_gaussian <- function(x, at, ...){
+  require_package("actuar")
+  actuar::dpoisinvgauss(at, x[["m"]], x[["s"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_poisson_inverse_gaussian <- function(x, p, ...){
   require_package("actuar")
   actuar::qpoisinvgauss(p, x[["m"]], x[["s"]])

@@ -48,6 +48,12 @@ density.dist_burr <- function(x, at, ...){
 }
 
 #' @export
+density.dist_burr <- function(x, at, ...){
+  require_package("actuar")
+  actuar::dburr(at, x[["s1"]], x[["s2"]], x[["r"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_burr <- function(x, p, ...){
   require_package("actuar")
   actuar::qburr(p, x[["s1"]], x[["s2"]], x[["r"]])

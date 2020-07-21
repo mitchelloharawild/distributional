@@ -38,6 +38,11 @@ density.dist_exponential <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_exponential <- function(x, at, ...){
+  stats::dexp(at, x[["rate"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_exponential <- function(x, p, ...){
   stats::qexp(p, x[["rate"]])
 }

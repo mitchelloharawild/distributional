@@ -40,6 +40,11 @@ density.dist_beta <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_beta <- function(x, at, ...){
+  stats::dbeta(at, x[["shape1"]], x[["shape2"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_beta <- function(x, p, ...){
   stats::qbeta(p, x[["shape1"]], x[["shape2"]])
 }

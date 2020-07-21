@@ -44,6 +44,12 @@ density.dist_inverse_gaussian <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_inverse_gaussian <- function(x, at, ...){
+  require_package("actuar")
+  actuar::dinvgauss(at, x[["m"]], x[["s"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_inverse_gaussian <- function(x, p, ...){
   require_package("actuar")
   actuar::qinvgauss(p, x[["m"]], x[["s"]])

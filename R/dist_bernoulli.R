@@ -35,6 +35,11 @@ density.dist_bernoulli <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_bernoulli <- function(x, at, ...){
+  stats::dbinom(at, 1, x[["p"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_bernoulli <- function(x, p, ...){
   stats::qbinom(p, 1, x[["p"]])
 }

@@ -44,6 +44,12 @@ density.dist_inverse_gamma <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_inverse_gamma <- function(x, at, ...){
+  require_package("actuar")
+  actuar::dinvgamma(at, x[["s"]], x[["r"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_inverse_gamma <- function(x, p, ...){
   require_package("actuar")
   actuar::qinvgamma(p, x[["s"]], x[["r"]])

@@ -42,6 +42,11 @@ density.dist_binomial <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_binomial <- function(x, at, ...){
+  stats::dbinom(at, x[["n"]], x[["p"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_binomial <- function(x, p, ...){
   stats::qbinom(p, x[["n"]], x[["p"]])
 }

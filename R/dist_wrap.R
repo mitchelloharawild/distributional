@@ -61,6 +61,15 @@ density.dist_wrap <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_wrap <- function(x, at, ...){
+  fn <- paste0("d", x[["dist"]][[1]])
+  env <- rlang::pkg_env(x[["package"]][[1]])
+  # fn <- get(fn, env = env, mode = "function")
+  par <- x[-(1:2)]
+  eval_tidy(call2(fn, at, !!!par, log = TRUE), env = env)
+}
+
+#' @export
 cdf.dist_wrap <- function(x, q, ...){
   fn <- paste0("p", x[["dist"]][[1]])
   env <- rlang::pkg_env(x[["package"]][[1]])

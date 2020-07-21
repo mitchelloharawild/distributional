@@ -39,6 +39,11 @@ density.dist_chisq <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_chisq <- function(x, at, ...){
+  stats::dchisq(at, x[["df"]], x[["ncp"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_chisq <- function(x, p, ...){
   stats::qchisq(p, x[["df"]], x[["ncp"]])
 }

@@ -52,6 +52,15 @@ density.dist_student_t <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_student_t <- function(x, at, ...){
+  ncp <- x[["ncp"]] %||% missing_arg()
+  sigma <- x[["sigma"]]
+
+  stats::dt((at - x[["mu"]])/sigma, x[["df"]], ncp, log = TRUE) - log(sigma)
+}
+
+
+#' @export
 quantile.dist_student_t <- function(x, p, ...){
   ncp <- x[["ncp"]] %||% missing_arg()
 

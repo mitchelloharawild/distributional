@@ -38,6 +38,11 @@ density.dist_poisson <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_poisson <- function(x, at, ...){
+  stats::dpois(at, x[["l"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_poisson <- function(x, p, ...){
   stats::qpois(p, x[["l"]])
 }

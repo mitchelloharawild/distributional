@@ -43,6 +43,11 @@ density.dist_gamma <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_gamma <- function(x, at, ...){
+  stats::dgamma(at, x[["shape"]], x[["rate"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_gamma <- function(x, p, ...){
   stats::qgamma(p, x[["shape"]], x[["rate"]])
 }

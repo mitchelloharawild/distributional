@@ -38,6 +38,11 @@ density.dist_geometric <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_geometric <- function(x, at, ...){
+  stats::dgeom(at, x[["p"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_geometric <- function(x, p, ...){
   stats::qgeom(p, x[["p"]])
 }

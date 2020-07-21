@@ -40,6 +40,11 @@ density.dist_uniform <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_uniform <- function(x, at, ...){
+  stats::dunif(at, x[["l"]], x[["u"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_uniform <- function(x, p, ...){
   stats::qunif(p, x[["l"]], x[["u"]])
 }

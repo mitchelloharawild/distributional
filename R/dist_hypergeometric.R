@@ -41,6 +41,11 @@ density.dist_hypergeometric <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_hypergeometric <- function(x, at, ...){
+  stats::dhyper(at, x[["m"]], x[["n"]], x[["k"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_hypergeometric <- function(x, p, ...){
   stats::qhyper(p, x[["m"]], x[["n"]], x[["k"]])
 }

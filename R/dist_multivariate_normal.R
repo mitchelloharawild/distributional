@@ -34,6 +34,12 @@ density.dist_mvnorm <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_mvnorm <- function(x, at, ...){
+  require_package("mvtnorm")
+  mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_mvnorm <- function(x, p, type = c("univariate", "equicoordinate"), ...){
   type <- match.arg(type)
   if (type == "univariate") {

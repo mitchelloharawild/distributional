@@ -37,6 +37,11 @@ density.dist_logistic <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_logistic <- function(x, at, ...){
+  stats::dlogis(at, x[["l"]], x[["s"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_logistic <- function(x, p, ...){
   stats::qlogis(p, x[["l"]], x[["s"]])
 }

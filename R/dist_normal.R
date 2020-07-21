@@ -40,6 +40,11 @@ density.dist_normal <- function(x, at, ...){
 }
 
 #' @export
+log_pdf.dist_normal <- function(x, at, ...){
+  stats::dnorm(at, x[["mu"]], x[["sigma"]], log = TRUE)
+}
+
+#' @export
 quantile.dist_normal <- function(x, p, ...){
   stats::qnorm(p, x[["mu"]], x[["sigma"]])
 }
