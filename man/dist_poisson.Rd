@@ -12,8 +12,65 @@ dist_poisson(lambda)
 \description{
 \lifecycle{stable}
 }
+\details{
+Poisson distributions are frequently used to model counts.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X} be a Poisson random variable with parameter
+\code{lambda} = \eqn{\lambda}.
+
+\strong{Support}: \eqn{\{0, 1, 2, 3, ...\}}{{0, 1, 2, 3, ...}}
+
+\strong{Mean}: \eqn{\lambda}
+
+\strong{Variance}: \eqn{\lambda}
+
+\strong{Probability mass function (p.m.f)}:
+
+\deqn{
+    P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}
+  }{
+    P(X = k) = \lambda^k e^(-\lambda) / k!
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    P(X \le k) = e^{-\lambda}
+    \sum_{i = 0}^{\lfloor k \rfloor} \frac{\lambda^i}{i!}
+  }{
+    P(X \le k) = e^(-\lambda)
+    \sum_{i = 0}^k \lambda^i / i!
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = e^{\lambda (e^t - 1)}
+  }{
+    E(e^(tX)) = e^(\lambda (e^t - 1))
+  }
+}
 \examples{
-dist_poisson(lambda = c(1, 4, 10))
+dist <- dist_poisson(lambda = c(1, 4, 10))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }
 \seealso{

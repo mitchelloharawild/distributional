@@ -1,13 +1,69 @@
-#' The (non-central) Chi-Squared Distribution
+#' The F Distribution
 #'
 #' \lifecycle{stable}
 #'
 #' @inheritParams stats::df
 #'
+#' @details
+#'
+#'   We recommend reading this documentation on
+#'   <https://pkg.mitchelloharawild.com/distributional>, where the math
+#'   will render nicely.
+#'
+#'   In the following, let \eqn{X} be a Gamma random variable
+#'   with parameters
+#'   `shape` = \eqn{\alpha} and
+#'   `rate` = \eqn{\beta}.
+#'
+#'   **Support**: \eqn{x \in (0, \infty)}
+#'
+#'   **Mean**: \eqn{\frac{\alpha}{\beta}}
+#'
+#'   **Variance**: \eqn{\frac{\alpha}{\beta^2}}
+#'
+#'   **Probability density function (p.m.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}
+#'   }{
+#'     f(x) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \frac{\Gamma(\alpha, \beta x)}{\Gamma{\alpha}}
+#'   }{
+#'     f(x) = \frac{\Gamma(\alpha, \beta x)}{\Gamma{\alpha}}
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   \deqn{
+#'     E(e^{tX}) = \Big(\frac{\beta}{ \beta - t}\Big)^{\alpha}, \thinspace t < \beta
+#'   }{
+#'     E(e^(tX)) = \Big(\frac{\beta}{ \beta - t}\Big)^{\alpha}, \thinspace t < \beta
+#'   }
+#'
 #' @seealso [stats::FDist]
 #'
 #' @examples
-#' dist_f(df1 = c(1,2,5,10,100), df2 = c(1,1,2,1,100))
+#' dist <- dist_f(df1 = c(1,2,5,10,100), df2 = c(1,1,2,1,100))
+#'
+#' dist
+#' mean(dist)
+#' variance(dist)
+#' skewness(dist)
+#' kurtosis(dist)
+#'
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @name dist_f
 #' @export

@@ -10,11 +10,65 @@ dist_geometric(prob)
 \item{prob}{probability of success in each trial. \code{0 < prob <= 1}.}
 }
 \description{
+The Geometric distribution can be thought of as a generalization
+of the \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution where we ask: "if I keep flipping a
+coin with probability \code{p} of heads, what is the probability I need
+\eqn{k} flips before I get my first heads?" The Geometric
+distribution is a special case of Negative Binomial distribution.
 \lifecycle{stable}
 }
-\examples{
-dist_geometric(prob = c(0.2, 0.5, 0.8))
+\details{
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
 
+In the following, let \eqn{X} be a Geometric random variable with
+success probability \code{p} = \eqn{p}. Note that there are multiple
+parameterizations of the Geometric distribution.
+
+\strong{Support}: 0 < p < 1, \eqn{x = 0, 1, \dots}
+
+\strong{Mean}: \eqn{\frac{1-p}{p}}
+
+\strong{Variance}: \eqn{\frac{1-p}{p^2}}
+
+\strong{Probability mass function (p.m.f)}:
+
+\deqn{
+    P(X = x) = p(1-p)^x,
+   }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    P(X \le x) = 1 - (1-p)^{x+1}
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
+  }{
+    E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
+  }
+}
+\examples{
+dist <- dist_geometric(prob = c(0.2, 0.5, 0.8))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 }
 \seealso{
 \link[stats:Geometric]{stats::Geometric}

@@ -7,15 +7,90 @@
 dist_normal(mu = 0, sigma = 1)
 }
 \arguments{
-\item{mu}{The mean (location parameter) of the distribution.}
+\item{mu}{The mean (location parameter) of the distribution, which is also
+the mean of the distribution. Can be any real number.}
 
-\item{sigma}{The standard deviation (scale parameter) of the distribution.}
+\item{sigma}{The standard deviation (scale parameter) of the distribution.
+Can be any positive number. If you would like a Normal distribution with
+\strong{variance} \eqn{\sigma^2}, be sure to take the square root, as this is a
+common source of errors.}
 }
 \description{
 \lifecycle{stable}
 }
+\details{
+The Normal distribution is ubiquitous in statistics, partially because
+of the central limit theorem, which states that sums of i.i.d. random
+variables eventually become Normal. Linear transformations of Normal
+random variables result in new random variables that are also Normal. If
+you are taking an intro stats course, you'll likely use the Normal
+distribution for Z-tests and in simple linear regression. Under
+regularity conditions, maximum likelihood estimators are
+asymptotically Normal. The Normal distribution is also called the
+gaussian distribution.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X} be a Normal random variable with mean
+\code{mu} = \eqn{\mu} and standard deviation \code{sigma} = \eqn{\sigma}.
+
+\strong{Support}: \eqn{R}, the set of all real numbers
+
+\strong{Mean}: \eqn{\mu}
+
+\strong{Variance}: \eqn{\sigma^2}
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2}
+  }{
+    f(x) = 1 / (2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2))
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+The cumulative distribution function has the form
+
+\deqn{
+    F(t) = \int_{-\infty}^t \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2} dx
+  }{
+    F(t) = integral_{-\infty}^t 1 / (2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2)) dx
+  }
+
+but this integral does not have a closed form solution and must be
+approximated numerically. The c.d.f. of a standard Normal is sometimes
+called the "error function". The notation \eqn{\Phi(t)} also stands
+for the c.d.f. of a standard Normal evaluated at \eqn{t}. Z-tables
+list the value of \eqn{\Phi(t)} for various \eqn{t}.
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = e^{\mu t + \sigma^2 t^2 / 2}
+  }{
+    E(e^(tX)) = e^(\mu t + \sigma^2 t^2 / 2)
+  }
+}
 \examples{
-dist_normal(mu = 1:5, sigma = 3)
+dist <- dist_normal(mu = 1:5, sigma = 3)
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }
 \seealso{

@@ -2,15 +2,66 @@
 #'
 #' \lifecycle{stable}
 #'
+#' The Student's T distribution is closely related to the [Normal()]
+#' distribution, but has heavier tails. As \eqn{\nu} increases to \eqn{\infty},
+#' the Student's T converges to a Normal. The T distribution appears
+#' repeatedly throughout classic frequentist hypothesis testing when
+#' comparing group means.
+#'
 #' @inheritParams stats::dt
 #' @param mu The location parameter of the distribution.
 #'   If `ncp == 0` (or `NULL`), this is the median.
 #' @param sigma The scale parameter of the distribution.
 #'
+#' @details
+#'
+#'   We recommend reading this documentation on
+#'   <https://pkg.mitchelloharawild.com/distributional>, where the math
+#'   will render nicely.
+#'
+#'   In the following, let \eqn{X} be a **central** Students T random variable
+#'   with `df` = \eqn{\nu}.
+#'
+#'   **Support**: \eqn{R}, the set of all real numbers
+#'
+#'   **Mean**: Undefined unless \eqn{\nu \ge 2}, in which case the mean is
+#'     zero.
+#'
+#'   **Variance**:
+#'
+#'   \deqn{
+#'     \frac{\nu}{\nu - 2}
+#'   }{
+#'     \nu / (\nu - 2)
+#'   }
+#'
+#'   Undefined if \eqn{\nu < 1}, infinite when \eqn{1 < \nu \le 2}.
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} \Gamma(\frac{\nu}{2})} (1 + \frac{x^2}{\nu} )^{- \frac{\nu + 1}{2}}
+#'   }{
+#'     f(x) = \Gamma((\nu + 1) / 2) / (\sqrt(\nu \pi) \Gamma(\nu / 2)) (1 + x^2 / \nu)^(- (\nu + 1) / 2)
+#'   }
+#'
 #' @seealso [stats::TDist]
 #'
 #' @examples
-#' dist_student_t(df = c(1,2,5), mu = c(0,1,2), sigma = c(1,2,3))
+#' dist <- dist_student_t(df = c(1,2,5), mu = c(0,1,2), sigma = c(1,2,3))
+#'
+#' dist
+#' mean(dist)
+#' variance(dist)
+#'
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @name dist_student_t
 #' @export

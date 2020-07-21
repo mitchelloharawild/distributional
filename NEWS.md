@@ -6,6 +6,12 @@
 
 * Added `dist_wrap()` for wrapping distributions not yet added in the package.
 
+## Improvements
+
+* Improved documentation for most distributions to include equations for the
+  region of support, summary statistics, density functions and moments. This is
+  the work of @alexpghayes in the `distributions3` package.
+
 # distributional 0.1.0
 
 First release. 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dist_f.R
 \name{dist_f}
 \alias{dist_f}
-\title{The (non-central) Chi-Squared Distribution}
+\title{The F Distribution}
 \usage{
 dist_f(df1, df2, ncp = NULL)
 }
@@ -16,8 +16,63 @@ dist_f(df1, df2, ncp = NULL)
 \description{
 \lifecycle{stable}
 }
+\details{
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X} be a Gamma random variable
+with parameters
+\code{shape} = \eqn{\alpha} and
+\code{rate} = \eqn{\beta}.
+
+\strong{Support}: \eqn{x \in (0, \infty)}
+
+\strong{Mean}: \eqn{\frac{\alpha}{\beta}}
+
+\strong{Variance}: \eqn{\frac{\alpha}{\beta^2}}
+
+\strong{Probability density function (p.m.f)}:
+
+\deqn{
+    f(x) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}
+  }{
+    f(x) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    f(x) = \frac{\Gamma(\alpha, \beta x)}{\Gamma{\alpha}}
+  }{
+    f(x) = \frac{\Gamma(\alpha, \beta x)}{\Gamma{\alpha}}
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \Big(\frac{\beta}{ \beta - t}\Big)^{\alpha}, \thinspace t < \beta
+  }{
+    E(e^(tX)) = \Big(\frac{\beta}{ \beta - t}\Big)^{\alpha}, \thinspace t < \beta
+  }
+}
 \examples{
-dist_f(df1 = c(1,2,5,10,100), df2 = c(1,1,2,1,100))
+dist <- dist_f(df1 = c(1,2,5,10,100), df2 = c(1,1,2,1,100))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }
 \seealso{

@@ -18,8 +18,63 @@ dist_multinomial(size, prob)
 \description{
 \lifecycle{maturing}
 }
+\details{
+The multinomial distribution is a generalization of the binomial
+distribution to multiple categories. It is perhaps easiest to think
+that we first extend a \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution to include more
+than two categories, resulting in a categorical distribution.
+We then extend repeat the Categorical experiment several (\eqn{n})
+times.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X = (X_1, ..., X_k)} be a Multinomial
+random variable with success probability \code{p} = \eqn{p}. Note that
+\eqn{p} is vector with \eqn{k} elements that sum to one. Assume
+that we repeat the Categorical experiment \code{size} = \eqn{n} times.
+
+\strong{Support}: Each \eqn{X_i} is in \eqn{{0, 1, 2, ..., n}}.
+
+\strong{Mean}: The mean of \eqn{X_i} is \eqn{n p_i}.
+
+\strong{Variance}: The variance of \eqn{X_i} is \eqn{n p_i (1 - p_i)}.
+For \eqn{i \neq j}, the covariance of \eqn{X_i} and \eqn{X_j}
+is \eqn{-n p_i p_j}.
+
+\strong{Probability mass function (p.m.f)}:
+
+\deqn{
+    P(X_1 = x_1, ..., X_k = x_k) = \frac{n!}{x_1! x_2! ... x_k!} p_1^{x_1} \cdot p_2^{x_2} \cdot ... \cdot p_k^{x_k}
+  }{
+    P(X_1 = x_1, ..., X_k = x_k) = n! / (x_1! x_2! ... x_k!) p_1^x_1 p_2^x_2 ... p_k^x_k
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+Omitted for multivariate random variables for the time being.
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \left(\sum_{i=1}^k p_i e^{t_i}\right)^n
+  }{
+    E(e^(tX)) = (p_1 e^t_1 + p_2 e^t_2 + ... + p_k e^t_k)^n
+  }
+}
 \examples{
-dist_multinomial(size = c(4, 3), prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
+dist <- dist_multinomial(size = c(4, 3), prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
+
+dist
+mean(dist)
+variance(dist)
+
+generate(dist, 10)
+
+# TODO: Needs fixing to support multiple inputs
+# density(dist, 2)
+# density(dist, 2, log = TRUE)
 
 }
 \seealso{

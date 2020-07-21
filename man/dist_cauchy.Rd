@@ -14,8 +14,63 @@ dist_cauchy(location, scale)
 \description{
 \lifecycle{maturing}
 }
+\details{
+The Cauchy distribution is the student's t distribution with one degree of
+freedom. The Cauchy distribution does not have a well defined mean or
+variance. Cauchy distributions often appear as priors in Bayesian contexts
+due to their heavy tails.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X} be a Cauchy variable with mean
+\verb{location =} \eqn{x_0} and \code{scale} = \eqn{\gamma}.
+
+\strong{Support}: \eqn{R}, the set of all real numbers
+
+\strong{Mean}: Undefined.
+
+\strong{Variance}: Undefined.
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{1}{\pi \gamma \left[1 + \left(\frac{x - x_0}{\gamma} \right)^2 \right]}
+  }{
+    f(x) = 1 / (\pi \gamma (1 + ((x - x_0) / \gamma)^2)
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(t) = \frac{1}{\pi} \arctan \left( \frac{t - x_0}{\gamma} \right) +
+      \frac{1}{2}
+  }{
+    F(t) = arctan((t - x_0) / \gamma) / \pi + 1/2
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+Does not exist.
+}
 \examples{
-dist_cauchy(location = c(0, 0, 0, -2), scale = c(0.5, 1, 2, 1))
+dist <- dist_cauchy(location = c(0, 0, 0, -2), scale = c(0.5, 1, 2, 1))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }
 \seealso{
