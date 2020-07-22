@@ -13,6 +13,13 @@
 * Added `kurtosis()` for computing the kurtosis of a distribution.
 * The `density()` method now accepts a `log` argument which will return log 
   probabilities.
+  
+## Improvements
+
+* Documentation improvements
+* Added support for displaying distributions with `View()`.
+* `hilo()` intervals can no longer be added to other intervals, as this is a
+  common mistake when aggregating forecasts.
 
 # distributional 0.1.0
 

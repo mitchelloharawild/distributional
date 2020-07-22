@@ -100,9 +100,7 @@ vec_math.hilo <- function(.fn, .x, ...){
 vec_arith.hilo <- function(op, x, y, ...){
   out <- dt_x <- vec_data(x)
   if(is_hilo(y)){
-    dt_y <- vec_data(y)
-    out[["lower"]] <- get(op)(dt_x[["lower"]], dt_y[["lower"]])
-    out[["upper"]] <- get(op)(dt_x[["upper"]], dt_y[["upper"]])
+    abort("Intervals should not be added to other intervals, the sum of intervals is not the interval from a sum of distributions.")
   }
   else if(is_empty(y)){
     if(op == "-"){
