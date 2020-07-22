@@ -48,7 +48,7 @@ density.dist_burr <- function(x, at, ...){
 }
 
 #' @export
-density.dist_burr <- function(x, at, ...){
+log_pdf.dist_burr <- function(x, at, ...){
   require_package("actuar")
   actuar::dburr(at, x[["s1"]], x[["s2"]], x[["r"]], log = TRUE)
 }
