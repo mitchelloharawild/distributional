@@ -163,6 +163,9 @@
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/is_hilo.html</loc>
   </url>
   <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/kurtosis.html</loc>
+  </url>
+  <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/mean.distribution.html</loc>
   </url>
   <url>
@@ -188,6 +191,9 @@
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/scale_level.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/skewness.html</loc>
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/variance.html</loc>
