@@ -32,6 +32,17 @@ cdf.dist_default <- function(x, ...){
 generate.dist_default <- function(x, times, ...){
   vapply(stats::runif(times,0,1), quantile, numeric(1L), x = x, ...)
 }
+
+#' @export
+likelihood.dist_default <- function(x, sample){
+  prod(vapply(sample, density, numeric(1L), x = x))
+}
+
+#' @export
+log_likelihood.dist_default <- function(x, sample){
+  sum(vapply(sample, log_pdf, numeric(1L), x = x))
+}
+
 #' @export
 mean.dist_default <- function(x, ...){
   mean(generate(x, times = 1000), na.rm = TRUE)

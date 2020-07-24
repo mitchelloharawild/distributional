@@ -17,6 +17,7 @@ reference:
     - cdf.distribution
     - generate.distribution
     - quantile.distribution
+    - likelihood.distribution
     - hilo.distribution
     - hdr.distribution
     - mean.distribution

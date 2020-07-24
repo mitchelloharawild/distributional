@@ -138,6 +138,46 @@ generate.distribution <- function(x, times, ...){
   # Needs work to structure MV appropriately.
 }
 
+#' The (log) likelihood of a sample matching a distribution
+#'
+#' \lifecycle{maturing}
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @name likelihood
+#' @export
+likelihood <- function (x, ...){
+  ellipsis::check_dots_used()
+  UseMethod("likelihood")
+}
+
+#' @rdname likelihood
+#' @param sample A list of sampled values to compare to distribution(s).
+#' @param log If `TRUE`, the log-likelihood will be computed.
+#' @export
+likelihood.distribution <- function(x, sample, ..., log = FALSE){
+  if(vec_is(sample, numeric())) {
+    warn("The `sample` argument of `likelihood()` should contain a list of numbers.
+The same sample will be used for each distribution, i.e. `sample = list(sample)`.")
+    sample <- list(sample)
+  }
+  if(log){
+    dist_apply(x, log_likelihood, sample = sample, ...)
+  } else {
+    dist_apply(x, likelihood, sample = sample, ...)
+  }
+}
+
+log_likelihood <- function(x, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("log_likelihood")
+}
+#' @export
+log_likelihood.distribution <- function(x, sample, ...){
+  dist_apply(x, log_likelihood, sample = sample, ...)
+}
+
 #' Mean of a probability distribution
 #'
 #' \lifecycle{stable}

@@ -9,6 +9,8 @@
 ### Methods
 
 * Added `pdf()` as an alias for `density()`.
+* Added `likelihood()` for computing the likelihood of observing a sample from a
+  distribution.
 * Added `skewness()` for computing the skewness of a distribution.
 * Added `kurtosis()` for computing the kurtosis of a distribution.
 * The `density()` method now accepts a `log` argument which will return log 
