@@ -216,8 +216,8 @@ variance.default <- function(x, ...){
 #'
 #' \lifecycle{stable}
 #'
-#' Returns the empirical mean of the probability distribution. If the method
-#' does not exist, the mean of a random sample will be returned.
+#' Returns the empirical variance of the probability distribution. If the method
+#' does not exist, the variance of a random sample will be returned.
 #'
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.

@@ -2,12 +2,70 @@
 #'
 #' \lifecycle{stable}
 #'
+#' Poisson distributions are frequently used to model counts.
+#'
 #' @inheritParams stats::dpois
 #'
+#'
+#' @details
+#'
+#'   We recommend reading this documentation on
+#'   <https://pkg.mitchelloharawild.com/distributional>, where the math
+#'   will render nicely.
+#'
+#'   In the following, let \eqn{X} be a Poisson random variable with parameter
+#'   `lambda` = \eqn{\lambda}.
+#'
+#'   **Support**: \eqn{\{0, 1, 2, 3, ...\}}{{0, 1, 2, 3, ...}}
+#'
+#'   **Mean**: \eqn{\lambda}
+#'
+#'   **Variance**: \eqn{\lambda}
+#'
+#'   **Probability mass function (p.m.f)**:
+#'
+#'   \deqn{
+#'     P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}
+#'   }{
+#'     P(X = k) = \lambda^k e^(-\lambda) / k!
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     P(X \le k) = e^{-\lambda}
+#'     \sum_{i = 0}^{\lfloor k \rfloor} \frac{\lambda^i}{i!}
+#'   }{
+#'     P(X \le k) = e^(-\lambda)
+#'     \sum_{i = 0}^k \lambda^i / i!
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   \deqn{
+#'     E(e^{tX}) = e^{\lambda (e^t - 1)}
+#'   }{
+#'     E(e^(tX)) = e^(\lambda (e^t - 1))
+#'   }
 #' @seealso [stats::Poisson]
 #'
 #' @examples
-#' dist_poisson(lambda = c(1, 4, 10))
+#' dist <- dist_poisson(lambda = c(1, 4, 10))
+#'
+#' dist
+#' mean(dist)
+#' variance(dist)
+#' skewness(dist)
+#' kurtosis(dist)
+#'
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @name dist_poisson
 #' @export

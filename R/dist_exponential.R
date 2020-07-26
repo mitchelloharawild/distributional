@@ -7,7 +7,22 @@
 #' @seealso [stats::Exponential]
 #'
 #' @examples
-#' dist_exponential(rate = c(2, 1, 2/3))
+#' dist <- dist_exponential(rate = c(2, 1, 2/3))
+#'
+#' dist
+#' mean(dist)
+#' variance(dist)
+#' skewness(dist)
+#' kurtosis(dist)
+#'
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @name dist_exponential
 #' @export

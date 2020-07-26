@@ -7,12 +7,85 @@
 dist_bernoulli(prob)
 }
 \arguments{
-\item{prob}{The probability of success on each trial.}
+\item{prob}{The probability of success on each trial, \code{prob} can be any
+value in \verb{[0, 1]}.}
 }
 \description{
 \lifecycle{stable}
 }
+\details{
+Bernoulli distributions are used to represent events like coin flips
+when there is single trial that is either successful or unsuccessful.
+The Bernoulli distribution is a special case of the \code{\link[=Binomial]{Binomial()}}
+distribution with \code{n = 1}.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X} be a Bernoulli random variable with parameter
+\code{p} = \eqn{p}. Some textbooks also define \eqn{q = 1 - p}, or use
+\eqn{\pi} instead of \eqn{p}.
+
+The Bernoulli probability  distribution is widely used to model
+binary variables, such as 'failure' and 'success'. The most
+typical example is the flip of a coin, when  \eqn{p} is thought as the
+probability of flipping a head, and \eqn{q = 1 - p} is the
+probability of flipping a tail.
+
+\strong{Support}: \eqn{\{0, 1\}}{{0, 1}}
+
+\strong{Mean}: \eqn{p}
+
+\strong{Variance}: \eqn{p \cdot (1 - p) = p \cdot q}{p (1 - p)}
+
+\strong{Probability mass function (p.m.f)}:
+
+\deqn{
+    P(X = x) = p^x (1 - p)^{1-x} = p^x q^{1-x}
+  }{
+    P(X = x) = p^x (1 - p)^(1-x)
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    P(X \le x) =
+    \left \{
+      \begin{array}{ll}
+        0 & x < 0 \\
+        1 - p & 0 \leq x < 1 \\
+        1 & x \geq 1
+      \end{array}
+    \right.
+  }{
+    P(X \le x) = (1 - p) 1_{[0, 1)}(x) + 1_{1}(x)
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = (1 - p) + p e^t
+  }{
+    E(e^(tX)) = (1 - p) + p e^t
+  }
+}
 \examples{
-dist_bernoulli(prob = c(0.05, 0.5, 0.3, 0.9, 0.1))
+dist <- dist_bernoulli(prob = c(0.05, 0.5, 0.3, 0.9, 0.1))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }

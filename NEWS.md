@@ -18,6 +18,9 @@
   
 ## Improvements
 
+* Improved documentation for most distributions to include equations for the
+  region of support, summary statistics, density functions and moments. This is
+  the work of @alexpghayes in the `distributions3` package.
 * Documentation improvements
 * Added support for displaying distributions with `View()`.
 * `hilo()` intervals can no longer be added to other intervals, as this is a

@@ -2,12 +2,60 @@
 #'
 #' \lifecycle{stable}
 #'
+#' Generalization of the gamma distribution. Often used in survival and
+#' time-to-event analyses.
+#'
 #' @inheritParams stats::dweibull
+#'
+#' @details
+#'
+#'   We recommend reading this documentation on
+#'   <https://pkg.mitchelloharawild.com/distributional>, where the math
+#'   will render nicely.
+#'
+#'   In the following, let \eqn{X} be a Weibull random variable with
+#'   success probability `p` = \eqn{p}.
+#'
+#'   **Support**: \eqn{R^+} and zero.
+#'
+#'   **Mean**: \eqn{\lambda \Gamma(1+1/k)}, where \eqn{\Gamma} is
+#'   the gamma function.
+#'
+#'   **Variance**: \eqn{\lambda [ \Gamma (1 + \frac{2}{k} ) - (\Gamma(1+ \frac{1}{k}))^2 ]}
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \frac{k}{\lambda}(\frac{x}{\lambda})^{k-1}e^{-(x/\lambda)^k}, x \ge 0
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{F(x) = 1 - e^{-(x/\lambda)^k}, x \ge 0}
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   \deqn{\sum_{n=0}^\infty \frac{t^n\lambda^n}{n!} \Gamma(1+n/k), k \ge 1}
 #'
 #' @seealso [stats::Weibull]
 #'
 #' @examples
-#' dist_weibull(shape = c(0.5, 1, 1.5, 5), scale = rep(1, 4))
+#' dist <- dist_weibull(shape = c(0.5, 1, 1.5, 5), scale = rep(1, 4))
+#'
+#' dist
+#' mean(dist)
+#' variance(dist)
+#' skewness(dist)
+#' kurtosis(dist)
+#'
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @name dist_weibull
 #' @export

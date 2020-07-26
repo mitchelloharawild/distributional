@@ -17,8 +17,28 @@ dist_studentized_range(nmeans, df, nranges)
 \description{
 \lifecycle{stable}
 }
+\details{
+Tukey's studentized range distribution, used for Tukey's
+honestly significant differences test in ANOVA.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+\strong{Support}: \eqn{R^+}, the set of positive real numbers.
+
+Other properties of Tukey's Studentized Range Distribution
+are omitted, largely because the distribution is not fun
+to work with.
+}
 \examples{
-dist_studentized_range(nmeans = c(6, 2), df = c(5, 4), nranges = c(1, 1))
+dist <- dist_studentized_range(nmeans = c(6, 2), df = c(5, 4), nranges = c(1, 1))
+
+dist
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }
 \seealso{

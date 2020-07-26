@@ -22,8 +22,58 @@ If \code{ncp == 0} (or \code{NULL}), this is the median.}
 \description{
 \lifecycle{stable}
 }
+\details{
+The Student's T distribution is closely related to the \code{\link[=Normal]{Normal()}}
+distribution, but has heavier tails. As \eqn{\nu} increases to \eqn{\infty},
+the Student's T converges to a Normal. The T distribution appears
+repeatedly throughout classic frequentist hypothesis testing when
+comparing group means.
+
+We recommend reading this documentation on
+\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+will render nicely.
+
+In the following, let \eqn{X} be a \strong{central} Students T random variable
+with \code{df} = \eqn{\nu}.
+
+\strong{Support}: \eqn{R}, the set of all real numbers
+
+\strong{Mean}: Undefined unless \eqn{\nu \ge 2}, in which case the mean is
+zero.
+
+\strong{Variance}:
+
+\deqn{
+    \frac{\nu}{\nu - 2}
+  }{
+    \nu / (\nu - 2)
+  }
+
+Undefined if \eqn{\nu < 1}, infinite when \eqn{1 < \nu \le 2}.
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} \Gamma(\frac{\nu}{2})} (1 + \frac{x^2}{\nu} )^{- \frac{\nu + 1}{2}}
+  }{
+    f(x) = \Gamma((\nu + 1) / 2) / (\sqrt(\nu \pi) \Gamma(\nu / 2)) (1 + x^2 / \nu)^(- (\nu + 1) / 2)
+  }
+}
 \examples{
-dist_student_t(df = c(1,2,5), mu = c(0,1,2), sigma = c(1,2,3))
+dist <- dist_student_t(df = c(1,2,5), mu = c(0,1,2), sigma = c(1,2,3))
+
+dist
+mean(dist)
+variance(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 
 }
 \seealso{
