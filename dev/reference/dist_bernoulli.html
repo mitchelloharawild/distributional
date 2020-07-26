@@ -137,15 +137,75 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>prob</th>
-      <td><p>The probability of success on each trial.</p></td>
+      <td><p>The probability of success on each trial, <code>prob</code> can be any
+value in <code>[0, 1]</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Bernoulli distributions are used to represent events like coin flips
+when there is single trial that is either successful or unsuccessful.
+The Bernoulli distribution is a special case of the <code><a href='https://rdrr.io/r/stats/Binomial.html'>Binomial()</a></code>
+distribution with <code>n = 1</code>.</p>
+<p>We recommend reading this documentation on
+<a href='https://pkg.mitchelloharawild.com/distributional'>https://pkg.mitchelloharawild.com/distributional</a>, where the math
+will render nicely.</p>
+<p>In the following, let \(X\) be a Bernoulli random variable with parameter
+<code>p</code> = \(p\). Some textbooks also define \(q = 1 - p\), or use
+\(\pi\) instead of \(p\).</p>
+<p>The Bernoulli probability  distribution is widely used to model
+binary variables, such as 'failure' and 'success'. The most
+typical example is the flip of a coin, when  \(p\) is thought as the
+probability of flipping a head, and \(q = 1 - p\) is the
+probability of flipping a tail.</p>
+<p><strong>Support</strong>: \(\{0, 1\}\)</p>
+<p><strong>Mean</strong>: \(p\)</p>
+<p><strong>Variance</strong>: \(p \cdot (1 - p) = p \cdot q\)</p>
+<p><strong>Probability mass function (p.m.f)</strong>:</p>
+<p>$$
+    P(X = x) = p^x (1 - p)^{1-x} = p^x q^{1-x}
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
+<p>$$
+    P(X \le x) =
+    \left \{
+      \begin{array}{ll}
+        0 &amp; x &lt; 0 \\
+        1 - p &amp; 0 \leq x &lt; 1 \\
+        1 &amp; x \geq 1
+      \end{array}
+    \right.
+  $$</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = (1 - p) + p e^t
+  $$</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dist_bernoulli</span>(<span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span>))</div><div class='output co'>#&gt; &lt;distribution[5]&gt;
+    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_bernoulli</span>(<span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span>))
+
+<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[5]&gt;
 #&gt; [1] Bernoulli(0.05) Bernoulli(0.5)  Bernoulli(0.3)  Bernoulli(0.9) 
-#&gt; [5] Bernoulli(0.1) </div><div class='input'>
+#&gt; [5] Bernoulli(0.1) </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.05 0.50 0.30 0.90 0.10</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.0475 0.2500 0.2100 0.0900 0.0900</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  4.1294832  0.0000000  0.8728716 -2.6666667  2.6666667</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 15.052632 -2.000000 -1.238095  5.111111  5.111111</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt;  [1] 0 0 0 0 0 0 0 0 0 0
+#&gt; 
+#&gt; [[2]]
+#&gt;  [1] 1 0 0 0 0 0 0 0 0 1
+#&gt; 
+#&gt; [[3]]
+#&gt;  [1] 0 0 1 0 1 1 0 0 0 0
+#&gt; 
+#&gt; [[4]]
+#&gt;  [1] 1 1 1 1 1 1 1 0 1 1
+#&gt; 
+#&gt; [[5]]
+#&gt;  [1] 0 0 0 0 0 0 0 1 1 0
+#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0 0 0 0 0</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -Inf -Inf -Inf -Inf -Inf</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 1 1 1 1 1</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 0 1 0 1 0</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -158,7 +218,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mitchell O'Hara-Wild.</p>
+  <p>Developed by Mitchell O'Hara-Wild, Alex Hayes.</p>
 </div>
 
 <div class="pkgdown">

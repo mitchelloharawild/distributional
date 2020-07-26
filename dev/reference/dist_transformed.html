@@ -159,8 +159,8 @@ they are based on numerical derivatives.</p>
     <pre class="examples"><div class='input'><span class='co'># Create a log normal distribution</span>
 <span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_transformed</span>(<span class='fu'><a href='dist_normal.html'>dist_normal</a></span>(<span class='fl'>0</span>, <span class='fl'>0.5</span>), <span class='no'>exp</span>, <span class='no'>log</span>)
 <span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>1</span>) <span class='co'># dlnorm(1, 0, 0.5)</span></div><div class='output co'>#&gt; [1] 0.7978846</div><div class='input'><span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>) <span class='co'># plnorm(4, 0, 0.5)</span></div><div class='output co'>#&gt; [1] 0.9972194</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.1</span>) <span class='co'># qlnorm(0.1, 0, 0.5)</span></div><div class='output co'>#&gt; [1] 0.5268835</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>) <span class='co'># rlnorm(10, 0, 0.5)</span></div><div class='output co'>#&gt; [[1]]
-#&gt;  [1] 0.8067915 1.9743331 0.9651915 0.8727756 0.2942457 1.0332853 0.5773801
-#&gt;  [8] 0.7286301 0.3563552 3.7601769
+#&gt;  [1] 1.3928036 1.3077456 0.9644412 1.3642390 2.3566417 0.7444349 0.7024642
+#&gt;  [8] 0.7828532 0.6723029 1.2295892
 #&gt; </div><div class='input'>
 </div></pre>
   </div>
@@ -174,7 +174,7 @@ they are based on numerical derivatives.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mitchell O'Hara-Wild.</p>
+  <p>Developed by Mitchell O'Hara-Wild, Alex Hayes.</p>
 </div>
 
 <div class="pkgdown">

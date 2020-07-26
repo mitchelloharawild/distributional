@@ -157,13 +157,54 @@ If <code>ncp == 0</code> (or <code>NULL</code>), this is the median.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The Student's T distribution is closely related to the <code><a href='https://rdrr.io/r/stats/Normal.html'>Normal()</a></code>
+distribution, but has heavier tails. As \(\nu\) increases to \(\infty\),
+the Student's T converges to a Normal. The T distribution appears
+repeatedly throughout classic frequentist hypothesis testing when
+comparing group means.</p>
+<p>We recommend reading this documentation on
+<a href='https://pkg.mitchelloharawild.com/distributional'>https://pkg.mitchelloharawild.com/distributional</a>, where the math
+will render nicely.</p>
+<p>In the following, let \(X\) be a <strong>central</strong> Students T random variable
+with <code>df</code> = \(\nu\).</p>
+<p><strong>Support</strong>: \(R\), the set of all real numbers</p>
+<p><strong>Mean</strong>: Undefined unless \(\nu \ge 2\), in which case the mean is
+zero.</p>
+<p><strong>Variance</strong>:</p>
+<p>$$
+    \frac{\nu}{\nu - 2}
+  $$</p>
+<p>Undefined if \(\nu &lt; 1\), infinite when \(1 &lt; \nu \le 2\).</p>
+<p><strong>Probability density function (p.d.f)</strong>:</p>
+<p>$$
+    f(x) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} \Gamma(\frac{\nu}{2})} (1 + \frac{x^2}{\nu} )^{- \frac{\nu + 1}{2}}
+  $$</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='https://rdrr.io/r/stats/TDist.html'>stats::TDist</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dist_student_t</span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>5</span>), <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>))</div><div class='output co'>#&gt; &lt;distribution[3]&gt;
-#&gt; [1] t(1, 0, 1) t(2, 1, 2) t(5, 2, 3)</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_student_t</span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>5</span>), <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>))
+
+<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[3]&gt;
+#&gt; [1] t(1, 0, 1) t(2, 1, 2) t(5, 2, 3)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] NA  1  2</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  NA Inf  15</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt;  [1]  0.63017890  0.80817754 13.67350714  0.40719714  0.81023079 -0.07963269
+#&gt;  [7] -0.61222199 -0.58856860  0.36477731 -1.47654233
+#&gt; 
+#&gt; [[2]]
+#&gt;  [1] -1.638119  3.561696  1.647123 -1.432021 -4.012675  1.650036 -1.397216
+#&gt;  [8]  2.015674  6.345520  2.381649
+#&gt; 
+#&gt; [[3]]
+#&gt;  [1]  1.144954  5.356423 -1.954513 -6.163206 -2.044159 -7.777897  2.338265
+#&gt;  [8]  6.399335  1.788889  4.995309
+#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.06366198 0.14814815 0.12653556</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -2.754168 -1.909543 -2.067232</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.9220209 0.8638034 0.7327454</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 0.7265425 2.2344268 3.6782889</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -176,7 +217,7 @@ If <code>ncp == 0</code> (or <code>NULL</code>), this is the median.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mitchell O'Hara-Wild.</p>
+  <p>Developed by Mitchell O'Hara-Wild, Alex Hayes.</p>
 </div>
 
 <div class="pkgdown">

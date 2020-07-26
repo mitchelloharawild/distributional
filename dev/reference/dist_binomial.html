@@ -137,18 +137,79 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>size</th>
-      <td><p>The number of trials.</p></td>
+      <td><p>The number of trials. Must be an integer greater than or equal
+to one. When <code>size = 1L</code>, the Binomial distribution reduces to the
+Bernoulli distribution. Often called <code>n</code> in textbooks.</p></td>
     </tr>
     <tr>
       <th>prob</th>
-      <td><p>The probability of success on each trial.</p></td>
+      <td><p>The probability of success on each trial, <code>prob</code> can be any
+value in <code>[0, 1]</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Binomial distributions are used to represent situations can that can
+be thought as the result of \(n\) Bernoulli experiments (here the
+\(n\) is defined as the <code>size</code> of the experiment). The classical
+example is \(n\) independent coin flips, where each coin flip has
+probability <code>p</code> of success. In this case, the individual probability of
+flipping heads or tails is given by the  Bernoulli(p) distribution,
+and the probability of having \(x\) equal results (\(x\) heads,
+for example), in \(n\) trials is given by the Binomial(n, p) distribution.
+The equation of the Binomial distribution is directly derived from
+the equation of the Bernoulli distribution.</p>
+<p>We recommend reading this documentation on
+<a href='https://pkg.mitchelloharawild.com/distributional'>https://pkg.mitchelloharawild.com/distributional</a>, where the math
+will render nicely.</p>
+<p>The Binomial distribution comes up when you are interested in the portion
+of people who do a thing. The Binomial distribution
+also comes up in the sign test, sometimes called the Binomial test
+(see <code><a href='https://rdrr.io/r/stats/binom.test.html'>stats::binom.test()</a></code>), where you may need the Binomial C.D.F. to
+compute p-values.</p>
+<p>In the following, let \(X\) be a Binomial random variable with parameter
+<code>size</code> = \(n\) and <code>p</code> = \(p\). Some textbooks define \(q = 1 - p\),
+or called \(\pi\) instead of \(p\).</p>
+<p><strong>Support</strong>: \(\{0, 1, 2, ..., n\}\)</p>
+<p><strong>Mean</strong>: \(np\)</p>
+<p><strong>Variance</strong>: \(np \cdot (1 - p) = np \cdot q\)</p>
+<p><strong>Probability mass function (p.m.f)</strong>:</p>
+<p>$$
+    P(X = k) = {n \choose k} p^k (1 - p)^{n-k}
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
+<p>$$
+    P(X \le k) = \sum_{i=0}^{\lfloor k \rfloor} {n \choose i} p^i (1 - p)^{n-i}
+  $$</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = (1 - p + p e^t)^n
+  $$</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dist_binomial</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span>))</div><div class='output co'>#&gt; &lt;distribution[5]&gt;
-#&gt; [1] B(1, 0.05) B(2, 0.5)  B(3, 0.3)  B(4, 0.9)  B(5, 0.1) </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_binomial</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span>))
+
+<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[5]&gt;
+#&gt; [1] B(1, 0.05) B(2, 0.5)  B(3, 0.3)  B(4, 0.9)  B(5, 0.1) </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.05 1.00 0.90 3.60 0.50</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.0475 0.5000 0.6300 0.3600 0.4500</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  4.1294832  0.0000000  0.5039526 -1.3333333  1.1925696</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 15.0526316 -1.0000000 -0.4126984  1.2777778  1.0222222</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt;  [1] 1 0 0 0 0 1 0 0 0 0
+#&gt; 
+#&gt; [[2]]
+#&gt;  [1] 2 0 0 2 1 2 1 1 1 1
+#&gt; 
+#&gt; [[3]]
+#&gt;  [1] 1 0 2 0 2 0 1 0 1 0
+#&gt; 
+#&gt; [[4]]
+#&gt;  [1] 2 4 4 3 3 4 3 3 4 1
+#&gt; 
+#&gt; [[5]]
+#&gt;  [1] 0 2 0 0 0 1 0 0 0 2
+#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.0000 0.2500 0.1890 0.0486 0.0729</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1]      -Inf -1.386294 -1.666008 -3.024132 -2.618667</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 1.00000 1.00000 1.00000 1.00000 0.99999</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 0 1 1 4 1</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -161,7 +222,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mitchell O'Hara-Wild.</p>
+  <p>Developed by Mitchell O'Hara-Wild, Alex Hayes.</p>
 </div>
 
 <div class="pkgdown">

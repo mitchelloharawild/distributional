@@ -141,6 +141,38 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The degenerate distribution takes a single value which is certain to be
+observed. It takes a single parameter, which is the value that is observed
+by the distribution.</p>
+<p>We recommend reading this documentation on
+<a href='https://pkg.mitchelloharawild.com/distributional'>https://pkg.mitchelloharawild.com/distributional</a>, where the math
+will render nicely.</p>
+<p>In the following, let \(X\) be a degenerate random variable with value
+<code>x</code> = \(k_0\).</p>
+<p><strong>Support</strong>: \(R\), the set of all real numbers</p>
+<p><strong>Mean</strong>: \(k_0\)</p>
+<p><strong>Variance</strong>: \(0\)</p>
+<p><strong>Probability density function (p.d.f)</strong>:</p>
+<p>$$
+    f(x) = 1 for x = k_0
+  $$
+$$
+    f(x) = 0 for x \neq k_0
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
+<p>The cumulative distribution function has the form</p>
+<p>$$
+    F(x) = 0 for x &lt; k_0
+  $$
+$$
+    F(x) = 1 for x \ge k_0
+  $$</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = e^{k_0 t}
+  $$</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>dist_degenerate</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>)</div><div class='output co'>#&gt; &lt;distribution[5]&gt;
@@ -157,7 +189,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mitchell O'Hara-Wild.</p>
+  <p>Developed by Mitchell O'Hara-Wild, Alex Hayes.</p>
 </div>
 
 <div class="pkgdown">
