@@ -122,7 +122,6 @@ mean.dist_negbin <- function(x, ...){
 variance.dist_negbin <- function(x, ...){
   x[["n"]] * (1 - x[["p"]]) / x[["p"]]^2
 }
-}
 
 #' @export
 skewness.dist_negbin <- function(x, ...) {
