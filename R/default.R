@@ -34,12 +34,12 @@ generate.dist_default <- function(x, times, ...){
 }
 
 #' @export
-likelihood.dist_default <- function(x, sample){
+likelihood.dist_default <- function(x, sample, ...){
   prod(vapply(sample, density, numeric(1L), x = x))
 }
 
 #' @export
-log_likelihood.dist_default <- function(x, sample){
+log_likelihood.dist_default <- function(x, sample, ...){
   sum(vapply(sample, log_pdf, numeric(1L), x = x))
 }
 
