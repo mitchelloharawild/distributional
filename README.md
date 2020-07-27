@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![R build
 status](https://github.com/mitchelloharawild/distributional/workflows/R-CMD-check/badge.svg)](https://github.com/mitchelloharawild/distributional)
 [![Coverage
@@ -56,10 +56,15 @@ normal distribution is supported for testing purposes.
 
 ``` r
 library(distributional)
+#> 
+#> Attaching package: 'distributional'
+#> The following object is masked from 'package:grDevices':
+#> 
+#>     pdf
 my_dist <- c(dist_normal(mu = 0, sigma = 1), dist_student_t(df = 10))
 my_dist
 #> <distribution[2]>
-#> [1] N(0, 1) t(10)
+#> [1] N(0, 1)     t(10, 0, 1)
 ```
 
 The standard four distribution functions in R are usable via these
@@ -97,30 +102,35 @@ supported, a transformed distribution will be created.
 ``` r
 my_dist
 #> <distribution[2]>
-#> [1] N(0, 1) t(10)
+#> [1] N(0, 1)     t(10, 0, 1)
 my_dist*3 + 2
 #> <distribution[2]>
-#> [1] N(2, 9)  t(t(10))
+#> [1] N(2, 9)        t(t(10, 0, 1))
 mean(my_dist)
 #> [1] 0 0
 variance(my_dist)
 #> [1] 1.00 1.25
 ```
 
-You can also visualise the distribution(s) using `autoplot()`.
+You can also visualise the distribution(s) using the
+[ggdist](https://mjskay.github.io/ggdist/) package.
 
 ``` r
+library(ggdist)
 library(ggplot2)
-autoplot(my_dist, type = "pdf")
+
+df <- data.frame(
+  name = c("Gamma(2,1)", "Normal(5,1)", "Mixture"),
+  dist = c(dist_gamma(2,1), dist_normal(5,1),
+           dist_mixture(dist_gamma(2,1), dist_normal(5, 1), weights = c(0.4, 0.6)))
+)
+
+ggplot(df, aes(y = factor(name, levels = rev(name)))) +
+  stat_dist_halfeye(aes(dist = dist)) + 
+  labs(title = "Density function for a mixture of distributions", y = NULL, x = NULL)
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
-
-``` r
-autoplot(my_dist, type = "cdf")
-```
-
-<img src="man/figures/README-plot-2.png" width="100%" />
 
 ## Related work
 
@@ -131,7 +141,8 @@ R:
     distributions (comparisons made below).
   - [distributions3](https://cran.r-project.org/package=distributions3)
     represents singular distributions using S3, with particularly nice
-    documentation.
+    documentation. This package makes use of some code and documentation
+    from this package.
   - [distr](https://cran.r-project.org/package=distr) represents
     singular distributions using S4.
   - [distr6](https://cran.r-project.org/package=distr6) represents
