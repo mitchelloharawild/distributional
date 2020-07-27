@@ -30,12 +30,16 @@ format.dist_mixture <- function(x, ...){
 }
 
 #' @export
-density.dist_mixture <- function(x, ...){
-  sum(x[["w"]]*vapply(x[["dist"]], density, numeric(1L), ...))
+density.dist_mixture <- function(x, at, ...){
+  if(length(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
+
+  sum(x[["w"]]*vapply(x[["dist"]], density, numeric(1L), at = at, ...))
 }
 
 #' @export
 quantile.dist_mixture <- function(x, p, ...){
+  if(length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
+
   # Find bounds for optimisation based on range of each quantile
   dist_q <- vapply(x[["dist"]], quantile, numeric(1L), p, ..., USE.NAMES = FALSE)
   if(vctrs::vec_unique_count(dist_q) == 1) return(dist_q[1])
@@ -48,8 +52,10 @@ quantile.dist_mixture <- function(x, p, ...){
 }
 
 #' @export
-cdf.dist_mixture <- function(x, ...){
-  sum(x[["w"]]*vapply(x[["dist"]], cdf, numeric(1L), ...))
+cdf.dist_mixture <- function(x, q, ...){
+  if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
+
+  sum(x[["w"]]*vapply(x[["dist"]], cdf, numeric(1L), q = q, ...))
 }
 
 #' @export
