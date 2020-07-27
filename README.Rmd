@@ -83,12 +83,13 @@ You can also visualise the distribution(s) using the [ggdist](https://mjskay.git
 library(ggdist)
 library(ggplot2)
 
-data.frame(
+df <- data.frame(
   name = c("Gamma(2,1)", "Normal(5,1)", "Mixture"),
   dist = c(dist_gamma(2,1), dist_normal(5,1),
            dist_mixture(dist_gamma(2,1), dist_normal(5, 1), weights = c(0.4, 0.6)))
-) %>%
-  ggplot(aes(y = factor(name, levels = rev(name)))) +
+)
+
+ggplot(df, aes(y = factor(name, levels = rev(name)))) +
   stat_dist_halfeye(aes(dist = dist)) + 
   labs(title = "Density function for a mixture of distributions", y = NULL, x = NULL)
 ```
