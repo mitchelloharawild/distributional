@@ -77,13 +77,43 @@ mean(my_dist)
 variance(my_dist)
 ```
 
-You can also visualise the distribution(s) using `autoplot()`.
+You can also visualise the distribution(s) using the [ggdist](https://mjskay.github.io/ggdist/) package.
 
 ```{r plot}
+library(ggdist)
 library(ggplot2)
-autoplot(my_dist, type = "pdf")
-autoplot(my_dist, type = "cdf")
+
+data.frame(
+  name = c("N(5,1)", "Gamma(2,1)"),
+  dist = c(dist_normal(5, 1), dist_gamma(2,1))
+) %>%
+  ggplot(aes(y = name)) +
+  stat_dist_halfeye(aes(dist = dist))
 ```
+
+<!-- ```{r plot} -->
+<!-- library(ggdist) -->
+<!-- library(ggplot2) -->
+
+<!-- dplyr::tribble( -->
+<!--   ~ name, ~ dist, -->
+<!--   "Gamma(2,1)", dist_gamma(2,1), -->
+<!--   "Normal", dist_normal(5, 1), -->
+<!--   "Mixture", dist_mixture( -->
+<!--     dist_gamma(2,1), dist_normal(5, 1), weights = c(0.4, 0.6) -->
+<!--   ) -->
+<!-- ) %>% -->
+<!--   ggplot(aes(y = name)) + -->
+<!--   stat_dist_halfeye(aes(dist = dist)) -->
+
+<!-- data.frame( -->
+<!--   name = c("N(5,1)", "Gamma(2,1)"),# "Mixture"), -->
+<!--   dist = c(dist_normal(5, 1), dist_gamma(2,1))#, -->
+<!--            # dist_mixture(dist_gamma(2,1), dist_normal(5, 1), weights = c(0.4, 0.6)) -->
+<!-- ) %>% -->
+<!--   ggplot(aes(y = name)) + -->
+<!--   stat_dist_halfeye(aes(dist = dist)) -->
+<!-- ``` -->
 
 ## Related work
 
