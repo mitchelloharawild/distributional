@@ -5,7 +5,7 @@
 \alias{cdf.distribution}
 \title{The cumulative distribution function}
 \usage{
-cdf(x, q, ...)
+cdf(x, q, ..., log = FALSE)
 
 \method{cdf}{distribution}(x, q, ...)
 }
@@ -14,7 +14,9 @@ cdf(x, q, ...)
 
 \item{q}{The quantile at which the cdf is calculated.}
 
-\item{...}{Additional arguments used by methods.}
+\item{...}{Additional arguments passed to methods.}
+
+\item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
 \lifecycle{stable}

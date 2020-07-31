@@ -102,13 +102,13 @@ quantile.distribution <- function(x, p, ...){
 #'
 #' \lifecycle{stable}
 #'
-#' @param x The distribution(s).
+#' @inheritParams density.distribution
 #' @param q The quantile at which the cdf is calculated.
-#' @param ... Additional arguments used by methods.
 #'
 #' @name cdf
 #' @export
-cdf <- function (x, q, ...){
+cdf <- function (x, q, ..., log = FALSE){
+  if(log) return(log_cdf(x, q, ...))
   ellipsis::check_dots_used()
   UseMethod("cdf")
 }
@@ -117,6 +117,15 @@ cdf <- function (x, q, ...){
 cdf.distribution <- function(x, q, ...){
   vec_is(q, double(), 1L)
   dist_apply(x, cdf, q = q, ...)
+}
+log_cdf <- function(x, q, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("log_cdf")
+}
+#' @export
+log_cdf.distribution <- function(x, q, ...){
+  vec_is(q, double(), 1L)
+  dist_apply(x, log_cdf, q = q, ...)
 }
 
 #' Randomly sample values from a distribution
