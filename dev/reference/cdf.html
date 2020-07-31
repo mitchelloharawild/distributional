@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>cdf</span>(<span class='no'>x</span>, <span class='no'>q</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>cdf</span>(<span class='no'>x</span>, <span class='no'>q</span>, <span class='no'>...</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for distribution</span>
 <span class='fu'>cdf</span>(<span class='no'>x</span>, <span class='no'>q</span>, <span class='no'>...</span>)</pre>
@@ -148,7 +148,11 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments used by methods.</p></td>
+      <td><p>Additional arguments passed to methods.</p></td>
+    </tr>
+    <tr>
+      <th>log</th>
+      <td><p>If <code>TRUE</code>, probabilities will be given as log probabilities.</p></td>
     </tr>
     </table>
 

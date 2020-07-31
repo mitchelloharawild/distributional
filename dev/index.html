@@ -103,10 +103,15 @@
 <a href="#examples" class="anchor"></a>Examples</h2>
 <p>Distributions are created using <code>dist_*()</code> functions. Currently only the normal distribution is supported for testing purposes.</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">distributional</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'distributional'</span>
+<span class="co">#&gt; The following object is masked from 'package:grDevices':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     pdf</span>
 <span class="no">my_dist</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="kw">mu</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">sigma</span> <span class="kw">=</span> <span class="fl">1</span>), <span class="fu"><a href="reference/dist_student_t.html">dist_student_t</a></span>(<span class="kw">df</span> <span class="kw">=</span> <span class="fl">10</span>))
 <span class="no">my_dist</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
-<span class="co">#&gt; [1] N(0, 1) t(10)</span></pre></div>
+<span class="co">#&gt; [1] N(0, 1)     t(10, 0, 1)</span></pre></div>
 <p>The standard four distribution functions in R are usable via these generics:</p>
 <div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/density.html">density</a></span>(<span class="no">my_dist</span>, <span class="fl">0</span>) <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span>
 <span class="co">#&gt; [1] 0.3989423 0.3891084</span>
@@ -129,20 +134,28 @@
 <p>Additionally, some distributions may support other methods such as mathematical operations and summary measures. If the methods aren’t supported, a transformed distribution will be created.</p>
 <div class="sourceCode" id="cb6"><pre class="r"><span class="no">my_dist</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
-<span class="co">#&gt; [1] N(0, 1) t(10)</span>
+<span class="co">#&gt; [1] N(0, 1)     t(10, 0, 1)</span>
 <span class="no">my_dist</span>*<span class="fl">3</span> + <span class="fl">2</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
-<span class="co">#&gt; [1] N(2, 9)  t(t(10))</span>
+<span class="co">#&gt; [1] N(2, 9)        t(t(10, 0, 1))</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">my_dist</span>)
 <span class="co">#&gt; [1] 0 0</span>
 <span class="fu"><a href="reference/variance.html">variance</a></span>(<span class="no">my_dist</span>)
 <span class="co">#&gt; [1] 1.00 1.25</span></pre></div>
-<p>You can also visualise the distribution(s) using <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">my_dist</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"pdf"</span>)</pre></div>
+<p>You can also visualise the distribution(s) using the <a href="https://mjskay.github.io/ggdist/">ggdist</a> package.</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggdist</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  <span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Gamma(2,1)"</span>, <span class="st">"Normal(5,1)"</span>, <span class="st">"Mixture"</span>),
+  <span class="kw">dist</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span>(<span class="fl">2</span>,<span class="fl">1</span>), <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="fl">5</span>,<span class="fl">1</span>),
+           <span class="fu"><a href="reference/dist_mixture.html">dist_mixture</a></span>(<span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span>(<span class="fl">2</span>,<span class="fl">1</span>), <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="fl">5</span>, <span class="fl">1</span>), <span class="kw">weights</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>)))
+)
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">name</span>, <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="no">name</span>)))) +
+  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_dist_slabinterval.html">stat_dist_halfeye</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">dist</span> <span class="kw">=</span> <span class="no">dist</span>)) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Density function for a mixture of distributions"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="kw">NULL</span>)</pre></div>
 <p><img src="reference/figures/README-plot-1.png" width="100%"></p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">my_dist</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"cdf"</span>)</pre></div>
-<p><img src="reference/figures/README-plot-2.png" width="100%"></p>
 </div>
 <div id="related-work" class="section level2">
 <h2 class="hasAnchor">
@@ -151,7 +164,7 @@
 <ul>
 <li>stats provides functions to work with possibly multiple distributions (comparisons made below).</li>
 <li>
-<a href="https://cran.r-project.org/package=distributions3">distributions3</a> represents singular distributions using S3, with particularly nice documentation.</li>
+<a href="https://cran.r-project.org/package=distributions3">distributions3</a> represents singular distributions using S3, with particularly nice documentation. This package makes use of some code and documentation from this package.</li>
 <li>
 <a href="https://cran.r-project.org/package=distr">distr</a> represents singular distributions using S4.</li>
 <li>
@@ -202,7 +215,7 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
 <li><a href="https://github.com/mitchelloharawild/distributional"><img src="https://github.com/mitchelloharawild/distributional/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://codecov.io/github/mitchelloharawild/distributional?branch=master"><img src="https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg" alt="Coverage Status"></a></li>
 <li><a href="https://CRAN.R-project.org/package=distributional"><img src="https://www.r-pkg.org/badges/version/distributional" alt="CRAN status"></a></li>
