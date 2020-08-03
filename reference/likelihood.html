@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute intervals — hilo • distributional</title>
+<title>The (log) likelihood of a sample matching a distribution — likelihood • distributional</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Compute intervals — hilo" />
-<meta property="og:description" content="Used to extract a specified prediction interval at a particular confidence
-level from a distribution." />
+<meta property="og:title" content="The (log) likelihood of a sample matching a distribution — likelihood" />
+<meta property="og:description" content="" />
 
 
 
@@ -122,28 +121,38 @@ level from a distribution." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute intervals</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/hilo.R'><code>R/hilo.R</code></a></small>
-    <div class="hidden name"><code>hilo.Rd</code></div>
+    <h1>The (log) likelihood of a sample matching a distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/distribution.R'><code>R/distribution.R</code></a></small>
+    <div class="hidden name"><code>likelihood.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Used to extract a specified prediction interval at a particular confidence
-level from a distribution.</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>hilo</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>likelihood</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for distribution</span>
+<span class='fu'>likelihood</span>(<span class='no'>x</span>, <span class='no'>sample</span>, <span class='no'>...</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object to create hilo from.</p></td>
+      <td><p>The distribution(s).</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Additional arguments used by methods.</p></td>
+    </tr>
+    <tr>
+      <th>sample</th>
+      <td><p>A list of sampled values to compare to distribution(s).</p></td>
+    </tr>
+    <tr>
+      <th>log</th>
+      <td><p>If <code>TRUE</code>, the log-likelihood will be computed.</p></td>
     </tr>
     </table>
 

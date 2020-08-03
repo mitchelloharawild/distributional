@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute intervals — hilo • distributional</title>
+<title>Kurtosis of a probability distribution — kurtosis • distributional</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Compute intervals — hilo" />
-<meta property="og:description" content="Used to extract a specified prediction interval at a particular confidence
-level from a distribution." />
+<meta property="og:title" content="Kurtosis of a probability distribution — kurtosis" />
+<meta property="og:description" content="" />
 
 
 
@@ -122,24 +121,26 @@ level from a distribution." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute intervals</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/hilo.R'><code>R/hilo.R</code></a></small>
-    <div class="hidden name"><code>hilo.Rd</code></div>
+    <h1>Kurtosis of a probability distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/distribution.R'><code>R/distribution.R</code></a></small>
+    <div class="hidden name"><code>kurtosis.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Used to extract a specified prediction interval at a particular confidence
-level from a distribution.</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>hilo</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>kurtosis</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for distribution</span>
+<span class='fu'>kurtosis</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object to create hilo from.</p></td>
+      <td><p>The distribution(s).</p></td>
     </tr>
     <tr>
       <th>...</th>

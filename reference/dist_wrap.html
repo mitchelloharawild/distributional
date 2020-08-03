@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Cauchy distribution — dist_cauchy • distributional</title>
+<title>Create a distribution from p/d/q/r style functions — dist_wrap • distributional</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="The Cauchy distribution — dist_cauchy" />
+<meta property="og:title" content="Create a distribution from p/d/q/r style functions — dist_wrap" />
 <meta property="og:description" content="" />
 
 
@@ -121,83 +121,68 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The Cauchy distribution</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/dist_cauchy.R'><code>R/dist_cauchy.R</code></a></small>
-    <div class="hidden name"><code>dist_cauchy.Rd</code></div>
+    <h1>Create a distribution from p/d/q/r style functions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/dist_wrap.R'><code>R/dist_wrap.R</code></a></small>
+    <div class="hidden name"><code>dist_wrap.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_cauchy</span>(<span class='no'>location</span>, <span class='no'>scale</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_wrap</span>(<span class='no'>dist</span>, <span class='no'>...</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"stats"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>location</th>
-      <td><p>location and scale parameters.</p></td>
+      <th>dist</th>
+      <td><p>The name of the distribution used in the functions (name that is
+prefixed by p/d/q/r)</p></td>
     </tr>
     <tr>
-      <th>scale</th>
-      <td><p>location and scale parameters.</p></td>
+      <th>...</th>
+      <td><p>Named arguments used to parameterise the distribution.</p></td>
+    </tr>
+    <tr>
+      <th>package</th>
+      <td><p>The package from which the distribution is provided.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The Cauchy distribution is the student's t distribution with one degree of
-freedom. The Cauchy distribution does not have a well defined mean or
-variance. Cauchy distributions often appear as priors in Bayesian contexts
-due to their heavy tails.</p>
-<p>We recommend reading this documentation on
-<a href='https://pkg.mitchelloharawild.com/distributional'>https://pkg.mitchelloharawild.com/distributional</a>, where the math
-will render nicely.</p>
-<p>In the following, let \(X\) be a Cauchy variable with mean
-<code>location =</code> \(x_0\) and <code>scale</code> = \(\gamma\).</p>
-<p><strong>Support</strong>: \(R\), the set of all real numbers</p>
-<p><strong>Mean</strong>: Undefined.</p>
-<p><strong>Variance</strong>: Undefined.</p>
-<p><strong>Probability density function (p.d.f)</strong>:</p>
-<p>$$
-    f(x) = \frac{1}{\pi \gamma \left[1 + \left(\frac{x - x_0}{\gamma} \right)^2 \right]}
-  $$</p>
-<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
-<p>$$
-    F(t) = \frac{1}{\pi} \arctan \left( \frac{t - x_0}{\gamma} \right) +
-      \frac{1}{2}
-  $$</p>
-<p><strong>Moment generating function (m.g.f)</strong>:</p>
-<p>Does not exist.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='https://rdrr.io/r/stats/Cauchy.html'>stats::Cauchy</a></p></div>
+    <p>If a distribution is not yet supported, you can vectorise p/d/q/r functions
+using this function. <code>dist_wrap()</code> stores the distributions parameters, and
+provides wrappers which call the appropriate p/d/q/r functions.</p>
+<p>Using this function to wrap a distribution should only be done if the
+distribution is not yet available in this package. If you need a distribution
+which isn't in the package yet, consider making a request at
+https://github.com/mitchelloharawild/distributional/issues.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_cauchy</span>(<span class='kw'>location</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, -<span class='fl'>2</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))
+    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_wrap</span>(<span class='st'>"norm"</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>9</span>, <span class='fl'>2</span>))
 
-<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[4]&gt;
-#&gt; [1] Cauchy(0, 0.5) Cauchy(0, 1)   Cauchy(0, 2)   Cauchy(-2, 1) </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] NA NA NA NA</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] NA NA NA NA</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] NA NA NA NA</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] NA NA NA NA</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1]  0.48431441 -0.41067449  0.63727704 -0.20644842  0.66921610 -0.02590136
-#&gt;  [7] -1.72429530 -0.47202527 -0.28296064 -0.46126548
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>1</span>) <span class='co'># dnorm()</span></div><div class='output co'>#&gt; [1] 0.13298076 0.04405414 0.12098536</div><div class='input'><span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>) <span class='co'># pnorm()</span></div><div class='output co'>#&gt; [1] 0.8413447 0.5879296 0.6914625</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.975</span>) <span class='co'># qnorm()</span></div><div class='output co'>#&gt; [1]  6.879892 19.639676  6.919928</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>) <span class='co'># rnorm()</span></div><div class='output co'>#&gt; [[1]]
+#&gt;  [1]  2.2198996  1.5486744 -4.6301461 -0.5322246  0.5259997  4.6454550
+#&gt;  [7]  1.1266567  2.1922211  4.8715095  3.6000141
 #&gt; 
 #&gt; [[2]]
-#&gt;  [1]  3.76054425  0.46319786  0.25958782 -1.87465440 -3.01301039 -1.86037015
-#&gt;  [7]  1.68265890 -0.06457316 -1.24670931 -0.42296261
+#&gt;  [1]   7.5453880 -11.3430179   3.2256863  13.6548980  -9.6158501  -6.7938406
+#&gt;  [7]  16.2245056   0.2115309   3.6040012  10.4841796
 #&gt; 
 #&gt; [[3]]
-#&gt;  [1]  -0.1051280   1.6393922  -3.5184328   5.5314315   0.2914638  -5.1980748
-#&gt;  [7]  -6.2572125   6.6384089  -0.9539910 -35.9684536
-#&gt; 
-#&gt; [[4]]
-#&gt;  [1] -2.0651436 -1.9464927 -3.6498567  0.3363926 -2.2634289 -3.5980958
-#&gt;  [7] -3.7512371 -2.9627453 -9.3857830 -1.0651374
+#&gt;  [1]  1.5534312  2.2070353  3.6316605  0.3906120 -0.6187544  1.1633196
+#&gt;  [7]  3.6561224  3.3957038  0.7122406  2.8709851
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.03744822 0.06366198 0.07957747 0.01872411</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -3.284796 -2.754168 -2.531024 -3.977943</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.9604166 0.9220209 0.8524164 0.9474315</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1]  0.3632713  0.7265425  1.4530851 -1.2734575</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>actuar</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘actuar’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:grDevices’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    cm</span></div><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_wrap</span>(<span class='st'>"invparalogis"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"actuar"</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>1</span>) <span class='co'># actuar::dinvparalogis()</span></div><div class='output co'>#&gt; [1] 0.512</div><div class='input'><span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>) <span class='co'># actuar::pinvparalogis()</span></div><div class='output co'>#&gt; [1] 0.9694675</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.975</span>) <span class='co'># actuar::qinvparalogis()</span></div><div class='output co'>#&gt; [1] 4.429922</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>) <span class='co'># actuar::rinvparalogis()</span></div><div class='output co'>#&gt; [[1]]
+#&gt;  [1] 0.4883214 0.5091362 0.2183942 0.4245982 0.9619228 0.4708693 0.2931011
+#&gt;  [8] 1.0096480 0.5630054 0.9977921
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
