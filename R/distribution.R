@@ -87,15 +87,25 @@ log_pdf.distribution <- function(x, at, ...){
 #'
 #' Computes the quantiles of a distribution.
 #'
-#' @param x The distribution(s).
+#' @inheritParams density.distribution
 #' @param p The probability of the quantile.
 #' @param ... Additional arguments passed to methods.
 #'
 #' @importFrom stats quantile
 #' @export
-quantile.distribution <- function(x, p, ...){
+quantile.distribution <- function(x, p, ..., log = FALSE){
+  if(log) return(log_quantile(x, p, ...))
   vec_is(p, double(), 1L)
   dist_apply(x, quantile, p = p, ...)
+}
+log_quantile <- function(x, q, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("log_quantile")
+}
+#' @export
+log_quantile.distribution <- function(x, p, ...){
+  vec_is(q, double(), 1L)
+  dist_apply(x, log_quantile, p = p, ...)
 }
 
 #' The cumulative distribution function

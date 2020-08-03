@@ -4,7 +4,7 @@
 \alias{quantile.distribution}
 \title{Distribution Quantiles}
 \usage{
-\method{quantile}{distribution}(x, p, ...)
+\method{quantile}{distribution}(x, p, ..., log = FALSE)
 }
 \arguments{
 \item{x}{The distribution(s).}
@@ -12,6 +12,8 @@
 \item{p}{The probability of the quantile.}
 
 \item{...}{Additional arguments passed to methods.}
+
+\item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
 \lifecycle{stable}

@@ -13,8 +13,8 @@
   distribution.
 * Added `skewness()` for computing the skewness of a distribution.
 * Added `kurtosis()` for computing the kurtosis of a distribution.
-* The `density()` method now accepts a `log` argument which will return log 
-  probabilities.
+* The `density()`, `cdf()` and `quantile()` methods now accept a `log` argument 
+  which will use/return probabilities as log probabilities.
   
 ## Improvements
 

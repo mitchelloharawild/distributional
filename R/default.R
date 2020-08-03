@@ -22,6 +22,10 @@ quantile.dist_default <- function(x, p, ...){
   })$par
 }
 #' @export
+log_quantile.dist_default <- function(x, p, ...){
+  quantile(x, exp(p), ...)
+}
+#' @export
 cdf.dist_default <- function(x, ...){
   abort(
     sprintf("The distribution class `%s` does not support `cdf()`",
