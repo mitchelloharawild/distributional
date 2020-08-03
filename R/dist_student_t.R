@@ -103,7 +103,7 @@ density.dist_student_t <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_student_t <- function(x, at, ...){
+log_density.dist_student_t <- function(x, at, ...){
   ncp <- x[["ncp"]] %||% missing_arg()
   sigma <- x[["sigma"]]
 

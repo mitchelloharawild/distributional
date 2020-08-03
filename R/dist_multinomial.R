@@ -95,7 +95,7 @@ density.dist_multinomial <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_multinomial <- function(x, at, ...){
+log_density.dist_multinomial <- function(x, at, ...){
   stats::dmultinom(at, x[["s"]], x[["p"]], log = TRUE)
 }
 

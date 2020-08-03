@@ -55,7 +55,7 @@ density.dist_beta <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_beta <- function(x, at, ...){
+log_density.dist_beta <- function(x, at, ...){
   stats::dbeta(at, x[["shape1"]], x[["shape2"]], log = TRUE)
 }
 

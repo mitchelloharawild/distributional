@@ -108,7 +108,7 @@ density.dist_bernoulli <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_bernoulli <- function(x, at, ...){
+log_density.dist_bernoulli <- function(x, at, ...){
   stats::dbinom(at, 1, x[["p"]], log = TRUE)
 }
 

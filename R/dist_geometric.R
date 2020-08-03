@@ -93,7 +93,7 @@ density.dist_geometric <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_geometric <- function(x, at, ...){
+log_density.dist_geometric <- function(x, at, ...){
   stats::dgeom(at, x[["p"]], log = TRUE)
 }
 

@@ -111,7 +111,7 @@ density.dist_gamma <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_gamma <- function(x, at, ...){
+log_density.dist_gamma <- function(x, at, ...){
   stats::dgamma(at, x[["shape"]], x[["rate"]], log = TRUE)
 }
 

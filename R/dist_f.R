@@ -105,7 +105,7 @@ density.dist_f <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_f <- function(x, at, ...){
+log_density.dist_f <- function(x, at, ...){
   if(is.null(x[["ncp"]])) {
     stats::df(at, x[["df1"]], x[["df2"]], log = TRUE)
   } else {

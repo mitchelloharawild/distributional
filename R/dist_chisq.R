@@ -107,7 +107,7 @@ density.dist_chisq <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_chisq <- function(x, at, ...){
+log_density.dist_chisq <- function(x, at, ...){
   stats::dchisq(at, x[["df"]], x[["ncp"]], log = TRUE)
 }
 

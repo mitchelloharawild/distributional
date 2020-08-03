@@ -91,7 +91,7 @@ density.dist_weibull <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_weibull <- function(x, at, ...){
+log_density.dist_weibull <- function(x, at, ...){
   stats::dweibull(at, x[["shape"]], x[["scale"]], log = TRUE)
 }
 

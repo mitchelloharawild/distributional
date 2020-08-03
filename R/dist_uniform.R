@@ -116,7 +116,7 @@ density.dist_uniform <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_uniform <- function(x, at, ...){
+log_density.dist_uniform <- function(x, at, ...){
   stats::dunif(at, x[["l"]], x[["u"]], log = TRUE)
 }
 

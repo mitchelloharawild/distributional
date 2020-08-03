@@ -2,15 +2,9 @@
 % Please edit documentation in R/distribution.R
 \name{density.distribution}
 \alias{density.distribution}
-\alias{pdf}
-\alias{pdf.distribution}
 \title{The probability density/mass function}
 \usage{
 \method{density}{distribution}(x, at, ..., log = FALSE)
-
-pdf(x, at, ...)
-
-\method{pdf}{distribution}(x, at, ..., log = FALSE)
 }
 \arguments{
 \item{x}{The distribution(s).}

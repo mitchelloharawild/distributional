@@ -39,7 +39,7 @@ density.dist_inverse_exponential <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_inverse_exponential <- function(x, at, ...){
+log_density.dist_inverse_exponential <- function(x, at, ...){
   require_package("actuar")
   actuar::dinvexp(at, x[["r"]], log = TRUE)
 }

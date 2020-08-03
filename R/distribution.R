@@ -55,30 +55,19 @@ dimnames.distribution <- function(x){
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
-  if(log) return(log_pdf(x, at, ...))
+  if(log) return(log_density(x, at, ...))
   vec_is(at, double(), 1L)
   dist_apply(x, density, at = at, ...)
 }
 
-#' @rdname density.distribution
-#' @export
-pdf <- function(x, at, ...) {
+log_density <- function(x, at, ...) {
   ellipsis::check_dots_used()
-  UseMethod("pdf")
-}
-
-#' @rdname density.distribution
-#' @export
-pdf.distribution <- density.distribution
-
-log_pdf <- function(x, at, ...) {
-  ellipsis::check_dots_used()
-  UseMethod("log_pdf")
+  UseMethod("log_density")
 }
 #' @export
-log_pdf.distribution <- function(x, at, ...){
+log_density.distribution <- function(x, at, ...){
   vec_is(at, double(), 1L)
-  dist_apply(x, log_pdf, at = at, ...)
+  dist_apply(x, log_density, at = at, ...)
 }
 
 #' Distribution Quantiles

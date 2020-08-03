@@ -61,7 +61,7 @@ density.dist_wrap <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_wrap <- function(x, at, ...){
+log_density.dist_wrap <- function(x, at, ...){
   fn <- paste0("d", x[["dist"]][[1]])
   env <- rlang::pkg_env(x[["package"]][[1]])
   # fn <- get(fn, env = env, mode = "function")

@@ -96,7 +96,7 @@ density.dist_cauchy <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_cauchy <- function(x, at, ...){
+log_density.dist_cauchy <- function(x, at, ...){
   stats::dcauchy(at, x[["location"]], x[["scale"]], log = TRUE)
 }
 

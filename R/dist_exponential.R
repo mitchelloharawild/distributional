@@ -53,7 +53,7 @@ density.dist_exponential <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_exponential <- function(x, at, ...){
+log_density.dist_exponential <- function(x, at, ...){
   stats::dexp(at, x[["rate"]], log = TRUE)
 }
 

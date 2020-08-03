@@ -116,7 +116,7 @@ density.dist_normal <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_normal <- function(x, at, ...){
+log_density.dist_normal <- function(x, at, ...){
   stats::dnorm(at, x[["mu"]], x[["sigma"]], log = TRUE)
 }
 

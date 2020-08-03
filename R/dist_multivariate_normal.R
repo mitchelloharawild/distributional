@@ -34,7 +34,7 @@ density.dist_mvnorm <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_mvnorm <- function(x, at, ...){
+log_density.dist_mvnorm <- function(x, at, ...){
   require_package("mvtnorm")
   mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]], log = TRUE)
 }

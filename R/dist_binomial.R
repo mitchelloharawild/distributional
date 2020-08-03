@@ -117,7 +117,7 @@ density.dist_binomial <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_binomial <- function(x, at, ...){
+log_density.dist_binomial <- function(x, at, ...){
   stats::dbinom(at, x[["n"]], x[["p"]], log = TRUE)
 }
 

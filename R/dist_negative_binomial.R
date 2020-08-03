@@ -94,7 +94,7 @@ density.dist_negbin <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_negbin <- function(x, at, ...){
+log_density.dist_negbin <- function(x, at, ...){
   stats::dnbinom(at, x[["n"]], x[["p"]], log = TRUE)
 }
 

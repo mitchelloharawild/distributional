@@ -96,7 +96,7 @@ density.dist_poisson <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_poisson <- function(x, at, ...){
+log_density.dist_poisson <- function(x, at, ...){
   stats::dpois(at, x[["l"]], log = TRUE)
 }
 

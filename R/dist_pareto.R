@@ -44,7 +44,7 @@ density.dist_pareto <- function(x, at, ...){
 }
 
 #' @export
-log_pdf.dist_pareto <- function(x, at, ...){
+log_density.dist_pareto <- function(x, at, ...){
   require_package("actuar")
   actuar::dpareto(at, x[["shape"]], x[["scale"]], log = TRUE)
 }

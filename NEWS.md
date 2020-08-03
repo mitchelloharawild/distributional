@@ -8,7 +8,6 @@
 
 ### Methods
 
-* Added `pdf()` as an alias for `density()`.
 * Added `likelihood()` for computing the likelihood of observing a sample from a
   distribution.
 * Added `skewness()` for computing the skewness of a distribution.

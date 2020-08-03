@@ -7,7 +7,7 @@ density.dist_default <- function(x, ...){
 }
 
 #' @export
-log_pdf.dist_default <- function(x, ...){
+log_density.dist_default <- function(x, ...){
   log(density(x, ...))
 }
 
@@ -49,7 +49,7 @@ likelihood.dist_default <- function(x, sample, ...){
 
 #' @export
 log_likelihood.dist_default <- function(x, sample, ...){
-  sum(vapply(sample, log_pdf, numeric(1L), x = x))
+  sum(vapply(sample, log_density, numeric(1L), x = x))
 }
 
 #' @export
