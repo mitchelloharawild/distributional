@@ -15,7 +15,7 @@
 #' @details
 #'
 #'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional>, where the math
+#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
 #'   will render nicely.
 #'
 #'   In the following, let \eqn{X = (X_1, ..., X_k)} be a Multinomial

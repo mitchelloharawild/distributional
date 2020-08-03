@@ -22,7 +22,7 @@ Tukey's studentized range distribution, used for Tukey's
 honestly significant differences test in ANOVA.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 \strong{Support}: \eqn{R^+}, the set of positive real numbers.

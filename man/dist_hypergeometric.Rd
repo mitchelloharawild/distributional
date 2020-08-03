@@ -25,7 +25,7 @@ type I elements observed in this sample is set to be our random
 variable \eqn{X}.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a HyperGeometric random variable with

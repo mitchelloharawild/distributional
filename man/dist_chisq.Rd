@@ -20,7 +20,7 @@ as the sampling distribution of test statistics, especially
 in maximum likelihood estimation settings.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a \eqn{\chi^2} random variable with

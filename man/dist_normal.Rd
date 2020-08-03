@@ -30,7 +30,7 @@ asymptotically Normal. The Normal distribution is also called the
 gaussian distribution.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Normal random variable with mean

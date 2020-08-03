@@ -27,7 +27,7 @@ We then extend repeat the Categorical experiment several (\eqn{n})
 times.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X = (X_1, ..., X_k)} be a Multinomial

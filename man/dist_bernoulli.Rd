@@ -20,7 +20,7 @@ The Bernoulli distribution is a special case of the \code{\link[=Binomial]{Binom
 distribution with \code{n = 1}.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Bernoulli random variable with parameter

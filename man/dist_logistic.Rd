@@ -20,7 +20,7 @@ the model given by \eqn{P(Y = 1 | X) = F(X \beta)} where
 \eqn{F} is the Logistic \code{\link[=cdf]{cdf()}} is called \emph{logistic regression}.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Logistic random variable with

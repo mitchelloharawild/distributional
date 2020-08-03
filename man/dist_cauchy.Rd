@@ -21,7 +21,7 @@ variance. Cauchy distributions often appear as priors in Bayesian contexts
 due to their heavy tails.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Cauchy variable with mean

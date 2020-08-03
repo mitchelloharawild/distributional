@@ -22,7 +22,7 @@
 #' @details
 #'
 #'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional>, where the math
+#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
 #'   will render nicely.
 #'
 #'   The Binomial distribution comes up when you are interested in the portion

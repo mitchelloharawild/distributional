@@ -29,7 +29,7 @@ has extensively been used in multivariate methods. More about the Gamma
 distribution will be added soon.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Gamma random variable

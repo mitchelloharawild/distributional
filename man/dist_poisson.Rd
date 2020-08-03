@@ -16,7 +16,7 @@ dist_poisson(lambda)
 Poisson distributions are frequently used to model counts.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Poisson random variable with parameter

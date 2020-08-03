@@ -18,7 +18,7 @@ observed. It takes a single parameter, which is the value that is observed
 by the distribution.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a degenerate random variable with value

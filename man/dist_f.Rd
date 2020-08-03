@@ -18,7 +18,7 @@ dist_f(df1, df2, ncp = NULL)
 }
 \details{
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Gamma random variable

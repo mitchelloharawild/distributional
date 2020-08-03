@@ -20,7 +20,7 @@ distribution, obtained when the GEV shape parameter \eqn{\xi} is equal to 0.
 It may be referred to as a type I extreme value distribution.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Gumbel random variable with location

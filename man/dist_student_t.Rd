@@ -30,7 +30,7 @@ repeatedly throughout classic frequentist hypothesis testing when
 comparing group means.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a \strong{central} Students T random variable

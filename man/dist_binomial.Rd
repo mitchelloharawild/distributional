@@ -30,7 +30,7 @@ The equation of the Binomial distribution is directly derived from
 the equation of the Bernoulli distribution.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 The Binomial distribution comes up when you are interested in the portion

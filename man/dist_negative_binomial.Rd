@@ -22,7 +22,7 @@ of successes in a sequence of i.i.d. Bernoulli trials before
 a specified number (\eqn{r}) of failures occurs.
 
 We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional}, where the math
+\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Negative Binomial random variable with
