@@ -1,7 +1,7 @@
 dist <- c(dist_normal(0, 1), dist_beta(5, 1))
 
 test_that("autoplot.distribution pdf", {
-  p <- expect_warning(autoplot(dist, type = "pdf"), "deprecated")
+  p <- rlang::with_options(lifecycle_verbosity = "quiet", autoplot(dist, type = "pdf"))
   expect_silent(print(p))
   expect_length(
     ggplot2::layer_data(p)$y,
@@ -25,7 +25,7 @@ test_that("autoplot.distribution pdf", {
 })
 
 test_that("autoplot.distribution cdf", {
-  p <- expect_warning(autoplot(dist, type = "cdf"), "deprecated")
+  p <- rlang::with_options(lifecycle_verbosity = "quiet", autoplot(dist, type = "cdf"))
   expect_silent(print(p))
   expect_length(
     ggplot2::layer_data(p)$y,
