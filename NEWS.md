@@ -25,7 +25,14 @@
 * Added support for displaying distributions with `View()`.
 * `hilo()` intervals can no longer be added to other intervals, as this is a
   common mistake when aggregating forecasts.
+  
+## Deprecated features
 
+* Graphics functionality provided by `autoplot.distribution()` is now deprecated
+  in favour of using the `ggdist` package. The `ggdist` package allows 
+  distributions produced by distributional to be used directly with ggplot2 as
+  aesthetics.
+  
 # distributional 0.1.0
 
 First release. 
