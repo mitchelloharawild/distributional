@@ -160,12 +160,6 @@ GeomHiloLinerange <- ggplot2::ggproto(
   }
 )
 
-#' @title darken_fill
-#' @description darken fill colors for probability ranges
-#' @param col colors
-#' @param prob probability values
-#' @rdname darken_fill
-#' @export
 #' @importFrom farver convert_colour
 #' @importFrom grDevices col2rgb
 darken_fill <- function(col, prob) {
@@ -176,12 +170,6 @@ darken_fill <- function(col, prob) {
   col2hex(col)
 }
 
-#' @title col2hex
-#' @description converts colors to RGB
-#' @param col colors
-#' @return RGB colors
-#' @rdname col2hex
-#' @export
 #' @importFrom grDevices rgb
 col2hex <- function(col){
   grDevices::rgb(col,  maxColorValue = 255)
