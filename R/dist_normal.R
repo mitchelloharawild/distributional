@@ -124,10 +124,18 @@ log_pdf.dist_normal <- function(x, at, ...){
 quantile.dist_normal <- function(x, p, ...){
   stats::qnorm(p, x[["mu"]], x[["sigma"]])
 }
+#' @export
+log_quantile.dist_normal <- function(x, p, ...){
+  stats::qnorm(p, x[["mu"]], x[["sigma"]], log.p = TRUE)
+}
 
 #' @export
 cdf.dist_normal <- function(x, q, ...){
   stats::pnorm(q, x[["mu"]], x[["sigma"]])
+}
+#' @export
+log_cdf.dist_normal <- function(x, q, ...){
+  stats::pnorm(q, x[["mu"]], x[["sigma"]], log.p = TRUE)
 }
 
 #' @export
