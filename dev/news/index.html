@@ -146,7 +146,7 @@
 <li>Added <code><a href="../reference/likelihood.html">likelihood()</a></code> for computing the likelihood of observing a sample from a distribution.</li>
 <li>Added <code><a href="../reference/skewness.html">skewness()</a></code> for computing the skewness of a distribution.</li>
 <li>Added <code><a href="../reference/kurtosis.html">kurtosis()</a></code> for computing the kurtosis of a distribution.</li>
-<li>The <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code> method now accepts a <code>log</code> argument which will return log probabilities.</li>
+<li>The <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code>, <code><a href="../reference/cdf.html">cdf()</a></code> and <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code> methods now accept a <code>log</code> argument which will use/return probabilities as log probabilities.</li>
 </ul>
 </div>
 </div>
@@ -159,6 +159,13 @@
 <li>Added support for displaying distributions with <code><a href="https://rdrr.io/r/utils/View.html">View()</a></code>.</li>
 <li>
 <code><a href="../reference/hilo.html">hilo()</a></code> intervals can no longer be added to other intervals, as this is a common mistake when aggregating forecasts.</li>
+</ul>
+</div>
+<div id="deprecated-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated-features" class="anchor"></a>Deprecated features</h2>
+<ul>
+<li>Graphics functionality provided by <code><a href="../reference/autoplot.distribution.html">autoplot.distribution()</a></code> is now deprecated in favour of using the <code>ggdist</code> package. The <code>ggdist</code> package allows distributions produced by distributional to be used directly with ggplot2 as aesthetics.</li>
 </ul>
 </div>
 </div>
