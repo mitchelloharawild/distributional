@@ -67,7 +67,7 @@ mean.dist_transformed <- function(x, ...){
     return(x[["transform"]](mu))
   }
   drop(
-    x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu)/2*sigma2
+    x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))/2*sigma2
   )
 }
 
@@ -77,7 +77,7 @@ variance.dist_transformed <- function(x, ...){
   sigma2 <- variance(x[["dist"]])
   if(is.na(sigma2)) return(NA_real_)
   drop(
-    numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu)*sigma2)^2/2
+    numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))*sigma2)^2/2
   )
 }
 

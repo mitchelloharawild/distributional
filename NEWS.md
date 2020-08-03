@@ -25,6 +25,8 @@
 * Added support for displaying distributions with `View()`.
 * `hilo()` intervals can no longer be added to other intervals, as this is a
   common mistake when aggregating forecasts.
+* Incremented `d` for `numDeriv::hessian()` when computing mean and variance of 
+  transformed distributions.
   
 ## Deprecated features
 
