@@ -22,7 +22,7 @@
 #' @export
 autoplot.distribution <- function(x, type = c("pdf", "cdf"), n = 100,
                                   quantile_range = c(0.001, 0.999), ...){
-  lifecycle::deprecate_soft("0.2.0", "distributional::autoplot.distribution()", details = "The autoplot() method for distributions will be replaced by the {ggdist} package in an upcoming release.")
+  lifecycle::deprecate_warn("0.2.0", "distributional::autoplot.distribution()", details = "The autoplot() method for distributions will be replaced by the {ggdist} package in an upcoming release.")
 
   type <- match.arg(type)
   lower <- quantile(x, quantile_range[1])
