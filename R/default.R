@@ -33,6 +33,11 @@ cdf.dist_default <- function(x, ...){
   )
 }
 #' @export
+log_cdf.dist_default <- function(x, q, ...){
+  log(cdf(x, q, ...))
+}
+
+#' @export
 generate.dist_default <- function(x, times, ...){
   vapply(stats::runif(times,0,1), quantile, numeric(1L), x = x, ...)
 }
