@@ -15,7 +15,7 @@
 #'   In the following, let \eqn{X} be a Poisson random variable with parameter
 #'   `lambda` = \eqn{\lambda}.
 #'
-#'   **Support**: \eqn{\[a,b\]}{[a,b]}
+#'   **Support**: \eqn{[a,b]}{[a,b]}
 #'
 #'   **Mean**: \eqn{\frac{1}{2}(a+b)}
 #'
@@ -24,7 +24,7 @@
 #'   **Probability mass function (p.m.f)**:
 #'
 #'   \deqn{
-#'     f(x) = \frac{1}{b-a} for x \in \[a,b\]
+#'     f(x) = \frac{1}{b-a} for x \in [a,b]
 #'   }{
 #'     f(x) = \frac{1}{b-a} for x in [a,b]
 #'   }
@@ -42,7 +42,7 @@
 #'     F(x) = 0 for x < a
 #'   }
 #'   \deqn{
-#'     F(x) = \frac{x - a}{b-a} for x \in \[a,b\]
+#'     F(x) = \frac{x - a}{b-a} for x \in [a,b]
 #'   }{
 #'     F(x) = \frac{x - a}{b-a} for x in [a,b]
 #'   }

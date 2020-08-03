@@ -24,7 +24,7 @@ will render nicely.
 In the following, let \eqn{X} be a Poisson random variable with parameter
 \code{lambda} = \eqn{\lambda}.
 
-\strong{Support}: \eqn{\[a,b\]}{[a,b]}
+\strong{Support}: \eqn{[a,b]}{[a,b]}
 
 \strong{Mean}: \eqn{\frac{1}{2}(a+b)}
 
@@ -33,7 +33,7 @@ In the following, let \eqn{X} be a Poisson random variable with parameter
 \strong{Probability mass function (p.m.f)}:
 
 \deqn{
-    f(x) = \frac{1}{b-a} for x \in \[a,b\]
+    f(x) = \frac{1}{b-a} for x \in [a,b]
   }{
     f(x) = \frac{1}{b-a} for x in [a,b]
   }
@@ -51,7 +51,7 @@ In the following, let \eqn{X} be a Poisson random variable with parameter
     F(x) = 0 for x < a
   }
 \deqn{
-    F(x) = \frac{x - a}{b-a} for x \in \[a,b\]
+    F(x) = \frac{x - a}{b-a} for x \in [a,b]
   }{
     F(x) = \frac{x - a}{b-a} for x in [a,b]
   }
