@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -149,16 +149,16 @@
 
     <p>A distribution with constant density on an interval.</p>
 <p>We recommend reading this documentation on
-<a href='https://pkg.mitchelloharawild.com/distributional'>https://pkg.mitchelloharawild.com/distributional</a>, where the math
+<a href='https://pkg.mitchelloharawild.com/distributional/'>https://pkg.mitchelloharawild.com/distributional/</a>, where the math
 will render nicely.</p>
 <p>In the following, let \(X\) be a Poisson random variable with parameter
 <code>lambda</code> = \(\lambda\).</p>
-<p><strong>Support</strong>: \(\[a,b\]\)</p>
+<p><strong>Support</strong>: \([a,b]\)</p>
 <p><strong>Mean</strong>: \(\frac{1}{2}(a+b)\)</p>
 <p><strong>Variance</strong>: \(\frac{1}{12}(b-a)^2\)</p>
 <p><strong>Probability mass function (p.m.f)</strong>:</p>
 <p>$$
-    f(x) = \frac{1}{b-a} for x \in \[a,b\]
+    f(x) = \frac{1}{b-a} for x \in [a,b]
   $$
 $$
     f(x) = 0 otherwise
@@ -168,7 +168,7 @@ $$
     F(x) = 0 for x &lt; a
   $$
 $$
-    F(x) = \frac{x - a}{b-a} for x \in \[a,b\]
+    F(x) = \frac{x - a}{b-a} for x \in [a,b]
   $$
 $$
     F(x) = 1 for x &gt; b
