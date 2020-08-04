@@ -82,5 +82,5 @@ reference:
     - dist_inflated
     - dist_mixture
     - dist_transformed
-    - dist_truncate
+    - dist_truncated
     - dist_wrap
