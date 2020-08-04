@@ -41,8 +41,8 @@ density.dist_truncated <- function(x, at, ...){
 
 #' @export
 quantile.dist_truncated <- function(x, p, ...){
-  F_lwr <- cdf(x[["dist"]], x[["lower"]], ...)
-  F_upr <- cdf(x[["dist"]], x[["upper"]], ...)
+  F_lwr <- cdf(x[["dist"]], x[["lower"]])
+  F_upr <- cdf(x[["dist"]], x[["upper"]])
   qt <- quantile(x[["dist"]], F_lwr + p * ( F_upr - F_lwr), ...)
   min(max(x[["lower"]], qt), x[["upper"]])
 }

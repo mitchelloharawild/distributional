@@ -1,5 +1,9 @@
 # distributional (development version)
 
+## Bug fixes
+
+* Fixed issue with computing the median of `dist_truncated()` distributions.
+
 # distributional 0.2.0
 
 ## New features

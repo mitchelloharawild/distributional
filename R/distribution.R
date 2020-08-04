@@ -278,14 +278,18 @@ kurtosis.distribution <- function(x, ...){
 #' Returns the median (50th percentile) of a probability distribution. This is
 #' equivalent to `quantile(x, p=0.5)`.
 #'
-#' @inheritParams stats::median
 #' @param x The distribution(s).
+#' @param na.rm Unused, included for consistency with the generic function.
 #' @param ... Additional arguments used by methods.
 #'
 #' @importFrom stats median
 #' @export
 median.distribution <- function(x, na.rm = FALSE, ...){
-  quantile(x, p = 0.5, na.rm = na.rm, ...)
+  # Only pass na.rm if it is explicitly provided.
+  if(missing(na.rm))
+    quantile(x, p = 0.5, ...)
+  else
+    quantile(x, p = 0.5, na.rm = na.rm, ...)
 }
 
 #' Probability intervals of a probability distribution
