@@ -3,6 +3,8 @@
 ## Bug fixes
 
 * Fixed issue with computing the median of `dist_truncated()` distributions.
+* Fixed format method for `dist_truncated()` distributions with no upper or 
+  lower limit.
 
 # distributional 0.2.0
 

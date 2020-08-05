@@ -24,7 +24,7 @@ dist_truncated <- function(dist, lower = -Inf, upper = Inf){
 #' @export
 format.dist_truncated <- function(x, ...){
   sprintf(
-    "%s[%i,%i]",
+    "%s[%s,%s]",
     format(x[["dist"]]),
     x[["lower"]],
     x[["upper"]]
