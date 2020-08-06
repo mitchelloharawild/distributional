@@ -193,7 +193,9 @@ the gamma function.</p>
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 8.595475e-02 1.353353e-01 1.253822e-01 1.013133e-12</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1]  -2.453934  -2.000000  -2.076388 -27.617973</div><div class='input'>
 <span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.8646647 0.9816844 0.9996645 1.0000000</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 1.449551 1.203973 1.131734 1.037823</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; Called from: quantile.distribution(dist, 0.7)
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)</div><div class='output co'>#&gt; [1] 1.449551 1.203973 1.131734 1.037823</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

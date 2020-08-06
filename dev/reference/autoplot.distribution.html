@@ -176,7 +176,17 @@ Note: This function currently only works for continuous distributions.</p>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>dist</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"pdf"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `autoplot.distribution()` is deprecated as of distributional 0.2.0.</span>
 #&gt; <span class='warning'>The autoplot() method for distributions will be replaced by the {ggdist} package in an upcoming release.</span>
 #&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
-#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='img'><img src='autoplot.distribution-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>dist</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"cdf"</span>)</div><div class='img'><img src='autoplot.distribution-2.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='output co'>#&gt; Called from: quantile.distribution(x, quantile_range[1])
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)
+#&gt; Called from: quantile.distribution(x, quantile_range[2])
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)</div><div class='img'><img src='autoplot.distribution-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>dist</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"cdf"</span>)</div><div class='output co'>#&gt; Called from: quantile.distribution(x, quantile_range[1])
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)
+#&gt; Called from: quantile.distribution(x, quantile_range[2])
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)</div><div class='img'><img src='autoplot.distribution-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

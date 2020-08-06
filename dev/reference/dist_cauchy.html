@@ -197,7 +197,9 @@ will render nicely.</p>
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.03744822 0.06366198 0.07957747 0.01872411</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -3.284796 -2.754168 -2.531024 -3.977943</div><div class='input'>
 <span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.9604166 0.9220209 0.8524164 0.9474315</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1]  0.3632713  0.7265425  1.4530851 -1.2734575</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; Called from: quantile.distribution(dist, 0.7)
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)</div><div class='output co'>#&gt; [1]  0.3632713  0.7265425  1.4530851 -1.2734575</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

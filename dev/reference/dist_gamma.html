@@ -221,7 +221,9 @@ with parameters
 <span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.183939721 0.183939721 0.091969860 0.090223522 0.059540363 0.006545958
 #&gt; [7] 0.053990967</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -1.693147 -1.693147 -2.386294 -2.405465 -2.821101 -5.028908 -2.918939</div><div class='input'>
 <span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.8646647 0.5939942 0.3233236 0.3711631 0.4074527 0.0762173 0.9953223</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 2.4079456 4.8784330 7.2311353 5.8903613 5.1503385 8.6608472 0.5370971</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; Called from: quantile.distribution(dist, 0.7)
+#&gt; debug: vec_assert(p, double(), 1L)
+#&gt; debug: dist_apply(x, quantile, p = p, ...)</div><div class='output co'>#&gt; [1] 2.4079456 4.8784330 7.2311353 5.8903613 5.1503385 8.6608472 0.5370971</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
