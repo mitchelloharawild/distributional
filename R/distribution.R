@@ -56,7 +56,7 @@ dimnames.distribution <- function(x){
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
   if(log) return(log_density(x, at, ...))
-  vec_assert(at, double(), 1L)
+  vec_assert(at, size = 1L)
   dist_apply(x, density, at = at, ...)
 }
 
@@ -66,7 +66,7 @@ log_density <- function(x, at, ...) {
 }
 #' @export
 log_density.distribution <- function(x, at, ...){
-  vec_assert(at, double(), 1L)
+  vec_assert(at, size = 1L)
   dist_apply(x, log_density, at = at, ...)
 }
 
@@ -84,7 +84,6 @@ log_density.distribution <- function(x, at, ...){
 #' @export
 quantile.distribution <- function(x, p, ..., log = FALSE){
   if(log) return(log_quantile(x, p, ...))
-  browser()
   vec_assert(p, double(), 1L)
   dist_apply(x, quantile, p = p, ...)
 }
@@ -115,7 +114,7 @@ cdf <- function (x, q, ..., log = FALSE){
 #' @rdname cdf
 #' @export
 cdf.distribution <- function(x, q, ...){
-  vec_assert(q, double(), 1L)
+  vec_assert(q, size = 1L)
   dist_apply(x, cdf, q = q, ...)
 }
 log_cdf <- function(x, q, ...) {
@@ -124,7 +123,7 @@ log_cdf <- function(x, q, ...) {
 }
 #' @export
 log_cdf.distribution <- function(x, q, ...){
-  vec_assert(q, double(), 1L)
+  vec_assert(q, size = 1L)
   dist_apply(x, log_cdf, q = q, ...)
 }
 
