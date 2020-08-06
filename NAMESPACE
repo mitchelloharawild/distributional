@@ -2,6 +2,7 @@
 
 S3method("$",hilo)
 S3method("dimnames<-",distribution)
+S3method("names<-",hilo)
 S3method(.DollarNames,hilo)
 S3method(Math,dist_default)
 S3method(Math,dist_transformed)

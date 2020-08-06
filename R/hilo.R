@@ -136,6 +136,9 @@ vec_arith.numeric.hilo <- function(op, x, y, ...){
 #' @export
 `$.hilo` <- function(x, name){
   vec_data(x)[[name]]
+#' @export
+`names<-.hilo` <- function(x, value) {
+  abort("A <hilo> object cannot be named.")
 }
 
 # Graphics ---------------------------------------------------------------------

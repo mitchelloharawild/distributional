@@ -9,6 +9,8 @@
 * Fixed issue with computing the median of `dist_truncated()` distributions.
 * Fixed format method for `dist_truncated()` distributions with no upper or 
   lower limit.
+* Fixed issue with naming <hilo> objects giving an invalid structure. It now
+  gives an informative error (#23).
 
 # distributional 0.2.0
 
