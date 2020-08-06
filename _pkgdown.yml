@@ -73,6 +73,7 @@ reference:
     Degenerate and non-standard probability distributions.
   contents:
     - dist_degenerate
+    - dist_missing
     - dist_percentile
     - dist_sample
 - title: Distribution modifiers

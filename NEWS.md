@@ -2,6 +2,7 @@
 
 ## Improvements
 
+* Added `dist_missing()` for representing unknown or missing (NA) distributions.
 * Documentation improvements.
 
 ## Bug fixes
