@@ -176,20 +176,20 @@ the gamma function.</p>
 <span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[4]&gt;
 #&gt; [1] Weibull(0.5, 1) Weibull(1, 1)   Weibull(1.5, 1) Weibull(5, 1)  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 2.0000000 1.0000000 0.9027453 0.9181687</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 20.00000000  1.00000000  0.37569028  0.04422998</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]   5.0737409   0.0000000  -0.7764597 -38.1055455</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  87.48382  14.00000  12.28013 660.88795</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1] 0.023631959 1.570997078 0.361287653 2.555403037 0.003518768 0.179314425
-#&gt;  [7] 0.003354072 7.058889630 6.924573438 1.124807102
+#&gt;  [1] 0.04133495 0.00896776 0.25671330 4.10589084 0.02810529 0.08029636
+#&gt;  [7] 0.09862785 1.70712964 0.81521819 1.02448807
 #&gt; 
 #&gt; [[2]]
-#&gt;  [1] 0.180005550 0.802950130 0.142163501 3.781983734 0.004435002 1.834822264
-#&gt;  [7] 3.260549713 0.411283633 7.413397339 0.744570283
+#&gt;  [1] 3.33309807 0.13742893 0.68249233 0.06458629 0.74832165 0.14412268
+#&gt;  [7] 0.04772059 0.45476028 0.91446659 3.87540197
 #&gt; 
 #&gt; [[3]]
-#&gt;  [1] 0.6105766 0.8321789 0.8917102 0.8027531 0.4430972 1.2773148 0.7885376
-#&gt;  [8] 1.6002144 0.5521945 1.3249037
+#&gt;  [1] 1.3842268 1.1093700 0.7657053 0.8202178 1.0100060 0.5441428 1.8210790
+#&gt;  [8] 1.6850931 0.5217221 0.5150500
 #&gt; 
 #&gt; [[4]]
-#&gt;  [1] 0.7850556 1.2678353 0.8439043 1.0184022 1.0858045 1.3099522 0.7372653
-#&gt;  [8] 0.3124373 1.0032489 0.5828555
+#&gt;  [1] 1.0725666 1.1452512 0.9642343 0.8367377 0.8286791 0.9763452 0.8485249
+#&gt;  [8] 1.0330047 0.7470882 1.1501865
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 8.595475e-02 1.353353e-01 1.253822e-01 1.013133e-12</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1]  -2.453934  -2.000000  -2.076388 -27.617973</div><div class='input'>
 <span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.8646647 0.9816844 0.9996645 1.0000000</div><div class='input'>
