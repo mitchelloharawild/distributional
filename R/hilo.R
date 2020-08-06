@@ -140,7 +140,8 @@ vec_arith.numeric.hilo <- function(op, x, y, ...){
 
 #' @export
 `names<-.hilo` <- function(x, value) {
-  abort("A <hilo> object cannot be named.")
+  # abort("A <hilo> object cannot be named.")
+  x
 }
 
 # Graphics ---------------------------------------------------------------------
