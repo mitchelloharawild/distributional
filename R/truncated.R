@@ -33,25 +33,30 @@ format.dist_truncated <- function(x, ...){
 
 #' @export
 density.dist_truncated <- function(x, at, ...){
-  if(at < x[["lower"]] || at > x[["upper"]]) return(0)
+  in_lim <- at >= x[["lower"]] & at <= x[["upper"]]
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
   cdf_lwr <- cdf(x[["dist"]], x[["lower"]])
-  density(x[["dist"]], at = at, ...)/(cdf_upr - cdf_lwr)
+  out <- numeric(length(at))
+  out[in_lim] <- density(x[["dist"]], at = at[in_lim], ...)/(cdf_upr - cdf_lwr)
+  out
 }
 
 #' @export
 quantile.dist_truncated <- function(x, p, ...){
   F_lwr <- cdf(x[["dist"]], x[["lower"]])
   F_upr <- cdf(x[["dist"]], x[["upper"]])
-  qt <- quantile(x[["dist"]], F_lwr + p * ( F_upr - F_lwr), ...)
-  min(max(x[["lower"]], qt), x[["upper"]])
+  qt <- quantile(x[["dist"]], F_lwr + p * (F_upr - F_lwr), ...)
+  pmin(pmax(x[["lower"]], qt), x[["upper"]])
 }
 
 #' @export
 cdf.dist_truncated <- function(x, q, ...){
-  if(q < x[["lower"]]) return(0)
-  if(q > x[["upper"]]) return(1)
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
   cdf_lwr <- cdf(x[["dist"]], x[["lower"]])
-  (cdf(x[["dist"]], q = q, ...) - cdf_lwr)/(cdf_upr - cdf_lwr)
+  out <- numeric(length(q))
+  q_lwr <- q < x[["lower"]] # out[q_lwr <- q < x[["lower"]]] <- 0
+  out[q_upr <- q > x[["upper"]]] <- 1
+  q_mid <- !(q_lwr|q_upr)
+  out[q_mid] <- (cdf(x[["dist"]], q = q[q_mid], ...) - cdf_lwr)/(cdf_upr - cdf_lwr)
+  out
 }
