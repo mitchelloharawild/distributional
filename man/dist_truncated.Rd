@@ -18,3 +18,29 @@ dist_truncated(dist, lower = -Inf, upper = Inf)
 Note that the samples are generated using inverse transform sampling, and the
 means and variances are estimated from samples.
 }
+\examples{
+dist <- dist_truncated(dist_normal(2,1), lower = 0)
+
+dist
+mean(dist)
+variance(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
+
+if(requireNamespace("ggdist")) {
+library(ggplot2)
+ggplot() +
+  ggdist::stat_dist_halfeye(
+    aes(y = c("Normal", "Truncated"),
+        dist = c(dist_normal(2,1), dist_truncated(dist_normal(2,1), lower = 0)))
+  )
+}
+
+}
