@@ -44,9 +44,13 @@ quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
   vapply(x, quantile, numeric(1L), probs = p, ..., na.rm = na.rm, USE.NAMES = FALSE)
 }
 
-# #' @export
-# cdf.dist_sample <- function(x, q, ...){
-# }
+#' @export
+cdf.dist_sample <- function(x, q, ...){
+  vapply(x, function(x, q){
+    mean(x < q)
+  }, numeric(1L), q = q)
+}
+
 #
 # #' @export
 # generate.dist_sample <- function(x, times, ...){
