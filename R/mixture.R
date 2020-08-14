@@ -11,6 +11,9 @@
 #' @export
 dist_mixture <- function(..., weights = numeric()){
   dist <- dots_list(...)
+  dn <- unique(lapply(dist, dimnames))
+  dn <- if(length(dn) == 1) dn[[1]] else NULL
+
   vec_is(weights, numeric(), length(dist))
   if(sum(weights) != 1){
     abort("Weights of a mixture model must sum to 1.")
@@ -18,7 +21,8 @@ dist_mixture <- function(..., weights = numeric()){
   if(any(weights < 0)){
     abort("All weights in a mixtue model must be non-negative.")
   }
-  new_dist(dist = transpose(dist), w = list(weights), class = "dist_mixture")
+  new_dist(dist = transpose(dist), w = list(weights),
+           class = "dist_mixture", dimnames = dn)
 }
 
 #' @export

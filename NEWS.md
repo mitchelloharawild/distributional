@@ -5,6 +5,8 @@
 * Added `dist_missing()` for representing unknown or missing (NA) distributions.
 * Documentation improvements.
 * Added `cdf()` method for `dist_sample()` which uses the emperical cdf.
+* `dist_mixture()` now preserves `dimnames()` if all distributions have the same
+  `dimnames()`.
 
 ## Bug fixes
 
