@@ -34,27 +34,31 @@ format.dist_sample <- function(x, ...){
   )
 }
 
-# #' @export
-# density.dist_sample <- function(x, at, ...){
-# }
-#
+#' @export
+density.dist_sample <- function(x, at, ...){
+  d <- density(x[["x"]], from = min(at), to = max(at))
+  approx(d$x, d$y, xout = at)$y
+}
+
 
 #' @export
 quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
+  if(length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
   vapply(x, quantile, numeric(1L), probs = p, ..., na.rm = na.rm, USE.NAMES = FALSE)
 }
 
 #' @export
 cdf.dist_sample <- function(x, q, ...){
+  if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
   vapply(x, function(x, q){
     mean(x < q)
   }, numeric(1L), q = q)
 }
 
-#
-# #' @export
-# generate.dist_sample <- function(x, times, ...){
-# }
+#' @export
+generate.dist_sample <- function(x, times, ...){
+  sample(x[["x"]], size = times, replace = TRUE)
+}
 
 #' @export
 mean.dist_sample <- function(x, ...){

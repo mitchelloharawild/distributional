@@ -7,6 +7,8 @@
 * Added `cdf()` method for `dist_sample()` which uses the emperical cdf.
 * `dist_mixture()` now preserves `dimnames()` if all distributions have the same
   `dimnames()`.
+* Added `density()` and `generate()` methods for sample distributions.
+* Improved vectorisation of distribution methods.
 
 ## Bug fixes
 
