@@ -93,68 +93,82 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of distributional from <a href="https://CRAN.R-project.org/package=distributional">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"distributional"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"distributional"</span>)
+</pre></div>
 <p>The development version can be installed from <a href="https://github.com/mitchelloharawild/distributional">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("remotes")</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"mitchelloharawild/distributional"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># install.packages("remotes")</span>
+<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"mitchelloharawild/distributional"</span>)
+</pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
 <p>Distributions are created using <code>dist_*()</code> functions. Currently only the normal distribution is supported for testing purposes.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">distributional</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://pkg.mitchelloharawild.com/distributional">distributional</a></span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'distributional'</span>
 <span class="co">#&gt; The following object is masked from 'package:grDevices':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     pdf</span>
-<span class="no">my_dist</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="kw">mu</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">sigma</span> <span class="kw">=</span> <span class="fl">1</span>), <span class="fu"><a href="reference/dist_student_t.html">dist_student_t</a></span>(<span class="kw">df</span> <span class="kw">=</span> <span class="fl">10</span>))
-<span class="no">my_dist</span>
+<span class="kw">my_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(mu = <span class="fl">0</span>, sigma = <span class="fl">1</span>), <span class="fu"><a href="reference/dist_student_t.html">dist_student_t</a></span>(df = <span class="fl">10</span>))
+<span class="kw">my_dist</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
-<span class="co">#&gt; [1] N(0, 1)     t(10, 0, 1)</span></pre></div>
+<span class="co">#&gt; [1] N(0, 1)     t(10, 0, 1)</span>
+</pre></div>
 <p>The standard four distribution functions in R are usable via these generics:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/density.html">density</a></span>(<span class="no">my_dist</span>, <span class="fl">0</span>) <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/stats/density.html">density</a></span>(<span class="kw">my_dist</span>, <span class="fl">0</span>) <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span>
 <span class="co">#&gt; [1] 0.3989423 0.3891084</span>
-<span class="fu"><a href="reference/cdf.html">cdf</a></span>(<span class="no">my_dist</span>, <span class="fl">5</span>) <span class="co"># c(pnorm(5, mean = 0, sd = 1), pt(5, df = 10))</span>
+<span class="fu"><a href="reference/cdf.html">cdf</a></span>(<span class="kw">my_dist</span>, <span class="fl">5</span>) <span class="co"># c(pnorm(5, mean = 0, sd = 1), pt(5, df = 10))</span>
 <span class="co">#&gt; [1] 0.9999997 0.9997313</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span>(<span class="no">my_dist</span>, <span class="fl">0.1</span>) <span class="co"># c(qnorm(0.1, mean = 0, sd = 1), qt(0.1, df = 10))</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span>(<span class="kw">my_dist</span>, <span class="fl">0.1</span>) <span class="co"># c(qnorm(0.1, mean = 0, sd = 1), qt(0.1, df = 10))</span>
 <span class="co">#&gt; [1] -1.281552 -1.372184</span>
-<span class="fu"><a href="https://rdrr.io/pkg/generics/man/generate.html">generate</a></span>(<span class="no">my_dist</span>, <span class="fl">10</span>) <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span>
+<span class="fu"><a href="https://rdrr.io/pkg/generics/man/generate.html">generate</a></span>(<span class="kw">my_dist</span>, <span class="fl">10</span>) <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt;  [1]  1.262954285 -0.326233361  1.329799263  1.272429321  0.414641434</span>
 <span class="co">#&gt;  [6] -1.539950042 -0.928567035 -0.294720447 -0.005767173  2.404653389</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt;  [1]  0.99165484 -1.36999677 -0.40943004 -0.85261144 -1.37728388  0.81020460</span>
-<span class="co">#&gt;  [7] -1.82965813 -0.06142032 -1.33933588 -0.28491414</span></pre></div>
+<span class="co">#&gt;  [7] -1.82965813 -0.06142032 -1.33933588 -0.28491414</span>
+</pre></div>
 <p>You can also compute intervals using <code><a href="reference/hilo.html">hilo()</a></code></p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/hilo.html">hilo</a></span>(<span class="no">my_dist</span>, <span class="fl">0.95</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="reference/hilo.html">hilo</a></span>(<span class="kw">my_dist</span>, <span class="fl">0.95</span>)
 <span class="co">#&gt; &lt;hilo[2]&gt;</span>
-<span class="co">#&gt; [1] [-0.01190677, 0.01190677]0.95 [-0.01220773, 0.01220773]0.95</span></pre></div>
+<span class="co">#&gt; [1] [-0.01190677, 0.01190677]0.95 [-0.01220773, 0.01220773]0.95</span>
+</pre></div>
 <p>Additionally, some distributions may support other methods such as mathematical operations and summary measures. If the methods aren’t supported, a transformed distribution will be created.</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">my_dist</span>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">my_dist</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
 <span class="co">#&gt; [1] N(0, 1)     t(10, 0, 1)</span>
-<span class="no">my_dist</span>*<span class="fl">3</span> + <span class="fl">2</span>
+<span class="kw">my_dist</span><span class="op">*</span><span class="fl">3</span> <span class="op">+</span> <span class="fl">2</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
 <span class="co">#&gt; [1] N(2, 9)        t(t(10, 0, 1))</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">my_dist</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="kw">my_dist</span>)
 <span class="co">#&gt; [1] 0 0</span>
-<span class="fu"><a href="reference/variance.html">variance</a></span>(<span class="no">my_dist</span>)
-<span class="co">#&gt; [1] 1.00 1.25</span></pre></div>
+<span class="fu"><a href="reference/variance.html">variance</a></span>(<span class="kw">my_dist</span>)
+<span class="co">#&gt; [1] 1.00 1.25</span>
+</pre></div>
 <p>You can also visualise the distribution(s) using the <a href="https://mjskay.github.io/ggdist/">ggdist</a> package.</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggdist</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://mjskay.github.io/ggdist">ggdist</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
 
-<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  <span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Gamma(2,1)"</span>, <span class="st">"Normal(5,1)"</span>, <span class="st">"Mixture"</span>),
-  <span class="kw">dist</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span>(<span class="fl">2</span>,<span class="fl">1</span>), <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="fl">5</span>,<span class="fl">1</span>),
-           <span class="fu"><a href="reference/dist_mixture.html">dist_mixture</a></span>(<span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span>(<span class="fl">2</span>,<span class="fl">1</span>), <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="fl">5</span>, <span class="fl">1</span>), <span class="kw">weights</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>)))
+<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  name = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Gamma(2,1)"</span>, <span class="st">"Normal(5,1)"</span>, <span class="st">"Mixture"</span>),
+  dist = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span>(<span class="fl">2</span>,<span class="fl">1</span>), <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="fl">5</span>,<span class="fl">1</span>),
+           <span class="fu"><a href="reference/dist_mixture.html">dist_mixture</a></span>(<span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span>(<span class="fl">2</span>,<span class="fl">1</span>), <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span>(<span class="fl">5</span>, <span class="fl">1</span>), weights = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>)))
 )
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">name</span>, <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="no">name</span>)))) +
-  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_dist_slabinterval.html">stat_dist_halfeye</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">dist</span> <span class="kw">=</span> <span class="no">dist</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Density function for a mixture of distributions"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="kw">NULL</span>)</pre></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">name</span>, levels = <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="kw">name</span>)))) <span class="op">+</span>
+  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_dist_slabinterval.html">stat_dist_halfeye</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(dist = <span class="kw">dist</span>)) <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(title = <span class="st">"Density function for a mixture of distributions"</span>, y = <span class="kw">NULL</span>, x = <span class="kw">NULL</span>)
+</pre></div>
 <p><img src="reference/figures/README-plot-1.png" width="100%"></p>
 </div>
 <div id="related-work" class="section level2">
@@ -230,7 +244,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

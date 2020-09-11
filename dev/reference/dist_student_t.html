@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_student_t</span>(<span class='no'>df</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ncp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_student_t</span>(<span class='kw'>df</span>, mu = <span class='fl'>0</span>, sigma = <span class='fl'>1</span>, ncp = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,11 +186,15 @@ zero.</p>
     <div class='dont-index'><p><a href='https://rdrr.io/r/stats/TDist.html'>stats::TDist</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_student_t</span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>5</span>), <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>))
+    <pre class="examples"><div class='input'><span class='kw'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_student_t</span>(df = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>5</span>), mu = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>2</span>), sigma = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>))
 
-<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[3]&gt;
-#&gt; [1] t(1, 0, 1) t(2, 1, 2) t(5, 2, 3)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] NA  1  2</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  NA Inf  15</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='kw'>dist</span>
+</div><div class='output co'>#&gt; &lt;distribution[3]&gt;
+#&gt; [1] t(1, 0, 1) t(2, 1, 2) t(5, 2, 3)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1] NA  1  2</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1]  NA Inf  15</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='kw'>dist</span>, <span class='fl'>10</span>)
+</div><div class='output co'>#&gt; [[1]]
 #&gt;  [1]  0.63017890  0.80817754 13.67350714  0.40719714  0.81023079 -0.07963269
 #&gt;  [7] -0.61222199 -0.58856860  0.36477731 -1.47654233
 #&gt; 
@@ -202,9 +206,13 @@ zero.</p>
 #&gt;  [1]  1.144954  5.356423 -1.954513 -6.163206 -2.044159 -7.777897  2.338265
 #&gt;  [8]  6.399335  1.788889  4.995309
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.06366198 0.14814815 0.12653556</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -2.754168 -1.909543 -2.067232</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.9220209 0.8638034 0.7327454</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 0.7265425 2.2344268 3.6782889</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>)
+</div><div class='output co'>#&gt; [1] 0.06366198 0.14814815 0.12653556</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>, log = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] -2.754168 -1.909543 -2.067232</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='kw'>dist</span>, <span class='fl'>4</span>)
+</div><div class='output co'>#&gt; [1] 0.9220209 0.8638034 0.7327454</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>dist</span>, <span class='fl'>0.7</span>)
+</div><div class='output co'>#&gt; [1] 0.7265425 2.2344268 3.6782889</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -221,7 +229,7 @@ zero.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

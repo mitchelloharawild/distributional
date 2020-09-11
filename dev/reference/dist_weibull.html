@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_weibull</span>(<span class='no'>shape</span>, <span class='no'>scale</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_weibull</span>(<span class='kw'>shape</span>, <span class='kw'>scale</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,11 +171,17 @@ the gamma function.</p>
     <div class='dont-index'><p><a href='https://rdrr.io/r/stats/Weibull.html'>stats::Weibull</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_weibull</span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>5</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>))
+    <pre class="examples"><div class='input'><span class='kw'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_weibull</span>(shape = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>5</span>), scale = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>))
 
-<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[4]&gt;
-#&gt; [1] Weibull(0.5, 1) Weibull(1, 1)   Weibull(1.5, 1) Weibull(5, 1)  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 2.0000000 1.0000000 0.9027453 0.9181687</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 20.00000000  1.00000000  0.37569028  0.04422998</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]   5.0737409   0.0000000  -0.7764597 -38.1055455</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  87.48382  14.00000  12.28013 660.88795</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='kw'>dist</span>
+</div><div class='output co'>#&gt; &lt;distribution[4]&gt;
+#&gt; [1] Weibull(0.5, 1) Weibull(1, 1)   Weibull(1.5, 1) Weibull(5, 1)  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1] 2.0000000 1.0000000 0.9027453 0.9181687</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1] 20.00000000  1.00000000  0.37569028  0.04422998</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1]   5.0737409   0.0000000  -0.7764597 -38.1055455</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1]  87.48382  14.00000  12.28013 660.88795</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='kw'>dist</span>, <span class='fl'>10</span>)
+</div><div class='output co'>#&gt; [[1]]
 #&gt;  [1] 0.04133495 0.00896776 0.25671330 4.10589084 0.02810529 0.08029636
 #&gt;  [7] 0.09862785 1.70712964 0.81521819 1.02448807
 #&gt; 
@@ -191,9 +197,13 @@ the gamma function.</p>
 #&gt;  [1] 1.0725666 1.1452512 0.9642343 0.8367377 0.8286791 0.9763452 0.8485249
 #&gt;  [8] 1.0330047 0.7470882 1.1501865
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 8.595475e-02 1.353353e-01 1.253822e-01 1.013133e-12</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1]  -2.453934  -2.000000  -2.076388 -27.617973</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.8646647 0.9816844 0.9996645 1.0000000</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 1.449551 1.203973 1.131734 1.037823</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>)
+</div><div class='output co'>#&gt; [1] 8.595475e-02 1.353353e-01 1.253822e-01 1.013133e-12</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>, log = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1]  -2.453934  -2.000000  -2.076388 -27.617973</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='kw'>dist</span>, <span class='fl'>4</span>)
+</div><div class='output co'>#&gt; [1] 0.8646647 0.9816844 0.9996645 1.0000000</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>dist</span>, <span class='fl'>0.7</span>)
+</div><div class='output co'>#&gt; [1] 1.449551 1.203973 1.131734 1.037823</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -210,7 +220,7 @@ the gamma function.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

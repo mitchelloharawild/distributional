@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_poisson</span>(<span class='no'>lambda</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_poisson</span>(<span class='kw'>lambda</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,11 +170,17 @@ will render nicely.</p>
     <div class='dont-index'><p><a href='https://rdrr.io/r/stats/Poisson.html'>stats::Poisson</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_poisson</span>(<span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>10</span>))
+    <pre class="examples"><div class='input'><span class='kw'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_poisson</span>(lambda = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>10</span>))
 
-<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[3]&gt;
-#&gt; [1] Pois(1)  Pois(4)  Pois(10)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  1  4 10</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  1  4 10</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 1.0000000 0.5000000 0.3162278</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 1.00 0.25 0.10</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='kw'>dist</span>
+</div><div class='output co'>#&gt; &lt;distribution[3]&gt;
+#&gt; [1] Pois(1)  Pois(4)  Pois(10)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1]  1  4 10</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1]  1  4 10</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1] 1.0000000 0.5000000 0.3162278</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='kw'>dist</span>)
+</div><div class='output co'>#&gt; [1] 1.00 0.25 0.10</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='kw'>dist</span>, <span class='fl'>10</span>)
+</div><div class='output co'>#&gt; [[1]]
 #&gt;  [1] 1 0 0 0 1 1 1 1 1 1
 #&gt; 
 #&gt; [[2]]
@@ -183,9 +189,13 @@ will render nicely.</p>
 #&gt; [[3]]
 #&gt;  [1] 10  5  9 10 13 14 12  8 11 13
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.183939721 0.146525111 0.002269996</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] -1.693147 -1.920558 -6.087977</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.99634015 0.62883694 0.02925269</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1]  1  5 12</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>)
+</div><div class='output co'>#&gt; [1] 0.183939721 0.146525111 0.002269996</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>, log = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] -1.693147 -1.920558 -6.087977</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='kw'>dist</span>, <span class='fl'>4</span>)
+</div><div class='output co'>#&gt; [1] 0.99634015 0.62883694 0.02925269</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>dist</span>, <span class='fl'>0.7</span>)
+</div><div class='output co'>#&gt; [1]  1  5 12</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -202,7 +212,7 @@ will render nicely.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
