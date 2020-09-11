@@ -4,7 +4,7 @@
 #'
 #' A generalization of the geometric distribution. It is the number
 #' of failures in a sequence of i.i.d. Bernoulli trials before
-#' a specified number of success (`size`) occurs. The probability of success in
+#' a specified number of successes (`size`) occur. The probability of success in
 #' each trial is given by `prob`.
 #'
 #' @inheritParams stats::NegBinomial

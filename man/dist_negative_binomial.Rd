@@ -19,7 +19,7 @@ dist_negative_binomial(size, prob)
 \details{
 A generalization of the geometric distribution. It is the number
 of failures in a sequence of i.i.d. Bernoulli trials before
-a specified number of success (\code{size}) occurs. The probability of success in
+a specified number of successes (\code{size}) occur. The probability of success in
 each trial is given by \code{prob}.
 
 We recommend reading this documentation on
