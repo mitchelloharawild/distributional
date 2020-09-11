@@ -150,13 +150,15 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A generalization of the geometric distribution. It is the number
-of successes in a sequence of i.i.d. Bernoulli trials before
-a specified number (\(r\)) of failures occurs.</p>
+of failures in a sequence of i.i.d. Bernoulli trials before
+a specified number of successes (<code>size</code>) occur. The probability of success in
+each trial is given by <code>prob</code>.</p>
 <p>We recommend reading this documentation on
 <a href='https://pkg.mitchelloharawild.com/distributional/'>https://pkg.mitchelloharawild.com/distributional/</a>, where the math
 will render nicely.</p>
 <p>In the following, let \(X\) be a Negative Binomial random variable with
-success probability <code>p</code> = \(p\).</p>
+success probability <code>prob</code> = \(p\) and the number of successes <code>size</code> =
+\(r\).</p>
 <p><strong>Support</strong>: \(\{0, 1, 2, 3, ...\}\)</p>
 <p><strong>Mean</strong>: \(\frac{p r}{1-p}\)</p>
 <p><strong>Variance</strong>: \(\frac{pr}{(1-p)^2}\)</p>
