@@ -69,3 +69,13 @@ mean.dist_sample <- function(x, ...){
 variance.dist_sample <- function(x, ...){
   vapply(x, stats::var, numeric(1L), ..., USE.NAMES = FALSE)
 }
+
+#' @export
+skewness.dist_sample <- function(x, ...) {
+  n <- lengths(x, use.names = FALSE)
+  x <- lapply(x, function(.) . - mean(.))
+  sum_x2 <- vapply(x, function(.) sum(.^2), numeric(1L), USE.NAMES = FALSE)
+  sum_x3 <- vapply(x, function(.) sum(.^3), numeric(1L), USE.NAMES = FALSE)
+  y <- sqrt(n) * sum_x3/(sum_x2^(3/2))
+  y * ((1 - 1/n))^(3/2)
+}

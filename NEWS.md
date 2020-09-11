@@ -8,6 +8,7 @@
 * `dist_mixture()` now preserves `dimnames()` if all distributions have the same
   `dimnames()`.
 * Added `density()` and `generate()` methods for sample distributions.
+* Added `skewness()` method for `dist_sample()`.
 * Improved vectorisation of distribution methods.
 
 ## Bug fixes
