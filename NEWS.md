@@ -18,6 +18,7 @@
   lower limit.
 * Fixed issue with naming <hilo> objects giving an invalid structure. It now
   gives an informative error (#23).
+* Fixed documentation for Negative Binomial distribution (#46).
 
 # distributional 0.2.0
 

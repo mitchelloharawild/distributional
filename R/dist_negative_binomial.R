@@ -3,8 +3,9 @@
 #' \lifecycle{stable}
 #'
 #' A generalization of the geometric distribution. It is the number
-#' of successes in a sequence of i.i.d. Bernoulli trials before
-#' a specified number (\eqn{r}) of failures occurs.
+#' of failures in a sequence of i.i.d. Bernoulli trials before
+#' a specified number of successes (`size`) occur. The probability of success in
+#' each trial is given by `prob`.
 #'
 #' @inheritParams stats::NegBinomial
 #'
@@ -15,7 +16,8 @@
 #'   will render nicely.
 #'
 #'   In the following, let \eqn{X} be a Negative Binomial random variable with
-#'   success probability `p` = \eqn{p}.
+#'   success probability `prob` = \eqn{p} and the number of successes `size` =
+#'   \eqn{r}.
 #'
 #'
 #'   **Support**: \eqn{\{0, 1, 2, 3, ...\}}

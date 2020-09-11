@@ -18,15 +18,17 @@ dist_negative_binomial(size, prob)
 }
 \details{
 A generalization of the geometric distribution. It is the number
-of successes in a sequence of i.i.d. Bernoulli trials before
-a specified number (\eqn{r}) of failures occurs.
+of failures in a sequence of i.i.d. Bernoulli trials before
+a specified number of successes (\code{size}) occur. The probability of success in
+each trial is given by \code{prob}.
 
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.
 
 In the following, let \eqn{X} be a Negative Binomial random variable with
-success probability \code{p} = \eqn{p}.
+success probability \code{prob} = \eqn{p} and the number of successes \code{size} =
+\eqn{r}.
 
 \strong{Support}: \eqn{\{0, 1, 2, 3, ...\}}
 
