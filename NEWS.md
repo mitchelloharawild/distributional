@@ -9,6 +9,7 @@
   `dimnames()`.
 * Added `density()` and `generate()` methods for sample distributions.
 * Added `skewness()` method for `dist_sample()`.
+* Improved performance for truncated Normal and sample distributions (#49).
 * Improved vectorisation of distribution methods.
 
 ## Bug fixes

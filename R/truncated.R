@@ -86,3 +86,19 @@ cdf.dist_truncated <- function(x, q, ...){
   out[q_mid] <- (cdf(x[["dist"]], q = q[q_mid], ...) - cdf_lwr)/(cdf_upr - cdf_lwr)
   out
 }
+
+#' @export
+mean.dist_truncated <- function(x) {
+  if(inherits(x$dist, "dist_sample")) {
+    y <- x$dist[[1]]
+    mean(y[y >= x$lower & y <= x$upper])
+  } else if(inherits(x$dist, "dist_normal")) {
+    mu <- x$dist$mu
+    s <- x$dist$sigma
+    a <- (x$lower - mu) / s
+    b <- (x$upper - mu) / s
+    mu + (dnorm(a) - dnorm(b))/(pnorm(b) - pnorm(a))*s
+  } else {
+    NextMethod()
+  }
+}
