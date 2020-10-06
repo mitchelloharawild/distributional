@@ -10,3 +10,4 @@
 ^pkgdown$
 ^tic\.R$
 ^revdep$
+^CRAN-RELEASE$
