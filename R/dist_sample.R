@@ -37,7 +37,7 @@ format.dist_sample <- function(x, ...){
 #' @export
 density.dist_sample <- function(x, at, ...){
   d <- density(x[["x"]], from = min(at), to = max(at))
-  approx(d$x, d$y, xout = at)$y
+  stats::approx(d$x, d$y, xout = at)$y
 }
 
 

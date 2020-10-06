@@ -97,7 +97,7 @@ mean.dist_truncated <- function(x, ...) {
     s <- x$dist$sigma
     a <- (x$lower - mu) / s
     b <- (x$upper - mu) / s
-    mu + (dnorm(a) - dnorm(b))/(pnorm(b) - pnorm(a))*s
+    mu + (stats::dnorm(a) - stats::dnorm(b))/(stats::pnorm(b) - stats::pnorm(a))*s
   } else {
     NextMethod()
   }
