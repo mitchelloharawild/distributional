@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_binomial</span>(<span class='no'>size</span>, <span class='no'>prob</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_binomial</span><span class='op'>(</span><span class='va'>size</span>, <span class='va'>prob</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,11 +188,17 @@ or called \(\pi\) instead of \(p\).</p>
   $$</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='fu'>dist_binomial</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span>))
+    <pre class="examples"><div class='input'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_binomial</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='no'>dist</span></div><div class='output co'>#&gt; &lt;distribution[5]&gt;
-#&gt; [1] B(1, 0.05) B(2, 0.5)  B(3, 0.3)  B(4, 0.9)  B(5, 0.1) </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.05 1.00 0.90 3.60 0.50</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.0475 0.5000 0.6300 0.3600 0.4500</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1]  4.1294832  0.0000000  0.5039526 -1.3333333  1.1925696</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 15.0526316 -1.0000000 -0.4126984  1.2777778  1.0222222</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='no'>dist</span>, <span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='va'>dist</span>
+</div><div class='output co'>#&gt; &lt;distribution[5]&gt;
+#&gt; [1] B(1, 0.05) B(2, 0.5)  B(3, 0.3)  B(4, 0.9)  B(5, 0.1) </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.05 1.00 0.90 3.60 0.50</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.0475 0.5000 0.6300 0.3600 0.4500</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  4.1294832  0.0000000  0.5039526 -1.3333333  1.1925696</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 15.0526316 -1.0000000 -0.4126984  1.2777778  1.0222222</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt;  [1] 1 0 0 0 0 1 0 0 0 0
 #&gt; 
 #&gt; [[2]]
@@ -207,9 +213,13 @@ or called \(\pi\) instead of \(p\).</p>
 #&gt; [[5]]
 #&gt;  [1] 0 2 0 0 0 1 0 0 0 2
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.0000 0.2500 0.1890 0.0486 0.0729</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>dist</span>, <span class='fl'>2</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1]      -Inf -1.386294 -1.666008 -3.024132 -2.618667</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='no'>dist</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 1.00000 1.00000 1.00000 1.00000 0.99999</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>dist</span>, <span class='fl'>0.7</span>)</div><div class='output co'>#&gt; [1] 0 1 1 4 1</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.0000 0.2500 0.1890 0.0486 0.0729</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]      -Inf -1.386294 -1.666008 -3.024132 -2.618667</div><div class='input'>
+<span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.00000 1.00000 1.00000 1.00000 0.99999</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0 1 1 4 1</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -226,7 +236,7 @@ or called \(\pi\) instead of \(p\).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

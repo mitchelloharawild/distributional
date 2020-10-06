@@ -84,7 +84,7 @@ to work with the legend output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -134,27 +134,27 @@ ones already defined by ggplot2. This allows the shade of confidence intervals
 to work with the legend output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scale_level_continuous</span>(<span class='no'>...</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='st'>"level"</span>)</pre>
+    <pre class="usage"><span class='fu'>scale_level_continuous</span><span class='op'>(</span><span class='va'>...</span>, guide <span class='op'>=</span> <span class='st'>"level"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/continuous_scale.html'>continuous_scale</a></code></p><dl'>
+      <td><p>Arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/continuous_scale.html'>continuous_scale</a></code></p><dl>
     <dt><code>scale_name</code></dt><dd><p>The name of the scale that should be used for error messages
 associated with this scale.</p></dd>
     <dt><code>palette</code></dt><dd><p>A palette function that when called with a numeric vector with
 values between 0 and 1 returns the corresponding output values
 (e.g., <code><a href='https://scales.r-lib.org//reference/area_pal.html'>scales::area_pal()</a></code>).</p></dd>
     <dt><code>name</code></dt><dd><p>The name of the scale. Used as the axis or legend title. If
-<code>waiver()</code>, the default, the name of the scale is taken from the first
+<code><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver()</a></code>, the default, the name of the scale is taken from the first
 mapping used for that aesthetic. If <code>NULL</code>, the legend title will be
 omitted.</p></dd>
     <dt><code>breaks</code></dt><dd><p>One of:
 <ul>
 <li><p><code>NULL</code> for no breaks</p></li>
-<li><p><code>waiver()</code> for the default breaks computed by the
+<li><p><code><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver()</a></code> for the default breaks computed by the
 <a href='https://scales.r-lib.org//reference/trans_new.html'>transformation object</a></p></li>
 <li><p>A numeric vector of positions</p></li>
 <li><p>A function that takes the limits as input and returns breaks
@@ -163,7 +163,7 @@ as output (e.g., a function returned by <code><a href='https://scales.r-lib.org/
     <dt><code>minor_breaks</code></dt><dd><p>One of:
 <ul>
 <li><p><code>NULL</code> for no minor breaks</p></li>
-<li><p><code>waiver()</code> for the default breaks (one minor break between
+<li><p><code><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver()</a></code> for the default breaks (one minor break between
 each major break)</p></li>
 <li><p>A numeric vector of positions</p></li>
 <li><p>A function that given the limits returns a vector of minor breaks.</p></li>
@@ -175,7 +175,7 @@ number of breaks given by the transformation.</p></dd>
     <dt><code>labels</code></dt><dd><p>One of:
 <ul>
 <li><p><code>NULL</code> for no labels</p></li>
-<li><p><code>waiver()</code> for the default labels computed by the
+<li><p><code><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver()</a></code> for the default labels computed by the
 transformation object</p></li>
 <li><p>A character vector giving labels (must be same length as <code>breaks</code>)</p></li>
 <li><p>A function that takes the breaks as input and returns labels
@@ -194,8 +194,8 @@ If the purpose is to zoom, use the limit argument in the coordinate system
 </ul></p></dd>
     <dt><code>rescaler</code></dt><dd><p>A function used to scale the input values to the
 range [0, 1]. This is always <code><a href='https://scales.r-lib.org//reference/rescale.html'>scales::rescale()</a></code>, except for
-diverging and n colour gradients (i.e., <code>scale_colour_gradient2()</code>,
-<code>scale_colour_gradientn()</code>). The <code>rescaler</code> is ignored by position
+diverging and n colour gradients (i.e., <code><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_colour_gradient2()</a></code>,
+<code><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_colour_gradientn()</a></code>). The <code>rescaler</code> is ignored by position
 scales, which always use <code><a href='https://scales.r-lib.org//reference/rescale.html'>scales::rescale()</a></code>.</p></dd>
     <dt><code>oob</code></dt><dd><p>One of:
 <ul>
@@ -253,7 +253,7 @@ colour bar, or <code>"legend"</code> for discrete colour legend.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
