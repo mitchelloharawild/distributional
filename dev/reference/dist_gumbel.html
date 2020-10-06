@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_gumbel</span>(<span class='kw'>alpha</span>, <span class='kw'>scale</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_gumbel</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>scale</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,16 +173,16 @@ for \(x\) in \(R\), the set of all real numbers.</p>
     <div class='dont-index'><p><a href='https://rdrr.io/pkg/actuar/man/Gumbel.html'>actuar::Gumbel</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_gumbel</span>(alpha = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>3</span>), scale = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>))
+    <pre class="examples"><div class='input'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_gumbel</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>3</span><span class='op'>)</span>, scale <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='kw'>dist</span>
+<span class='va'>dist</span>
 </div><div class='output co'>#&gt; &lt;distribution[4]&gt;
-#&gt; [1] Gumbel(0.5, 2) Gumbel(1, 2)   Gumbel(1.5, 3) Gumbel(3, 4)  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>dist</span>)
-</div><div class='output co'>#&gt; [1] 1.654431 2.154431 3.231647 5.308863</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='kw'>dist</span>)
-</div><div class='output co'>#&gt; [1]  6.579736  6.579736 14.804407 26.318945</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='kw'>dist</span>)
-</div><div class='output co'>#&gt; [1] 1.139547 1.139547 1.139547 1.139547</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='kw'>dist</span>)
+#&gt; [1] Gumbel(0.5, 2) Gumbel(1, 2)   Gumbel(1.5, 3) Gumbel(3, 4)  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.654431 2.154431 3.231647 5.308863</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  6.579736  6.579736 14.804407 26.318945</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.139547 1.139547 1.139547 1.139547</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 2.4 2.4 2.4 2.4</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='kw'>dist</span>, <span class='fl'>10</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [[1]]
 #&gt;  [1]  1.4234504 -0.8770471  0.7087932 -1.3189072 -0.7334558 -0.9265949
 #&gt;  [7]  3.9049136  1.5706775  1.3214666  3.3713520
@@ -199,12 +199,12 @@ for \(x\) in \(R\), the set of all real numbers.</p>
 #&gt;  [1] 11.0318227  3.4582295  5.6218779  0.9202432  6.4717787  3.6832715
 #&gt;  [7]  5.4196623 10.6118931 -2.4033575  5.4201572
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>)
-</div><div class='output co'>#&gt; [1] 0.14726616 0.16535215 0.12102469 0.08889319</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>, log = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.14726616 0.16535215 0.12102469 0.08889319</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] -1.915514 -1.799678 -2.111761 -2.420320</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='kw'>dist</span>, <span class='fl'>4</span>)
+<span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 0.8404869 0.8000107 0.6475248 0.4589561</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>dist</span>, <span class='fl'>0.7</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 2.561861 3.061861 4.592791 7.123722</div><div class='input'>
 </div></pre>
   </div>
@@ -222,7 +222,7 @@ for \(x\) in \(R\), the set of all real numbers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

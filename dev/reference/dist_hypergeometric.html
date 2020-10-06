@@ -130,7 +130,7 @@
     <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_hypergeometric</span>(<span class='kw'>m</span>, <span class='kw'>n</span>, <span class='kw'>k</span>)</pre>
+    <pre class="usage"><span class='fu'>dist_hypergeometric</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>n</span>, <span class='va'>k</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,17 +179,17 @@ success probability <code>p</code> = \(p = m/(m+n)\).</p>
     <div class='dont-index'><p><a href='https://rdrr.io/r/stats/Hypergeometric.html'>stats::Hypergeometric</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_hypergeometric</span>(m = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>500</span>, <span class='fl'>3</span>), n = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>50</span>, <span class='fl'>60</span>, <span class='fl'>70</span>), k = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>200</span>, <span class='fl'>300</span>))
+    <pre class="examples"><div class='input'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_hypergeometric</span><span class='op'>(</span>m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>500</span>, <span class='fl'>3</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>60</span>, <span class='fl'>70</span><span class='op'>)</span>, k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>200</span>, <span class='fl'>300</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='kw'>dist</span>
+<span class='va'>dist</span>
 </div><div class='output co'>#&gt; &lt;distribution[3]&gt;
 #&gt; [1] Hypergeometric(500, 50, 100) Hypergeometric(500, 60, 200)
-#&gt; [3] Hypergeometric(500, 70, 300)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>dist</span>)
-</div><div class='output co'>#&gt; [1]  90.90909 178.57143 263.15789</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span>(<span class='kw'>dist</span>)
-</div><div class='output co'>#&gt; [1]  6.77415 12.32157 15.33526</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span>(<span class='kw'>dist</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs produced by integer overflow</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs produced by integer overflow</span></div><div class='output co'>#&gt; [1] -0.2007751         NA         NA</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span>(<span class='kw'>dist</span>)
+#&gt; [3] Hypergeometric(500, 70, 300)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  90.90909 178.57143 263.15789</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  6.77415 12.32157 15.33526</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs produced by integer overflow</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs produced by integer overflow</span></div><div class='output co'>#&gt; [1] -0.2007751         NA         NA</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: NAs produced by integer overflow</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs produced by integer overflow</span></div><div class='output co'>#&gt; [1] 2.965375e-15           NA           NA</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span>(<span class='kw'>dist</span>, <span class='fl'>10</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [[1]]
 #&gt;  [1] 95 96 89 90 90 89 91 90 98 86
 #&gt; 
@@ -199,12 +199,12 @@ success probability <code>p</code> = \(p = m/(m+n)\).</p>
 #&gt; [[3]]
 #&gt;  [1] 258 266 267 257 259 262 256 264 262 262
 #&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>)
-</div><div class='output co'>#&gt; [1] 0 0 0</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>dist</span>, <span class='fl'>2</span>, log = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0 0 0</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] -Inf -Inf -Inf</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span>(<span class='kw'>dist</span>, <span class='fl'>4</span>)
+<span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 0 0 0</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>dist</span>, <span class='fl'>0.7</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1]  92 180 265</div><div class='input'>
 </div></pre>
   </div>
@@ -222,7 +222,7 @@ success probability <code>p</code> = \(p = m/(m+n)\).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
