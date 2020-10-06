@@ -1,6 +1,6 @@
 Package: distributional
 Title: Vectorised Probability Distributions
-Version: 0.2.0.9000
+Version: 0.2.1
 Authors@R: 
     c(person(given = "Mitchell",
              family = "O'Hara-Wild",
