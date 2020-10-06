@@ -1,8 +1,17 @@
 # distributional 0.2.1
 
-## Improvements
+A small performance and methods release. Some issues with truncated
+distributions have been fixed, and some more distribution methods have been
+added which improve performance of common tasks.
+
+## New features
+
+### Probability distributions
 
 * Added `dist_missing()` for representing unknown or missing (NA) distributions.
+
+## Improvements
+
 * Documentation improvements.
 * Added `cdf()` method for `dist_sample()` which uses the emperical cdf.
 * `dist_mixture()` now preserves `dimnames()` if all distributions have the same
