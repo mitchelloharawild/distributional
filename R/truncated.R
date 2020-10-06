@@ -88,7 +88,7 @@ cdf.dist_truncated <- function(x, q, ...){
 }
 
 #' @export
-mean.dist_truncated <- function(x) {
+mean.dist_truncated <- function(x, ...) {
   if(inherits(x$dist, "dist_sample")) {
     y <- x$dist[[1]]
     mean(y[y >= x$lower & y <= x$upper])
