@@ -66,7 +66,7 @@
 #' @name dist_student_t
 #' @export
 dist_student_t <- function(df, mu = 0, sigma = 1, ncp = NULL){
-  df <- vec_cast(df, if(any(is.infinite(df))) numeric() else integer())
+  df <- vec_cast(df, numeric())
   if(any(df <= 0)){
     abort("The degrees of freedom parameter of a Student t distribution must be strictly positive.")
   }
