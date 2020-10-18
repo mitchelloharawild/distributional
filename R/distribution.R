@@ -433,3 +433,27 @@ vec_cast.distribution.integer <- vec_cast.distribution.double
 vec_cast.character.distribution <- function(x, to, ...){
   format(x)
 }
+
+#' Test if the object is a distribution
+#'
+#' @description
+#' This function returns `TRUE` for distributions and `FALSE` for all other objects.
+#' \lifecycle{stable}
+#'
+#' @param x An object.
+#'
+#' @return TRUE if the object inherits from the distribution class.
+#' @rdname is-distribution
+#' @examples
+#' # A distribution ----
+#' dist <- dist_normal()
+#' is_distribution(dist)
+#' 
+#' # distribution columns ----
+#' df <- tibble(a = 1:10, b = dist_poisson(1:10), c = dist_normal(1:10))
+#' df
+#' mutate(df, across(is_distribution, mean))
+#' @export
+is_distribution <- function(x) {
+    inherits(x, "distribution")
+}
