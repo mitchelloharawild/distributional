@@ -1,5 +1,9 @@
 # distributional (development version)
 
+## New features
+
+* Added `is_distribution()` to identify if an object is a distribution.
+
 # distributional 0.2.1
 
 A small performance and methods release. Some issues with truncated
