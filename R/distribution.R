@@ -85,7 +85,6 @@ log_density.distribution <- function(x, at, ...){
 quantile.distribution <- function(x, p, ..., log = FALSE){
   if(log) return(log_quantile(x, p, ...))
   vec_assert(p, double())
-  vec_assert(x, dist_normal())
   if (length(x) == 0 || length(p) == 0) {
     abort("neither `x` nor `p` may have size 0")
   }
