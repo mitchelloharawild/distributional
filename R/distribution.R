@@ -84,7 +84,13 @@ log_density.distribution <- function(x, at, ...){
 #' @export
 quantile.distribution <- function(x, p, ..., log = FALSE){
   if(log) return(log_quantile(x, p, ...))
-  vec_assert(p, double(), 1L)
+  vec_assert(p, double())
+  vec_assert(x, dist_normal())
+  assert_that(length(x) > 0)
+  assert_that(length(p) > 0)
+  if (length(x) > 1 && length(p) > 1) {
+    abort("either `x` or `p` must have size 1")
+  }
   dist_apply(x, quantile, p = p, ...)
 }
 log_quantile <- function(x, q, ...) {
@@ -448,7 +454,7 @@ vec_cast.character.distribution <- function(x, to, ...){
 #' # A distribution ----
 #' dist <- dist_normal()
 #' is_distribution(dist)
-#' 
+#'
 #' # distribution columns ----
 #' df <- tibble(a = 1:10, b = dist_poisson(1:10), c = dist_normal(1:10))
 #' df
