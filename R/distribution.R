@@ -86,8 +86,9 @@ quantile.distribution <- function(x, p, ..., log = FALSE){
   if(log) return(log_quantile(x, p, ...))
   vec_assert(p, double())
   vec_assert(x, dist_normal())
-  assert_that(length(x) > 0)
-  assert_that(length(p) > 0)
+  if (length(x) == 0 || length(p) == 0) {
+    abort("neither `x` nor `p` may have size 0")
+  }
   if (length(x) > 1 && length(p) > 1) {
     abort("either `x` or `p` must have size 1")
   }
