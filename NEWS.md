@@ -4,6 +4,12 @@
 
 * Added `is_distribution()` to identify if an object is a distribution.
 
+## Improvements
+
+* Improved NA structure of distributions, allowing it to work with `is.na()` and
+  `vctrs` vector resiging / filling functionality.
+  
+
 # distributional 0.2.1
 
 A small performance and methods release. Some issues with truncated

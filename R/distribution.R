@@ -26,7 +26,7 @@ vec_ptype_abbr.distribution <- function(x, ...){
 format.distribution <- function(x, ...){
   x <- vec_data(x)
   out <- vapply(x, format, character(1L), ...)
-  out[vapply(x, is.null, logical(1L))] <- "?"
+  out[vapply(x, is.null, logical(1L))] <- "NA"
   out
 }
 
@@ -448,7 +448,7 @@ vec_cast.character.distribution <- function(x, to, ...){
 #' # A distribution ----
 #' dist <- dist_normal()
 #' is_distribution(dist)
-#' 
+#'
 #' # distribution columns ----
 #' df <- tibble(a = 1:10, b = dist_poisson(1:10), c = dist_normal(1:10))
 #' df

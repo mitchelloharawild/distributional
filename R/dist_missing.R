@@ -27,15 +27,10 @@
 #'
 #' @export
 dist_missing <- function(length = 1) {
-  new_dist(x = rep(NA, length), class = "dist_na")
+  vctrs::vec_rep(NA_dist_, length)
 }
 
-# NA_dist_ <- dist_missing()
-
-#' @export
-format.dist_na <- function(x, ...){
-  rep_len("NA", length(x[["x"]]))
-}
+NA_dist_ <- structure(list(NULL), class = c("distribution", "vctrs_vctr", "list"))
 
 #' @export
 density.dist_na <- function(x, at, ...){
