@@ -89,7 +89,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +103,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mitchelloharawild/distributional/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,14 @@
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h2>
 <ul>
-<li>Added <code>is_distribution()</code> to identify if an object is a distribution.</li>
+<li>Added <code><a href="../reference/is_distribution.html">is_distribution()</a></code> to identify if an object is a distribution.</li>
+</ul>
+</div>
+<div id="improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#improvements" class="anchor"></a>Improvements</h2>
+<ul>
+<li>Improved NA structure of distributions, allowing it to work with <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> and <code>vctrs</code> vector resiging / filling functionality.</li>
 </ul>
 </div>
 </div>
@@ -152,15 +159,15 @@
 </ul>
 </div>
 </div>
-<div id="improvements" class="section level2">
+<div id="improvements-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements" class="anchor"></a>Improvements</h2>
+<a href="#improvements-1" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Documentation improvements.</li>
 <li>Added <code><a href="../reference/cdf.html">cdf()</a></code> method for <code><a href="../reference/dist_sample.html">dist_sample()</a></code> which uses the emperical cdf.</li>
 <li>
 <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> now preserves <code><a href="https://rdrr.io/r/base/dimnames.html">dimnames()</a></code> if all distributions have the same <code><a href="https://rdrr.io/r/base/dimnames.html">dimnames()</a></code>.</li>
-<li>Added <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code> and <code><a href="https://rdrr.io/pkg/generics/man/generate.html">generate()</a></code> methods for sample distributions.</li>
+<li>Added <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code> and <code><a href="https://generics.r-lib.org/reference/generate.html">generate()</a></code> methods for sample distributions.</li>
 <li>Added <code><a href="../reference/skewness.html">skewness()</a></code> method for <code><a href="../reference/dist_sample.html">dist_sample()</a></code>.</li>
 <li>Improved performance for truncated Normal and sample distributions (<a href='https://github.com/mitchelloharawild/distributional/issues/49'>#49</a>).</li>
 <li>Improved vectorisation of distribution methods.</li>
@@ -203,9 +210,9 @@
 </ul>
 </div>
 </div>
-<div id="improvements-1" class="section level2">
+<div id="improvements-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements-1" class="anchor"></a>Improvements</h2>
+<a href="#improvements-2" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Improved documentation for most distributions to include equations for the region of support, summary statistics, density functions and moments. This is the work of <a href='https://github.com/alexpghayes'>@alexpghayes</a> in the <code>distributions3</code> package.</li>
 <li>Documentation improvements</li>
@@ -253,7 +260,7 @@
 <li>
 <code><a href="../reference/cdf.html">cdf()</a></code>: The cumulative distribution function (equivalent to <code>p...()</code>).</li>
 <li>
-<code><a href="https://rdrr.io/pkg/generics/man/generate.html">generate()</a></code>: Random generation from the distribution (equivalent to <code>r...()</code>).</li>
+<code><a href="https://generics.r-lib.org/reference/generate.html">generate()</a></code>: Random generation from the distribution (equivalent to <code>r...()</code>).</li>
 <li>
 <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>: Compute quantiles of the distribution (equivalent to <code>q...()</code>).</li>
 <li>
