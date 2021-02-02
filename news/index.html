@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +103,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mitchelloharawild/distributional/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,14 +124,33 @@
       <small>Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="distributional-021" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.1">
-<a href="#distributional-021" class="anchor"></a>distributional 0.2.1<small> Unreleased </small>
+    <div id="distributional-022" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.2">
+<a href="#distributional-022" class="anchor"></a>distributional 0.2.2<small> Unreleased </small>
 </h1>
-<p>A small performance and methods release. Some issues with truncated distributions have been fixed, and some more distribution methods have been added which improve performance of common tasks.</p>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h2>
+<ul>
+<li>Added <code><a href="../reference/is_distribution.html">is_distribution()</a></code> to identify if an object is a distribution.</li>
+</ul>
+</div>
+<div id="improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#improvements" class="anchor"></a>Improvements</h2>
+<ul>
+<li>Improved NA structure of distributions, allowing it to work with <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> and <code>vctrs</code> vector resizing / filling functionality.</li>
+</ul>
+</div>
+</div>
+    <div id="distributional-021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#distributional-021" class="anchor"></a>distributional 0.2.1<small> 2020-10-06 </small>
+</h1>
+<p>A small performance and methods release. Some issues with truncated distributions have been fixed, and some more distribution methods have been added which improve performance of common tasks.</p>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New features</h2>
 <div id="probability-distributions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#probability-distributions" class="anchor"></a>Probability distributions</h3>
@@ -140,15 +159,15 @@
 </ul>
 </div>
 </div>
-<div id="improvements" class="section level2">
+<div id="improvements-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements" class="anchor"></a>Improvements</h2>
+<a href="#improvements-1" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Documentation improvements.</li>
 <li>Added <code><a href="../reference/cdf.html">cdf()</a></code> method for <code><a href="../reference/dist_sample.html">dist_sample()</a></code> which uses the emperical cdf.</li>
 <li>
 <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> now preserves <code><a href="https://rdrr.io/r/base/dimnames.html">dimnames()</a></code> if all distributions have the same <code><a href="https://rdrr.io/r/base/dimnames.html">dimnames()</a></code>.</li>
-<li>Added <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code> and <code><a href="https://rdrr.io/pkg/generics/man/generate.html">generate()</a></code> methods for sample distributions.</li>
+<li>Added <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code> and <code><a href="https://generics.r-lib.org/reference/generate.html">generate()</a></code> methods for sample distributions.</li>
 <li>Added <code><a href="../reference/skewness.html">skewness()</a></code> method for <code><a href="../reference/dist_sample.html">dist_sample()</a></code>.</li>
 <li>Improved performance for truncated Normal and sample distributions (<a href='https://github.com/mitchelloharawild/distributional/issues/49'>#49</a>).</li>
 <li>Improved vectorisation of distribution methods.</li>
@@ -170,9 +189,9 @@
 <h1 class="page-header" data-toc-text="0.2.0">
 <a href="#distributional-020" class="anchor"></a>distributional 0.2.0<small> 2020-08-03 </small>
 </h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New features</h2>
+<a href="#new-features-2" class="anchor"></a>New features</h2>
 <div id="probability-distributions-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#probability-distributions-1" class="anchor"></a>Probability distributions</h3>
@@ -191,9 +210,9 @@
 </ul>
 </div>
 </div>
-<div id="improvements-1" class="section level2">
+<div id="improvements-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements-1" class="anchor"></a>Improvements</h2>
+<a href="#improvements-2" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Improved documentation for most distributions to include equations for the region of support, summary statistics, density functions and moments. This is the work of <a href='https://github.com/alexpghayes'>@alexpghayes</a> in the <code>distributions3</code> package.</li>
 <li>Documentation improvements</li>
@@ -216,9 +235,9 @@
 <a href="#distributional-010" class="anchor"></a>distributional 0.1.0<small> 2020-06-09 </small>
 </h1>
 <p>First release.</p>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New features</h2>
+<a href="#new-features-3" class="anchor"></a>New features</h2>
 <div id="object-classes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#object-classes" class="anchor"></a>Object classes</h3>
@@ -241,7 +260,7 @@
 <li>
 <code><a href="../reference/cdf.html">cdf()</a></code>: The cumulative distribution function (equivalent to <code>p...()</code>).</li>
 <li>
-<code><a href="https://rdrr.io/pkg/generics/man/generate.html">generate()</a></code>: Random generation from the distribution (equivalent to <code>r...()</code>).</li>
+<code><a href="https://generics.r-lib.org/reference/generate.html">generate()</a></code>: Random generation from the distribution (equivalent to <code>r...()</code>).</li>
 <li>
 <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>: Compute quantiles of the distribution (equivalent to <code>q...()</code>).</li>
 <li>
