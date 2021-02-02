@@ -12,3 +12,7 @@
 ## Revdep checks
 
 All reverse dependencies have been checked, none have changed to worse.
+
+## Re-submission
+
+Fixed http -> https for lifecycle URL.
