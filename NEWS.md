@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.2.2
 
 ## New features
 
@@ -7,7 +7,7 @@
 ## Improvements
 
 * Improved NA structure of distributions, allowing it to work with `is.na()` and
-  `vctrs` vector resiging / filling functionality.
+  `vctrs` vector resizing / filling functionality.
   
 
 # distributional 0.2.1
