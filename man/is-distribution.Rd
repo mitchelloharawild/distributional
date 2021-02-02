@@ -17,12 +17,7 @@ This function returns \code{TRUE} for distributions and \code{FALSE} for all oth
 \lifecycle{stable}
 }
 \examples{
-# A distribution ----
 dist <- dist_normal()
 is_distribution(dist)
-
-# distribution columns ----
-df <- tibble(a = 1:10, b = dist_poisson(1:10), c = dist_normal(1:10))
-df
-mutate(df, across(is_distribution, mean))
+is_distribution("distributional")
 }
