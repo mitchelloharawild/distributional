@@ -141,6 +141,8 @@ log_cdf.distribution <- function(x, q, ...){
 generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
+  dist_is_na <- vapply(x, is.null, logical(1L))
+  x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
   mapply(generate, vec_data(x), times = times, ..., SIMPLIFY = FALSE)
   # dist_apply(x, generate, times = times, ...)
   # Needs work to structure MV appropriately.
@@ -369,6 +371,8 @@ vec_arith.distribution <- function(op, x, y, ...){
 #' @method vec_arith.distribution default
 #' @export
 vec_arith.distribution.default <- function(op, x, y, ...){
+  dist_is_na <- vapply(x, is.null, logical(1L))
+  x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
   if(is_empty(y)){
     out <- lapply(x, get(op))
   }

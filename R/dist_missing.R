@@ -33,6 +33,11 @@ dist_missing <- function(length = 1) {
 NA_dist_ <- structure(list(NULL), class = c("distribution", "vctrs_vctr", "list"))
 
 #' @export
+format.dist_na <- function(x, ...) {
+  "NA"
+}
+
+#' @export
 density.dist_na <- function(x, at, ...){
   NA_real_
 }
@@ -70,3 +75,13 @@ skewness.dist_na <- function(x, ...) NA_real_
 
 #' @export
 kurtosis.dist_na <- function(x, ...) NA_real_
+
+#' @export
+Math.dist_na <- function(x, ...) {
+  x
+}
+
+#' @export
+Ops.dist_na <- function(e1, e2) {
+  dist_missing(max(length(e1), length(e2)))
+}
