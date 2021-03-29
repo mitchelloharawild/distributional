@@ -75,17 +75,17 @@ format.dist_degenerate <- function(x, ...){
 
 #' @export
 density.dist_degenerate <- function(x, at, ...){
-  if(at == x[["x"]]) 1 else 0
+  ifelse(at == x[["x"]], 1, 0)
 }
 
 #' @export
 quantile.dist_degenerate <- function(x, p, ...){
-  x[["x"]]
+  ifelse(p < 0 | p > 1, NaN, x[["x"]])
 }
 
 #' @export
 cdf.dist_degenerate <- function(x, q, ...){
-  if(q >= x[["x"]]) 1 else 0
+  ifelse(q >= x[["x"]], 1, 0)
 }
 
 #' @export
