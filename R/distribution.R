@@ -205,11 +205,18 @@ mean.distribution <- function(x, ...){
 
 #' Variance
 #'
-#' A generic function for computing the variance of an object. The default
-#' method will use [`stats::var()`] to compute the variance.
+#' A generic function for computing the variance of an object.
 #'
 #' @param x An object.
 #' @param ... Additional arguments used by methods.
+#'
+#' @details
+#'
+#' The implementation of `variance()` for numeric variables coerces the input to
+#' a vector then uses [`stats::var()`] to compute the variance. This means that,
+#' unlike [`stats::var()`], if `variance()` is passed a matrix or a 2-dimensional
+#' array, it will still return the variance ([`stats::var()`] returns the
+#' covariance matrix in that case).
 #'
 #' @seealso [`variance.distribution()`]
 #'
@@ -219,7 +226,15 @@ variance <- function(x, ...){
 }
 #' @export
 variance.default <- function(x, ...){
-  stats::var(x, ...)
+  stop(
+    "The variance() method is not supported for objects of type ",
+    paste(deparse(class(x)), collapse = "")
+  )
+}
+#' @rdname variance
+#' @export
+variance.numeric <- function(x, ...){
+  stats::var(as.vector(x), ...)
 }
 
 #' Variance of a probability distribution
