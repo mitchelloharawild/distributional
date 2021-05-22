@@ -15,3 +15,7 @@ test_that("variance() works correctly on arrays of different dimension", {
   expect_equal(variance(matrix(x, nrow = 2)), 6)
   expect_equal(variance(array(x, dim = c(2, 2, 2))), 6)
 })
+
+test_that("variance() throws an error on non-numeric objects", {
+  expect_error(variance("foo"))
+})
