@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Variance — variance" />
-<meta property="og:description" content="A generic function for computing the variance of an object. The default
-method will use stats::var() to compute the variance." />
+<meta property="og:description" content="A generic function for computing the variance of an object." />
 
 
 
@@ -128,11 +127,13 @@ method will use stats::var() to compute the variance." />
     </div>
 
     <div class="ref-description">
-    <p>A generic function for computing the variance of an object. The default
-method will use <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code> to compute the variance.</p>
+    <p>A generic function for computing the variance of an object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>variance</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>variance</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for numeric</span>
+<span class='fu'>variance</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +148,13 @@ method will use <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The implementation of <code>variance()</code> for numeric variables coerces the input to
+a vector then uses <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code> to compute the variance. This means that,
+unlike <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code>, if <code>variance()</code> is passed a matrix or a 2-dimensional
+array, it will still return the variance (<code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code> returns the
+covariance matrix in that case).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='variance.distribution.html'>variance.distribution()</a></code></p></div>
