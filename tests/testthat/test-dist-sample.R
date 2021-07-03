@@ -16,5 +16,7 @@ test_that("Negative Binomial distribution", {
 
   # stats
   expect_equal(mean(dist), mean(x[[1]]))
+  expect_equal(median(dist), median(x[[1]]))
+  expect_equal(median(dist[[1]]), median(x[[1]]))
   expect_equal(variance(dist), var(x[[1]]))
 })

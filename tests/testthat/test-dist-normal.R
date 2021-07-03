@@ -24,6 +24,8 @@ test_that("Normal distribution", {
 
   # summary statistics
   expect_equal(mean(dist), mu)
+  expect_equal(median(dist), mu)
+  expect_equal(median(dist[[1]]), mu[[1]])
   expect_equal(variance(dist), sigma^2)
 
   # math

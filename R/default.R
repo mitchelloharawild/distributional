@@ -62,6 +62,15 @@ variance.dist_default <- function(x, ...){
 }
 
 #' @export
+median.dist_default <- function(x, na.rm = FALSE, ...){
+  # Only pass na.rm if it is explicitly provided.
+  if(missing(na.rm))
+    quantile(x, p = 0.5, ...)
+  else
+    quantile(x, p = 0.5, na.rm = na.rm, ...)
+}
+
+#' @export
 hilo.dist_default <- function(x, size = 95, ...){
   lower <- quantile(x, 0.5-size/200, ...)
   upper <- quantile(x, 0.5+size/200, ...)
