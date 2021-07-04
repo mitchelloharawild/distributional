@@ -20,5 +20,7 @@ test_that("Inverse Gamma distribution", {
 
   # stats
   expect_equal(mean(dist), (1/2) / (3 - 1))
+  expect_equal(median(dist), 0.186981571595056) # dput(actuar::qinvgamma(0.5, 3, 2))
+  expect_equal(median(dist[[1]]), 0.186981571595056) # dput(actuar::qinvgamma(0.5, 3, 2))
   expect_equal(variance(dist), (1/2)^2/((3-1)^2*(3-2)))
 })
