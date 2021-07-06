@@ -78,6 +78,35 @@ hilo.dist_default <- function(x, size = 95, ...){
 }
 
 #' @export
+hdr.dist_default <- function(x, size = 95, n = 512, ...){
+  dist_x <- vapply(seq(0.5/n, 1 - 0.5/n, length.out = n), quantile, numeric(1L), x = x)
+  dist_y <- vapply(dist_x, density, numeric(1L), x = x)
+  alpha <- quantile(dist_y, probs = size/100)
+
+  crossing_alpha <- function(alpha, x, y){
+    it <- seq_len(length(y) - 1)
+    dd <- y - alpha
+    dd <- dd[it + 1] * dd[it]
+    index <- it[dd <= 0]
+    # unique() removes possible duplicates if sequential dd has same value.
+    # More robust approach is required.
+    unique(
+      vapply(
+        index,
+        function(.x) stats::approx(y[.x + c(0,1)], x[.x + c(0,1)], xout = alpha)$y,
+        numeric(1L)
+      )
+    )
+  }
+
+  # purrr::map(alpha, crossing_alpha, dist_x, dist_y)
+  hdr <- crossing_alpha(alpha, dist_x, dist_y)
+  lower_hdr <- seq_along(hdr)%%2==1
+  hdr <- new_hilo(hdr[lower_hdr], hdr[!lower_hdr], size = size)
+  new_hdr(list(hdr))
+}
+
+#' @export
 format.dist_default <- function(x, ...){
   rep_along("?", x)
 }
