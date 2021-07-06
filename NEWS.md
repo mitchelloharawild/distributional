@@ -8,7 +8,11 @@
 
 * Improved NA structure of distributions, allowing it to work with `is.na()` and
   `vctrs` vector resizing / filling functionality.
-  
+
+## Bug fixes
+
+* Fixed issue with `hdr()` range `size` incorrectly being treated as `100-size`,
+  giving 5% ranges for 95% sizes and vice-versa (#61).
 
 # distributional 0.2.1
 
