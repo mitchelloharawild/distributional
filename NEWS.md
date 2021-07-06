@@ -8,6 +8,8 @@
 
 * Improved NA structure of distributions, allowing it to work with `is.na()` and
   `vctrs` vector resizing / filling functionality.
+* Added `as.character(<hilo>)` method, allowing datasets containing `hilo()`
+  objects to be saved as a text file (#57).
 
 ## Bug fixes
 

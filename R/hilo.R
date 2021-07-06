@@ -81,6 +81,14 @@ vec_ptype2.hilo.hilo <- function(x, y, ...){
   x
 }
 
+#' @export
+vec_cast.character.hilo <- function(x, to, ...){
+  sprintf(
+    "[%s, %s]%s",
+    as.character(x$lower), as.character(x$upper), as.character(x$level)
+  )
+}
+
 #' @method vec_math hilo
 #' @export
 vec_math.hilo <- function(.fn, .x, ...){
