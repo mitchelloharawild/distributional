@@ -122,20 +122,20 @@ log_density.dist_normal <- function(x, at, ...){
 
 #' @export
 quantile.dist_normal <- function(x, p, ...){
-  stats::qnorm(p, x[["mu"]], x[["sigma"]])
+  stats::qnorm(p, x[["mu"]], x[["sigma"]], ...)
 }
 #' @export
 log_quantile.dist_normal <- function(x, p, ...){
-  stats::qnorm(p, x[["mu"]], x[["sigma"]], log.p = TRUE)
+  stats::qnorm(p, x[["mu"]], x[["sigma"]], ..., log.p = TRUE)
 }
 
 #' @export
 cdf.dist_normal <- function(x, q, ...){
-  stats::pnorm(q, x[["mu"]], x[["sigma"]])
+  stats::pnorm(q, x[["mu"]], x[["sigma"]], ...)
 }
 #' @export
 log_cdf.dist_normal <- function(x, q, ...){
-  stats::pnorm(q, x[["mu"]], x[["sigma"]], log.p = TRUE)
+  stats::pnorm(q, x[["mu"]], x[["sigma"]], ..., log.p = TRUE)
 }
 
 #' @export

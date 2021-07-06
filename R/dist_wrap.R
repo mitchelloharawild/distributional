@@ -75,7 +75,7 @@ cdf.dist_wrap <- function(x, q, ...){
   env <- rlang::pkg_env(x[["package"]][[1]])
   # fn <- get(fn, env = env, mode = "function")
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, q, !!!par), env = env)
+  eval_tidy(call2(fn, q, !!!par, ...), env = env)
 }
 
 #' @export
@@ -84,7 +84,7 @@ quantile.dist_wrap <- function(x, p, ...){
   env <- rlang::pkg_env(x[["package"]][[1]])
   # fn <- get(fn, env = env, mode = "function")
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, p, !!!par), env = env)
+  eval_tidy(call2(fn, p, !!!par, ...), env = env)
 }
 
 #' @export
