@@ -13,7 +13,7 @@ transpose_c <- function(.l) {
   if(is_empty(.l)) return(.l)
   inner_names <- names(.l[[1L]])
   result <- lapply(seq_along(.l[[1L]]), function(i) {
-    vec_c(!!!lapply(.l, vec_slice, i), .ptype = .ptype)
+    unname(vec_c(!!!lapply(.l, vec_slice, i), .ptype = .ptype))
   })
   set_names(result, inner_names)
 }
