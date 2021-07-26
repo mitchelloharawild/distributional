@@ -1,20 +1,77 @@
 transpose <- function(.l) {
   if(is_empty(.l)) return(.l)
-  inner_names <- names(.l[[1]])
-  result <- lapply(seq_along(.l[[1]]), function(i) {
+  inner_names <- names(.l[[1L]])
+  result <- lapply(seq_along(.l[[1L]]), function(i) {
     lapply(.l, .subset2, i)
   })
   set_names(result, inner_names)
 }
 
+transpose_c <- function(.l) {
+  stopifnot(is_list_of(.l))
+  .ptype <- vec_init(attr(.l, "ptype"), 1L)
+  if(is_empty(.l)) return(.l)
+  inner_names <- names(.l[[1L]])
+  result <- lapply(seq_along(.l[[1L]]), function(i) {
+    vec_c(!!!lapply(.l, vec_slice, i), .ptype = .ptype)
+  })
+  set_names(result, inner_names)
+}
+
+# Declare a function's argument as allowing list inputs for mapping values
+arg_listable <- function(x, .ptype) {
+  if(is.list(x)) {
+    x <- as_list_of(x, .ptype)
+    if(is.null(names(x))) {
+      names(x) <- vec_as_names(character(vec_size(x)), repair = "unique")
+    }
+  } else {
+    vec_assert(x, .ptype)
+  }
+  # Declares list arguments to be unpacked for dist_apply()
+  class(x) <- c("arg_listable", class(x))
+  x
+}
+
+validate_recycling <- function(x, arg) {
+  if(is_list_of(arg)) return(lapply(arg, validate_recycling, x = x))
+  if(!any(vec_size(arg) == c(1, vec_size(x)))) {
+    abort(
+      sprintf("Cannot recycle input of size %i to match the distributions (size %i).",
+              vec_size(arg), vec_size(x)
+      )
+    )
+  }
+}
 
 dist_apply <- function(x, .f, ...){
   dn <- dimnames(x)
   x <- vec_data(x)
   dist_is_na <- vapply(x, is.null, logical(1L))
   x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
-  out <- mapply(.f, x, ..., SIMPLIFY = FALSE, USE.NAMES = FALSE)
-  if(length(out[[1]]) > 1){
+
+  args <- dots_list(...)
+  is_arg_listable <- vapply(args, inherits, FUN.VALUE = logical(1L), "arg_listable")
+  unpack_listable <- FALSE
+  if(any(is_arg_listable)) {
+    if(sum(is_arg_listable) > 1) abort("Only distribution argument can be unpacked at a time.\nThis shouldn't happen, please report a bug at https://github.com/mitchelloharawild/distributional/issues/")
+    validate_recycling(x, args[[is_arg_listable]])
+
+    if(unpack_listable <- is_list_of(args[[is_arg_listable]])) {
+      .unpack_names <- names(args[[is_arg_listable]])
+      args[[is_arg_listable]] <- transpose_c(args[[is_arg_listable]])
+    }
+  }
+
+  out <- do.call(mapply, c(.f, list(x), args, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+  # out <- mapply(.f, x, ..., SIMPLIFY = FALSE, USE.NAMES = FALSE)
+
+  if(unpack_listable) {
+    # TODO - update and repair multivariate distribution i/o with unpacking
+    out <- transpose_c(as_list_of(out))
+    names(out) <- .unpack_names
+    out <- new_data_frame(out, n = vec_size(x))
+  } else if(length(out[[1]]) > 1) {
     out <- suppressMessages(vctrs::vec_rbind(!!!out))
   } else {
     out <- vctrs::vec_c(!!!out)

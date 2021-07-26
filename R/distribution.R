@@ -56,7 +56,7 @@ dimnames.distribution <- function(x){
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
   if(log) return(log_density(x, at, ...))
-  vec_assert(at, size = 1L)
+  at <- arg_listable(at, .ptype = NULL)
   dist_apply(x, density, at = at, ...)
 }
 
@@ -66,7 +66,7 @@ log_density <- function(x, at, ...) {
 }
 #' @export
 log_density.distribution <- function(x, at, ...){
-  vec_assert(at, size = 1L)
+  at <- arg_listable(at, .ptype = NULL)
   dist_apply(x, log_density, at = at, ...)
 }
 
@@ -84,7 +84,7 @@ log_density.distribution <- function(x, at, ...){
 #' @export
 quantile.distribution <- function(x, p, ..., log = FALSE){
   if(log) return(log_quantile(x, p, ...))
-  vec_assert(p, double(), 1L)
+  p <- arg_listable(p, .ptype = double())
   dist_apply(x, quantile, p = p, ...)
 }
 log_quantile <- function(x, q, ...) {
@@ -94,6 +94,7 @@ log_quantile <- function(x, q, ...) {
 #' @export
 log_quantile.distribution <- function(x, p, ...){
   vec_assert(q, double(), 1L)
+  p <- arg_listable(p, .ptype = double())
   dist_apply(x, log_quantile, p = p, ...)
 }
 
@@ -114,7 +115,7 @@ cdf <- function (x, q, ..., log = FALSE){
 #' @rdname cdf
 #' @export
 cdf.distribution <- function(x, q, ...){
-  vec_assert(q, size = 1L)
+  q <- arg_listable(q, .ptype = NULL)
   dist_apply(x, cdf, q = q, ...)
 }
 log_cdf <- function(x, q, ...) {
@@ -123,7 +124,7 @@ log_cdf <- function(x, q, ...) {
 }
 #' @export
 log_cdf.distribution <- function(x, q, ...){
-  vec_assert(q, size = 1L)
+  q <- arg_listable(q, .ptype = NULL)
   dist_apply(x, log_cdf, q = q, ...)
 }
 
@@ -326,6 +327,7 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 #' @importFrom stats median
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
+  size <- arg_listable(size, .ptype = double())
   dist_apply(x, hilo, size = size, ...)
 }
 
@@ -346,6 +348,7 @@ hilo.distribution <- function(x, size = 95, ...){
 #'
 #' @export
 hdr.distribution <- function(x, size = 95, n = 512, ...){
+  size <- arg_listable(size, .ptype = double())
   dist_apply(x, hdr, size = size, n = n, ...)
 }
 
