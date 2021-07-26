@@ -12,6 +12,7 @@ transpose_c <- function(.l) {
   .ptype <- vec_init(attr(.l, "ptype"), 1L)
   if(is_empty(.l)) return(.l)
   inner_names <- names(.l[[1L]])
+  .l <- vec_recycle_common(!!!.l)
   result <- lapply(seq_along(.l[[1L]]), function(i) {
     unname(vec_c(!!!lapply(.l, vec_slice, i), .ptype = .ptype))
   })
