@@ -8,13 +8,17 @@ test_that("Multinomial distribution", {
   # quantiles
 
   # pdf
-  expect_equal(density(dist, list(c(1, 2, 1))), dmultinom(c(1, 2, 1), 4, p))
+  expect_equal(density(dist, cbind(1, 2, 1)), dmultinom(c(1, 2, 1), 4, p))
 
   # cdf
 
   # F(Finv(a)) ~= a
 
   # stats
-  expect_equal(mean(dist), data.frame(a = p[1]*4, b = p[2]*4, c = p[3]*4))
+  expect_equal(
+    mean(dist),
+    matrix(c(1.2, 2, 0.8), nrow = 1, dimnames = list(NULL, c("a", "b", "c")))
+  )
+
   expect_equal(variance(dist), list(matrix(c(0.84, -0.6, -0.24, -0.6, 1, -0.4, -0.24, -0.4, 0.64), nrow = 3)))
 })

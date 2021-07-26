@@ -18,13 +18,23 @@ transpose_c <- function(.l) {
   set_names(result, inner_names)
 }
 
+split_matrix_rows <- function(x) {
+  lapply(seq_len(nrow(x)), function(i) x[i,,drop=FALSE])
+}
+
 # Declare a function's argument as allowing list inputs for mapping values
 arg_listable <- function(x, .ptype) {
   if(is.list(x)) {
     x <- as_list_of(x, .ptype)
+    if(is.matrix(attr(x, "ptype"))) {
+      x <- lapply(x, split_matrix_rows)
+      x <- as_list_of(x, .ptype)
+    }
     if(is.null(names(x))) {
       names(x) <- vec_as_names(character(vec_size(x)), repair = "unique")
     }
+  } else if(is.matrix(x)) {
+    x <- split_matrix_rows(x)
   } else {
     vec_assert(x, .ptype)
   }
@@ -55,11 +65,12 @@ dist_apply <- function(x, .f, ...){
   unpack_listable <- FALSE
   if(any(is_arg_listable)) {
     if(sum(is_arg_listable) > 1) abort("Only distribution argument can be unpacked at a time.\nThis shouldn't happen, please report a bug at https://github.com/mitchelloharawild/distributional/issues/")
-    validate_recycling(x, args[[is_arg_listable]])
+    arg_pos <- which(is_arg_listable)
+    validate_recycling(x, args[[arg_pos]])
 
-    if(unpack_listable <- is_list_of(args[[is_arg_listable]])) {
-      .unpack_names <- names(args[[is_arg_listable]])
-      args[[is_arg_listable]] <- transpose_c(args[[is_arg_listable]])
+    if(unpack_listable <- is_list_of(args[[arg_pos]])) {
+      .unpack_names <- names(args[[arg_pos]])
+      args[[arg_pos]] <- transpose_c(args[[arg_pos]])
     }
   }
 
@@ -68,17 +79,24 @@ dist_apply <- function(x, .f, ...){
 
   if(unpack_listable) {
     # TODO - update and repair multivariate distribution i/o with unpacking
-    out <- transpose_c(as_list_of(out))
+    out <- as_list_of(out)
+    if (rbind_mat <- is.matrix(attr(out, "ptype"))) {
+      out <- as_list_of(lapply(out, split_matrix_rows))
+    }
+    out <- transpose_c(out)
+    if(rbind_mat) {
+      out <- lapply(out, function(x) `colnames<-`(do.call(rbind, x), dn))
+    }
     names(out) <- .unpack_names
     out <- new_data_frame(out, n = vec_size(x))
-  } else if(length(out[[1]]) > 1) {
-    out <- suppressMessages(vctrs::vec_rbind(!!!out))
+  # } else if(length(out[[1]]) > 1) {
+  #   out <- suppressMessages(vctrs::vec_rbind(!!!out))
   } else {
     out <- vctrs::vec_c(!!!out)
-  }
-  if(is.data.frame(out) && !is.null(dn)){
-    # Set dimension names
-    colnames(out) <- dn
+    if(is.matrix(out) && !is.null(dn)){
+      # Set dimension names
+      colnames(out) <- dn
+    }
   }
   out
 }

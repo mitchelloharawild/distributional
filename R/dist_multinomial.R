@@ -91,6 +91,7 @@ format.dist_multinomial <- function(x, digits = 2, ...){
 
 #' @export
 density.dist_multinomial <- function(x, at, ...){
+  if(is.list(at)) return(vapply(at, density, numeric(1L), x = x, ...))
   stats::dmultinom(at, x[["s"]], x[["p"]])
 }
 
@@ -106,7 +107,7 @@ generate.dist_multinomial <- function(x, times, ...){
 
 #' @export
 mean.dist_multinomial <- function(x, ...){
-  x[["s"]]*x[["p"]]
+  matrix(x[["s"]]*x[["p"]], nrow = 1)
 }
 
 #' @export
