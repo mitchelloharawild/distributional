@@ -40,6 +40,9 @@ dimnames.distribution <- function(x){
   attr(x, "vars")
 }
 
+#' @export
+`[[.distribution` <- `[`
+
 #' The probability density/mass function
 #'
 #' \lifecycle{stable}
@@ -368,13 +371,14 @@ vec_arith.distribution.default <- function(op, x, y, ...){
   dist_is_na <- vapply(x, is.null, logical(1L))
   x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
   if(is_empty(y)){
-    out <- lapply(x, get(op))
+    out <- lapply(vec_data(x), get(op))
   }
   else {
     x <- vec_recycle_common(x = x, y = y)
     y <- x[["y"]]
+    if(is_distribution(y)) y <- vec_data(y)
     x <- x[["x"]]
-    out <- mapply(get(op), x = x, y = y, SIMPLIFY = FALSE)
+    out <- mapply(get(op), x = vec_data(x), y = y, SIMPLIFY = FALSE)
   }
   vec_restore(out, x)
 }
@@ -385,7 +389,7 @@ vec_arith.numeric.distribution <- function(op, x, y, ...){
   x <- vec_recycle_common(x = x, y = y)
   y <- x[["y"]]
   x <- x[["x"]]
-  out <- mapply(get(op), x = x, y = y, SIMPLIFY = FALSE)
+  out <- mapply(get(op), x = x, y = vec_data(y), SIMPLIFY = FALSE)
   vec_restore(out, y)
 }
 
@@ -394,7 +398,7 @@ vec_arith.numeric.distribution <- function(op, x, y, ...){
 vec_math.distribution <- function(.fn, .x, ...) {
   if(.fn %in% c("is.nan", "is.infinite")) return(rep_len(FALSE, length(.x)))
   if(.fn == "is.finite") return(rep_len(TRUE, length(.x)))
-  out <- lapply(.x, get(.fn), ...)
+  out <- lapply(vec_data(.x), get(.fn), ...)
   vec_restore(out, .x)
 }
 
