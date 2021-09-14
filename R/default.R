@@ -53,6 +53,11 @@ log_likelihood.dist_default <- function(x, sample, ...){
 }
 
 #' @export
+parameters.dist_default <- function(x, ...) {
+  unclass(x)
+}
+
+#' @export
 mean.dist_default <- function(x, ...){
   mean(generate(x, times = 1000), na.rm = TRUE)
 }

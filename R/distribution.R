@@ -192,6 +192,25 @@ log_likelihood.distribution <- function(x, sample, ...){
   dist_apply(x, log_likelihood, sample = sample, ...)
 }
 
+#' Extract the parameters of a distribution
+#'
+#' \lifecycle{experimental}
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @name parameters
+#' @export
+parameters <- function(x, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("parameters")
+}
+
+#' @export
+parameters.distribution <- function(x, ...) {
+  lapply(vec_data(x), parameters)
+}
+
 #' Mean of a probability distribution
 #'
 #' \lifecycle{stable}
