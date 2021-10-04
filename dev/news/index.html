@@ -128,21 +128,47 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#distributional-development-version" class="anchor"></a>distributional (development version)<small> Unreleased </small>
 </h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<div id="probability-distributions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#probability-distributions" class="anchor"></a>Probability distributions</h3>
+<ul>
+<li>Added <code><a href="../reference/dist_categorical.html">dist_categorical()</a></code> for the Categorical distribution.</li>
+</ul>
+</div>
+<div id="generics" class="section level3">
+<h3 class="hasAnchor">
+<a href="#generics" class="anchor"></a>Generics</h3>
+<ul>
+<li>Added <code><a href="../reference/parameters.html">parameters()</a></code> generic for obtaining the distributions’s parameters.</li>
+</ul>
+</div>
+</div>
+<div id="improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#improvements" class="anchor"></a>Improvements</h2>
+<ul>
+<li>
+<code><a href="../reference/variance.html">variance()</a></code> now always returns a variance. It will not default to providing a covariance matrix for matrices.</li>
+</ul>
+</div>
 </div>
     <div id="distributional-022" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.2">
 <a href="#distributional-022" class="anchor"></a>distributional 0.2.2<small> 2021-02-02 </small>
 </h1>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h2>
+<a href="#new-features-1" class="anchor"></a>New features</h2>
 <ul>
 <li>Added <code><a href="../reference/is_distribution.html">is_distribution()</a></code> to identify if an object is a distribution.</li>
 </ul>
 </div>
-<div id="improvements" class="section level2">
+<div id="improvements-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements" class="anchor"></a>Improvements</h2>
+<a href="#improvements-1" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Improved NA structure of distributions, allowing it to work with <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> and <code>vctrs</code> vector resizing / filling functionality.</li>
 <li>Added <code>as.character(&lt;hilo&gt;)</code> method, allowing datasets containing <code><a href="../reference/hilo.html">hilo()</a></code> objects to be saved as a text file (<a href='https://github.com/mitchelloharawild/distributional/issues/57'>#57</a>).</li>
@@ -161,20 +187,20 @@
 <a href="#distributional-021" class="anchor"></a>distributional 0.2.1<small> 2020-10-06 </small>
 </h1>
 <p>A small performance and methods release. Some issues with truncated distributions have been fixed, and some more distribution methods have been added which improve performance of common tasks.</p>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New features</h2>
-<div id="probability-distributions" class="section level3">
+<a href="#new-features-2" class="anchor"></a>New features</h2>
+<div id="probability-distributions-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#probability-distributions" class="anchor"></a>Probability distributions</h3>
+<a href="#probability-distributions-1" class="anchor"></a>Probability distributions</h3>
 <ul>
 <li>Added <code><a href="../reference/dist_missing.html">dist_missing()</a></code> for representing unknown or missing (NA) distributions.</li>
 </ul>
 </div>
 </div>
-<div id="improvements-1" class="section level2">
+<div id="improvements-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements-1" class="anchor"></a>Improvements</h2>
+<a href="#improvements-2" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Documentation improvements.</li>
 <li>Added <code><a href="../reference/cdf.html">cdf()</a></code> method for <code><a href="../reference/dist_sample.html">dist_sample()</a></code> which uses the emperical cdf.</li>
@@ -202,12 +228,12 @@
 <h1 class="page-header" data-toc-text="0.2.0">
 <a href="#distributional-020" class="anchor"></a>distributional 0.2.0<small> 2020-08-03 </small>
 </h1>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New features</h2>
-<div id="probability-distributions-1" class="section level3">
+<a href="#new-features-3" class="anchor"></a>New features</h2>
+<div id="probability-distributions-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#probability-distributions-1" class="anchor"></a>Probability distributions</h3>
+<a href="#probability-distributions-2" class="anchor"></a>Probability distributions</h3>
 <ul>
 <li>Added <code><a href="../reference/dist_wrap.html">dist_wrap()</a></code> for wrapping distributions not yet added in the package.</li>
 </ul>
@@ -223,9 +249,9 @@
 </ul>
 </div>
 </div>
-<div id="improvements-2" class="section level2">
+<div id="improvements-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#improvements-2" class="anchor"></a>Improvements</h2>
+<a href="#improvements-3" class="anchor"></a>Improvements</h2>
 <ul>
 <li>Improved documentation for most distributions to include equations for the region of support, summary statistics, density functions and moments. This is the work of <a href='https://github.com/alexpghayes'>@alexpghayes</a> in the <code>distributions3</code> package.</li>
 <li>Documentation improvements</li>
@@ -248,9 +274,9 @@
 <a href="#distributional-010" class="anchor"></a>distributional 0.1.0<small> 2020-06-09 </small>
 </h1>
 <p>First release.</p>
-<div id="new-features-3" class="section level2">
+<div id="new-features-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-3" class="anchor"></a>New features</h2>
+<a href="#new-features-4" class="anchor"></a>New features</h2>
 <div id="object-classes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#object-classes" class="anchor"></a>Object classes</h3>
@@ -296,9 +322,9 @@
 <li>Added <code><a href="../reference/geom_hilo_ribbon.html">geom_hilo_ribbon()</a></code> and <code><a href="../reference/geom_hilo_linerange.html">geom_hilo_linerange()</a></code> geometries for ggplot2. These geoms allow uncertainty to be shown graphically with <code><a href="../reference/hilo.html">hilo()</a></code> intervals.</li>
 </ul>
 </div>
-<div id="probability-distributions-2" class="section level3">
+<div id="probability-distributions-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#probability-distributions-2" class="anchor"></a>Probability distributions</h3>
+<a href="#probability-distributions-3" class="anchor"></a>Probability distributions</h3>
 <ul>
 <li>Added 20 continuous probability distributions: <code><a href="../reference/dist_beta.html">dist_beta()</a></code>, <code><a href="../reference/dist_burr.html">dist_burr()</a></code>, <code><a href="../reference/dist_cauchy.html">dist_cauchy()</a></code>, <code><a href="../reference/dist_chisq.html">dist_chisq()</a></code>, <code><a href="../reference/dist_exponential.html">dist_exponential()</a></code>, <code><a href="../reference/dist_f.html">dist_f()</a></code>, <code><a href="../reference/dist_gamma.html">dist_gamma()</a></code>, <code><a href="../reference/dist_gumbel.html">dist_gumbel()</a></code>, <code><a href="../reference/dist_hypergeometric.html">dist_hypergeometric()</a></code>, <code><a href="../reference/dist_inverse_exponential.html">dist_inverse_exponential()</a></code>, <code><a href="../reference/dist_inverse_gamma.html">dist_inverse_gamma()</a></code>, <code><a href="../reference/dist_inverse_gaussian.html">dist_inverse_gaussian()</a></code>, <code><a href="../reference/dist_logistic.html">dist_logistic()</a></code>, <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code>, <code><a href="../reference/dist_normal.html">dist_normal()</a></code>, <code><a href="../reference/dist_pareto.html">dist_pareto()</a></code>, <code><a href="../reference/dist_student_t.html">dist_student_t()</a></code>, <code><a href="../reference/dist_studentized_range.html">dist_studentized_range()</a></code>, <code><a href="../reference/dist_uniform.html">dist_uniform()</a></code>, <code><a href="../reference/dist_weibull.html">dist_weibull()</a></code>
 </li>
