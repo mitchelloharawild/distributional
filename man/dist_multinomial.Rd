@@ -7,13 +7,9 @@
 dist_multinomial(size, prob)
 }
 \arguments{
-\item{size}{integer, say \eqn{N}, specifying the total number
-    of objects that are put into \eqn{K} boxes in the typical multinomial
-    experiment. For \code{dmultinom}, it defaults to \code{sum(x)}.}
+\item{size}{The number of draws from the Categorical distribution.}
 
-\item{prob}{numeric non-negative vector of length \eqn{K}, specifying
-    the probability for the \eqn{K} classes; is internally normalized to
-    sum 1. Infinite and missing values are not allowed.}
+\item{prob}{The probability of an event occurring from each draw.}
 }
 \description{
 \lifecycle{maturing}
@@ -22,7 +18,7 @@ dist_multinomial(size, prob)
 The multinomial distribution is a generalization of the binomial
 distribution to multiple categories. It is perhaps easiest to think
 that we first extend a \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution to include more
-than two categories, resulting in a categorical distribution.
+than two categories, resulting in a \code{\link[=dist_categorical]{dist_categorical()}} distribution.
 We then extend repeat the Categorical experiment several (\eqn{n})
 times.
 

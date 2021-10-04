@@ -1,5 +1,20 @@
 # distributional (development version)
 
+## New features
+
+### Probability distributions
+
+* Added `dist_categorical()` for the Categorical distribution.
+
+### Generics
+
+* Added `parameters()` generic for obtaining the distributions's parameters.
+
+## Improvements
+
+* `variance()` now always returns a variance. It will not default to providing
+  a covariance matrix for matrices.
+
 # distributional 0.2.2
 
 ## New features
