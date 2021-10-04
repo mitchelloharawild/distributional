@@ -84,8 +84,8 @@ hilo.dist_default <- function(x, size = 95, ...){
 
 #' @export
 hdr.dist_default <- function(x, size = 95, n = 512, ...){
-  dist_x <- vapply(seq(0.5/n, 1 - 0.5/n, length.out = n), quantile, numeric(1L), x = x)
-  dist_y <- vapply(dist_x, density, numeric(1L), x = x)
+  dist_x <- quantile(x, seq(0.5/n, 1 - 0.5/n, length.out = n))
+  dist_y <- density(x, dist_x)
   alpha <- quantile(dist_y, probs = 1-size/100)
 
   crossing_alpha <- function(alpha, x, y){
