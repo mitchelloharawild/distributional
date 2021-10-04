@@ -54,7 +54,8 @@ log_likelihood.dist_default <- function(x, sample, ...){
 
 #' @export
 parameters.dist_default <- function(x, ...) {
-  unclass(x)
+  # Reduce parameter structures to length 1 list if needed.
+  lapply(unclass(x), function(z) if(vec_size(z) > 1) list(z) else z)
 }
 
 #' @export
