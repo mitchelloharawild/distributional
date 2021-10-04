@@ -85,6 +85,8 @@ hilo.dist_default <- function(x, size = 95, ...){
 #' @export
 hdr.dist_default <- function(x, size = 95, n = 512, ...){
   dist_x <- quantile(x, seq(0.5/n, 1 - 0.5/n, length.out = n))
+  # Remove duplicate values of dist_x from less continuous distributions
+  dist_x <- unique(dist_x)
   dist_y <- density(x, dist_x)
   alpha <- quantile(dist_y, probs = 1-size/100)
 
