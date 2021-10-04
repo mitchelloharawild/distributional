@@ -209,7 +209,9 @@ parameters <- function(x, ...) {
 
 #' @export
 parameters.distribution <- function(x, ...) {
-  lapply(vec_data(x), parameters)
+  x <- lapply(vec_data(x), parameters)
+  x <- lapply(x, function(z) data_frame(!!!z, .name_repair = "minimal"))
+  vec_rbind(!!!x)
 }
 
 #' Mean of a probability distribution
