@@ -23,14 +23,18 @@ can be computed, including the `mean()`, `median()`, `variance()`, and
 intervals with `hilo()`.
 
 The distributional nature of a model’s predictions is often understated,
-with defaults of `predict()` methods usually only producing point
-predictions. The `forecast()` function from the [forecast
-package](https://CRAN.R-project.org/package=forecast) goes further in
-illustrating uncertainty by producing point forecasts and intervals by
+with default output of prediction methods usually only producing point
+predictions. Some R packages (such as
+[forecast](https://CRAN.R-project.org/package=forecast)) further
+emphasise uncertainty by producing point forecasts and intervals by
 default, however the user’s ability to interact with them is limited.
 This package vectorises distributions and provides methods for working
-with them, making entire distributions suitable prediction outputs for
-model functions.
+with them, making distributions compatible with prediction outputs of
+modelling functions. These vectorised distributions can be illustrated
+with [ggplot2](https://CRAN.R-project.org/package=ggplot2) using the
+[ggdist](https://CRAN.R-project.org/package=ggdist) package, providing
+further opportunity to visualise the uncertainty of predictions and
+teach distributional theory.
 
 ## Installation
 
@@ -134,20 +138,20 @@ ggplot(df, aes(y = factor(name, levels = rev(name)))) +
 There are several packages which unify interfaces for distributions in
 R:
 
-  - stats provides functions to work with possibly multiple
+-   stats provides functions to work with possibly multiple
     distributions (comparisons made below).
-  - [distributions3](https://cran.r-project.org/package=distributions3)
+-   [distributions3](https://cran.r-project.org/package=distributions3)
     represents singular distributions using S3, with particularly nice
     documentation. This package makes use of some code and documentation
     from this package.
-  - [distr](https://cran.r-project.org/package=distr) represents
+-   [distr](https://cran.r-project.org/package=distr) represents
     singular distributions using S4.
-  - [distr6](https://cran.r-project.org/package=distr6) represents
+-   [distr6](https://cran.r-project.org/package=distr6) represents
     singular distributions using R6.
-  - Many more in the [CRAN task
+-   Many more in the [CRAN task
     view](https://cran.r-project.org/view=Distributions)
 
 This package differs from the above libraries by storing the
 distributions in a vectorised format. It does this using
 [vctrs](https://vctrs.r-lib.org/), so it should play nicely with the
-tidyverse (try putting distributions into a tibble\!).
+tidyverse (try putting distributions into a tibble!).
