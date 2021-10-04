@@ -8,7 +8,7 @@
 
 ### Generics
 
-* Added `parameters()` generic for obtaining the distributions's parameters.
+* Added `parameters()` generic for obtaining the distribution's parameters.
 
 ## Improvements
 
