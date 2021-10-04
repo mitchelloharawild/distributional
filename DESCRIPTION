@@ -44,7 +44,7 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     mvtnorm,
-    actuar,
+    actuar (>= 2.0.0),
     ggdist
 RdMacros: 
     lifecycle
