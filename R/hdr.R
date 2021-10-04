@@ -6,12 +6,31 @@
 #'
 #' @author Mitchell O'Hara-Wild
 #'
+#' @examples
+#'
+#' new_hdr(lower = list(1, c(3,6)), upper = list(10, c(5, 8)), size = c(80, 95))
 #'
 #' @export
-new_hdr <- function(x = list()) {
-  vec_assert(x, list())
+new_hdr <- function(lower = list_of(.ptype = double()),
+                    upper = list_of(.ptype = double()),
+                    size = double()) {
+  lower <- as_list_of(lower)
+  upper <- as_list_of(upper)
+  vec_assert(lower, list_of(.ptype = double()))
+  vec_assert(upper, list_of(.ptype = double()))
+  vec_assert(size, double())
+  if (any(size < 0 | size > 100, na.rm = TRUE))
+    abort("'size' must be between [0, 100].")
 
-  vctrs::new_list_of(x, ptype = new_hilo(), class = "hdr")
+
+  out <- vec_recycle_common(lower = lower, upper = upper)
+  mapply(
+    function(l,u) if (any(u<l, na.rm = TRUE)) abort("`upper` can't be lower than `lower`."),
+    l = out[["lower"]], u = out[["upper"]]
+  )
+  out[["level"]] <- vctrs::vec_recycle(size, vec_size(out[[1]]))
+
+  vctrs::new_rcrd(out, class = "hdr")
 }
 
 #' Compute highest density regions
@@ -46,5 +65,14 @@ is_hdr <- function(x) {
 
 #' @export
 format.hdr <- function(x, justify = "right", ...) {
-  rep_along("hdr", x)
+  out <- mapply(function(l,u,s) {
+    limit <- paste(
+      format(l, justify = justify, ...),
+      format(u, justify = justify, ...),
+      sep = ", "
+    )
+    limit <- paste0("[", limit, "]", collapse = "")
+    paste0(limit, s)
+  }, l = field(x, "lower"), u = field(x, "upper"), s = field(x, "level"))
+  as.vector(out, "character")
 }

@@ -22,7 +22,7 @@ new_hilo <- function(lower = double(), upper = double(), size = double()) {
   if (any(out[["upper"]] < out[["lower"]], na.rm = TRUE)) {
     abort("`upper` can't be lower than `lower`.")
   }
-  len <- length(out[[1]])
+  len <- vec_size(out[[1]])
   out[["level"]] <- vctrs::vec_recycle(size, len)
 
   vctrs::new_rcrd(out, class = "hilo")

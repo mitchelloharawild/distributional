@@ -98,20 +98,21 @@ hdr.dist_default <- function(x, size = 95, n = 512, ...){
     index <- it[dd <= 0]
     # unique() removes possible duplicates if sequential dd has same value.
     # More robust approach is required.
-    unique(
+    out <- unique(
       vapply(
         index,
         function(.x) stats::approx(y[.x + c(0,1)], x[.x + c(0,1)], xout = alpha)$y,
         numeric(1L)
       )
     )
+    # Add boundary values which may exceed the crossing point.
+    c(x[1][y[1]>alpha], out, x[length(x)][y[length(y)]>alpha])
   }
 
   # purrr::map(alpha, crossing_alpha, dist_x, dist_y)
   hdr <- crossing_alpha(alpha, dist_x, dist_y)
   lower_hdr <- seq_along(hdr)%%2==1
-  hdr <- new_hilo(hdr[lower_hdr], hdr[!lower_hdr], size = size)
-  new_hdr(list(hdr))
+  new_hdr(lower = list(hdr[lower_hdr]), upper = list(hdr[!lower_hdr]), size = size)
 }
 
 #' @export
