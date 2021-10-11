@@ -68,7 +68,7 @@ generate.dist_na <- function(x, times, ...){
 mean.dist_na <- function(x, ...) NA_real_
 
 #' @export
-variance.dist_na <- function(x, ...) NA_real_
+covariance.dist_na <- function(x, ...) NA_real_
 
 #' @export
 skewness.dist_na <- function(x, ...) NA_real_

@@ -70,7 +70,7 @@ mean.dist_transformed <- function(x, ...){
 }
 
 #' @export
-variance.dist_transformed <- function(x, ...){
+covariance.dist_transformed <- function(x, ...){
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
   if(is.na(sigma2)) return(NA_real_)

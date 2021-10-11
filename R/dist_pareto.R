@@ -73,6 +73,6 @@ mean.dist_pareto <- function(x, ...){
 }
 
 #' @export
-variance.dist_pareto <- function(x, ...){
+covariance.dist_pareto <- function(x, ...){
   actuar::mpareto(2, x[["shape"]], x[["scale"]]) - actuar::mpareto(1, x[["shape"]], x[["scale"]])^2
 }

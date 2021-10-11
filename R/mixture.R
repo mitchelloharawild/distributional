@@ -79,7 +79,7 @@ mean.dist_mixture <- function(x, ...){
 }
 
 #' @export
-variance.dist_mixture <- function(x, ...){
+covariance.dist_mixture <- function(x, ...){
   m <- vapply(x[["dist"]], mean, numeric(1L), ...)
   v <- vapply(x[["dist"]], variance, numeric(1L), ...)
   m1 <- sum(x[["w"]]*m)

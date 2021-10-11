@@ -121,7 +121,7 @@ mean.dist_cauchy <- function(x, ...){
 }
 
 #' @export
-variance.dist_cauchy <- function(x, ...){
+covariance.dist_cauchy <- function(x, ...){
   NA_real_
 }
 

@@ -142,7 +142,7 @@ mean.dist_binomial <- function(x, ...){
 }
 
 #' @export
-variance.dist_binomial <- function(x, ...){
+covariance.dist_binomial <- function(x, ...){
   x[["n"]]*x[["p"]]*(1-x[["p"]])
 }
 

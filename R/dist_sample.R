@@ -69,7 +69,7 @@ mean.dist_sample <- function(x, ...){
 }
 
 #' @export
-variance.dist_sample <- function(x, ...){
+covariance.dist_sample <- function(x, ...){
   vapply(x, stats::var, numeric(1L), ..., USE.NAMES = FALSE)
 }
 

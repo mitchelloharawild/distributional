@@ -73,6 +73,6 @@ mean.dist_poisson_inverse_gaussian <- function(x, ...){
 }
 
 #' @export
-variance.dist_poisson_inverse_gaussian <- function(x, ...){
+covariance.dist_poisson_inverse_gaussian <- function(x, ...){
   x[["m"]]/x[["s"]] * (x[["m"]]^2 + x[["s"]])
 }

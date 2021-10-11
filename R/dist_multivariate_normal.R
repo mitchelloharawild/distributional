@@ -75,7 +75,7 @@ mean.dist_mvnorm <- function(x, ...){
 }
 
 #' @export
-variance.dist_mvnorm <- function(x, ...){
+covariance.dist_mvnorm <- function(x, ...){
   # Wrap in list to preserve matrix structure
   list(x[["sigma"]])
 }

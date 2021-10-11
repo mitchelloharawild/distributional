@@ -122,7 +122,7 @@ mean.dist_gumbel <- function(x, ...){
 }
 
 #' @export
-variance.dist_gumbel <- function(x, ...){
+covariance.dist_gumbel <- function(x, ...){
   (pi*x[["s"]])^2/6
 }
 

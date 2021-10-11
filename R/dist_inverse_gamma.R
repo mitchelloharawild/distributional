@@ -74,7 +74,7 @@ mean.dist_inverse_gamma <- function(x, ...){
 }
 
 #' @export
-variance.dist_inverse_gamma <- function(x, ...){
+covariance.dist_inverse_gamma <- function(x, ...){
   if(x[["s"]] <= 2) return(NA_real_)
   1/(x[["r"]]^2*(x[["s"]]-1)^2*(x[["s"]]-2))
 }

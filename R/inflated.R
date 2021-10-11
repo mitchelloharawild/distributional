@@ -64,7 +64,7 @@ mean.dist_inflated <- function(x, ...){
 }
 
 #' @export
-variance.dist_inflated <- function(x, ...){
+covariance.dist_inflated <- function(x, ...){
   # Can't compute if inflation value is not numeric
   if(!vec_is(x[["x"]], numeric())) return(NA_real_)
   # Can't (easily) compute if inflation value is not zero

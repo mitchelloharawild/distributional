@@ -141,7 +141,7 @@ mean.dist_uniform <- function(x, ...){
 }
 
 #' @export
-variance.dist_uniform <- function(x, ...){
+covariance.dist_uniform <- function(x, ...){
   (x[["u"]]-x[["l"]])^2/12
 }
 

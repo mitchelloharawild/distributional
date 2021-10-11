@@ -99,7 +99,7 @@ mean.dist_degenerate <- function(x, ...){
 }
 
 #' @export
-variance.dist_degenerate <- function(x, ...){
+covariance.dist_degenerate <- function(x, ...){
   0
 }
 

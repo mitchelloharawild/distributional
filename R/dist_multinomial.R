@@ -111,7 +111,7 @@ mean.dist_multinomial <- function(x, ...){
 }
 
 #' @export
-variance.dist_multinomial <- function(x, ...){
+covariance.dist_multinomial <- function(x, ...){
   s <- x[["s"]]
   p <- x[["p"]]
   v <- numeric(length(p)^2)

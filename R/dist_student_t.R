@@ -144,7 +144,7 @@ mean.dist_student_t <- function(x, ...){
 }
 
 #' @export
-variance.dist_student_t <- function(x, ...){
+covariance.dist_student_t <- function(x, ...){
   df <- x[["df"]]
   ncp <- x[["ncp"]]
   if(df <= 1) return(NA_real_)

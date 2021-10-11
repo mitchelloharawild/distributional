@@ -120,7 +120,7 @@ mean.dist_hypergeometric <- function(x, ...){
 }
 
 #' @export
-variance.dist_hypergeometric <- function(x, ...){
+covariance.dist_hypergeometric <- function(x, ...){
   m <- x[["m"]]
   n <- x[["n"]]
   k <- x[["k"]]

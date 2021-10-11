@@ -64,7 +64,13 @@ mean.dist_default <- function(x, ...){
 }
 #' @export
 variance.dist_default <- function(x, ...){
-  stats::var(generate(x, times = 1000), na.rm = TRUE)
+  x <- covariance(x, ...)
+  if(is.matrix(x)) diag(x) else x
+}
+#' @export
+covariance.dist_default <- function(x, ...){
+  x <- generate(x, times = 1000)
+  if(is.matrix(x)) stats::cov(x) else stats::var(x, na.rm = TRUE)
 }
 
 #' @export

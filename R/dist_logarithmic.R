@@ -69,7 +69,7 @@ mean.dist_logarithmic <- function(x, ...){
 }
 
 #' @export
-variance.dist_logarithmic <- function(x, ...){
+covariance.dist_logarithmic <- function(x, ...){
   p <- x[["p"]]
   -(p^2 + p*log(1-p))/((1-p)*log(1-p))^2
 }

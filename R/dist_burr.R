@@ -78,7 +78,7 @@ mean.dist_burr <- function(x, ...){
 }
 
 #' @export
-variance.dist_burr <- function(x, ...){
+covariance.dist_burr <- function(x, ...){
   require_package("actuar")
   m1 <- actuar::mburr(1, x[["s1"]], x[["s2"]], x[["r"]])
   m2 <- actuar::mburr(2, x[["s1"]], x[["s2"]], x[["r"]])

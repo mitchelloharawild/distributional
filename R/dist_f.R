@@ -156,7 +156,7 @@ mean.dist_f <- function(x, ...){
 }
 
 #' @export
-variance.dist_f <- function(x, ...){
+covariance.dist_f <- function(x, ...){
   df1 <- x[["df1"]]
   df2 <- x[["df2"]]
   if(df2 > 4) {

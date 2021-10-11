@@ -116,7 +116,7 @@ mean.dist_weibull <- function(x, ...){
 }
 
 #' @export
-variance.dist_weibull <- function(x, ...){
+covariance.dist_weibull <- function(x, ...){
   x[["scale"]]^2 * (gamma(1 + 2/x[["shape"]]) - gamma(1 + 1/x[["shape"]])^2)
 }
 

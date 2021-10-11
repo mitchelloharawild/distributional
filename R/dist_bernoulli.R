@@ -133,7 +133,7 @@ mean.dist_bernoulli <- function(x, ...){
 }
 
 #' @export
-variance.dist_bernoulli <- function(x, ...){
+covariance.dist_bernoulli <- function(x, ...){
   x[["p"]]*(1-x[["p"]])
 }
 

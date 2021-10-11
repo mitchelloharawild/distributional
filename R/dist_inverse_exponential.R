@@ -68,6 +68,6 @@ mean.dist_inverse_exponential <- function(x, ...){
 }
 
 #' @export
-variance.dist_inverse_exponential <- function(x, ...){
+covariance.dist_inverse_exponential <- function(x, ...){
   NA_real_
 }

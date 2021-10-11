@@ -121,7 +121,7 @@ mean.dist_negbin <- function(x, ...){
 }
 
 #' @export
-variance.dist_negbin <- function(x, ...){
+covariance.dist_negbin <- function(x, ...){
   x[["n"]] * (1 - x[["p"]]) / x[["p"]]^2
 }
 

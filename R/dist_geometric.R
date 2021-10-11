@@ -118,7 +118,7 @@ mean.dist_geometric <- function(x, ...){
 }
 
 #' @export
-variance.dist_geometric <- function(x, ...){
+covariance.dist_geometric <- function(x, ...){
   (1 - x[["p"]])/x[["p"]]^2
 }
 

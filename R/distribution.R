@@ -244,7 +244,7 @@ mean.distribution <- function(x, ...){
 #' array, it will still return the variance ([`stats::var()`] returns the
 #' covariance matrix in that case).
 #'
-#' @seealso [`variance.distribution()`]
+#' @seealso [`variance.distribution()`], [`covariance()`]
 #'
 #' @export
 variance <- function(x, ...){
@@ -276,6 +276,46 @@ variance.numeric <- function(x, ...){
 #' @export
 variance.distribution <- function(x, ...){
   dist_apply(x, variance, ...)
+}
+
+#' Covariance
+#'
+#' A generic function for computing the covariance of an object.
+#'
+#' @param x An object.
+#' @param ... Additional arguments used by methods.
+#'
+#' @seealso [`covariance.distribution()`], [`variance()`]
+#'
+#' @export
+covariance <- function(x, ...){
+  UseMethod("covariance")
+}
+#' @export
+covariance.default <- function(x, ...){
+  stop(
+    "The covariance() method is not supported for objects of type ",
+    paste(deparse(class(x)), collapse = "")
+  )
+}
+#' @rdname variance
+#' @export
+covariance.numeric <- function(x, ...){
+  stats::cov(x, ...)
+}
+#' Covariance of a probability distribution
+#'
+#' \lifecycle{stable}
+#'
+#' Returns the empirical covariance of the probability distribution. If the
+#' method does not exist, the covariance of a random sample will be returned.
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @export
+covariance.distribution <- function(x, ...){
+  dist_apply(x, covariance, ...)
 }
 
 #' Skewness of a probability distribution

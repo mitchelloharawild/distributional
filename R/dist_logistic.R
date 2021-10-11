@@ -123,7 +123,7 @@ mean.dist_logistic <- function(x, ...){
 }
 
 #' @export
-variance.dist_logistic <- function(x, ...){
+covariance.dist_logistic <- function(x, ...){
   (x[["s"]]*pi)^2/3
 }
 

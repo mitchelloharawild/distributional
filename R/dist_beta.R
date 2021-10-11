@@ -80,7 +80,7 @@ mean.dist_beta <- function(x, ...){
 }
 
 #' @export
-variance.dist_beta <- function(x, ...){
+covariance.dist_beta <- function(x, ...){
   a <- x[["shape1"]]
   b <- x[["shape2"]]
   a*b/((a+b)^2*(a+b+1))

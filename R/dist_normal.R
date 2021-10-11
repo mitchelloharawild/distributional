@@ -149,7 +149,7 @@ mean.dist_normal <- function(x, ...){
 }
 
 #' @export
-variance.dist_normal <- function(x, ...){
+covariance.dist_normal <- function(x, ...){
   x[["sigma"]]^2
 }
 

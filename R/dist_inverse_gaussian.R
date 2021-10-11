@@ -73,6 +73,6 @@ mean.dist_inverse_gaussian <- function(x, ...){
 }
 
 #' @export
-variance.dist_inverse_gaussian <- function(x, ...){
+covariance.dist_inverse_gaussian <- function(x, ...){
   x[["m"]]^3/x[["s"]]
 }

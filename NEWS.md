@@ -9,16 +9,24 @@
 ### Generics
 
 * Added `parameters()` generic for obtaining the distribution's parameters.
+* Added `covariance()` to return the covariance of a distribution.
 
 ## Improvements
 
 * `variance()` now always returns a variance. It will not default to providing
-  a covariance matrix for matrices.
+  a covariance matrix for matrices. This also applies to multivariate 
+  distributions such as `dist_multivariate_normal()`. The covariance can now
+  be obtained using the `covariance()` function.
   
 ## Bug fixes
 
 * Fixed fallback `format()` function for distributions classes that have not
   defined this method (#67).
+
+## Breaking changes
+
+* `variance()` on a `dist_multivariate_normal()` will now return the diagonal
+  instead of the complete variance-covariance matrix.
 
 # distributional 0.2.2
 

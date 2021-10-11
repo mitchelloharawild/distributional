@@ -125,7 +125,7 @@ mean.dist_categorical <- function(x, ...){
 }
 
 #' @export
-variance.dist_categorical <- function(x, ...){
+covariance.dist_categorical <- function(x, ...){
   NA_real_
 }
 

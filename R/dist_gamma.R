@@ -136,7 +136,7 @@ mean.dist_gamma <- function(x, ...){
 }
 
 #' @export
-variance.dist_gamma <- function(x, ...){
+covariance.dist_gamma <- function(x, ...){
   x[["shape"]] / x[["rate"]]^2
 }
 

@@ -132,7 +132,7 @@ mean.dist_chisq <- function(x, ...){
 }
 
 #' @export
-variance.dist_chisq <- function(x, ...){
+covariance.dist_chisq <- function(x, ...){
   2*(x[["df"]] + 2*x[["ncp"]])
 }
 

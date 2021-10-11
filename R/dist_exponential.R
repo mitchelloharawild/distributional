@@ -78,7 +78,7 @@ mean.dist_exponential <- function(x, ...){
 }
 
 #' @export
-variance.dist_exponential <- function(x, ...){
+covariance.dist_exponential <- function(x, ...){
   1/x[["rate"]]^2
 }
 

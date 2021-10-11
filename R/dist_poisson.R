@@ -121,7 +121,7 @@ mean.dist_poisson <- function(x, ...){
 }
 
 #' @export
-variance.dist_poisson <- function(x, ...){
+covariance.dist_poisson <- function(x, ...){
   x[["l"]]
 }
 

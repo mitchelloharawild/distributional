@@ -3,11 +3,14 @@
 \name{variance}
 \alias{variance}
 \alias{variance.numeric}
+\alias{covariance.numeric}
 \title{Variance}
 \usage{
 variance(x, ...)
 
 \method{variance}{numeric}(x, ...)
+
+\method{covariance}{numeric}(x, ...)
 }
 \arguments{
 \item{x}{An object.}
@@ -25,5 +28,5 @@ array, it will still return the variance (\code{\link[stats:cor]{stats::var()}} 
 covariance matrix in that case).
 }
 \seealso{
-\code{\link[=variance.distribution]{variance.distribution()}}
+\code{\link[=variance.distribution]{variance.distribution()}}, \code{\link[=covariance]{covariance()}}
 }
