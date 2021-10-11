@@ -4,10 +4,12 @@
 \alias{dist_categorical}
 \title{The Categorical distribution}
 \usage{
-dist_categorical(prob)
+dist_categorical(prob, categories = NULL)
 }
 \arguments{
 \item{prob}{A list of probabilities of observing each outcome category.}
+
+\item{categories}{The values used to represent each outcome.}
 }
 \description{
 \lifecycle{stable}
@@ -66,5 +68,15 @@ mean(dist)
 variance(dist)
 skewness(dist)
 kurtosis(dist)
+
+dist <- dist_categorical(
+  prob = list(c(0.05, 0.5, 0.15, 0.2, 0.1), c(0.3, 0.1, 0.6)),
+  categories = list(letters[1:5], letters[24:26])
+)
+
+generate(dist, 10)
+
+density(dist, "a")
+density(dist, "z", log = TRUE)
 
 }
