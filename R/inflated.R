@@ -10,8 +10,6 @@
 #' @export
 dist_inflated <- function(dist, prob, x = 0){
   vec_is(dist, new_dist())
-  vec_is(x, numeric())
-  vec_is(x, numeric())
   if(prob < 0 || prob > 1){
     abort("The inflation probability must be between 0 and 1.")
   }
@@ -23,7 +21,7 @@ dist_inflated <- function(dist, prob, x = 0){
 format.dist_inflated <- function(x, ...){
   sprintf(
     "%i+%s",
-    x[["x"]],
+    format(x[["x"]]),
     format(x[["dist"]])
   )
 }
