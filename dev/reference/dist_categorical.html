@@ -130,7 +130,7 @@
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#stable'><img src='figures/lifecycle-stable.svg' alt='[Stable]' /></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_categorical</span><span class='op'>(</span><span class='va'>prob</span>, categories <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>dist_categorical</span><span class='op'>(</span><span class='va'>prob</span>, outcomes <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,7 +140,7 @@
       <td><p>A list of probabilities of observing each outcome category.</p></td>
     </tr>
     <tr>
-      <th>categories</th>
+      <th>outcomes</th>
       <td><p>The values used to represent each outcome.</p></td>
     </tr>
     </table>
@@ -197,7 +197,7 @@ each number on a 6 sided dice.</p>
 </div><div class='output co'>#&gt; [1] NA NA</div><div class='input'>
 <span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_categorical</span><span class='op'>(</span>
   prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.15</span>, <span class='fl'>0.2</span>, <span class='fl'>0.1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.3</span>, <span class='fl'>0.1</span>, <span class='fl'>0.6</span><span class='op'>)</span><span class='op'>)</span>,
-  categories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>, <span class='va'>letters</span><span class='op'>[</span><span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span><span class='op'>]</span><span class='op'>)</span>
+  outcomes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>, <span class='va'>letters</span><span class='op'>[</span><span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span><span class='op'>]</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
