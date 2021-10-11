@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Variance — variance • distributional</title>
+<title>Covariance of a probability distribution — covariance.distribution • distributional</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Variance — variance" />
-<meta property="og:description" content="A generic function for computing the variance of an object." />
+<meta property="og:title" content="Covariance of a probability distribution — covariance.distribution" />
+<meta property="og:description" content="" />
 
 
 <meta name="robots" content="noindex">
@@ -121,21 +121,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Variance</h1>
+    <h1>Covariance of a probability distribution</h1>
     <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/distribution.R'><code>R/distribution.R</code></a></small>
-    <div class="hidden name"><code>variance.Rd</code></div>
+    <div class="hidden name"><code>covariance.distribution.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A generic function for computing the variance of an object.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#stable'><img src='figures/lifecycle-stable.svg' alt='[Stable]' /></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>variance</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for numeric</span>
-<span class='fu'>variance</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for numeric</span>
+    <pre class="usage"><span class='co'># S3 method for distribution</span>
 <span class='fu'><a href='covariance.html'>covariance</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -143,7 +138,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object.</p></td>
+      <td><p>The distribution(s).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -153,14 +148,8 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The implementation of <code>variance()</code> for numeric variables coerces the input to
-a vector then uses <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code> to compute the variance. This means that,
-unlike <code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code>, if <code>variance()</code> is passed a matrix or a 2-dimensional
-array, it will still return the variance (<code><a href='https://rdrr.io/r/stats/cor.html'>stats::var()</a></code> returns the
-covariance matrix in that case).</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='variance.distribution.html'>variance.distribution()</a></code>, <code><a href='covariance.html'>covariance()</a></code></p></div>
+    <p>Returns the empirical covariance of the probability distribution. If the
+method does not exist, the covariance of a random sample will be returned.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

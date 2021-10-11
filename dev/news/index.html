@@ -143,6 +143,7 @@
 <a href="#generics" class="anchor"></a>Generics</h3>
 <ul>
 <li>Added <code><a href="../reference/parameters.html">parameters()</a></code> generic for obtaining the distribution’s parameters.</li>
+<li>Added <code><a href="../reference/covariance.html">covariance()</a></code> to return the covariance of a distribution.</li>
 </ul>
 </div>
 </div>
@@ -151,7 +152,7 @@
 <a href="#improvements" class="anchor"></a>Improvements</h2>
 <ul>
 <li>
-<code><a href="../reference/variance.html">variance()</a></code> now always returns a variance. It will not default to providing a covariance matrix for matrices.</li>
+<code><a href="../reference/variance.html">variance()</a></code> now always returns a variance. It will not default to providing a covariance matrix for matrices. This also applies to multivariate distributions such as <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code>. The covariance can now be obtained using the <code><a href="../reference/covariance.html">covariance()</a></code> function.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -159,6 +160,14 @@
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed fallback <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> function for distributions classes that have not defined this method (<a href='https://github.com/mitchelloharawild/distributional/issues/67'>#67</a>).</li>
+</ul>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>
+<code><a href="../reference/variance.html">variance()</a></code> on a <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> will now return the diagonal instead of the complete variance-covariance matrix.</li>
 </ul>
 </div>
 </div>
