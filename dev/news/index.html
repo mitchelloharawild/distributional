@@ -154,6 +154,13 @@
 <code><a href="../reference/variance.html">variance()</a></code> now always returns a variance. It will not default to providing a covariance matrix for matrices.</li>
 </ul>
 </div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed fallback <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> function for distributions classes that have not defined this method (<a href='https://github.com/mitchelloharawild/distributional/issues/67'>#67</a>).</li>
+</ul>
+</div>
 </div>
     <div id="distributional-022" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.2">
@@ -174,9 +181,9 @@
 <li>Added <code>as.character(&lt;hilo&gt;)</code> method, allowing datasets containing <code><a href="../reference/hilo.html">hilo()</a></code> objects to be saved as a text file (<a href='https://github.com/mitchelloharawild/distributional/issues/57'>#57</a>).</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue with <code><a href="../reference/hdr.html">hdr()</a></code> range <code>size</code> incorrectly being treated as <code>100-size</code>, giving 5% ranges for 95% sizes and vice-versa (<a href='https://github.com/mitchelloharawild/distributional/issues/61'>#61</a>).</li>
 </ul>
@@ -212,9 +219,9 @@
 <li>Improved vectorisation of distribution methods.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue with computing the median of <code><a href="../reference/dist_truncated.html">dist_truncated()</a></code> distributions.</li>
 <li>Fixed format method for <code><a href="../reference/dist_truncated.html">dist_truncated()</a></code> distributions with no upper or lower limit.</li>
