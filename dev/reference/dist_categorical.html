@@ -130,7 +130,7 @@
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#stable'><img src='figures/lifecycle-stable.svg' alt='[Stable]' /></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_categorical</span><span class='op'>(</span><span class='va'>prob</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>dist_categorical</span><span class='op'>(</span><span class='va'>prob</span>, categories <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,6 +138,10 @@
     <tr>
       <th>prob</th>
       <td><p>A list of probabilities of observing each outcome category.</p></td>
+    </tr>
+    <tr>
+      <th>categories</th>
+      <td><p>The values used to represent each outcome.</p></td>
     </tr>
     </table>
 
@@ -191,6 +195,21 @@ each number on a 6 sided dice.</p>
 </div><div class='output co'>#&gt; [1] NA NA</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] NA NA</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] NA NA</div><div class='input'>
+<span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_categorical</span><span class='op'>(</span>
+  prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.15</span>, <span class='fl'>0.2</span>, <span class='fl'>0.1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.3</span>, <span class='fl'>0.1</span>, <span class='fl'>0.6</span><span class='op'>)</span><span class='op'>)</span>,
+  categories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>, <span class='va'>letters</span><span class='op'>[</span><span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt;  [1] "a" "b" "d" "b" "b" "d" "d" "b" "e" "d"
+#&gt; 
+#&gt; [[2]]
+#&gt;  [1] "y" "z" "x" "z" "y" "x" "x" "x" "z" "z"
+#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='st'>"a"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.05   NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='st'>"z"</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]         NA -0.5108256</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
