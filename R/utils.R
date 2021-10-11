@@ -26,7 +26,7 @@ split_matrix_rows <- function(x) {
 # Declare a function's argument as allowing list inputs for mapping values
 arg_listable <- function(x, .ptype) {
   if(is.list(x)) {
-    x <- as_list_of(x, .ptype)
+    x <- as_list_of(as.list(x), .ptype)
     if(is.matrix(attr(x, "ptype"))) {
       x <- lapply(x, split_matrix_rows)
       x <- as_list_of(x, .ptype)
