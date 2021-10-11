@@ -14,6 +14,11 @@
 
 * `variance()` now always returns a variance. It will not default to providing
   a covariance matrix for matrices.
+  
+## Bug fixes
+
+* Fixed fallback `format()` function for distributions classes that have not
+  defined this method (#67).
 
 # distributional 0.2.2
 

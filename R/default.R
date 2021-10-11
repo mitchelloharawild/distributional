@@ -117,7 +117,7 @@ hdr.dist_default <- function(x, size = 95, n = 512, ...){
 
 #' @export
 format.dist_default <- function(x, ...){
-  rep_along("?", x)
+  "?"
 }
 
 #' @export
