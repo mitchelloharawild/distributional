@@ -9,7 +9,7 @@
 #' distribution with `n = 1`.
 #'
 #' @param prob A list of probabilities of observing each outcome category.
-#' @param categories The values used to represent each outcome.
+#' @param outcomes The values used to represent each outcome.
 #' @details
 #'
 #'   We recommend reading this documentation on
@@ -62,7 +62,7 @@
 #'
 #' dist <- dist_categorical(
 #'   prob = list(c(0.05, 0.5, 0.15, 0.2, 0.1), c(0.3, 0.1, 0.6)),
-#'   categories = list(letters[1:5], letters[24:26])
+#'   outcomes = list(letters[1:5], letters[24:26])
 #' )
 #'
 #' generate(dist, 10)
@@ -71,13 +71,13 @@
 #' density(dist, "z", log = TRUE)
 #'
 #' @export
-dist_categorical <- function(prob, categories = NULL){
+dist_categorical <- function(prob, outcomes = NULL){
   prob <- lapply(prob, function(x) x/sum(x))
   prob <- as_list_of(prob, .ptype = double())
-  if(is.null(categories)) {
+  if(is.null(outcomes)) {
     new_dist(p = prob, class = "dist_categorical")
   } else {
-    new_dist(p = prob, c = categories, class = "dist_categorical")
+    new_dist(p = prob, x = outcomes, class = "dist_categorical")
   }
 }
 
@@ -96,7 +96,7 @@ format.dist_categorical <- function(x, digits = 2, ...){
 
 #' @export
 density.dist_categorical <- function(x, at, ...){
-  if(!is.null(x[["c"]])) at <- match(at, x[["c"]])
+  if(!is.null(x[["x"]])) at <- match(at, x[["x"]])
   x[["p"]][at]
 }
 
@@ -115,8 +115,8 @@ generate.dist_categorical <- function(x, times, ...){
   z <- sample(
     x = seq_along(x[["p"]]), size = times, prob = x[["p"]], replace = TRUE
   )
-  if(is.null(x[["c"]])) return(z)
-  x[["c"]][z]
+  if(is.null(x[["x"]])) return(z)
+  x[["x"]][z]
 }
 
 #' @export
