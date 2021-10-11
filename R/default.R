@@ -65,7 +65,9 @@ mean.dist_default <- function(x, ...){
 #' @export
 variance.dist_default <- function(x, ...){
   x <- covariance(x, ...)
-  if(is.matrix(x)) diag(x) else x
+  if(is.matrix(x[[1]]) && ncol(x[[1]]) > 1){
+    matrix(diag(x[[1]]), nrow = 1)
+  } else x
 }
 #' @export
 covariance.dist_default <- function(x, ...){
