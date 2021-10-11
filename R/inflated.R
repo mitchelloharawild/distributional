@@ -20,7 +20,7 @@ dist_inflated <- function(dist, prob, x = 0){
 #' @export
 format.dist_inflated <- function(x, ...){
   sprintf(
-    "%i+%s",
+    "%s+%s",
     format(x[["x"]]),
     format(x[["dist"]])
   )
