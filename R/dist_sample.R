@@ -43,8 +43,7 @@ density.dist_sample <- function(x, at, ...){
 
 #' @export
 quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
-  if(length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
-  vapply(x, quantile, numeric(1L), probs = p, ..., na.rm = na.rm, USE.NAMES = FALSE)
+  quantile(x$x, probs = p, ..., na.rm = na.rm, names = FALSE)
 }
 
 #' @export
