@@ -63,15 +63,17 @@ dist_apply <- function(x, .f, ...){
 
   args <- dots_list(...)
   is_arg_listable <- vapply(args, inherits, FUN.VALUE = logical(1L), "arg_listable")
-  unpack_listable <- FALSE
+  unpack_listable <- multi_arg <- FALSE
   if(any(is_arg_listable)) {
     if(sum(is_arg_listable) > 1) abort("Only distribution argument can be unpacked at a time.\nThis shouldn't happen, please report a bug at https://github.com/mitchelloharawild/distributional/issues/")
     arg_pos <- which(is_arg_listable)
-    validate_recycling(x, args[[arg_pos]])
 
     if(unpack_listable <- is_list_of(args[[arg_pos]])) {
+      validate_recycling(x, args[[arg_pos]])
       .unpack_names <- names(args[[arg_pos]])
       args[[arg_pos]] <- transpose_c(args[[arg_pos]])
+    } else if (multi_arg <- (length(args[[arg_pos]]) > 1)){
+      args[[arg_pos]] <- list(unclass(args[[arg_pos]]))
     }
   }
 
@@ -92,6 +94,8 @@ dist_apply <- function(x, .f, ...){
     out <- new_data_frame(out, n = vec_size(x))
   # } else if(length(out[[1]]) > 1) {
   #   out <- suppressMessages(vctrs::vec_rbind(!!!out))
+  } else if(multi_arg) {
+    out <- lapply(out, `colnames<-`, dn)
   } else {
     out <- vctrs::vec_c(!!!out)
     if(is.matrix(out) && !is.null(dn)){
