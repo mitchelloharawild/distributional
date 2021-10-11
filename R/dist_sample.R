@@ -36,6 +36,10 @@ format.dist_sample <- function(x, ...){
 
 #' @export
 density.dist_sample <- function(x, at, ...){
+  # Shortcut if only one point in density is needed
+  if(vec_size(at) == 1){
+    return(density(x[["x"]], from = at, to = at, n = 1)$y)
+  }
   d <- density(x[["x"]], from = min(at), to = max(at))
   stats::approx(d$x, d$y, xout = at)$y
 }
