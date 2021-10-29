@@ -153,6 +153,8 @@
 <ul>
 <li>
 <code><a href="../reference/variance.html">variance()</a></code> now always returns a variance. It will not default to providing a covariance matrix for matrices. This also applies to multivariate distributions such as <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code>. The covariance can now be obtained using the <code><a href="../reference/covariance.html">covariance()</a></code> function.</li>
+<li>
+<code><a href="../reference/dist_wrap.html">dist_wrap()</a></code> can now search for distribution functions in any environment, not just packages. If the <code>package</code> argument is <code>NULL</code>, it will search the calling environment for the functions. You can also provide a package name as before, and additionally an arbitrary environment to this argument.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
