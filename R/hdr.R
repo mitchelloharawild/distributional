@@ -1,6 +1,8 @@
 #' Construct hdr intervals
 #'
-#' @param x A list of [`hilo()`] objects.
+#' @param lower,upper A list of numeric vectors specifying the region's lower
+#' and upper bounds.
+#' @param size A numeric vector specifying the coverage size of the region.
 #'
 #' @return A "hdr" vector
 #'

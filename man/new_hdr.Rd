@@ -11,7 +11,10 @@ new_hdr(
 )
 }
 \arguments{
-\item{x}{A list of \code{\link[=hilo]{hilo()}} objects.}
+\item{lower, upper}{A list of numeric vectors specifying the region's lower
+and upper bounds.}
+
+\item{size}{A numeric vector specifying the coverage size of the region.}
 }
 \value{
 A "hdr" vector
