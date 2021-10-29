@@ -17,6 +17,10 @@
   a covariance matrix for matrices. This also applies to multivariate 
   distributions such as `dist_multivariate_normal()`. The covariance can now
   be obtained using the `covariance()` function.
+* `dist_wrap()` can now search for distribution functions in any environment,
+  not just packages. If the `package` argument is `NULL`, it will search the
+  calling environment for the functions. You can also provide a package name as
+  before, and additionally an arbitrary environment to this argument.
   
 ## Bug fixes
 

@@ -4,7 +4,7 @@
 \alias{dist_wrap}
 \title{Create a distribution from p/d/q/r style functions}
 \usage{
-dist_wrap(dist, ..., package = "stats")
+dist_wrap(dist, ..., package = NULL)
 }
 \arguments{
 \item{dist}{The name of the distribution used in the functions (name that is
@@ -12,7 +12,9 @@ prefixed by p/d/q/r)}
 
 \item{...}{Named arguments used to parameterise the distribution.}
 
-\item{package}{The package from which the distribution is provided.}
+\item{package}{The package from which the distribution is provided. If NULL,
+the calling environment's search path is used to find the distribution
+functions. Alternatively, an arbitrary environment can also be provided here.}
 }
 \description{
 \lifecycle{experimental}

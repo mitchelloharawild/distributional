@@ -14,7 +14,9 @@
 #' @param dist The name of the distribution used in the functions (name that is
 #' prefixed by p/d/q/r)
 #' @param ... Named arguments used to parameterise the distribution.
-#' @param package The package from which the distribution is provided.
+#' @param package The package from which the distribution is provided. If NULL,
+#' the calling environment's search path is used to find the distribution
+#' functions. Alternatively, an arbitrary environment can also be provided here.
 # #' @param p,d,q,r The functions used to compute the p/d/q/r
 # #' (pdf/cdf/quantile/generate)
 #'
@@ -34,11 +36,16 @@
 #' generate(dist, 10) # actuar::rinvparalogis()
 #'
 #' @export
-dist_wrap <- function(dist, ..., package = "stats"){
-                      # p = NULL, d = NULL, q = NULL, r = NULL){
+dist_wrap <- function(dist, ..., package = NULL){
   vec_assert(dist, character(), 1L)
-  vec_assert(package, character(), 1L)
-  par <- vec_recycle_common(dist = dist, package = package, ...)
+  if(is.null(package)) {
+    env <- rlang::caller_env()
+  } else if (is.character(package)) {
+    env <- rlang::pkg_env(package)
+  } else {
+    env <- as.environment(package)
+  }
+  par <- vec_recycle_common(dist = dist, env = list(env), ...)
   new_dist(!!!par, class = "dist_wrap")
 }
 
@@ -53,45 +60,55 @@ format.dist_wrap <- function(x, ...){
 
 #' @export
 density.dist_wrap <- function(x, at, ...){
-  fn <- paste0("d", x[["dist"]][[1]])
-  env <- rlang::pkg_env(x[["package"]][[1]])
-  # fn <- get(fn, env = env, mode = "function")
+  fn <- get(paste0("d", x[["dist"]][[1]]), envir = x$env, mode = "function")
+
+  # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, at, !!!par), env = env)
+
+  do.call(fn, c(list(at), par))
 }
 
 #' @export
 log_density.dist_wrap <- function(x, at, ...){
-  fn <- paste0("d", x[["dist"]][[1]])
-  env <- rlang::pkg_env(x[["package"]][[1]])
-  # fn <- get(fn, env = env, mode = "function")
+  fn <- get(paste0("d", x[["dist"]][[1]]), envir = x$env, mode = "function")
+
+  # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, at, !!!par, log = TRUE), env = env)
+
+  # Use density(log = TRUE) if supported
+  if(is.null(formals(fn)$log)){
+    log(do.call(fn, c(list(at), par)))
+  } else {
+    do.call(fn, c(list(at), par, log = TRUE))
+  }
 }
 
 #' @export
 cdf.dist_wrap <- function(x, q, ...){
-  fn <- paste0("p", x[["dist"]][[1]])
-  env <- rlang::pkg_env(x[["package"]][[1]])
-  # fn <- get(fn, env = env, mode = "function")
+  fn <- get(paste0("p", x[["dist"]][[1]]), envir = x$env, mode = "function")
+
+  # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, q, !!!par, ...), env = env)
+
+  do.call(fn, c(list(q), par))
 }
 
 #' @export
 quantile.dist_wrap <- function(x, p, ...){
-  fn <- paste0("q", x[["dist"]][[1]])
-  env <- rlang::pkg_env(x[["package"]][[1]])
-  # fn <- get(fn, env = env, mode = "function")
+  fn <- get(paste0("q", x[["dist"]][[1]]), envir = x$env, mode = "function")
+
+  # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, p, !!!par, ...), env = env)
+
+  do.call(fn, c(list(p), par))
 }
 
 #' @export
 generate.dist_wrap <- function(x, times, ...){
-  fn <- paste0("r", x[["dist"]][[1]])
-  env <- rlang::pkg_env(x[["package"]][[1]])
-  # fn <- get(fn, env = env, mode = "function")
+  fn <- get(paste0("r", x[["dist"]][[1]]), envir = x$env, mode = "function")
+
+  # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
-  eval_tidy(call2(fn, times, !!!par), env = env)
+
+  do.call(fn, c(list(times), par))
 }
