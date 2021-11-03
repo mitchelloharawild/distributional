@@ -10,6 +10,7 @@
 
 * Added `parameters()` generic for obtaining the distribution's parameters.
 * Added `covariance()` to return the covariance of a distribution.
+* Added `support()` to identify the distribution's region of support (#8).
 
 ## Improvements
 

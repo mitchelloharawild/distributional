@@ -213,6 +213,24 @@ parameters.distribution <- function(x, ...) {
   x <- lapply(x, function(z) data_frame(!!!z, .name_repair = "minimal"))
   vec_rbind(!!!x)
 }
+#' Region of support of a distribution
+#'
+#' \lifecycle{experimental}
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @name support
+#' @export
+support <- function(x, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("support")
+}
+
+#' @export
+support.distribution <- function(x, ...) {
+  dist_apply(x, support, ...)
+}
 
 #' Mean of a probability distribution
 #'

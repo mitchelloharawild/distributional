@@ -130,3 +130,13 @@ require_package <- function(pkg){
     )
   }
 }
+
+restore_rng <- function(expr, seed = NULL) {
+  old_seed <- .GlobalEnv$.Random.seed
+  # Set new temporary seed
+  set.seed(seed)
+  # Restore previous seed
+  on.exit(.GlobalEnv$.Random.seed <- old_seed)
+
+  expr
+}

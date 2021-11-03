@@ -63,6 +63,11 @@ parameters.dist_default <- function(x, ...) {
 }
 
 #' @export
+support.dist_default <- function(x, ...) {
+  vctrs::vec_init(restore_rng(generate(x, 1)), n = 0L)
+}
+
+#' @export
 mean.dist_default <- function(x, ...){
   mean(generate(x, times = 1000), na.rm = TRUE)
 }
