@@ -32,6 +32,8 @@
 
 * `variance()` on a `dist_multivariate_normal()` will now return the diagonal
   instead of the complete variance-covariance matrix.
+* `dist_bernoulli()` will now return logical values for `quantile()` and 
+  `generate()`.
 
 # distributional 0.2.2
 
