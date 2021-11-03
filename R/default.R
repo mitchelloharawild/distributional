@@ -64,7 +64,9 @@ parameters.dist_default <- function(x, ...) {
 
 #' @export
 support.dist_default <- function(x, ...) {
-  list(vctrs::vec_init(restore_rng(generate(x, 1)), n = 0L))
+  new_support_region(
+    list(vctrs::vec_init(restore_rng(generate(x, 1)), n = 0L))
+  )
 }
 
 #' @export
