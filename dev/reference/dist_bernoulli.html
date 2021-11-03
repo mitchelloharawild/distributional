@@ -183,40 +183,50 @@ probability of flipping a tail.</p>
   $$</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_bernoulli</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>dist</span>
-</div><div class='output co'>#&gt; &lt;distribution[5]&gt;
-#&gt; [1] Bernoulli(0.05) Bernoulli(0.5)  Bernoulli(0.3)  Bernoulli(0.9) 
-#&gt; [5] Bernoulli(0.1) </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.05 0.50 0.30 0.90 0.10</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.0475 0.2500 0.2100 0.0900 0.0900</div><div class='input'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]  4.1294832  0.0000000  0.8728716 -2.6666667  2.6666667</div><div class='input'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 15.052632 -2.000000 -1.238095  5.111111  5.111111</div><div class='input'>
-<span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1] 0 0 0 0 0 0 0 0 0 0
-#&gt; 
-#&gt; [[2]]
-#&gt;  [1] 1 0 0 0 0 0 0 0 0 1
-#&gt; 
-#&gt; [[3]]
-#&gt;  [1] 0 0 1 0 1 1 0 0 0 0
-#&gt; 
-#&gt; [[4]]
-#&gt;  [1] 1 1 1 1 1 1 1 0 1 1
-#&gt; 
-#&gt; [[5]]
-#&gt;  [1] 0 0 0 0 0 0 0 1 1 0
-#&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0 0 0 0 0</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] -Inf -Inf -Inf -Inf -Inf</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1 1 1 1 1</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0 1 0 1 0</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_bernoulli</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.3</span>, <span class='fl'>0.9</span>, <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dist</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;distribution[5]&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] Bernoulli(0.05) Bernoulli(0.5)  Bernoulli(0.3)  Bernoulli(0.9) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5] Bernoulli(0.1) </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.05 0.50 0.30 0.90 0.10</span>
+<span class='r-in'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.0475 0.2500 0.2100 0.0900 0.0900</span>
+<span class='r-in'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  4.1294832  0.0000000  0.8728716 -2.6666667  2.6666667</span>
+<span class='r-in'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 15.052632 -2.000000 -1.238095  5.111111  5.111111</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[1]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 1 0 0 0 0 0 0 0 0 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[3]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0 0 1 0 1 1 0 0 0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[4]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 1 1 1 1 1 1 1 0 1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[5]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0 0 0 0 0 0 0 1 1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0 0 0 0 0</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -Inf -Inf -Inf -Inf -Inf</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1 1 1 1 1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0 1 0 1 0</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

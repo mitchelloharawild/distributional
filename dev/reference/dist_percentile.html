@@ -147,13 +147,14 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dist_normal.html'>dist_normal</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>percentiles</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.99</span>, by <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span><span class='op'>(</span><span class='va'>percentiles</span>, <span class='va'>quantile</span>, <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span><span class='op'>(</span><span class='fl'>1L</span><span class='op'>)</span>, x <span class='op'>=</span> <span class='va'>dist</span><span class='op'>)</span>
-<span class='fu'>dist_percentile</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>percentiles</span><span class='op'>*</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;distribution[1]&gt;
-#&gt; [1] percentile[99]</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dist_normal.html'>dist_normal</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>percentiles</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.99</span>, by <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span><span class='op'>(</span><span class='va'>percentiles</span>, <span class='va'>quantile</span>, <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span><span class='op'>(</span><span class='fl'>1L</span><span class='op'>)</span>, x <span class='op'>=</span> <span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>dist_percentile</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>percentiles</span><span class='op'>*</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;distribution[1]&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] percentile[99]</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -147,31 +147,39 @@
 distributions.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_missing</span><span class='op'>(</span><span class='fl'>3L</span><span class='op'>)</span>
-
-<span class='va'>dist</span>
-</div><div class='output co'>#&gt; &lt;distribution[3]&gt;
-#&gt; [1] NA NA NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA NA NA</div><div class='input'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA NA NA</div><div class='input'>
-<span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1] NA NA NA NA NA NA NA NA NA NA
-#&gt; 
-#&gt; [[2]]
-#&gt;  [1] NA NA NA NA NA NA NA NA NA NA
-#&gt; 
-#&gt; [[3]]
-#&gt;  [1] NA NA NA NA NA NA NA NA NA NA
-#&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA NA NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA NA NA</div><div class='input'>
-<span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA NA NA</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA NA NA</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_missing</span><span class='op'>(</span><span class='fl'>3L</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dist</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;distribution[3]&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[1]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] NA NA NA NA NA NA NA NA NA NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] NA NA NA NA NA NA NA NA NA NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[3]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] NA NA NA NA NA NA NA NA NA NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA NA</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

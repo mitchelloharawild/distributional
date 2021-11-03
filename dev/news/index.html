@@ -144,6 +144,7 @@
 <ul>
 <li>Added <code><a href="../reference/parameters.html">parameters()</a></code> generic for obtaining the distribution’s parameters.</li>
 <li>Added <code><a href="../reference/covariance.html">covariance()</a></code> to return the covariance of a distribution.</li>
+<li>Added <code><a href="../reference/support.html">support()</a></code> to identify the distribution’s region of support (<a href='https://github.com/mitchelloharawild/distributional/issues/8'>#8</a>).</li>
 </ul>
 </div>
 </div>
@@ -302,7 +303,7 @@
 <li>
 <code>distribution</code>: Distributions are represented in a vectorised format using the <a href="https://cran.r-project.org/package=vctrs">vctrs</a> package. This makes distributions suitable for inclusion in model prediction output. A <code>distribution</code> is a container for distribution-specific S3 classes.</li>
 <li>
-<code>hilo</code>: Intervals are also stored in a vector. A <code>hilo</code> consists of a <code>lower</code> bound, <code>upper</code> bound, and confidence <code>level</code>. Each numerical element can be extracted using <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>, for example my_hilo$lower to obtain the lower bounds.</li>
+<code>hilo</code>: Intervals are also stored in a vector. A <code>hilo</code> consists of a <code>lower</code> bound, <code>upper</code> bound, and confidence <code>level</code>. Each numerical element can be extracted using <code>$</code>, for example my_hilo$lower to obtain the lower bounds.</li>
 <li>
 <code>hdr</code>: Highest density regions are currently stored as lists of <code>hilo</code> values. This is an experimental feature, and is likely to be expanded upon in an upcoming release.</li>
 </ul>
@@ -357,7 +358,7 @@
 <a href="#distribution-modifiers" class="anchor"></a>Distribution modifiers</h3>
 <ul>
 <li>Added <code><a href="../reference/dist_inflated.html">dist_inflated()</a></code> which inflates a specific value of a distribution by a given probability. This can be used to produce zero-inflated distributions.</li>
-<li>Added <code><a href="../reference/dist_transformed.html">dist_transformed()</a></code> for transforming distributions. This can be used to produce log distributions such as logNormal: <code><a href="../reference/dist_transformed.html">dist_transformed(dist_normal(), transform = exp, inverse = log)</a></code>
+<li>Added <code><a href="../reference/dist_transformed.html">dist_transformed()</a></code> for transforming distributions. This can be used to produce log distributions such as logNormal: <code>dist_transformed(dist_normal(), transform = exp, inverse = log)</code>
 </li>
 <li>Added <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> for producing weighted mixtures of distributions.</li>
 <li>Added <code><a href="../reference/dist_truncated.html">dist_truncated()</a></code> to impose boundaries on a distribution’s domain via truncation.</li>
