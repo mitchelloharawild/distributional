@@ -24,6 +24,7 @@ reference:
     - parameters.distribution
     - mean.distribution
     - median.distribution
+    - covariance.distribution
     - variance.distribution
     - skewness.distribution
     - kurtosis.distribution
