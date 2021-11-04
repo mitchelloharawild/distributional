@@ -2,9 +2,12 @@
 % Please edit documentation in R/distribution.R
 \name{parameters}
 \alias{parameters}
+\alias{parameters.distribution}
 \title{Extract the parameters of a distribution}
 \usage{
 parameters(x, ...)
+
+\method{parameters}{distribution}(x, ...)
 }
 \arguments{
 \item{x}{The distribution(s).}

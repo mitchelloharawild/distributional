@@ -22,7 +22,7 @@ reference:
     - hdr.distribution
     - mean.distribution
     - median.distribution
-    - parameters
+    - parameters.distribution
     - variance.distribution
     - skewness.distribution
     - kurtosis.distribution

@@ -215,6 +215,7 @@ parameters <- function(x, ...) {
   UseMethod("parameters")
 }
 
+#' @rdname parameters
 #' @export
 parameters.distribution <- function(x, ...) {
   x <- lapply(vec_data(x), parameters)
