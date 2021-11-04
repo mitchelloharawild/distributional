@@ -9,7 +9,7 @@ new_support_region <- function(x, limits = NULL, interval = NULL) {
 }
 
 #' @export
-format.support_region <- function(x) {
+format.support_region <- function(x, ...) {
   vapply(vec_data(x), function(z) {
     out <- if(is.integer(z)) "Z"
     else if(is.numeric(z)) "R"

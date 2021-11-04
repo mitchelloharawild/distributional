@@ -4,8 +4,8 @@ test_that("Bernoulli distribution", {
   expect_equal(format(dist), "Bernoulli(0.4)")
 
   # quantiles
-  expect_equal(quantile(dist, 0.6), stats::qbinom(0.6, 1, 0.4))
-  expect_equal(quantile(dist, 0.61), stats::qbinom(0.61, 1, 0.4))
+  expect_equal(quantile(dist, 0.6), FALSE)
+  expect_equal(quantile(dist, 0.61), TRUE)
 
   # pdf
   expect_equal(density(dist, 0), stats::dbinom(0, 1, 0.4))
