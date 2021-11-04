@@ -76,6 +76,7 @@ reference:
     - dist_missing
     - dist_percentile
     - dist_sample
+    - dist_wrap
 - title: Distribution modifiers
   desc: >
     Modifiers which change the nature of a distribution.
@@ -84,4 +85,3 @@ reference:
     - dist_mixture
     - dist_transformed
     - dist_truncated
-    - dist_wrap
