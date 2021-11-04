@@ -201,12 +201,21 @@ log_likelihood.distribution <- function(x, sample, ...){
 #' @param ... Additional arguments used by methods.
 #'
 #' @name parameters
+#' @examples
+#' dist <- c(
+#'   dist_normal(1:2),
+#'   dist_poisson(3),
+#'   dist_multinomial(size = c(4, 3),
+#'   prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
+#'   )
+#' parameters(dist)
 #' @export
 parameters <- function(x, ...) {
   ellipsis::check_dots_used()
   UseMethod("parameters")
 }
 
+#' @rdname parameters
 #' @export
 parameters.distribution <- function(x, ...) {
   x <- lapply(vec_data(x), parameters)

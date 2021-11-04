@@ -2,9 +2,12 @@
 % Please edit documentation in R/distribution.R
 \name{parameters}
 \alias{parameters}
+\alias{parameters.distribution}
 \title{Extract the parameters of a distribution}
 \usage{
 parameters(x, ...)
+
+\method{parameters}{distribution}(x, ...)
 }
 \arguments{
 \item{x}{The distribution(s).}
@@ -13,4 +16,13 @@ parameters(x, ...)
 }
 \description{
 \lifecycle{experimental}
+}
+\examples{
+dist <- c(
+  dist_normal(1:2),
+  dist_poisson(3),
+  dist_multinomial(size = c(4, 3),
+  prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
+  )
+parameters(dist)
 }

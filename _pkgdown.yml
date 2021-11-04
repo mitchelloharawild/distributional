@@ -22,6 +22,7 @@ reference:
     - hdr.distribution
     - mean.distribution
     - median.distribution
+    - parameters.distribution
     - variance.distribution
     - skewness.distribution
     - kurtosis.distribution
@@ -62,6 +63,7 @@ reference:
   contents:
     - dist_bernoulli
     - dist_binomial
+    - dist_categorical
     - dist_geometric
     - dist_logarithmic
     - dist_multinomial
