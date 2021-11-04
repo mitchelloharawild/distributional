@@ -31,8 +31,9 @@ reference:
 - title: Graphics
   desc: >
     Tools for visualising distributions and intervals.
+    This functionality is deprecated, and will be removed from the package.
+    You can use the {ggdist} package to visualise your distributions.
   contents:
-    - autoplot.distribution
     - geom_hilo_ribbon
     - geom_hilo_linerange
 - title: Continuous distributions

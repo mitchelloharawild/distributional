@@ -4,22 +4,10 @@
 \alias{autoplot.distribution}
 \title{Plot a distribution}
 \usage{
-\method{autoplot}{distribution}(
-  x,
-  type = c("pdf", "cdf"),
-  n = 100,
-  quantile_range = c(0.001, 0.999),
-  ...
-)
+autoplot.distribution(x, ...)
 }
 \arguments{
 \item{x}{The distribution(s) to plot.}
-
-\item{type}{The type of plot to make (must be either \code{"pdf"} or \code{"cdf"}).}
-
-\item{n}{The resolution (number of points) used to display the distribution.}
-
-\item{quantile_range}{The range of the distribution (specified as quantiles).}
 
 \item{...}{Unused.}
 }
@@ -27,14 +15,8 @@
 \lifecycle{deprecated}
 }
 \details{
-Visualise distribution(s) by plotting its probability density function
-(\code{\link[=density]{density()}}) or cumulative distribution function (\code{\link[=cdf]{cdf()}}).
-Note: This function currently only works for continuous distributions.
-}
-\examples{
-library(ggplot2)
-dist <- c(dist_normal(mu = 0, sigma = 1), dist_student_t(df = 3))
-autoplot(dist, type = "pdf")
-autoplot(dist, type = "cdf")
-
+This function is now defunct and can no longer be used. Instead consider using
+the {ggdist} package to produce your own distribution plots. You can learn
+more about how this plot can be produced using {ggdist} here:
+https://mjskay.github.io/ggdist/articles/slabinterval.html
 }
