@@ -2,9 +2,12 @@
 % Please edit documentation in R/distribution.R
 \name{support}
 \alias{support}
+\alias{support.distribution}
 \title{Region of support of a distribution}
 \usage{
 support(x, ...)
+
+\method{support}{distribution}(x, ...)
 }
 \arguments{
 \item{x}{The distribution(s).}

@@ -20,9 +20,10 @@ reference:
     - likelihood.distribution
     - hilo.distribution
     - hdr.distribution
+    - support.distribution
+    - parameters.distribution
     - mean.distribution
     - median.distribution
-    - parameters.distribution
     - variance.distribution
     - skewness.distribution
     - kurtosis.distribution

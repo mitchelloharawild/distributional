@@ -236,6 +236,7 @@ support <- function(x, ...) {
   UseMethod("support")
 }
 
+#' @rdname support
 #' @export
 support.distribution <- function(x, ...) {
   dist_apply(x, support, ...)
