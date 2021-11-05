@@ -112,3 +112,9 @@ generate.dist_wrap <- function(x, times, ...){
 
   do.call(fn, c(list(times), par))
 }
+
+#' @export
+parameters.dist_wrap <- function(x, ...) {
+  # All parameters except distribution environment
+  x[-2]
+}
