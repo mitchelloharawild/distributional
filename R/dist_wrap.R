@@ -118,8 +118,3 @@ parameters.dist_wrap <- function(x, ...) {
   # All parameters except distribution environment
   x[-2L]
 }
-
-#' @export
-family.dist_wrap <- function(x, ...) {
-  x[[1L]]
-}
