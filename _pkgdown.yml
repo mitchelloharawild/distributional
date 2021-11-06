@@ -21,6 +21,7 @@ reference:
     - hilo.distribution
     - hdr.distribution
     - support.distribution
+    - family.distribution
     - parameters.distribution
     - mean.distribution
     - median.distribution

@@ -63,6 +63,11 @@ parameters.dist_default <- function(x, ...) {
 }
 
 #' @export
+family.dist_default <- function(x, ...) {
+  substring(class(x)[1], first = 6)
+}
+
+#' @export
 support.dist_default <- function(x, ...) {
   new_support_region(
     list(vctrs::vec_init(restore_rng(generate(x, 1)), n = 0L))

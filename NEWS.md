@@ -9,6 +9,7 @@
 ### Generics
 
 * Added `parameters()` generic for obtaining the distribution's parameters.
+* Added `family(<distribution>)` for getting the distribution's family name.
 * Added `covariance()` to return the covariance of a distribution.
 * Added `support()` to identify the distribution's region of support (#8).
 

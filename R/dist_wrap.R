@@ -116,5 +116,10 @@ generate.dist_wrap <- function(x, times, ...){
 #' @export
 parameters.dist_wrap <- function(x, ...) {
   # All parameters except distribution environment
-  x[-2]
+  x[-2L]
+}
+
+#' @export
+family.dist_wrap <- function(x, ...) {
+  x[[1L]]
 }

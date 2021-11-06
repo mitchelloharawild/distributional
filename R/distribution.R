@@ -222,6 +222,29 @@ parameters.distribution <- function(x, ...) {
   x <- lapply(x, function(z) data_frame(!!!z, .name_repair = "minimal"))
   vec_rbind(!!!x)
 }
+
+#' Extract the name of the distribution family
+#'
+#' \lifecycle{experimental}
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @examples
+#' dist <- c(
+#'   dist_normal(1:2),
+#'   dist_poisson(3),
+#'   dist_multinomial(size = c(4, 3),
+#'   prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
+#'   )
+#' family(dist)
+#'
+#' @importFrom stats family
+#' @export
+family.distribution <- function(x, ...) {
+  vapply(vec_data(x), family, character(1L))
+}
+
 #' Region of support of a distribution
 #'
 #' \lifecycle{experimental}
