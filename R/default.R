@@ -57,7 +57,7 @@ parameters.dist_default <- function(x, ...) {
   # Reduce parameter structures to length 1 list if needed.
   lapply(unclass(x), function(z) {
     if(inherits(z, "dist_default")) wrap_dist(list(z))
-    else if (vec_size(z) > 1) list(z)
+    else if (tryCatch(vec_size(z), error = function(e) Inf) > 1) list(z)
     else z
   })
 }
