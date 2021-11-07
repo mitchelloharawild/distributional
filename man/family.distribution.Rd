@@ -7,9 +7,9 @@
 \method{family}{distribution}(object, ...)
 }
 \arguments{
-\item{...}{Additional arguments used by methods.}
+\item{object}{The distribution(s).}
 
-\item{x}{The distribution(s).}
+\item{...}{Additional arguments used by methods.}
 }
 \description{
 \lifecycle{experimental}

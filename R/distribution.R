@@ -227,7 +227,7 @@ parameters.distribution <- function(x, ...) {
 #'
 #' \lifecycle{experimental}
 #'
-#' @param x The distribution(s).
+#' @param object The distribution(s).
 #' @param ... Additional arguments used by methods.
 #'
 #' @examples
