@@ -63,8 +63,8 @@ parameters.dist_default <- function(x, ...) {
 }
 
 #' @export
-family.dist_default <- function(x, ...) {
-  substring(class(x)[1], first = 6)
+family.dist_default <- function(object, ...) {
+  substring(class(object)[1], first = 6)
 }
 
 #' @export

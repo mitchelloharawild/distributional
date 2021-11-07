@@ -241,8 +241,8 @@ parameters.distribution <- function(x, ...) {
 #'
 #' @importFrom stats family
 #' @export
-family.distribution <- function(x, ...) {
-  vapply(vec_data(x), family, character(1L))
+family.distribution <- function(object, ...) {
+  vapply(vec_data(object), family, character(1L))
 }
 
 #' Region of support of a distribution

@@ -4,12 +4,12 @@
 \alias{family.distribution}
 \title{Extract the name of the distribution family}
 \usage{
-\method{family}{distribution}(x, ...)
+\method{family}{distribution}(object, ...)
 }
 \arguments{
-\item{x}{The distribution(s).}
-
 \item{...}{Additional arguments used by methods.}
+
+\item{x}{The distribution(s).}
 }
 \description{
 \lifecycle{experimental}
