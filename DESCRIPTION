@@ -14,11 +14,11 @@ Authors@R:
       person(given = "Alex",
              family = "Hayes",
              role = c("aut"),
-             comment = c(ORCID = "0000-0002-4985-5160"))),
+             comment = c(ORCID = "0000-0002-4985-5160")),
       person(given = "Earo",
              family = "Wang",
              role = c("ctb"),
-             comment = c(ORCID = "0000-0001-6448-5260"))
+             comment = c(ORCID = "0000-0001-6448-5260")))
 Description: Vectorised distribution objects with tools for manipulating, 
     visualising, and using probability distributions. Designed to allow model
     prediction outputs to return distributions rather than their parameters, 
