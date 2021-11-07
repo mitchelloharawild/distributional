@@ -79,11 +79,6 @@ dist_logistic <- function(location, scale){
 }
 
 #' @export
-print.dist_logistic <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_logistic <- function(x, digits = 2, ...){
   sprintf(
     "Logistic(%s, %s)",

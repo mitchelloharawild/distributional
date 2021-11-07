@@ -39,11 +39,6 @@ dist_studentized_range <- function(nmeans, df, nranges){
 }
 
 #' @export
-print.dist_studentized_range <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_studentized_range <- function(x, digits = 2, ...){
   sprintf(
     "StudentizedRange(%s, %s, %s)",

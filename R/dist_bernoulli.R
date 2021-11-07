@@ -90,11 +90,6 @@ dist_bernoulli <- function(prob){
 }
 
 #' @export
-print.dist_bernoulli <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_bernoulli <- function(x, digits = 2, ...){
   sprintf(
     "Bernoulli(%s)",

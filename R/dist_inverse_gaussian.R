@@ -24,11 +24,6 @@ dist_inverse_gaussian <- function(mean, shape){
 }
 
 #' @export
-print.dist_inverse_gaussian <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_inverse_gaussian <- function(x, digits = 2, ...){
   sprintf(
     "IG(%s, %s)",

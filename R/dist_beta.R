@@ -36,11 +36,6 @@ dist_beta <- function(shape1, shape2){
 }
 
 #' @export
-print.dist_beta <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_beta <- function(x, digits = 2, ...){
   sprintf(
     "Beta(%s, %s)",

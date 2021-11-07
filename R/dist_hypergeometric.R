@@ -74,11 +74,6 @@ dist_hypergeometric <- function(m, n, k){
 }
 
 #' @export
-print.dist_hypergeometric <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_hypergeometric <- function(x, digits = 2, ...){
   sprintf(
     "Hypergeometric(%s, %s, %s)",

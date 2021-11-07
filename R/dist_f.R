@@ -82,11 +82,6 @@ dist_f <- function(df1, df2, ncp = NULL){
 }
 
 #' @export
-print.dist_f <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_f <- function(x, digits = 2, ...){
   sprintf(
     "F(%s, %s)",

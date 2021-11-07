@@ -15,11 +15,6 @@ dist_multivariate_normal <- function(mu = 0, sigma = diag(1)){
 }
 
 #' @export
-print.dist_mvnorm <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_mvnorm <- function(x, digits = 2, ...){
   sprintf(
     "MVN[%i]",

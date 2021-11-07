@@ -89,11 +89,6 @@ dist_chisq <- function(df, ncp = 0){
 }
 
 #' @export
-print.dist_chisq <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_chisq <- function(x, digits = 2, ...){
   sprintf(
     if (is_utf8_output()) "\u1d6a\u00b2(%s)" else "x2(%s)",

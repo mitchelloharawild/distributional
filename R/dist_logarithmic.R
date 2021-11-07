@@ -20,11 +20,6 @@ dist_logarithmic <- function(prob){
 }
 
 #' @export
-print.dist_logarithmic <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_logarithmic <- function(x, digits = 2, ...){
   sprintf(
     "Logarithmic(%s)",

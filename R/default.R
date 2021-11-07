@@ -141,6 +141,11 @@ format.dist_default <- function(x, ...){
 }
 
 #' @export
+print.dist_default <- function(x, ...){
+  cat(format(x, ...))
+}
+
+#' @export
 dim.dist_default <- function(x){
   1
 }

@@ -76,11 +76,6 @@ dist_multinomial <- function(size, prob){
 }
 
 #' @export
-print.dist_multinomial <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_multinomial <- function(x, digits = 2, ...){
   sprintf(
     "Multinomial(%s)[%s]",

@@ -77,11 +77,6 @@ dist_negative_binomial <- function(size, prob){
 }
 
 #' @export
-print.dist_negbin <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_negbin <- function(x, digits = 2, ...){
   sprintf(
     "NB(%s, %s)",

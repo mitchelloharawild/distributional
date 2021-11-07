@@ -27,11 +27,6 @@ dist_burr <- function(shape1, shape2, rate = 1){
 }
 
 #' @export
-print.dist_burr <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_burr <- function(x, digits = 2, ...){
   sprintf(
     "Burr12(%s, %s, %s)",

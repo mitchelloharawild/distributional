@@ -82,11 +82,6 @@ dist_categorical <- function(prob, outcomes = NULL){
 }
 
 #' @export
-print.dist_categorical <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_categorical <- function(x, digits = 2, ...){
   sprintf(
     "Categorical[%s]",

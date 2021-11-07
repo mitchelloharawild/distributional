@@ -19,11 +19,6 @@ dist_percentile <- function(x, percentile){
 }
 
 #' @export
-print.dist_percentile <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_percentile <- function(x, ...){
   sprintf(
     "percentile[%s]",

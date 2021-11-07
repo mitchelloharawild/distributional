@@ -97,11 +97,6 @@ dist_normal <- function(mu = 0, sigma = 1){
 }
 
 #' @export
-print.dist_normal <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_normal <- function(x, digits = 2, ...){
   sprintf(
     "N(%s, %s)",

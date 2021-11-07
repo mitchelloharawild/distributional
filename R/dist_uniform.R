@@ -97,11 +97,6 @@ dist_uniform <- function(min, max){
 }
 
 #' @export
-print.dist_uniform <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_uniform <- function(x, digits = 2, ...){
   sprintf(
     "U(%s, %s)",

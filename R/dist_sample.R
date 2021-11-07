@@ -22,11 +22,6 @@ dist_sample <- function(x){
 }
 
 #' @export
-print.dist_sample <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_sample <- function(x, ...){
   sprintf(
     "sample[%s]",

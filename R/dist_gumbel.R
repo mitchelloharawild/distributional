@@ -73,11 +73,6 @@ dist_gumbel <- function(alpha, scale){
 }
 
 #' @export
-print.dist_gumbel <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_gumbel <- function(x, digits = 2, ...){
   sprintf(
     "Gumbel(%s, %s)",

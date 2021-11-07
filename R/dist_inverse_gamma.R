@@ -24,11 +24,6 @@ dist_inverse_gamma <- function(shape, rate = 1/scale, scale){
 }
 
 #' @export
-print.dist_inverse_gamma <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_inverse_gamma <- function(x, digits = 2, ...){
   sprintf(
     "InvGamma(%s, %s)",

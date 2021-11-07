@@ -78,11 +78,6 @@ dist_poisson <- function(lambda){
 }
 
 #' @export
-print.dist_poisson <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_poisson <- function(x, digits = 2, ...){
   sprintf(
     "Pois(%s)",

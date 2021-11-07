@@ -20,11 +20,6 @@ dist_inverse_exponential <- function(rate){
 }
 
 #' @export
-print.dist_inverse_exponential <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_inverse_exponential <- function(x, digits = 2, ...){
   sprintf(
     "InvExp(%s)",

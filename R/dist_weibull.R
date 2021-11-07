@@ -72,11 +72,6 @@ dist_weibull <- function(shape, scale){
 }
 
 #' @export
-print.dist_weibull <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_weibull <- function(x, digits = 2, ...){
   sprintf(
     "Weibull(%s, %s)",

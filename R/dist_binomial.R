@@ -98,11 +98,6 @@ dist_binomial <- function(size, prob){
 }
 
 #' @export
-print.dist_binomial <- function(x, ...){
-  cat(format(x, ...))
-}
-
-#' @export
 format.dist_binomial <- function(x, digits = 2, ...){
   sprintf(
     "B(%s, %s)",
