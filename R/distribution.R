@@ -419,11 +419,7 @@ kurtosis.distribution <- function(x, ...){
 #' @importFrom stats median
 #' @export
 median.distribution <- function(x, na.rm = FALSE, ...){
-  # Only pass na.rm if it is explicitly provided.
-  if(missing(na.rm))
-    quantile(x, p = 0.5, ...)
-  else
-    quantile(x, p = 0.5, na.rm = na.rm, ...)
+  dist_apply(x, median, na.rm = na.rm, ...)
 }
 
 #' Probability intervals of a probability distribution

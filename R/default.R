@@ -93,11 +93,7 @@ covariance.dist_default <- function(x, ...){
 
 #' @export
 median.dist_default <- function(x, na.rm = FALSE, ...){
-  # Only pass na.rm if it is explicitly provided.
-  if(missing(na.rm))
-    quantile(x, p = 0.5, ...)
-  else
-    quantile(x, p = 0.5, na.rm = na.rm, ...)
+  quantile(x, p = 0.5, ...)
 }
 
 #' @export

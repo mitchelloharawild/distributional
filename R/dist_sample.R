@@ -69,6 +69,11 @@ mean.dist_sample <- function(x, ...){
 }
 
 #' @export
+median.dist_sample <- function(x, na.rm = FALSE, ...){
+  vapply(x, median, numeric(1L), na.rm = na.rm, ..., USE.NAMES = FALSE)
+}
+
+#' @export
 covariance.dist_sample <- function(x, ...){
   vapply(x, stats::var, numeric(1L), ..., USE.NAMES = FALSE)
 }

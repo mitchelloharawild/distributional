@@ -23,6 +23,8 @@
   not just packages. If the `package` argument is `NULL`, it will search the
   calling environment for the functions. You can also provide a package name as
   before, and additionally an arbitrary environment to this argument.
+* `median()` methods will now ignore the `na.rm` option when it does not apply
+  to that distribution type (#72).
   
 ## Bug fixes
 
