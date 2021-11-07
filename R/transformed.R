@@ -83,7 +83,7 @@ covariance.dist_transformed <- function(x, ...){
 #' @export
 Math.dist_transformed <- function(x, ...) {
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
-  dist_transformed(wrap_dist(list(x[["dist"]])), trans, invert_fail)[[1]]
+  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, invert_fail))[[1]]
 }
 
 #' @method Ops dist_transformed
@@ -101,5 +101,5 @@ Ops.dist_transformed <- function(e1, e2) {
   } else {
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
   }
-  dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, invert_fail)[[1]]
+  vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, invert_fail))[[1]]
 }

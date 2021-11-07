@@ -37,32 +37,20 @@ test_that("LogNormal distributions", {
 
   # quantiles
   expect_equal(
-    quantile(dist, 0.1),
-    qlnorm(0.1, 0, 0.5)
-  )
-  expect_equal(
-    quantile(dist, 0.5),
-    qlnorm(0.5, 0, 0.5)
+    quantile(dist, c(0.1, 0.5)),
+    list(qlnorm(c(0.1, 0.5), 0, 0.5))
   )
 
   # pdf
   expect_equal(
-    density(dist, 1),
-    dlnorm(1, 0, 0.5)
-  )
-  expect_equal(
-    density(dist, 20),
-    dlnorm(20, 0, 0.5)
+    density(dist, c(1, 20)),
+    list(dlnorm(c(1, 20), 0, 0.5))
   )
 
   # cdf
   expect_equal(
-    cdf(dist, 4),
-    plnorm(4, 0, 0.5)
-  )
-  expect_equal(
-    cdf(dist, 90),
-    plnorm(90, 0, 0.5)
+    cdf(dist, c(4, 90)),
+    list(plnorm(c(4, 90), 0, 0.5))
   )
 
   # F(Finv(a)) ~= a
