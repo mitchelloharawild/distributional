@@ -12,7 +12,9 @@
 * Added `family(<distribution>)` for getting the distribution's family name.
 * Added `covariance()` to return the covariance of a distribution.
 * Added `support()` to identify the distribution's region of support (#8).
-
+* Added `log_likelihood()` for computing the log-likelihood of observing a 
+  sample from a distribution.
+  
 ## Improvements
 
 * `variance()` now always returns a variance. It will not default to providing

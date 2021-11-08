@@ -3,11 +3,14 @@
 \name{likelihood}
 \alias{likelihood}
 \alias{likelihood.distribution}
+\alias{log_likelihood}
 \title{The (log) likelihood of a sample matching a distribution}
 \usage{
 likelihood(x, ...)
 
 \method{likelihood}{distribution}(x, sample, ..., log = FALSE)
+
+log_likelihood(x, ...)
 }
 \arguments{
 \item{x}{The distribution(s).}

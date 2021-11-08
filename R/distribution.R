@@ -184,6 +184,8 @@ The same sample will be used for each distribution, i.e. `sample = list(sample)`
   }
 }
 
+#' @rdname likelihood
+#' @export
 log_likelihood <- function(x, ...) {
   ellipsis::check_dots_used()
   UseMethod("log_likelihood")
