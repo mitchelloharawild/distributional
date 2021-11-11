@@ -160,6 +160,8 @@
 <code><a href="../reference/dist_wrap.html">dist_wrap()</a></code> can now search for distribution functions in any environment, not just packages. If the <code>package</code> argument is <code>NULL</code>, it will search the calling environment for the functions. You can also provide a package name as before, and additionally an arbitrary environment to this argument.</li>
 <li>
 <code><a href="https://rdrr.io/r/stats/median.html">median()</a></code> methods will now ignore the <code>na.rm</code> option when it does not apply to that distribution type (<a href='https://github.com/mitchelloharawild/distributional/issues/72'>#72</a>).</li>
+<li>
+<code><a href="../reference/dist_sample.html">dist_sample()</a></code> now allows for missing values to be stored. Note that <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code>, <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code> and <code><a href="../reference/cdf.html">cdf()</a></code> will remove these missing values by default. This behaviour can be changed with the <code>na.rm</code> argument.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
