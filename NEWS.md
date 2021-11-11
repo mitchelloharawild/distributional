@@ -27,6 +27,9 @@
   before, and additionally an arbitrary environment to this argument.
 * `median()` methods will now ignore the `na.rm` option when it does not apply
   to that distribution type (#72).
+* `dist_sample()` now allows for missing values to be stored. Note that 
+  `density()`, `quantile()` and `cdf()` will remove these missing values by
+  default. This behaviour can be changed with the `na.rm` argument.
   
 ## Bug fixes
 

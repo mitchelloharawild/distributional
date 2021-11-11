@@ -10,13 +10,13 @@
 #' @export
 dist_sample <- function(x){
   has_NA <- FALSE
-  x <- lapply(x, function(.) if(any(na_pos <- is.na(.))){
-    has_NA<<-TRUE
-    .[!na_pos]
-  } else .)
-  if(has_NA){
-    warn("Missing sampled values have been removed from the sample distribution.")
-  }
+  # x <- lapply(x, function(.) if(any(na_pos <- is.na(.))){
+  #   has_NA<<-TRUE
+  #   .[!na_pos]
+  # } else .)
+  # if(has_NA){
+  #   warn("Missing sampled values have been removed from the sample distribution.")
+  # }
   x <- as_list_of(x, .ptype = double())
   new_dist(x = x, class = "dist_sample")
 }
@@ -30,12 +30,12 @@ format.dist_sample <- function(x, ...){
 }
 
 #' @export
-density.dist_sample <- function(x, at, ...){
+density.dist_sample <- function(x, at, ..., na.rm = TRUE){
   # Shortcut if only one point in density is needed
   if(vec_size(at) == 1){
     return(density(x[["x"]], from = at, to = at, n = 1)$y)
   }
-  d <- density(x[["x"]], from = min(at), to = max(at))
+  d <- density(x[["x"]], from = min(at), to = max(at), ..., na.rm=na.rm)
   stats::approx(d$x, d$y, xout = at)$y
 }
 
@@ -46,11 +46,9 @@ quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
 }
 
 #' @export
-cdf.dist_sample <- function(x, q, ...){
+cdf.dist_sample <- function(x, q, ..., na.rm = TRUE){
   if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
-  vapply(x, function(x, q){
-    mean(x < q)
-  }, numeric(1L), q = q)
+  vapply(x, function(x, q) mean(x < q, ..., na.rm = na.rm), numeric(1L), q = q)
 }
 
 #' @export
@@ -74,11 +72,11 @@ covariance.dist_sample <- function(x, ...){
 }
 
 #' @export
-skewness.dist_sample <- function(x, ...) {
+skewness.dist_sample <- function(x, na.rm = FALSE, ...) {
   n <- lengths(x, use.names = FALSE)
-  x <- lapply(x, function(.) . - mean(.))
-  sum_x2 <- vapply(x, function(.) sum(.^2), numeric(1L), USE.NAMES = FALSE)
-  sum_x3 <- vapply(x, function(.) sum(.^3), numeric(1L), USE.NAMES = FALSE)
+  x <- lapply(x, function(.) . - mean(., na.rm = na.rm))
+  sum_x2 <- vapply(x, function(.) sum(.^2, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
+  sum_x3 <- vapply(x, function(.) sum(.^3, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
   y <- sqrt(n) * sum_x3/(sum_x2^(3/2))
   y * ((1 - 1/n))^(3/2)
 }
