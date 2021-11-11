@@ -72,7 +72,7 @@ covariance.dist_sample <- function(x, ...){
 }
 
 #' @export
-skewness.dist_sample <- function(x, na.rm = FALSE, ...) {
+skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
   n <- lengths(x, use.names = FALSE)
   x <- lapply(x, function(.) . - mean(., na.rm = na.rm))
   sum_x2 <- vapply(x, function(.) sum(.^2, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
