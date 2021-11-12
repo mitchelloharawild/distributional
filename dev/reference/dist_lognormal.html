@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Truncate a distribution — dist_truncated • distributional</title>
+<title>The log-normal distribution — dist_lognormal • distributional</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Truncate a distribution — dist_truncated" />
+<meta property="og:title" content="The log-normal distribution — dist_lognormal" />
 <meta property="og:description" content="" />
 
 
@@ -121,75 +121,113 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Truncate a distribution</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/truncated.R'><code>R/truncated.R</code></a></small>
-    <div class="hidden name"><code>dist_truncated.Rd</code></div>
+    <h1>The log-normal distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mitchelloharawild/distributional/blob/master/R/dist_lognormal.R'><code>R/dist_lognormal.R</code></a></small>
+    <div class="hidden name"><code>dist_lognormal.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#stable'><img src='figures/lifecycle-stable.svg' alt='[Stable]' /></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>dist_truncated</span><span class='op'>(</span><span class='va'>dist</span>, lower <span class='op'>=</span> <span class='op'>-</span><span class='cn'>Inf</span>, upper <span class='op'>=</span> <span class='cn'>Inf</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>dist_lognormal</span><span class='op'>(</span>mu <span class='op'>=</span> <span class='fl'>0</span>, sigma <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dist</th>
-      <td><p>The distribution(s) to truncate.</p></td>
+      <th>mu</th>
+      <td><p>The mean (location parameter) of the distribution, which is the
+mean of the associated Normal distribution. Can be any real number.</p></td>
     </tr>
     <tr>
-      <th>lower, upper</th>
-      <td><p>The range of values to keep from a distribution.</p></td>
+      <th>sigma</th>
+      <td><p>The standard deviation (scale parameter) of the distribution.
+Can be any positive number.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that the samples are generated using inverse transform sampling, and the
-means and variances are estimated from samples.</p>
+    <p>The log-normal distribution is a commonly used transformation of the Normal
+distribution. If \(X\) follows a log-normal distribution, then \(\ln{X}\)
+would be characteristed by a Normal distribution.</p>
+<p>We recommend reading this documentation on
+<a href='https://pkg.mitchelloharawild.com/distributional/'>https://pkg.mitchelloharawild.com/distributional/</a>, where the math
+will render nicely.</p>
+<p>In the following, let \(Y\) be a Normal random variable with mean
+<code>mu</code> = \(\mu\) and standard deviation <code>sigma</code> = \(\sigma\). The
+log-normal distribution \(X = exp(Y)\) is characterised by:</p>
+<p><strong>Support</strong>: \(R+\), the set of all real numbers greater than or equal to 0.</p>
+<p><strong>Mean</strong>: \(e^(\mu + \sigma^2/2\)</p>
+<p><strong>Variance</strong>: \((e^(\sigma^2)-1) e^(2\mu + \sigma^2\)</p>
+<p><strong>Probability density function (p.d.f)</strong>:</p>
+<p>$$
+    f(x) = \frac{1}{x\sqrt{2 \pi \sigma^2}} e^{-(\ln{x} - \mu)^2 / 2 \sigma^2}
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
+<p>The cumulative distribution function has the form</p>
+<p>$$
+    F(x) = \Phi((\ln{x} - \mu)/\sigma)
+  $$</p>
+<p>Where \(Phi\) is the CDF of a standard Normal distribution, N(0,1).</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_truncated</span><span class='op'>(</span><span class='fu'><a href='dist_normal.html'>dist_normal</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, lower <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
+    <pre class="examples"><span class='r-in'><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>dist_lognormal</span><span class='op'>(</span>mu <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, sigma <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>dist</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;distribution[1]&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] N(2, 1)[0,Inf]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;distribution[5]&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] lN(1, 0.01) lN(2, 0.01) lN(3, 0.01) lN(4, 0.01) lN(5, 0.01)</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.055248</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]   2.731907   7.426094  20.186216  54.871824 149.157083</span>
 <span class='r-in'><span class='fu'><a href='variance.html'>variance</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.808425</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]   0.07500759   0.55423526   4.09527545  30.26022006 223.59446360</span>
+<span class='r-in'><span class='fu'><a href='skewness.html'>skewness</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.3017591 0.3017591 0.3017591 0.3017591 0.3017591</span>
+<span class='r-in'><span class='fu'><a href='kurtosis.html'>kurtosis</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.1623239 0.1623239 0.1623239 0.1623239 0.1623239</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='https://generics.r-lib.org/reference/generate.html'>generate</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>10</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [[1]]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 1.7457023 1.8196097 2.2556054 0.1399266 1.9628775 2.0317023 3.2573120</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 2.6878040 1.7425402 2.2508952</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 2.835129 2.622812 2.548013 2.704686 2.834015 2.551653 3.049613 2.655021</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] 2.306403 2.338856</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 6.019123 6.852957 7.290600 8.170894 9.177168 9.320867 6.672254 7.425214</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] 6.840160 6.831037</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[3]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 18.67788 21.50290 19.62915 17.26946 18.94665 16.40700 20.91257 21.22122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] 20.14257 21.96206</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[4]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 52.58045 58.00844 54.57154 51.82747 51.21836 51.23437 55.18321 61.41729</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] 57.09629 68.53164</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[5]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 150.4462 121.5221 142.3018 142.9020 167.6834 127.2173 143.8785 148.1150</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] 116.8604 162.2254</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.4082296</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  1.799910e-02  1.637111e-37 5.539330e-116 6.972494e-238  0.000000e+00</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>2</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -0.8959256</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]   -4.017433  -84.702715 -265.387997 -546.073279 -926.758561</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='cdf.html'>cdf</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>4</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.9767203</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  9.999440e-01  4.203228e-10  7.003186e-59 6.915322e-151 2.970982e-286</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='fl'>0.7</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.544133</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]   2.864632   7.786878  21.166930  57.537681 156.403632</span>
 <span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggdist"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span class='r-in'>  <span class='fu'>ggdist</span><span class='fu'>::</span><span class='fu'><a href='http://mjskay.github.io/ggdist/reference/stat_dist_slabinterval.html'>stat_dist_halfeye</a></span><span class='op'>(</span></span>
-<span class='r-in'>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Normal"</span>, <span class='st'>"Truncated"</span><span class='op'>)</span>,</span>
-<span class='r-in'>        dist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='dist_normal.html'>dist_normal</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'>dist_truncated</span><span class='op'>(</span><span class='fu'><a href='dist_normal.html'>dist_normal</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, lower <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'>  <span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Computation failed in `stat_dist_slabinterval()`:</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> subscript out of bounds</span>
-<span class='r-plt img'><img src='dist_truncated-1.png' alt='' width='700' height='433' /></span>
-<span class='r-in'></span>
+<span class='r-in'><span class='co'># A log-normal distribution X is exp(Y), where Y is a Normal distribution of</span></span>
+<span class='r-in'><span class='co'># the same parameters. So log(X) will produce the Normal distribution Y.</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;distribution[5]&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] N(1, 0.01) N(2, 0.01) N(3, 0.01) N(4, 0.01) N(5, 0.01)</span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
