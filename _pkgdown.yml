@@ -54,6 +54,7 @@ reference:
     - dist_inverse_gamma
     - dist_inverse_gaussian
     - dist_logistic
+    - dist_lognormal
     - dist_multivariate_normal
     - dist_normal
     - dist_pareto

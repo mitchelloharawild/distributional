@@ -39,7 +39,7 @@
 #'   \deqn{
 #'     f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2}
 #'   }{
-#'     f(x) = 1 / (2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2))
+#'     f(x) = 1 / sqrt(2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2))
 #'   }
 #'
 #'   **Cumulative distribution function (c.d.f)**:
@@ -49,7 +49,7 @@
 #'   \deqn{
 #'     F(t) = \int_{-\infty}^t \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2} dx
 #'   }{
-#'     F(t) = integral_{-\infty}^t 1 / (2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2)) dx
+#'     F(t) = integral_{-\infty}^t 1 / sqrt(2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2)) dx
 #'   }
 #'
 #'   but this integral does not have a closed form solution and must be
@@ -210,4 +210,12 @@ Ops.dist_normal <- function(e1, e2){
     dist$sigma <- dist$sigma * abs(scalar)
   }
   dist
+}
+
+#' @method Math dist_normal
+#' @export
+Math.dist_normal <- function(x, ...) {
+  # Shortcut to get log-normal distribution from Normal.
+  if(.Generic == "exp") return(vec_data(dist_lognormal(x[["mu"]], x[["sigma"]]))[[1]])
+  NextMethod()
 }

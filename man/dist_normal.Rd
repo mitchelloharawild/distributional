@@ -47,7 +47,7 @@ In the following, let \eqn{X} be a Normal random variable with mean
 \deqn{
     f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2}
   }{
-    f(x) = 1 / (2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2))
+    f(x) = 1 / sqrt(2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2))
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
@@ -57,7 +57,7 @@ The cumulative distribution function has the form
 \deqn{
     F(t) = \int_{-\infty}^t \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2} dx
   }{
-    F(t) = integral_{-\infty}^t 1 / (2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2)) dx
+    F(t) = integral_{-\infty}^t 1 / sqrt(2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2)) dx
   }
 
 but this integral does not have a closed form solution and must be

@@ -5,6 +5,9 @@
 ### Probability distributions
 
 * Added `dist_categorical()` for the Categorical distribution.
+* Added `dist_lognormal()` for the log-normal distribution. Mathematical 
+  conversion shortcuts have also been added, so `exp(dist_normal())` produces
+  `dist_lognormal()`.
 
 ### Generics
 
