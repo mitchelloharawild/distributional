@@ -33,6 +33,8 @@
 * `dist_sample()` now allows for missing values to be stored. Note that 
   `density()`, `quantile()` and `cdf()` will remove these missing values by
   default. This behaviour can be changed with the `na.rm` argument.
+* `<hilo>` objects now support non-numeric and multivariate distributions. 
+  `<hilo>` vectors that have different bound types cannot be mixed (#74).
   
 ## Bug fixes
 

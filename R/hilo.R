@@ -12,15 +12,15 @@
 #'
 #' @export
 new_hilo <- function(lower = double(), upper = double(), size = double()) {
-  vec_assert(lower, double())
-  vec_assert(upper, double())
   vec_assert(size, double())
   if (any(size < 0 | size > 100, na.rm = TRUE))
     abort("'size' must be between [0, 100].")
 
   out <- vec_recycle_common(lower = lower, upper = upper)
-  if (any(out[["upper"]] < out[["lower"]], na.rm = TRUE)) {
-    abort("`upper` can't be lower than `lower`.")
+  if(vec_is(lower, double()) && vec_is(upper, double())) {
+    if (any(out[["upper"]] < out[["lower"]], na.rm = TRUE)) {
+      abort("`upper` can't be lower than `lower`.")
+    }
   }
   len <- vec_size(out[[1]])
   out[["level"]] <- vctrs::vec_recycle(size, len)
@@ -60,13 +60,20 @@ is_hilo <- function(x) {
 
 #' @export
 format.hilo <- function(x, justify = "right", ...) {
-  x <- vec_data(x)
+  lwr <- field(x, "lower")
+  upr <- field(x, "upper")
+  if(is.matrix(lwr)) {
+    lwr <- if(ncol(lwr) > 1) vctrs::vec_ptype_abbr(lwr) else drop(lwr)
+  }
+  if(is.matrix(upr)) {
+    upr <- if(ncol(upr) > 1) vctrs::vec_ptype_abbr(upr) else drop(upr)
+  }
   limit <- paste(
-    format(x$lower, justify = justify, ...),
-    format(x$upper, justify = justify, ...),
+    format(lwr, justify = justify, ...),
+    format(upr, justify = justify, ...),
     sep = ", "
   )
-  paste0("[", limit, "]", x$level)
+  paste0("[", limit, "]", field(x, "level"))
 }
 
 #' @export
