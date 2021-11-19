@@ -163,6 +163,8 @@
 <code><a href="https://rdrr.io/r/stats/median.html">median()</a></code> methods will now ignore the <code>na.rm</code> option when it does not apply to that distribution type (<a href='https://github.com/mitchelloharawild/distributional/issues/72'>#72</a>).</li>
 <li>
 <code><a href="../reference/dist_sample.html">dist_sample()</a></code> now allows for missing values to be stored. Note that <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code>, <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code> and <code><a href="../reference/cdf.html">cdf()</a></code> will remove these missing values by default. This behaviour can be changed with the <code>na.rm</code> argument.</li>
+<li>
+<code>&lt;hilo&gt;</code> objects now support non-numeric and multivariate distributions. <code>&lt;hilo&gt;</code> vectors that have different bound types cannot be mixed (<a href='https://github.com/mitchelloharawild/distributional/issues/74'>#74</a>).</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
