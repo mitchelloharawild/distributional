@@ -100,6 +100,13 @@ median.dist_default <- function(x, na.rm = FALSE, ...){
 hilo.dist_default <- function(x, size = 95, ...){
   lower <- quantile(x, 0.5-size/200, ...)
   upper <- quantile(x, 0.5+size/200, ...)
+  if(is.matrix(lower) && is.matrix(upper)) {
+    return(
+      vctrs::new_data_frame(split(
+        new_hilo(drop(lower), drop(upper), size = rep_len(size, length(lower))),
+      seq_along(lower)))
+    )
+  }
   new_hilo(lower, upper, size)
 }
 

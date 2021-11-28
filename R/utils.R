@@ -98,7 +98,7 @@ dist_apply <- function(x, .f, ...){
     out <- lapply(out, `colnames<-`, dn)
   } else {
     out <- vctrs::vec_c(!!!out)
-    if(is.matrix(out) && !is.null(dn)){
+    if((is.matrix(out) || is.data.frame(out)) && !is.null(dn)){
       # Set dimension names
       colnames(out) <- dn
     }
