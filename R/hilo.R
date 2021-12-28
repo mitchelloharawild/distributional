@@ -109,7 +109,6 @@ vec_math.hilo <- function(.fn, .x, ...){
   vec_restore(out, .x)
 }
 
-#' @rdname vctrs-compat
 #' @method vec_arith hilo
 #' @export
 vec_arith.hilo <- function(op, x, y, ...){

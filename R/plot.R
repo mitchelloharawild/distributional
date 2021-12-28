@@ -10,7 +10,7 @@
 #' @param x The distribution(s) to plot.
 #' @param ... Unused.
 #'
-#' @keyword internal
+#' @keywords internal
 #'
 #' @export
 autoplot.distribution <- function(x, ...){
