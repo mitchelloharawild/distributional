@@ -220,7 +220,7 @@ get_binary_inverse_2 <- function(f, constant) {
     `+` = function(x) x - constant,
     `-` = function(x) constant - x,
     `*` = function(x) x / constant,
-    `/` = function(x) x * constant,
+    `/` = function(x) constant / x,
     `^` = function(x) log(x, base = constant),
 
     invert_fail

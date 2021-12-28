@@ -38,7 +38,7 @@ format.dist_transformed <- function(x, ...){
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  density(x[["dist"]], x[["inverse"]](at))*vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]])
+  density(x[["dist"]], x[["inverse"]](at))*abs(vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]]))
 }
 
 #' @export
