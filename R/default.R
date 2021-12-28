@@ -159,12 +159,39 @@ dim.dist_default <- function(x){
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")
 
+inverse_functions <- exprs(
+  sqrt = function(x) x^2,
+  exp = log,
+  log = function(x, base = exp(1)) base ^ x,
+  log2 = function(x) 2^x,
+  log10 = function(x) 10^x,
+  expm1 = log1p,
+  log1p = expm1,
+  cos = acos,
+  sin = asin,
+  tan = atan,
+  acos = cos,
+  asin = sin,
+  atan = tan,
+  cosh = acosh,
+  sinh = asinh,
+  tanh = atanh,
+  acosh = cosh,
+  asinh = sinh,
+  atanh = tanh
+)
+
 #' @method Math dist_default
 #' @export
 Math.dist_default <- function(x, ...) {
   if(dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
+
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
-  vec_data(dist_transformed(wrap_dist(list(x)), trans, invert_fail))[[1]]
+
+  inverse_fun <- inverse_functions[[.Generic]] %||% invert_fail
+  inverse <- new_function(exprs(x = ), body = expr((!!inverse_fun)(x, !!!dots_list(...))))
+
+  vec_data(dist_transformed(wrap_dist(list(x)), trans, inverse))[[1]]
 }
 
 #' @method Ops dist_default
