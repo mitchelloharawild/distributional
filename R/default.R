@@ -158,33 +158,73 @@ dim.dist_default <- function(x){
 }
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")
-inverse_functions <- exprs(
-  sqrt = function(x) x^2,
-  exp = log,
-  log = function(x, base = exp(1)) base ^ x,
-  log2 = function(x) 2^x,
-  log10 = function(x) 10^x,
-  expm1 = log1p,
-  log1p = expm1,
-  cos = acos,
-  sin = asin,
-  tan = atan,
-  acos = cos,
-  asin = sin,
-  atan = tan,
-  cosh = acosh,
-  sinh = asinh,
-  tanh = atanh,
-  acosh = cosh,
-  asinh = sinh,
-  atanh = tanh
-)
-#' Attempt to get the inverse of a known function by name. Returns invert_fail
+
+#' Attempt to get the inverse of f(x) by name. Returns invert_fail
 #' (a function that raises an error if called) if there is no known inverse.
 #' @param f string. Name of a function.
 #' @noRd
-get_inverse_function <- function(f) {
-  inverse_functions[[f]] %||% invert_fail
+get_unary_inverse <- function(f) {
+  switch(f,
+    sqrt = function(x) x^2,
+    exp = log,
+    log = function(x, base = exp(1)) base ^ x,
+    log2 = function(x) 2^x,
+    log10 = function(x) 10^x,
+    expm1 = log1p,
+    log1p = expm1,
+    cos = acos,
+    sin = asin,
+    tan = atan,
+    acos = cos,
+    asin = sin,
+    atan = tan,
+    cosh = acosh,
+    sinh = asinh,
+    tanh = atanh,
+    acosh = cosh,
+    asinh = sinh,
+    atanh = tanh,
+
+    invert_fail
+  )
+}
+
+#' Attempt to get the inverse of f(x, constant) by name. Returns invert_fail
+#' (a function that raises an error if called) if there is no known inverse.
+#' @param f string. Name of a function.
+#' @param constant a constant value
+#' @noRd
+get_binary_inverse_1 <- function(f, constant) {
+  force(constant)
+
+  switch(f,
+    `+` = function(x) x - constant,
+    `-` = function(x) x + constant,
+    `*` = function(x) x / constant,
+    `/` = function(x) x * constant,
+    `^` = function(x) x ^ (1/constant),
+
+    invert_fail
+  )
+}
+
+#' Attempt to get the inverse of f(constant, x) by name. Returns invert_fail
+#' (a function that raises an error if called) if there is no known inverse.
+#' @param f string. Name of a function.
+#' @param constant a constant value
+#' @noRd
+get_binary_inverse_2 <- function(f, constant) {
+  force(constant)
+
+  switch(f,
+    `+` = function(x) x - constant,
+    `-` = function(x) constant - x,
+    `*` = function(x) x / constant,
+    `/` = function(x) x * constant,
+    `^` = function(x) log(x, base = constant),
+
+    invert_fail
+  )
 }
 
 #' @method Math dist_default
@@ -194,7 +234,7 @@ Math.dist_default <- function(x, ...) {
 
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
 
-  inverse_fun <- get_inverse_function(.Generic)
+  inverse_fun <- get_unary_inverse(.Generic)
   inverse <- new_function(exprs(x = ), body = expr((!!inverse_fun)(x, !!!dots_list(...))))
 
   vec_data(dist_transformed(wrap_dist(list(x)), trans, inverse))[[1]]
@@ -215,10 +255,18 @@ Ops.dist_default <- function(e1, e2) {
       stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
     }
   } else if(is_dist[1]){
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
   } else {
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
   }
 
-  vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, invert_fail))[[1]]
+  inverse <- if(all(is_dist)) {
+    invert_fail
+  } else if(is_dist[1]){
+    get_binary_inverse_1(.Generic, e2)
+  } else {
+    get_binary_inverse_2(.Generic, e1)
+  }
+
+  vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))[[1]]
 }

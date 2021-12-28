@@ -43,6 +43,11 @@ test_that("LogNormal distributions", {
     dist_normal(0, 0.5)
   )
 
+  # Test log() shortcut with different bases
+  expect_equal(log(dist_lognormal(0, log(3)), base = 3), dist_normal(0, 1))
+  expect_equal(log2(dist_lognormal(0, log(2))), dist_normal(0, 1))
+  expect_equal(log10(dist_lognormal(0, log(10))), dist_normal(0, 1))
+
   # format
   expect_equal(format(dist), sprintf("t(%s)", format(dist_normal(0, 0.5))))
 
@@ -70,4 +75,42 @@ test_that("LogNormal distributions", {
   # stats (approximate due to bias adjustment method)
   expect_equal(mean(dist), exp(0.25/2), tolerance = 0.01)
   expect_equal(variance(dist), (exp(0.25) - 1)*exp(0.25), tolerance = 0.1)
+})
+
+test_that("inverses are applied automatically", {
+  dist <- dist_gamma(1,1)
+  log2dist <- log(dist, base = 2)
+  log2dist_t <- dist_transformed(dist, log2, function(x) 2 ^ x)
+
+  expect_equal(density(log2dist, 0.5), density(log2dist_t, 0.5))
+  expect_equal(cdf(log2dist, 0.5), cdf(log2dist_t, 0.5))
+  expect_equal(quantile(log2dist, 0.5), quantile(log2dist_t, 0.5))
+
+  # test multiple transformations that get stacked together by dist_transformed
+  explogdist <- exp(log(dist))
+  expect_equal(density(dist, 0.5), density(explogdist, 0.5))
+  expect_equal(cdf(dist, 0.5), cdf(explogdist, 0.5))
+  expect_equal(quantile(dist, 0.5), quantile(explogdist, 0.5))
+
+  # test multiple transformations created by operators (via Ops)
+  explog2dist <- 2 ^ log2dist
+  expect_equal(density(dist, 0.5), density(explog2dist, 0.5))
+  expect_equal(cdf(dist, 0.5), cdf(explog2dist, 0.5))
+  expect_equal(quantile(dist, 0.5), quantile(explog2dist, 0.5))
+
+  # basic set of inverses
+  expect_equal(density(sqrt(dist^2), 0.5), density(dist, 0.5))
+  expect_equal(density(exp(log(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(10^(log10(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(expm1(log1p(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(cos(acos(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(sin(asin(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(tan(atan(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(cosh(acosh(dist + 1)) - 1, 0.5), density(dist, 0.5))
+  expect_equal(density(sinh(asinh(dist)), 0.5), density(dist, 0.5))
+  expect_equal(density(tanh(atanh(dist)), 0.5), density(dist, 0.5))
+
+  expect_equal(density(dist + 1 - 1, 0.5), density(dist, 0.5))
+  expect_equal(density(dist * 2 / 2, 0.5), density(dist, 0.5))
+
 })
