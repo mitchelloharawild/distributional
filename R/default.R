@@ -158,7 +158,6 @@ dim.dist_default <- function(x){
 }
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")
-
 inverse_functions <- exprs(
   sqrt = function(x) x^2,
   exp = log,
@@ -180,6 +179,13 @@ inverse_functions <- exprs(
   asinh = sinh,
   atanh = tanh
 )
+#' Attempt to get the inverse of a known function by name. Returns invert_fail
+#' (a function that raises an error if called) if there is no known inverse.
+#' @param f string. Name of a function.
+#' @noRd
+get_inverse_function <- function(f) {
+  inverse_functions[[f]] %||% invert_fail
+}
 
 #' @method Math dist_default
 #' @export
@@ -188,7 +194,7 @@ Math.dist_default <- function(x, ...) {
 
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
 
-  inverse_fun <- inverse_functions[[.Generic]] %||% invert_fail
+  inverse_fun <- get_inverse_function(.Generic)
   inverse <- new_function(exprs(x = ), body = expr((!!inverse_fun)(x, !!!dots_list(...))))
 
   vec_data(dist_transformed(wrap_dist(list(x)), trans, inverse))[[1]]

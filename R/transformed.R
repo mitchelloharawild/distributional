@@ -83,7 +83,11 @@ covariance.dist_transformed <- function(x, ...){
 #' @export
 Math.dist_transformed <- function(x, ...) {
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
-  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, invert_fail))[[1]]
+
+  inverse_fun <- get_inverse_function(.Generic)
+  inverse <- new_function(exprs(x = ), body = expr((!!x$inverse)((!!inverse_fun)(x, !!!dots_list(...)))))
+
+  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse))[[1]]
 }
 
 #' @method Ops dist_transformed
