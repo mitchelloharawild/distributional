@@ -13,6 +13,26 @@ dist_sample(x)
 \lifecycle{stable}
 }
 \examples{
-dist_sample(x = list(rnorm(100), rnorm(100, 10)))
+# Univariate numeric samples
+dist <- dist_sample(x = list(rnorm(100), rnorm(100, 10)))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+generate(dist, 10)
+
+density(dist, 1)
+
+# Multivariate numeric samples
+dist <- dist_sample(x = list(cbind(rnorm(100), rnorm(100, 10))))
+
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+generate(dist, 10)
+
+density(dist, 1)
 
 }
