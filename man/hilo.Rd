@@ -15,3 +15,17 @@ hilo(x, ...)
 Used to extract a specified prediction interval at a particular confidence
 level from a distribution.
 }
+\details{
+The numeric lower and upper bounds can be extracted from the interval using
+\verb{<hilo>$lower} and \verb{<hilo>$upper} as shown in the examples below.
+}
+\examples{
+# 95\% interval from a standard normal distribution
+interval <- hilo(dist_normal(0, 1), 95)
+interval
+
+Extract the individual quantities with `$lower`, `$upper`, and `$level`
+interval$lower
+interval$upper
+interval$level
+}

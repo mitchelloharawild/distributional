@@ -33,9 +33,21 @@ new_hilo <- function(lower = double(), upper = double(), size = double()) {
 #' Used to extract a specified prediction interval at a particular confidence
 #' level from a distribution.
 #'
+#' The numeric lower and upper bounds can be extracted from the interval using
+#' `<hilo>$lower` and `<hilo>$upper` as shown in the examples below.
+#'
 #' @param x Object to create hilo from.
 #' @param ... Additional arguments used by methods.
 #'
+#' @examples
+#' # 95% interval from a standard normal distribution
+#' interval <- hilo(dist_normal(0, 1), 95)
+#' interval
+#'
+#' Extract the individual quantities with `$lower`, `$upper`, and `$level`
+#' interval$lower
+#' interval$upper
+#' interval$level
 #' @export
 hilo <- function(x, ...){
   UseMethod("hilo")
