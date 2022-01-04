@@ -2,9 +2,8 @@
 #'
 #' @param x A list of prototype vectors defining the distribution type.
 #' @param limits A list of value limits for the distribution.
-#' @param interval The
 #'
-new_support_region <- function(x, limits = NULL, interval = NULL) {
+new_support_region <- function(x, limits = NULL) {
   vctrs::new_vctr(x, class = "support_region")
 }
 

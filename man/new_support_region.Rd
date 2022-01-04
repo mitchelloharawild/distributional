@@ -4,14 +4,12 @@
 \alias{new_support_region}
 \title{Create a new support region vector}
 \usage{
-new_support_region(x, limits = NULL, interval = NULL)
+new_support_region(x, limits = NULL)
 }
 \arguments{
 \item{x}{A list of prototype vectors defining the distribution type.}
 
 \item{limits}{A list of value limits for the distribution.}
-
-\item{interval}{The}
 }
 \description{
 Create a new support region vector
