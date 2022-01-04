@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/ISSUE_TEMPLATE.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/SUPPORT.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/authors.html</loc>
+  </url>
+  <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/index.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/news/index.html</loc>
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/autoplot.distribution.html</loc>
@@ -10,10 +31,10 @@
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/cdf.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/covariance.html</loc>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/covariance.distribution.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/covariance.distribution.html</loc>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/covariance.html</loc>
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/density.distribution.html</loc>
@@ -157,16 +178,19 @@
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/guide_level.html</loc>
   </url>
   <url>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/hdr.distribution.html</loc>
+  </url>
+  <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/hdr.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/hdr.distribution.html</loc>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/hilo.distribution.html</loc>
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/hilo.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/hilo.distribution.html</loc>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/index.html</loc>
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/is-distribution.html</loc>
@@ -223,9 +247,9 @@
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/support.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/variance.html</loc>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/variance.distribution.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/variance.distribution.html</loc>
+    <loc>https://pkg.mitchelloharawild.com/distributional/reference/variance.html</loc>
   </url>
 </urlset>

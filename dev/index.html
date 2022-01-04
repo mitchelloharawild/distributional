@@ -32,6 +32,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -51,12 +53,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li>
@@ -65,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mitchelloharawild/distributional/">
+  <a href="https://github.com/mitchelloharawild/distributional/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -82,43 +78,43 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="distributional" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#distributional" class="anchor"></a>distributional</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="distributional">distributional<a class="anchor" aria-label="anchor" href="#distributional"></a>
+</h1></div>
 <!-- badges: start -->
 
-<p>The distributional package allows distributions to be used in a vectorised context. It provides methods which are minimal wrappers to the standard d, p, q, and r distribution functions which are applied to each distribution in the vector. Additional distributional statistics can be computed, including the <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code>, <code><a href="https://rdrr.io/r/stats/median.html">median()</a></code>, <code><a href="reference/variance.html">variance()</a></code>, and intervals with <code><a href="reference/hilo.html">hilo()</a></code>.</p>
-<p>The distributional nature of a model’s predictions is often understated, with default output of prediction methods usually only producing point predictions. Some R packages (such as <a href="https://CRAN.R-project.org/package=forecast">forecast</a>) further emphasise uncertainty by producing point forecasts and intervals by default, however the user’s ability to interact with them is limited. This package vectorises distributions and provides methods for working with them, making distributions compatible with prediction outputs of modelling functions. These vectorised distributions can be illustrated with <a href="https://CRAN.R-project.org/package=ggplot2">ggplot2</a> using the <a href="https://CRAN.R-project.org/package=ggdist">ggdist</a> package, providing further opportunity to visualise the uncertainty of predictions and teach distributional theory.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of distributional from <a href="https://CRAN.R-project.org/package=distributional">CRAN</a> with:</p>
+<p>The distributional package allows distributions to be used in a vectorised context. It provides methods which are minimal wrappers to the standard d, p, q, and r distribution functions which are applied to each distribution in the vector. Additional distributional statistics can be computed, including the <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>, <code><a href="https://rdrr.io/r/stats/median.html" class="external-link">median()</a></code>, <code><a href="reference/variance.html">variance()</a></code>, and intervals with <code><a href="reference/hilo.html">hilo()</a></code>.</p>
+<p>The distributional nature of a model’s predictions is often understated, with default output of prediction methods usually only producing point predictions. Some R packages (such as <a href="https://CRAN.R-project.org/package=forecast" class="external-link">forecast</a>) further emphasise uncertainty by producing point forecasts and intervals by default, however the user’s ability to interact with them is limited. This package vectorises distributions and provides methods for working with them, making distributions compatible with prediction outputs of modelling functions. These vectorised distributions can be illustrated with <a href="https://CRAN.R-project.org/package=ggplot2" class="external-link">ggplot2</a> using the <a href="https://CRAN.R-project.org/package=ggdist" class="external-link">ggdist</a> package, providing further opportunity to visualise the uncertainty of predictions and teach distributional theory.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of distributional from <a href="https://CRAN.R-project.org/package=distributional" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"distributional"</span><span class="op">)</span></code></pre></div>
-<p>The development version can be installed from <a href="https://github.com/mitchelloharawild/distributional">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"distributional"</span><span class="op">)</span></code></pre></div>
+<p>The development version can be installed from <a href="https://github.com/mitchelloharawild/distributional" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mitchelloharawild/distributional"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
 <p>Distributions are created using <code>dist_*()</code> functions. Currently only the normal distribution is supported for testing purposes.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.mitchelloharawild.com/distributional/">distributional</a></span><span class="op">)</span>
-<span class="va">my_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/dist_student_t.html">dist_student_t</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.mitchelloharawild.com/distributional/">distributional</a></span><span class="op">)</span>
+<span class="va">my_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/dist_student_t.html">dist_student_t</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
 <span class="va">my_dist</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
 <span class="co">#&gt; [1] N(0, 1)     t(10, 0, 1)</span></code></pre></div>
 <p>The standard four distribution functions in R are usable via these generics:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/density.html">density</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">0</span><span class="op">)</span> <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">0</span><span class="op">)</span> <span class="co"># c(dnorm(0, mean = 0, sd = 1), dt(0, df = 10))</span>
 <span class="co">#&gt; [1] 0.3989423 0.3891084</span>
 <span class="fu"><a href="reference/cdf.html">cdf</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">5</span><span class="op">)</span> <span class="co"># c(pnorm(5, mean = 0, sd = 1), pt(5, df = 10))</span>
 <span class="co">#&gt; [1] 0.9999997 0.9997313</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">0.1</span><span class="op">)</span> <span class="co"># c(qnorm(0.1, mean = 0, sd = 1), qt(0.1, df = 10))</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">0.1</span><span class="op">)</span> <span class="co"># c(qnorm(0.1, mean = 0, sd = 1), qt(0.1, df = 10))</span>
 <span class="co">#&gt; [1] -1.281552 -1.372184</span>
-<span class="fu"><a href="https://generics.r-lib.org/reference/generate.html">generate</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span>
+<span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt;  [1]  1.262954285 -0.326233361  1.329799263  1.272429321  0.414641434</span>
 <span class="co">#&gt;  [6] -1.539950042 -0.928567035 -0.294720447 -0.005767173  2.404653389</span>
@@ -139,103 +135,113 @@
 <span class="va">my_dist</span><span class="op">*</span><span class="fl">3</span> <span class="op">+</span> <span class="fl">2</span>
 <span class="co">#&gt; &lt;distribution[2]&gt;</span>
 <span class="co">#&gt; [1] N(2, 9)        t(t(10, 0, 1))</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">my_dist</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">my_dist</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0 0</span>
 <span class="fu"><a href="reference/variance.html">variance</a></span><span class="op">(</span><span class="va">my_dist</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1.00 1.25</span></code></pre></div>
-<p>You can also visualise the distribution(s) using the <a href="https://mjskay.github.io/ggdist/">ggdist</a> package.</p>
+<p>You can also visualise the distribution(s) using the <a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a> package.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/">ggdist</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Gamma(2,1)"</span>, <span class="st">"Normal(5,1)"</span>, <span class="st">"Mixture"</span><span class="op">)</span>,
-  dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">)</span>,
-           <span class="fu"><a href="reference/dist_mixture.html">dist_mixture</a></span><span class="op">(</span><span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
+  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gamma(2,1)"</span>, <span class="st">"Normal(5,1)"</span>, <span class="st">"Mixture"</span><span class="op">)</span>,
+  dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">)</span>,
+           <span class="fu"><a href="reference/dist_mixture.html">dist_mixture</a></span><span class="op">(</span><span class="fu"><a href="reference/dist_gamma.html">dist_gamma</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/dist_normal.html">dist_normal</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">name</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_dist_slabinterval.html">stat_dist_halfeye</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>dist <span class="op">=</span> <span class="va">dist</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Density function for a mixture of distributions"</span>, y <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">name</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_dist_slabinterval.html" class="external-link">stat_dist_halfeye</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>dist <span class="op">=</span> <span class="va">dist</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Density function for a mixture of distributions"</span>, y <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Computation failed in `stat_dist_slabinterval()`:</span>
 <span class="co">#&gt; invalid 'xmin' value</span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png" width="100%"></p>
 </div>
-<div id="related-work" class="section level2">
-<h2 class="hasAnchor">
-<a href="#related-work" class="anchor"></a>Related work</h2>
+<div class="section level2">
+<h2 id="related-work">Related work<a class="anchor" aria-label="anchor" href="#related-work"></a>
+</h2>
 <p>There are several packages which unify interfaces for distributions in R:</p>
 <ul>
 <li>stats provides functions to work with possibly multiple distributions (comparisons made below).</li>
 <li>
-<a href="https://cran.r-project.org/package=distributions3">distributions3</a> represents singular distributions using S3, with particularly nice documentation. This package makes use of some code and documentation from this package.</li>
+<a href="https://cran.r-project.org/package=distributions3" class="external-link">distributions3</a> represents singular distributions using S3, with particularly nice documentation. This package makes use of some code and documentation from this package.</li>
 <li>
-<a href="https://cran.r-project.org/package=distr">distr</a> represents singular distributions using S4.</li>
+<a href="https://cran.r-project.org/package=distr" class="external-link">distr</a> represents singular distributions using S4.</li>
 <li>
-<a href="https://cran.r-project.org/package=distr6">distr6</a> represents singular distributions using R6.</li>
-<li>Many more in the <a href="https://cran.r-project.org/view=Distributions">CRAN task view</a>
+<a href="https://cran.r-project.org/package=distr6" class="external-link">distr6</a> represents singular distributions using R6.</li>
+<li>Many more in the <a href="https://cran.r-project.org/view=Distributions" class="external-link">CRAN task view</a>
 </li>
 </ul>
-<p>This package differs from the above libraries by storing the distributions in a vectorised format. It does this using <a href="https://vctrs.r-lib.org/">vctrs</a>, so it should play nicely with the tidyverse (try putting distributions into a tibble!).</p>
+<p>This package differs from the above libraries by storing the distributions in a vectorised format. It does this using <a href="https://vctrs.r-lib.org/" class="external-link">vctrs</a>, so it should play nicely with the tidyverse (try putting distributions into a tibble!).</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=distributional">https://​cloud.r-project.org/​package=distributional</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/mitchelloharawild/distributional/">https://​github.com/​mitchelloharawild/​distributional/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/mitchelloharawild/distributional/issues">https://​github.com/​mitchelloharawild/​distributional/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=distributional" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/mitchelloharawild/distributional/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/mitchelloharawild/distributional/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Mitchell O'Hara-Wild <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6729-7695" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Matthew Kay <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9446-0419" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Alex Hayes <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing distributional</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
-<li><a href="https://github.com/mitchelloharawild/distributional"><img src="https://github.com/mitchelloharawild/distributional/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/github/mitchelloharawild/distributional?branch=master"><img src="https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg" alt="Coverage Status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=distributional"><img src="https://www.r-pkg.org/badges/version/distributional" alt="CRAN status"></a></li>
+<li>Mitchell O'Hara-Wild <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6729-7695" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Matthew Kay <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9446-0419" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Alex Hayes <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4985-5160" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
+<li><a href="https://github.com/mitchelloharawild/distributional" class="external-link"><img src="https://github.com/mitchelloharawild/distributional/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/github/mitchelloharawild/distributional?branch=master" class="external-link"><img src="https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg" alt="Coverage Status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=distributional" class="external-link"><img src="https://www.r-pkg.org/badges/version/distributional" alt="CRAN status"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Mitchell O'Hara-Wild, Matthew Kay, Alex Hayes.</p>
+  <p></p>
+<p>Developed by Mitchell O’Hara-Wild, Matthew Kay, Alex Hayes.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -243,6 +249,8 @@
 
   
 
+
+  
 
   </body>
 </html>
