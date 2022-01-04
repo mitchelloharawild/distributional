@@ -315,6 +315,11 @@ variance.default <- function(x, ...){
 variance.numeric <- function(x, ...){
   stats::var(as.vector(x), ...)
 }
+#' @rdname variance
+#' @export
+variance.matrix <- function(x, ...){
+  diag(stats::cov(x, ...))
+}
 
 #' Variance of a probability distribution
 #'

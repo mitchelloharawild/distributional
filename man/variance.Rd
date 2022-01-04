@@ -3,12 +3,15 @@
 \name{variance}
 \alias{variance}
 \alias{variance.numeric}
+\alias{variance.matrix}
 \alias{covariance.numeric}
 \title{Variance}
 \usage{
 variance(x, ...)
 
 \method{variance}{numeric}(x, ...)
+
+\method{variance}{matrix}(x, ...)
 
 \method{covariance}{numeric}(x, ...)
 }
