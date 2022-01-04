@@ -7,7 +7,21 @@
 #' @seealso [actuar::InverseGaussian]
 #'
 #' @examples
-#' dist_inverse_gaussian(mean = c(1,1,1,3,3), shape = c(0.2, 1, 3, 0.2, 1))
+#' dist <- dist_inverse_gaussian(mean = c(1,1,1,3,3), shape = c(0.2, 1, 3, 0.2, 1))
+#' dist
+#'
+#' @examplesIf requireNamespace("actuar", quietly = TRUE)
+#' mean(dist)
+#' variance(dist)
+#' support(dist)
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @name dist_inverse_gaussian
 #' @export

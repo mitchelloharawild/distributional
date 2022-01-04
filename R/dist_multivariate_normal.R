@@ -5,8 +5,24 @@
 #' @param mu A list of numeric vectors for the distribution's mean.
 #' @param sigma A list of matrices for the distribution's variance-covariance matrix.
 #'
+#' @seealso [mvtnorm::dmvnorm], [mvtnorm::qmvnorm]
+#'
 #' @examples
-#' dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,3), ncol=2)))
+#' dist <- dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,3), ncol=2)))
+#' dist
+#'
+#' @examplesIf requireNamespace("mvtnorm", quietly = TRUE)
+#' mean(dist)
+#' variance(dist)
+#' support(dist)
+#' generate(dist, 10)
+#'
+#' density(dist, c(2, 1))
+#' density(dist, c(2, 1), log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #'
 #' @export
 dist_multivariate_normal <- function(mu = 0, sigma = diag(1)){

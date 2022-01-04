@@ -17,8 +17,22 @@ dist_burr(shape1, shape2, rate = 1)
 \lifecycle{stable}
 }
 \examples{
-dist_burr(shape1 = c(1,1,1,2,3,0.5), shape2 = c(1,2,3,1,1,2))
+dist <- dist_burr(shape1 = c(1,1,1,2,3,0.5), shape2 = c(1,2,3,1,1,2))
+dist
 
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+mean(dist)
+variance(dist)
+support(dist)
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[actuar:Burr]{actuar::Burr}

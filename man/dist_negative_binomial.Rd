@@ -64,6 +64,7 @@ mean(dist)
 variance(dist)
 skewness(dist)
 kurtosis(dist)
+support(dist)
 
 generate(dist, 10)
 

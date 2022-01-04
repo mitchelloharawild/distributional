@@ -7,8 +7,21 @@
 #' @seealso [actuar::Logarithmic]
 #'
 #' @examples
-#' dist_logarithmic(prob = c(0.33, 0.66, 0.99))
+#' dist <- dist_logarithmic(prob = c(0.33, 0.66, 0.99))
+#' dist
 #'
+#' @examplesIf requireNamespace("actuar", quietly = TRUE)
+#' mean(dist)
+#' variance(dist)
+#' support(dist)
+#' generate(dist, 10)
+#'
+#' density(dist, 2)
+#' density(dist, 2, log = TRUE)
+#'
+#' cdf(dist, 4)
+#'
+#' quantile(dist, 0.7)
 #' @name dist_logarithmic
 #' @export
 dist_logarithmic <- function(prob){

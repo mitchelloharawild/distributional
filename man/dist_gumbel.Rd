@@ -52,13 +52,14 @@ for \eqn{x} in \eqn{R}, the set of all real numbers.
 }
 \examples{
 dist <- dist_gumbel(alpha = c(0.5, 1, 1.5, 3), scale = c(2, 2, 3, 4))
-
 dist
+
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mean(dist)
 variance(dist)
 skewness(dist)
 kurtosis(dist)
-
+support(dist)
 generate(dist, 10)
 
 density(dist, 2)
@@ -67,7 +68,7 @@ density(dist, 2, log = TRUE)
 cdf(dist, 4)
 
 quantile(dist, 0.7)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[actuar:Gumbel]{actuar::Gumbel}

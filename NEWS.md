@@ -38,9 +38,11 @@
 * Improved performance of default methods of `mean()` and `variance()`, which
   no longer use sampling based means and variances for univariate continuous
   distributions (#71, @mjskay)
-  
 * `dist_binomial()` distributions now return integers for `quantile()` and
   `generate()` methods.
+* Added conditional examples for distributions using functions from supported
+  packages.
+
 ## Bug fixes
 
 * Fixed fallback `format()` function for distributions classes that have not

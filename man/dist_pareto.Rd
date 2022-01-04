@@ -15,8 +15,22 @@ dist_pareto(shape, scale)
 \lifecycle{questioning}
 }
 \examples{
-dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))
+dist <- dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))
+dist
 
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+mean(dist)
+variance(dist)
+support(dist)
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[actuar:Pareto]{actuar::Pareto}

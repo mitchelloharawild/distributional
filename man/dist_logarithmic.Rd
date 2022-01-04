@@ -13,8 +13,22 @@ dist_logarithmic(prob)
 \lifecycle{stable}
 }
 \examples{
-dist_logarithmic(prob = c(0.33, 0.66, 0.99))
+dist <- dist_logarithmic(prob = c(0.33, 0.66, 0.99))
+dist
 
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+mean(dist)
+variance(dist)
+support(dist)
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[actuar:Logarithmic]{actuar::Logarithmic}

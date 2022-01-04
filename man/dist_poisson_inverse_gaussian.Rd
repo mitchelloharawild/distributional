@@ -17,8 +17,22 @@ dist_poisson_inverse_gaussian(mean, shape)
 \lifecycle{stable}
 }
 \examples{
-dist_poisson_inverse_gaussian(mean = rep(0.1, 3), shape = c(0.4, 0.8, 1))
+dist <- dist_poisson_inverse_gaussian(mean = rep(0.1, 3), shape = c(0.4, 0.8, 1))
+dist
 
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+mean(dist)
+variance(dist)
+support(dist)
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[actuar:PoissonInverseGaussian]{actuar::PoissonInverseGaussian}
