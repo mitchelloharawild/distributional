@@ -24,7 +24,7 @@ The numeric lower and upper bounds can be extracted from the interval using
 interval <- hilo(dist_normal(0, 1), 95)
 interval
 
-Extract the individual quantities with `$lower`, `$upper`, and `$level`
+# Extract the individual quantities with `$lower`, `$upper`, and `$level`
 interval$lower
 interval$upper
 interval$level
