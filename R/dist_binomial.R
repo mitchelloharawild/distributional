@@ -118,7 +118,7 @@ log_density.dist_binomial <- function(x, at, ...){
 
 #' @export
 quantile.dist_binomial <- function(x, p, ...){
-  stats::qbinom(p, x[["n"]], x[["p"]])
+  as.integer(stats::qbinom(p, x[["n"]], x[["p"]]))
 }
 
 #' @export
@@ -128,7 +128,7 @@ cdf.dist_binomial <- function(x, q, ...){
 
 #' @export
 generate.dist_binomial <- function(x, times, ...){
-  stats::rbinom(times, x[["n"]], x[["p"]])
+  as.integer(stats::rbinom(times, x[["n"]], x[["p"]]))
 }
 
 #' @export

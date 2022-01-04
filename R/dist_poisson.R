@@ -107,7 +107,7 @@ cdf.dist_poisson <- function(x, q, ...){
 
 #' @export
 generate.dist_poisson <- function(x, times, ...){
-  stats::rpois(times, x[["l"]])
+  as.integer(stats::rpois(times, x[["l"]]))
 }
 
 #' @export

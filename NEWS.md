@@ -39,6 +39,8 @@
   no longer use sampling based means and variances for univariate continuous
   distributions (#71, @mjskay)
   
+* `dist_binomial()` distributions now return integers for `quantile()` and
+  `generate()` methods.
 ## Bug fixes
 
 * Fixed fallback `format()` function for distributions classes that have not
