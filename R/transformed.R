@@ -38,7 +38,7 @@ format.dist_transformed <- function(x, ...){
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  density(x[["dist"]], x[["inverse"]](at))*vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]])
+  density(x[["dist"]], x[["inverse"]](at))*abs(vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]]))
 }
 
 #' @export
@@ -83,7 +83,11 @@ covariance.dist_transformed <- function(x, ...){
 #' @export
 Math.dist_transformed <- function(x, ...) {
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
-  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, invert_fail))[[1]]
+
+  inverse_fun <- get_unary_inverse(.Generic)
+  inverse <- new_function(exprs(x = ), body = expr((!!x$inverse)((!!inverse_fun)(x, !!!dots_list(...)))))
+
+  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse))[[1]]
 }
 
 #' @method Ops dist_transformed
@@ -101,5 +105,16 @@ Ops.dist_transformed <- function(e1, e2) {
   } else {
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
   }
-  vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, invert_fail))[[1]]
+
+  inverse <- if(all(is_dist)) {
+    invert_fail
+  } else if(is_dist[1]){
+    inverse_fun <- get_binary_inverse_1(.Generic, e2)
+    new_function(exprs(x = ), body = expr((!!e1$inverse)((!!inverse_fun)(x))))
+  } else {
+    inverse_fun <- get_binary_inverse_2(.Generic, e1)
+    new_function(exprs(x = ), body = expr((!!e2$inverse)((!!inverse_fun)(x))))
+  }
+
+  vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))[[1]]
 }

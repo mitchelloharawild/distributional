@@ -145,10 +145,21 @@ kurtosis.dist_lognormal <- function(x, ...) {
   exp(4*s2) + 2*exp(3*s2) + 3*exp(2*s2) - 6
 }
 
+# make a normal distribution from a lognormal distribution using the
+# specified base
+normal_dist_with_base <- function(x, base = exp(1)) {
+  vec_data(dist_normal(x[["mu"]], x[["sigma"]]) / log(base))[[1]]
+}
+
 #' @method Math dist_lognormal
 #' @export
 Math.dist_lognormal <- function(x, ...) {
-  # Shortcut to get Normal distribution from log-normal.
-  if(.Generic == "log") return(vec_data(dist_normal(x[["mu"]], x[["sigma"]]))[[1]])
-  NextMethod()
+  switch(.Generic,
+    # Shortcuts to get Normal distribution from log-normal.
+    log = normal_dist_with_base(x, ...),
+    log2 = normal_dist_with_base(x, 2),
+    log10 = normal_dist_with_base(x, 10),
+
+    NextMethod()
+  )
 }

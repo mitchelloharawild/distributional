@@ -20,3 +20,4 @@ the {ggdist} package to produce your own distribution plots. You can learn
 more about how this plot can be produced using {ggdist} here:
 https://mjskay.github.io/ggdist/articles/slabinterval.html
 }
+\keyword{internal}
