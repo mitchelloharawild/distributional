@@ -19,16 +19,23 @@ reference:
     - quantile.distribution
     - likelihood.distribution
     - hilo.distribution
+    - hilo
+    - is_hilo
     - hdr.distribution
+    - hdr
+    - is_hdr
     - support.distribution
     - family.distribution
     - parameters.distribution
     - mean.distribution
     - median.distribution
-    - covariance.distribution
+    - variance
     - variance.distribution
+    - covariance
+    - covariance.distribution
     - skewness.distribution
     - kurtosis.distribution
+    - is_distribution
 - title: Graphics
   desc: >
     Tools for visualising distributions and intervals.
@@ -37,6 +44,9 @@ reference:
   contents:
     - geom_hilo_ribbon
     - geom_hilo_linerange
+    - scale_hilo_continuous
+    - scale_level
+    - guide_level
 - title: Continuous distributions
   desc: >
     Continuous probability distributions.
@@ -92,3 +102,11 @@ reference:
     - dist_mixture
     - dist_transformed
     - dist_truncated
+- title: Object constructors
+  desc: >
+    Constructor functions for developers to use in extending the package.
+  contents:
+    - new_dist
+    - new_hilo
+    - new_hdr
+    - new_support_region
