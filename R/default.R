@@ -76,7 +76,17 @@ support.dist_default <- function(x, ...) {
 
 #' @export
 mean.dist_default <- function(x, ...){
-  mean(generate(x, times = 1000), na.rm = TRUE)
+  dist_type <- support(x)[[1]]
+  if (!is.numeric(dist_type)) return(NA_real_)
+  if (is.double(dist_type)) {
+    limits <- quantile(x, c(0, 1))
+    tryCatch(
+      integrate(function(at) density(x, at) * at, limits[1], limits[2])$value,
+      error = function(e) NA_real_
+    )
+  } else {
+    mean(quantile(x, stats::ppoints(1000)), na.rm = TRUE)
+  }
 }
 #' @export
 variance.dist_default <- function(x, ...){
@@ -87,8 +97,18 @@ variance.dist_default <- function(x, ...){
 }
 #' @export
 covariance.dist_default <- function(x, ...){
-  x <- generate(x, times = 1000)
-  if(is.matrix(x)) stats::cov(x) else stats::var(x, na.rm = TRUE)
+  dist_type <- support(x)[[1]]
+  if (!is.numeric(dist_type)) return(NA_real_)
+  else if (is.matrix(dist_type)) stats::cov(generate(x, times = 1000))
+  else if (is.double(dist_type)) {
+    limits <- quantile(x, c(0, 1))
+    tryCatch(
+      integrate(function(at) density(x, at) * at^2, limits[1], limits[2])$value,
+      error = function(e) NA_real_
+    ) - mean(x)^2
+  } else {
+    var(quantile(x, stats::ppoints(1000)), na.rm = TRUE)
+  }
 }
 
 #' @export

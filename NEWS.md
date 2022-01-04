@@ -35,6 +35,9 @@
   default. This behaviour can be changed with the `na.rm` argument.
 * `<hilo>` objects now support non-numeric and multivariate distributions. 
   `<hilo>` vectors that have different bound types cannot be mixed (#74).
+* Improved performance of default methods of `mean()` and `variance()`, which
+  no longer use sampling based means and variances for univariate continuous
+  distributions (#71, @mjskay)
   
 ## Bug fixes
 
