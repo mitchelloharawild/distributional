@@ -52,6 +52,5 @@ URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitch
 BugReports: https://github.com/mitchelloharawild/distributional/issues
 Encoding: UTF-8
 Language: en-GB
-LazyData: true
 Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate', 'namespace'))
 RoxygenNote: 7.1.2
