@@ -47,13 +47,13 @@ log_density.dist_pareto <- function(x, at, ...){
 #' @export
 quantile.dist_pareto <- function(x, p, ...){
   require_package("actuar")
-  actuar::qpareto(p, x[["shape"]], x[["scale"]], ...)
+  actuar::qpareto(p, x[["shape"]], x[["scale"]])
 }
 
 #' @export
 cdf.dist_pareto <- function(x, q, ...){
   require_package("actuar")
-  actuar::ppareto(q, x[["shape"]], x[["scale"]], ...)
+  actuar::ppareto(q, x[["shape"]], x[["scale"]])
 }
 
 #' @export

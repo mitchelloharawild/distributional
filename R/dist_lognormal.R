@@ -101,20 +101,20 @@ log_density.dist_lognormal <- function(x, at, ...){
 
 #' @export
 quantile.dist_lognormal <- function(x, p, ...){
-  stats::qlnorm(p, x[["mu"]], x[["sigma"]], ...)
+  stats::qlnorm(p, x[["mu"]], x[["sigma"]])
 }
 #' @export
 log_quantile.dist_lognormal <- function(x, p, ...){
-  stats::qlnorm(p, x[["mu"]], x[["sigma"]], ..., log.p = TRUE)
+  stats::qlnorm(p, x[["mu"]], x[["sigma"]], log.p = TRUE)
 }
 
 #' @export
 cdf.dist_lognormal <- function(x, q, ...){
-  stats::plnorm(q, x[["mu"]], x[["sigma"]], ...)
+  stats::plnorm(q, x[["mu"]], x[["sigma"]])
 }
 #' @export
 log_cdf.dist_lognormal <- function(x, q, ...){
-  stats::plnorm(q, x[["mu"]], x[["sigma"]], ..., log.p = TRUE)
+  stats::plnorm(q, x[["mu"]], x[["sigma"]], log.p = TRUE)
 }
 
 #' @export
