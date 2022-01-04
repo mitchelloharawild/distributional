@@ -31,3 +31,8 @@ format.support_region <- function(x, ...) {
     else type
   }, type, field(x, "lim"))
 }
+
+#' @export
+vec_ptype_abbr.support_region <- function(x, ...){
+  "support"
+}
