@@ -8,12 +8,11 @@ test_that("is_distribution", {
   expect_true(all(sapply(df, is_distribution) == c(FALSE, TRUE, TRUE)))
 })
 
-test_that("variance() works correctly on arrays of different dimension", {
+test_that("variance() works correctly on vectors/matrices of different dimension", {
   x = 1:8
 
   expect_equal(variance(x), 6)
-  expect_equal(variance(matrix(x, nrow = 2)), 6)
-  expect_equal(variance(array(x, dim = c(2, 2, 2))), 6)
+  expect_equal(variance(matrix(x, nrow = 2)), rep(0.5, 4))
 })
 
 test_that("variance() throws an error on non-numeric objects", {
