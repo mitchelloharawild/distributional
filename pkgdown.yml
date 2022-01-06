@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles: {}
-last_built: 2021-07-26T05:06Z
+last_built: 2022-01-06T00:00Z
 urls:
   reference: https://pkg.mitchelloharawild.com/distributional/reference
   article: https://pkg.mitchelloharawild.com/distributional/articles
