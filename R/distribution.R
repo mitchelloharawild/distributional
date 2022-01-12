@@ -64,7 +64,6 @@ density.distribution <- function(x, at, ..., log = FALSE){
 }
 
 log_density <- function(x, at, ...) {
-  ellipsis::check_dots_used()
   UseMethod("log_density")
 }
 #' @export
@@ -91,7 +90,6 @@ quantile.distribution <- function(x, p, ..., log = FALSE){
   dist_apply(x, quantile, p = p, ...)
 }
 log_quantile <- function(x, q, ...) {
-  ellipsis::check_dots_used()
   UseMethod("log_quantile")
 }
 #' @export
@@ -112,7 +110,6 @@ log_quantile.distribution <- function(x, p, ...){
 #' @export
 cdf <- function (x, q, ..., log = FALSE){
   if(log) return(log_cdf(x, q, ...))
-  ellipsis::check_dots_used()
   UseMethod("cdf")
 }
 #' @rdname cdf
@@ -122,7 +119,6 @@ cdf.distribution <- function(x, q, ...){
   dist_apply(x, cdf, q = q, ...)
 }
 log_cdf <- function(x, q, ...) {
-  ellipsis::check_dots_used()
   UseMethod("log_cdf")
 }
 #' @export
@@ -163,7 +159,6 @@ generate.distribution <- function(x, times, ...){
 #' @name likelihood
 #' @export
 likelihood <- function (x, ...){
-  ellipsis::check_dots_used()
   UseMethod("likelihood")
 }
 
@@ -187,7 +182,6 @@ The same sample will be used for each distribution, i.e. `sample = list(sample)`
 #' @rdname likelihood
 #' @export
 log_likelihood <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("log_likelihood")
 }
 #' @export
@@ -213,7 +207,6 @@ log_likelihood.distribution <- function(x, sample, ...){
 #' parameters(dist)
 #' @export
 parameters <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("parameters")
 }
 
@@ -257,7 +250,6 @@ family.distribution <- function(object, ...) {
 #' @name support
 #' @export
 support <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("support")
 }
 
@@ -385,7 +377,6 @@ covariance.distribution <- function(x, ...){
 #'
 #' @export
 skewness <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("skewness")
 }
 #' @rdname skewness
@@ -403,7 +394,6 @@ skewness.distribution <- function(x, ...){
 #'
 #' @export
 kurtosis <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("kurtosis")
 }
 #' @rdname kurtosis

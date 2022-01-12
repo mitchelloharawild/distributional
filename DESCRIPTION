@@ -31,7 +31,6 @@ Imports:
     vctrs (>= 0.3.0),
     rlang (>= 0.4.5),
     generics,
-    ellipsis,
     stats,
     numDeriv,
     ggplot2,

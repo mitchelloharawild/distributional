@@ -1,5 +1,13 @@
 # distributional (development version)
 
+## Improvements
+
+* Generics introduced by this package now allow `na.rm` and other parameters to
+  be passed to distribution methods, even if these parameters aren't used. The
+  package no longer checks the usage of `...` with the `ellipsis` package, if
+  you'd like to check that all `...` are used, you can write your own wrapping
+  functions.
+
 # distributional 0.3.0
 
 ## New features
