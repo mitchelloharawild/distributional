@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -77,23 +77,23 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;distribution[2]&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] sample[100] sample[100]</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02314534 9.83891806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.05715749 10.05235748</span>
 <span class="r-in"><span class="fu"><a href="variance.html">variance</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8110334 1.2059229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.275371 0.942066</span>
 <span class="r-in"><span class="fu"><a href="skewness.html">skewness</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.03481784 -0.37313633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.33793684 -0.07306719</span>
 <span class="r-in"><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.6703847  0.1759870  1.0148800 -0.1321513  1.5064035 -0.8251071</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.4559875 -1.1302202  0.7055531  1.0148800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.045369380  1.723392091  0.573303905 -0.065741964  2.105884331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] -0.244727112  0.002069092  1.955380562 -0.565978699 -0.010569606</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 10.744902 10.678465 10.761690  8.239408 10.609192 10.046189 10.761690</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  9.813064  9.896107 10.930571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  8.831805 10.339878 10.612477  8.867626  9.557843  8.808797  9.947049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.472779 11.044075 10.115580</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1881308 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2129757 0.0000000</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Multivariate numeric samples</span></span>
 <span class="r-in"><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu">dist_sample</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -102,30 +102,30 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;distribution[1]&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] sample[100]</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.05120919 10.03008580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.05590383  9.84500784</span>
 <span class="r-in"><span class="fu"><a href="variance.html">variance</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]      [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.0036064 0.1128782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.1128782 1.0878539</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]       [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.06229902 0.03995491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.03995491 0.97933844</span>
 <span class="r-in"><span class="fu"><a href="skewness.html">skewness</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.005349162</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.005580738</span>
 <span class="r-in"><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]      [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  1.54525067  8.691713</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.80863926 11.091088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.22628641 10.130258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.13587171 11.202589</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.05620755  8.419269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.61790381  7.307074</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -1.63763324 10.382976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -3.15899807  9.311138</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.80282868 10.568482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -1.63763324 10.382976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.74634356 10.160850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.14838845 12.529325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  1.16481818 10.236206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.06925327  9.589019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.09751491 10.709971</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  1.16481818 10.236206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  1.42038741  9.182078</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.85129409  9.682913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.26054313 11.021228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.06925327  9.589019</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2122785 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2211925 0.0000000</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

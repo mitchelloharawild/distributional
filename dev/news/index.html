@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -56,14 +56,21 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>Generics introduced by this package now allow <code>na.rm</code> and other parameters to be passed to distribution methods, even if these parameters aren’t used. The package no longer checks the usage of <code>...</code> with the <code>ellipsis</code> package, if you’d like to check that all <code>...</code> are used, you can write your own wrapping functions.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.0" id="distributional-030">distributional 0.3.0<small>2022-01-05</small><a class="anchor" aria-label="anchor" href="#distributional-030"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
 <div class="section level4">
-<h4 id="probability-distributions-development-version">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-development-version"></a></h4>
+<h4 id="probability-distributions-0-3-0">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-0-3-0"></a></h4>
 <ul><li>Added <code><a href="../reference/dist_categorical.html">dist_categorical()</a></code> for the Categorical distribution.</li>
 <li>Added <code><a href="../reference/dist_lognormal.html">dist_lognormal()</a></code> for the log-normal distribution. Mathematical conversion shortcuts have also been added, so <code>exp(dist_normal())</code> produces <code><a href="../reference/dist_lognormal.html">dist_lognormal()</a></code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="generics-development-version">Generics<a class="anchor" aria-label="anchor" href="#generics-development-version"></a></h4>
+<h4 id="generics-0-3-0">Generics<a class="anchor" aria-label="anchor" href="#generics-0-3-0"></a></h4>
 <ul><li>Added <code><a href="../reference/parameters.html">parameters()</a></code> generic for obtaining the distribution’s parameters.</li>
 <li>Added <code>family(&lt;distribution&gt;)</code> for getting the distribution’s family name.</li>
 <li>Added <code><a href="../reference/covariance.html">covariance()</a></code> to return the covariance of a distribution.</li>
@@ -72,7 +79,7 @@
 </ul></div>
 </div>
 <div class="section level3">
-<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<h3 id="improvements-0-3-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-3-0"></a></h3>
 <ul><li>
 <code><a href="../reference/variance.html">variance()</a></code> now always returns a variance. It will not default to providing a covariance matrix for matrices. This also applies to multivariate distributions such as <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code>. The covariance can now be obtained using the <code><a href="../reference/covariance.html">covariance()</a></code> function.</li>
 <li>
@@ -89,11 +96,11 @@
 <li>Added conditional examples for distributions using functions from supported packages.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h3>
 <ul><li>Fixed fallback <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> function for distributions classes that have not defined this method (<a href="https://github.com/mitchelloharawild/distributional/issues/67" class="external-link">#67</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
 <ul><li>
 <code><a href="../reference/variance.html">variance()</a></code> on a <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> will now return the diagonal instead of the complete variance-covariance matrix.</li>
 <li>
