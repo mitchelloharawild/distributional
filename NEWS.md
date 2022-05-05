@@ -7,6 +7,8 @@
   package no longer checks the usage of `...` with the `ellipsis` package, if
   you'd like to check that all `...` are used, you can write your own wrapping
   functions.
+* Lists of functions can now be used in `dist_transformed()`, allowing the
+  transformation to differ for each distribution.
 
 # distributional 0.3.0
 
