@@ -1,5 +1,10 @@
 # distributional (development version)
 
+## New features
+
+* Add Math and Ops methods for sample distribution, which applies the functions
+  directly to the samples.
+
 ## Improvements
 
 * Generics introduced by this package now allow `na.rm` and other parameters to

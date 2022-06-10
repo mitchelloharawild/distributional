@@ -125,3 +125,27 @@ skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
   y <- sqrt(n) * sum_x3/(sum_x2^(3/2))
   y * ((1 - 1/n))^(3/2)
 }
+
+
+
+#' @method Math dist_sample
+#' @export
+Math.dist_sample <- function(x, ...) {
+  x <- mapply(.Generic, parameters(x)$x, ..., SIMPLIFY = FALSE)
+  dist_sample(x)
+}
+
+#' @method Ops dist_sample
+#' @export
+Ops.dist_sample <- function(e1, e2) {
+  is_dist <- c(inherits(e1, "dist_sample"), inherits(e2, "dist_sample"))
+  if(is_dist[1]) {
+    e1 <- parameters(e1)$x
+  }
+  if(is_dist[2]) {
+    e2 <- parameters(e2)$x
+  }
+
+  x <- mapply(.Generic, e1, e2, SIMPLIFY = FALSE)
+  dist_sample(x)
+}
