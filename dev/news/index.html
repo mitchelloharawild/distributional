@@ -56,6 +56,9 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
 <div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>Add Math and Ops methods for sample distribution, which applies the functions directly to the samples.</li></ul></div>
+<div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
 <ul><li>Generics introduced by this package now allow <code>na.rm</code> and other parameters to be passed to distribution methods, even if these parameters aren’t used. The package no longer checks the usage of <code>...</code> with the <code>ellipsis</code> package, if you’d like to check that all <code>...</code> are used, you can write your own wrapping functions.</li>
 <li>Lists of functions can now be used in <code><a href="../reference/dist_transformed.html">dist_transformed()</a></code>, allowing the transformation to differ for each distribution.</li>
