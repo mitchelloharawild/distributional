@@ -21,6 +21,7 @@ set.seed(0)
 [![R-CMD-check](https://github.com/mitchelloharawild/distributional/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mitchelloharawild/distributional/actions/workflows/R-CMD-check.yaml)
 [![Coverage Status](https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg)](https://codecov.io/github/mitchelloharawild/distributional?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/distributional)](https://CRAN.R-project.org/package=distributional)
+![Download count](https://cranlogs.r-pkg.org/badges/last-month/distributional)
 <!-- badges: end -->
 
 The distributional package allows distributions to be used in a vectorised context. It provides methods which are minimal wrappers to the standard d, p, q, and r distribution functions which are applied to each distribution in the vector. Additional distributional statistics can be computed, including the `mean()`, `median()`, `variance()`, and intervals with `hilo()`. 

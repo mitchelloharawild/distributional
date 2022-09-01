@@ -12,6 +12,8 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lif
 Status](https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg)](https://codecov.io/github/mitchelloharawild/distributional?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/distributional)](https://CRAN.R-project.org/package=distributional)
+![Download
+count](https://cranlogs.r-pkg.org/badges/last-month/distributional)
 <!-- badges: end -->
 
 The distributional package allows distributions to be used in a
