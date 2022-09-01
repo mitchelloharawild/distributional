@@ -4,6 +4,9 @@
 
 * Add Math and Ops methods for sample distribution, which applies the functions
   directly to the samples.
+* Added `mean` and `sd` as aliases for `mu` and `sigma` respectively in 
+  `dist_normal()` and `dist_student_t()` to match arguments of the stats package
+  interface (#76).
 
 ## Improvements
 

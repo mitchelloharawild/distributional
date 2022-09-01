@@ -52,4 +52,4 @@ BugReports: https://github.com/mitchelloharawild/distributional/issues
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE, roclets=c('rd', 'collate', 'namespace'))
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

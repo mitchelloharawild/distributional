@@ -4,13 +4,13 @@
 \alias{dist_normal}
 \title{The Normal distribution}
 \usage{
-dist_normal(mu = 0, sigma = 1)
+dist_normal(mu = 0, sigma = 1, mean = mu, sd = sigma)
 }
 \arguments{
-\item{mu}{The mean (location parameter) of the distribution, which is also
+\item{mu, mean}{The mean (location parameter) of the distribution, which is also
 the mean of the distribution. Can be any real number.}
 
-\item{sigma}{The standard deviation (scale parameter) of the distribution.
+\item{sigma, sd}{The standard deviation (scale parameter) of the distribution.
 Can be any positive number. If you would like a Normal distribution with
 \strong{variance} \eqn{\sigma^2}, be sure to take the square root, as this is a
 common source of errors.}

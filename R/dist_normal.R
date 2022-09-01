@@ -12,9 +12,9 @@
 #' asymptotically Normal. The Normal distribution is also called the
 #' gaussian distribution.
 #'
-#' @param mu The mean (location parameter) of the distribution, which is also
+#' @param mu,mean The mean (location parameter) of the distribution, which is also
 #'   the mean of the distribution. Can be any real number.
-#' @param sigma The standard deviation (scale parameter) of the distribution.
+#' @param sigma,sd The standard deviation (scale parameter) of the distribution.
 #'   Can be any positive number. If you would like a Normal distribution with
 #'   **variance** \eqn{\sigma^2}, be sure to take the square root, as this is a
 #'   common source of errors.
@@ -87,13 +87,13 @@
 #' quantile(dist, 0.7)
 #'
 #' @export
-dist_normal <- function(mu = 0, sigma = 1){
-  mu <- vec_cast(mu, double())
-  sigma <- vec_cast(sigma, double())
-  if(any(sigma[!is.na(sigma)] < 0)){
+dist_normal <- function(mu = 0, sigma = 1, mean = mu, sd = sigma){
+  mean <- vec_cast(mean, double())
+  sd <- vec_cast(sd, double())
+  if(any(sd[!is.na(sd)] < 0)){
     abort("Standard deviation of a normal distribution must be non-negative")
   }
-  new_dist(mu = mu, sigma = sigma, class = "dist_normal")
+  new_dist(mu = mean, sigma = sd, class = "dist_normal")
 }
 
 #' @export
