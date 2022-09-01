@@ -62,7 +62,12 @@
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
 <ul><li>Generics introduced by this package now allow <code>na.rm</code> and other parameters to be passed to distribution methods, even if these parameters aren’t used. The package no longer checks the usage of <code>...</code> with the <code>ellipsis</code> package, if you’d like to check that all <code>...</code> are used, you can write your own wrapping functions.</li>
 <li>Lists of functions can now be used in <code><a href="../reference/dist_transformed.html">dist_transformed()</a></code>, allowing the transformation to differ for each distribution.</li>
+<li>
+<code><a href="../reference/covariance.html">covariance()</a></code> and other matrix output functions of multivariate distributions now name the result using the distribution’s dimension names.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Fixed issue with computing multiple values from a univariate distribution with named dimensions (<a href="https://github.com/mitchelloharawild/distributional/issues/79" class="external-link">#79</a>).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.0" id="distributional-030">distributional 0.3.0<small>2022-01-05</small><a class="anchor" aria-label="anchor" href="#distributional-030"></a></h2>
@@ -254,7 +259,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

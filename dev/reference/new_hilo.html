@@ -59,19 +59,24 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">new_hilo</span><span class="op">(</span>lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_hilo</span><span class="op">(</span>lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>lower, upper</dt>
 <dd><p>A numeric vector of values for lower and upper limits.</p></dd>
+
+
 <dt>size</dt>
 <dd><p>Size of the interval between [0, 100].</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A "hilo" vector</p>
+    
+
+<p>A "hilo" vector</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -80,13 +85,13 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">new_hilo</span><span class="op">(</span>lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fl">5</span>, size <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">new_hilo</span><span class="op">(</span>lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fl">5</span>, size <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilo[10]&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] [-0.6044681, 5.275592]95 [ 0.7941240, 4.521167]95 [-0.4792398, 4.998602]95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] [ 0.3117374, 4.841491]95 [ 1.3054925, 5.150667]95 [ 0.7925865, 3.119843]95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] [ 0.5280990, 4.169194]95 [-0.6464746, 4.259934]95 [-1.3827794, 5.596745]95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10] [-0.5977916, 4.893008]95</span>
-<span class="r-in"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] [-0.8006377, 3.941209]95 [ 0.6050894, 5.200057]95 [-0.6727444, 4.038594]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] [ 1.2742528, 4.808807]95 [ 2.7950903, 5.677217]95 [-1.7164371, 5.228166]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] [ 1.4325938, 7.397492]95 [ 2.1748381, 5.233501]95 [ 0.2909311, 4.248769]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] [ 0.9551257, 4.994008]95</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -101,7 +106,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

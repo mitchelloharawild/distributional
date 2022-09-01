@@ -61,15 +61,18 @@ level from a distribution.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">hilo</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hilo</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Object to create hilo from.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments used by methods.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -79,18 +82,18 @@ level from a distribution.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># 95% interval from a standard normal distribution</span></span>
-<span class="r-in"><span class="va">interval</span> <span class="op">&lt;-</span> <span class="fu">hilo</span><span class="op">(</span><span class="fu"><a href="dist_normal.html">dist_normal</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">95</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">interval</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># 95% interval from a standard normal distribution</span></span></span>
+<span class="r-in"><span><span class="va">interval</span> <span class="op">&lt;-</span> <span class="fu">hilo</span><span class="op">(</span><span class="fu"><a href="dist_normal.html">dist_normal</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">interval</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilo[1]&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] [-1.959964, 1.959964]95</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Extract the individual quantities with `$lower`, `$upper`, and `$level`</span></span>
-<span class="r-in"><span class="va">interval</span><span class="op">$</span><span class="va">lower</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Extract the individual quantities with `$lower`, `$upper`, and `$level`</span></span></span>
+<span class="r-in"><span><span class="va">interval</span><span class="op">$</span><span class="va">lower</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.959964</span>
-<span class="r-in"><span class="va">interval</span><span class="op">$</span><span class="va">upper</span></span>
+<span class="r-in"><span><span class="va">interval</span><span class="op">$</span><span class="va">upper</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.959964</span>
-<span class="r-in"><span class="va">interval</span><span class="op">$</span><span class="va">level</span></span>
+<span class="r-in"><span><span class="va">interval</span><span class="op">$</span><span class="va">level</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 95</span>
 </code></pre></div>
     </div>
@@ -106,7 +109,7 @@ level from a distribution.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
