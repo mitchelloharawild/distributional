@@ -79,7 +79,7 @@
 #'
 #' @name dist_gamma
 #' @export
-dist_gamma <- function(shape, rate){
+dist_gamma <- function(shape, rate, scale = 1/rate){
   shape <- vec_cast(shape, double())
   rate <- vec_cast(rate, double())
   if(any(shape[!is.na(shape)] < 0)){
@@ -88,7 +88,7 @@ dist_gamma <- function(shape, rate){
   if(any(rate[!is.na(rate)] <= 0)){
     abort("The rate parameter of a Gamma distribution must be strictly positive.")
   }
-  new_dist(shape = shape, rate = rate, class = "dist_gamma")
+  new_dist(shape = shape, rate = 1/scale, class = "dist_gamma")
 }
 
 #' @export

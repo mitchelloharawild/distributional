@@ -7,6 +7,8 @@
 * Added `mean` and `sd` as aliases for `mu` and `sigma` respectively in 
   `dist_normal()` and `dist_student_t()` to match arguments of the stats package
   interface (#76).
+* Added `scale` argument for alternative specification for `dist_burr()` and
+  `dist_gamma()`.
 
 ## Improvements
 

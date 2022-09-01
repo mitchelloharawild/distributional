@@ -25,7 +25,7 @@
 #'
 #' @name dist_burr
 #' @export
-dist_burr <- function(shape1, shape2, rate = 1){
+dist_burr <- function(shape1, shape2, rate = 1, scale = 1/rate){
   shape1 <- vec_cast(shape1, double())
   shape2 <- vec_cast(shape2, double())
   if(any(shape1 <= 0)){
@@ -37,7 +37,7 @@ dist_burr <- function(shape1, shape2, rate = 1){
   if(any(rate <= 0)){
     abort("The rate parameter of a Burr distribution must be strictly positive.")
   }
-  new_dist(s1 = shape1, s2 = shape2, r = rate, class = "dist_burr")
+  new_dist(s1 = shape1, s2 = shape2, r = 1/scale, class = "dist_burr")
 }
 
 #' @export

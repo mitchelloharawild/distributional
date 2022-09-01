@@ -4,12 +4,10 @@
 \alias{dist_burr}
 \title{The Burr distribution}
 \usage{
-dist_burr(shape1, shape2, rate = 1)
+dist_burr(shape1, shape2, rate = 1, scale = 1/rate)
 }
 \arguments{
-\item{shape1}{parameters. Must be strictly positive.}
-
-\item{shape2}{parameters. Must be strictly positive.}
+\item{shape1, shape2, scale}{parameters. Must be strictly positive.}
 
 \item{rate}{an alternative way to specify the scale.}
 }
