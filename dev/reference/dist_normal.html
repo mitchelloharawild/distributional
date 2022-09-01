@@ -59,17 +59,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_normal</span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_normal</span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span>, mean <span class="op">=</span> <span class="va">mu</span>, sd <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>mu</dt>
+    <dl><dt>mu, mean</dt>
 <dd><p>The mean (location parameter) of the distribution, which is also
 the mean of the distribution. Can be any real number.</p></dd>
 
 
-<dt>sigma</dt>
+<dt>sigma, sd</dt>
 <dd><p>The standard deviation (scale parameter) of the distribution.
 Can be any positive number. If you would like a Normal distribution with
 <strong>variance</strong> \(\sigma^2\), be sure to take the square root, as this is a
@@ -137,24 +137,24 @@ list the value of \(\Phi(t)\) for various \(t\).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -2.1718655  5.8449920  3.0467585  5.5337458  1.8665823 -1.4160545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.7298165  0.2768841 -0.5292731  3.8407643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.6625103  2.0937873 -1.5601584  0.7087088  1.8627369 -2.6643205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  3.0608093 -3.4219400 -2.4162128 -1.2202212</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2.8467423  4.7135999  5.1686784  2.8806391 -5.0518388  0.2242895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -4.6132235  4.5703127  7.8451139  2.9379471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6.5295247  1.3064698  3.6876647  0.7218355  4.4241906  9.2030806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.3538205  4.8212418 -1.2028095 -3.6574541</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 7.168577 2.739742 4.216964 2.916473 1.966804 4.942461 2.463207 1.498753</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 1.702250 4.955666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.202017 -1.395805  3.004387  6.511165  2.596909  3.521984  4.116041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  6.322768  3.296255 -1.321194</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  7.8360633  3.0836069  0.2542459  5.4122322 -0.7839523  9.8585907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  6.8494675  8.8241916  2.5577085  8.8470753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2.8269800  2.6843550  7.9004284  2.8822810  4.5458613  7.2475697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  4.2766662 10.3502840 -0.1278867  2.7982651</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 8.3997372 0.7076138 3.0830538 2.4167642 7.0913045 5.5787629 3.5919064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 6.1404778 7.8032356 7.7102369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 6.412122 4.813524 9.172814 2.993953 9.513085 4.383748 7.307501 3.035310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 4.425802 3.918446</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

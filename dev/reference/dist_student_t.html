@@ -59,7 +59,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_student_t</span><span class="op">(</span><span class="va">df</span>, mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span>, ncp <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_student_t</span><span class="op">(</span><span class="va">df</span>, mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span>, ncp <span class="op">=</span> <span class="cn">NULL</span>, mean <span class="op">=</span> <span class="va">mu</span>, sd <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -69,12 +69,12 @@
       = Inf</code> is allowed.</p></dd>
 
 
-<dt>mu</dt>
+<dt>mu, mean</dt>
 <dd><p>The location parameter of the distribution.
 If <code>ncp == 0</code> (or <code>NULL</code>), this is the median.</p></dd>
 
 
-<dt>sigma</dt>
+<dt>sigma, sd</dt>
 <dd><p>The scale parameter of the distribution.</p></dd>
 
 
@@ -128,16 +128,16 @@ zero.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6.27642973 -5.33501339  0.14358105 -1.49883595  0.69167048  2.47345556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -2.31231697  1.61581304 -9.29295166  0.07316789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  -0.2316631   0.4670838  -2.9695793   1.1859258 -15.0176753  -1.2478652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]   4.3148418  -0.5401848  -1.8776290  -1.0595509</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.1193924  1.8903183  0.7950598 -5.1910512 -1.3449119 -5.1621030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -1.0275352 -1.4654574  3.5134392 -1.1889721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -1.30268256 -0.49105679  2.21862861  1.46428549  1.06759351 -0.95368936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.17106272  0.04665057  1.05155816  0.28717872</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]   2.0394105   1.2539880  13.3365014   5.8667279   5.9579933   2.7531899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  -0.3079983   3.1468666   8.4227931 -10.8968973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6.2698561  0.9871436  1.1953999  4.1929646  5.2262599 -0.2384595</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.3415057  4.5797156  2.9735710 -2.5440288</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>
