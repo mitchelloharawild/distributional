@@ -7,8 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![R build
-status](https://github.com/mitchelloharawild/distributional/workflows/R-CMD-check/badge.svg)](https://github.com/mitchelloharawild/distributional)
+[![R-CMD-check](https://github.com/mitchelloharawild/distributional/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mitchelloharawild/distributional/actions/workflows/R-CMD-check.yaml)
 [![Coverage
 Status](https://codecov.io/gh/mitchelloharawild/distributional/branch/master/graph/badge.svg)](https://codecov.io/github/mitchelloharawild/distributional?branch=master)
 [![CRAN
@@ -127,8 +126,6 @@ df <- data.frame(
 ggplot(df, aes(y = factor(name, levels = rev(name)))) +
   stat_dist_halfeye(aes(dist = dist)) + 
   labs(title = "Density function for a mixture of distributions", y = NULL, x = NULL)
-#> Warning: Computation failed in `stat_dist_slabinterval()`:
-#> invalid 'xmin' value
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
@@ -138,20 +135,20 @@ ggplot(df, aes(y = factor(name, levels = rev(name)))) +
 There are several packages which unify interfaces for distributions in
 R:
 
-  - stats provides functions to work with possibly multiple
+-   stats provides functions to work with possibly multiple
     distributions (comparisons made below).
-  - [distributions3](https://cran.r-project.org/package=distributions3)
+-   [distributions3](https://cran.r-project.org/package=distributions3)
     represents singular distributions using S3, with particularly nice
     documentation. This package makes use of some code and documentation
     from this package.
-  - [distr](https://cran.r-project.org/package=distr) represents
+-   [distr](https://cran.r-project.org/package=distr) represents
     singular distributions using S4.
-  - [distr6](https://cran.r-project.org/package=distr6) represents
+-   [distr6](https://cran.r-project.org/package=distr6) represents
     singular distributions using R6.
-  - Many more in the [CRAN task
+-   Many more in the [CRAN task
     view](https://cran.r-project.org/view=Distributions)
 
 This package differs from the above libraries by storing the
 distributions in a vectorised format. It does this using
 [vctrs](https://vctrs.r-lib.org/), so it should play nicely with the
-tidyverse (try putting distributions into a tibble\!).
+tidyverse (try putting distributions into a tibble!).
