@@ -7,11 +7,9 @@
 dist_inverse_gamma(shape, rate = 1/scale, scale)
 }
 \arguments{
-\item{shape}{parameters. Must be strictly positive.}
+\item{shape, scale}{parameters. Must be strictly positive.}
 
 \item{rate}{an alternative way to specify the scale.}
-
-\item{scale}{parameters. Must be strictly positive.}
 }
 \description{
 \lifecycle{stable}

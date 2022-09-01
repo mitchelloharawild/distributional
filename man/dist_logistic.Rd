@@ -7,9 +7,7 @@
 dist_logistic(location, scale)
 }
 \arguments{
-\item{location}{location and scale parameters.}
-
-\item{scale}{location and scale parameters.}
+\item{location, scale}{location and scale parameters.}
 }
 \description{
 \lifecycle{stable}

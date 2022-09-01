@@ -7,9 +7,7 @@
 dist_pareto(shape, scale)
 }
 \arguments{
-\item{shape}{parameters. Must be strictly positive.}
-
-\item{scale}{parameters. Must be strictly positive.}
+\item{shape, scale}{parameters. Must be strictly positive.}
 }
 \description{
 \lifecycle{questioning}

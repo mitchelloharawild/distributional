@@ -7,9 +7,7 @@
 dist_f(df1, df2, ncp = NULL)
 }
 \arguments{
-\item{df1}{degrees of freedom.  \code{Inf} is allowed.}
-
-\item{df2}{degrees of freedom.  \code{Inf} is allowed.}
+\item{df1, df2}{degrees of freedom.  \code{Inf} is allowed.}
 
 \item{ncp}{non-centrality parameter. If omitted the central F is assumed.}
 }

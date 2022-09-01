@@ -7,10 +7,7 @@
 dist_poisson_inverse_gaussian(mean, shape)
 }
 \arguments{
-\item{mean}{parameters. Must be strictly positive. Infinite
-    values are supported.}
-
-\item{shape}{parameters. Must be strictly positive. Infinite
+\item{mean, shape}{parameters. Must be strictly positive. Infinite
     values are supported.}
 }
 \description{

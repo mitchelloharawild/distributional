@@ -7,9 +7,7 @@
 dist_uniform(min, max)
 }
 \arguments{
-\item{min}{lower and upper limits of the distribution.  Must be finite.}
-
-\item{max}{lower and upper limits of the distribution.  Must be finite.}
+\item{min, max}{lower and upper limits of the distribution.  Must be finite.}
 }
 \description{
 \lifecycle{stable}

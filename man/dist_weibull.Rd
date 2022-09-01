@@ -7,9 +7,7 @@
 dist_weibull(shape, scale)
 }
 \arguments{
-\item{shape}{shape and scale parameters, the latter defaulting to 1.}
-
-\item{scale}{shape and scale parameters, the latter defaulting to 1.}
+\item{shape, scale}{shape and scale parameters, the latter defaulting to 1.}
 }
 \description{
 \lifecycle{stable}
