@@ -21,6 +21,7 @@
   transformation to differ for each distribution.
 * `covariance()` and other matrix output functions of multivariate distributions
   now name the result using the distribution's dimension names.
+* Improve handling of mixture distribution quantiles at boundaries {0,1}.
 
 ## Bug fixes
 
