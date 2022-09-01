@@ -14,6 +14,13 @@
   functions.
 * Lists of functions can now be used in `dist_transformed()`, allowing the
   transformation to differ for each distribution.
+* `covariance()` and other matrix output functions of multivariate distributions
+  now name the result using the distribution's dimension names.
+
+## Bug fixes
+
+* Fixed issue with computing multiple values from a univariate distribution with
+  named dimensions (#79).
 
 # distributional 0.3.0
 

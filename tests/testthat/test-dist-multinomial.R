@@ -22,5 +22,11 @@ test_that("Multinomial distribution", {
 
   expect_equal(
     covariance(dist),
-    list(matrix(c(0.84, -0.6, -0.24, -0.6, 1, -0.4, -0.24, -0.4, 0.64), nrow = 3)))
+    list(
+      matrix(
+        c(0.84, -0.6, -0.24, -0.6, 1, -0.4, -0.24, -0.4, 0.64),
+        nrow = 3, dimnames = list(NULL, c("a", "b", "c"))
+      )
+    )
+  )
 })

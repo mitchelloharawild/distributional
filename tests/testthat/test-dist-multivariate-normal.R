@@ -11,7 +11,7 @@ test_that("Multivariate normal distribution", {
     mean(dist),
     matrix(c(1,2), nrow = 1, dimnames = list(NULL, c("a", "b")))
   )
-  expect_equal(covariance(dist), list(sigma))
+  expect_equal(covariance(dist), list(`colnames<-`(sigma, dimnames(dist))))
 
   # quantiles
   expect_equal(
