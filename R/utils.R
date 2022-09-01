@@ -94,7 +94,7 @@ dist_apply <- function(x, .f, ...){
     out <- new_data_frame(out, n = vec_size(x))
   # } else if(length(out[[1]]) > 1) {
   #   out <- suppressMessages(vctrs::vec_rbind(!!!out))
-  } else if(multi_arg) {
+  } else if(multi_arg && length(dn) > 1) {
     out <- lapply(out, `colnames<-`, dn)
   } else {
     out <- vctrs::vec_c(!!!out)
