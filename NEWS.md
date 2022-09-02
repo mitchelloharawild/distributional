@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.3.1
 
 ## New features
 
