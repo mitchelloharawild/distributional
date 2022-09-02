@@ -9,9 +9,9 @@
 #' comparing group means.
 #'
 #' @inheritParams stats::dt
-#' @param mu,mean The location parameter of the distribution.
+#' @param mu The location parameter of the distribution.
 #'   If `ncp == 0` (or `NULL`), this is the median.
-#' @param sigma,sd The scale parameter of the distribution.
+#' @param sigma The scale parameter of the distribution.
 #'
 #' @details
 #'
@@ -65,17 +65,17 @@
 #'
 #' @name dist_student_t
 #' @export
-dist_student_t <- function(df, mu = 0, sigma = 1, ncp = NULL, mean = mu, sd = sigma){
+dist_student_t <- function(df, mu = 0, sigma = 1, ncp = NULL){
   df <- vec_cast(df, numeric())
   if(any(df <= 0)){
     abort("The degrees of freedom parameter of a Student t distribution must be strictly positive.")
   }
-  mean <- vec_cast(mean, double())
-  sd <- vec_cast(sd, double())
-  if(any(sd[!is.na(sd)] <= 0)){
+  mu <- vec_cast(mu, double())
+  sigma <- vec_cast(sigma, double())
+  if(any(sigma[!is.na(sigma)] <= 0)){
     abort("The scale (sigma) parameter of a Student t distribution must be strictly positive.")
   }
-  new_dist(df = df, mu = mean, sigma = sd, ncp = ncp, class = "dist_student_t")
+  new_dist(df = df, mu = mu, sigma = sigma, ncp = ncp, class = "dist_student_t")
 }
 
 #' @export

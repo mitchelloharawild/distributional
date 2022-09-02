@@ -4,16 +4,16 @@
 \alias{dist_student_t}
 \title{The (non-central) location-scale Student t Distribution}
 \usage{
-dist_student_t(df, mu = 0, sigma = 1, ncp = NULL, mean = mu, sd = sigma)
+dist_student_t(df, mu = 0, sigma = 1, ncp = NULL)
 }
 \arguments{
 \item{df}{degrees of freedom (\eqn{> 0}, maybe non-integer).  \code{df
       = Inf} is allowed.}
 
-\item{mu, mean}{The location parameter of the distribution.
+\item{mu}{The location parameter of the distribution.
 If \code{ncp == 0} (or \code{NULL}), this is the median.}
 
-\item{sigma, sd}{The scale parameter of the distribution.}
+\item{sigma}{The scale parameter of the distribution.}
 
 \item{ncp}{non-centrality parameter \eqn{\delta}{delta};
     currently except for \code{rt()}, only for \code{abs(ncp) <= 37.62}.
