@@ -17,9 +17,8 @@ the calling environment's search path is used to find the distribution
 functions. Alternatively, an arbitrary environment can also be provided here.}
 }
 \description{
-\lifecycle{experimental}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+
 If a distribution is not yet supported, you can vectorise p/d/q/r functions
 using this function. \code{dist_wrap()} stores the distributions parameters, and
 provides wrappers which call the appropriate p/d/q/r functions.

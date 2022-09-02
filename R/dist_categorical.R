@@ -1,6 +1,7 @@
 #' The Categorical distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Categorical distributions are used to represent events with multiple
 #' outcomes, such as what number appears on the roll of a dice. This is also

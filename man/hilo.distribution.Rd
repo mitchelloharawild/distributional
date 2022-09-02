@@ -14,9 +14,8 @@
 \item{...}{Additional arguments used by methods.}
 }
 \description{
-\lifecycle{maturing}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Returns a \code{hilo} central probability interval with probability coverage of
 \code{size}. By default, the distribution's \code{\link[=quantile]{quantile()}} will be used to compute
 the lower and upper bound for a centered interval

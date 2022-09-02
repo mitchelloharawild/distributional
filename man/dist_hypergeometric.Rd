@@ -14,16 +14,16 @@ dist_hypergeometric(m, n, k)
 \item{k}{The size of the sample taken.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 To understand the HyperGeometric distribution, consider a set of
 \eqn{r} objects, of which \eqn{m} are of the type I and
 \eqn{n} are of the type II. A sample with size \eqn{k} (\eqn{k<r})
 with no replacement is randomly chosen. The number of observed
 type I elements observed in this sample is set to be our random
 variable \eqn{X}.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

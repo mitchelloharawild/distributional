@@ -12,16 +12,16 @@ dist_multinomial(size, prob)
 \item{prob}{The probability of an event occurring from each draw.}
 }
 \description{
-\lifecycle{maturing}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The multinomial distribution is a generalization of the binomial
 distribution to multiple categories. It is perhaps easiest to think
 that we first extend a \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution to include more
 than two categories, resulting in a \code{\link[=dist_categorical]{dist_categorical()}} distribution.
 We then extend repeat the Categorical experiment several (\eqn{n})
 times.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

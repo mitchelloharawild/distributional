@@ -1,6 +1,7 @@
 #' The degenerate distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The degenerate distribution takes a single value which is certain to be
 #' observed. It takes a single parameter, which is the value that is observed

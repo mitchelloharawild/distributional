@@ -16,8 +16,7 @@
 \item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Computes the quantiles of a distribution.
 }

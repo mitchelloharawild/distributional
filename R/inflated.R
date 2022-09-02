@@ -1,6 +1,7 @@
 #' Inflate a value of a probability distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param dist The distribution(s) to inflate.
 #' @param prob The added probability of observing `x`.

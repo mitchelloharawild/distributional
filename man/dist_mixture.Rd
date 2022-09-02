@@ -12,7 +12,7 @@ dist_mixture(..., weights = numeric())
 \item{weights}{The weight of each distribution passed to \code{...}.}
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
 dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))

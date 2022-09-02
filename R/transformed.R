@@ -1,6 +1,7 @@
 #' Modify a distribution with a transformation
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('maturing')`
 #'
 #' The [`density()`], [`mean()`], and [`variance()`] methods are approximate as
 #' they are based on numerical derivatives.

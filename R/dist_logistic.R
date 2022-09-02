@@ -1,6 +1,7 @@
 #' The Logistic distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' A continuous distribution on the real line. For binary outcomes
 #' the model given by \eqn{P(Y = 1 | X) = F(X \beta)} where

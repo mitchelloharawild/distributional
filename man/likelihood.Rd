@@ -22,5 +22,5 @@ log_likelihood(x, ...)
 \item{log}{If \code{TRUE}, the log-likelihood will be computed.}
 }
 \description{
-\lifecycle{maturing}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

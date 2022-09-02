@@ -1,6 +1,7 @@
 #' Truncate a distribution
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Note that the samples are generated using inverse transform sampling, and the
 #' means and variances are estimated from samples.

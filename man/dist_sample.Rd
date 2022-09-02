@@ -10,7 +10,7 @@ dist_sample(x)
 \item{x}{A list of sampled values.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 # Univariate numeric samples

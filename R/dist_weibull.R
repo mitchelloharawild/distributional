@@ -1,6 +1,7 @@
 #' The Weibull distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Generalization of the gamma distribution. Often used in survival and
 #' time-to-event analyses.

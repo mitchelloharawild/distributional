@@ -1,6 +1,7 @@
 #' Percentile distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param x A list of values
 #' @param percentile A list of percentiles

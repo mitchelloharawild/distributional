@@ -1,6 +1,7 @@
 #' The Logarithmic distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams actuar::dlogarithmic
 #'

@@ -1,6 +1,7 @@
 #' The (non-central) location-scale Student t Distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The Student's T distribution is closely related to the [Normal()]
 #' distribution, but has heavier tails. As \eqn{\nu} increases to \eqn{\infty},

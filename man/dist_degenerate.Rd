@@ -10,13 +10,13 @@ dist_degenerate(x)
 \item{x}{The value of the distribution.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The degenerate distribution takes a single value which is certain to be
 observed. It takes a single parameter, which is the value that is observed
 by the distribution.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

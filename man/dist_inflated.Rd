@@ -14,5 +14,5 @@ dist_inflated(dist, prob, x = 0)
 \item{x}{The value to inflate. The default of \code{x = 0} is for zero-inflation.}
 }
 \description{
-\lifecycle{maturing}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

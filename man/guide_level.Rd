@@ -12,10 +12,10 @@ If \code{NULL}, the title is not shown. By default
 (\code{\link[ggplot2:waiver]{waiver()}}), the name of the scale object or the name
 specified in \code{\link[ggplot2:labs]{labs()}} is used for the title.}
 
-\item{max_discrete}{The maximum number of levels to be shown using \code{\link[ggplot2]{guide_legend}}.
-If the number of levels exceeds this value, level shades are shown with \code{\link[ggplot2]{guide_colourbar}}.}
+\item{max_discrete}{The maximum number of levels to be shown using \code{\link[ggplot2:guide_legend]{ggplot2::guide_legend()}}.
+If the number of levels exceeds this value, level shades are shown with \code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colourbar()}}.}
 
-\item{...}{Further arguments passed onto either \code{\link[ggplot2]{guide_colourbar}} or \code{\link[ggplot2]{guide_legend}}}
+\item{...}{Further arguments passed onto either \code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colourbar()}} or \code{\link[ggplot2:guide_legend]{ggplot2::guide_legend()}}}
 }
 \description{
 The level guide shows the colour from the forecast intervals which is blended with the series colour.

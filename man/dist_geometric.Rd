@@ -10,12 +10,13 @@ dist_geometric(prob)
 \item{prob}{probability of success in each trial. \code{0 < prob <= 1}.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The Geometric distribution can be thought of as a generalization
 of the \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution where we ask: "if I keep flipping a
 coin with probability \code{p} of heads, what is the probability I need
 \eqn{k} flips before I get my first heads?" The Geometric
 distribution is a special case of Negative Binomial distribution.
-\lifecycle{stable}
 }
 \details{
 We recommend reading this documentation on

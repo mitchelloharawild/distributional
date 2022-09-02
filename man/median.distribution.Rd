@@ -14,9 +14,8 @@
 \item{...}{Additional arguments used by methods.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Returns the median (50th percentile) of a probability distribution. This is
 equivalent to \code{quantile(x, p=0.5)}.
 }

@@ -1,6 +1,7 @@
 #' The Inverse Gamma distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams actuar::dinvgamma
 #'

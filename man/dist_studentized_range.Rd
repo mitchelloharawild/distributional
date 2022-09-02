@@ -15,12 +15,12 @@ dist_studentized_range(nmeans, df, nranges)
     considered.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Tukey's studentized range distribution, used for Tukey's
 honestly significant differences test in ANOVA.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

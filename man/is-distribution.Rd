@@ -13,8 +13,9 @@ is_distribution(x)
 TRUE if the object inherits from the distribution class.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function returns \code{TRUE} for distributions and \code{FALSE} for all other objects.
-\lifecycle{stable}
 }
 \examples{
 dist <- dist_normal()

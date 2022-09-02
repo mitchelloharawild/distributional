@@ -20,15 +20,15 @@ If \code{ncp == 0} (or \code{NULL}), this is the median.}
     If omitted, use the central t distribution.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The Student's T distribution is closely related to the \code{\link[=Normal]{Normal()}}
 distribution, but has heavier tails. As \eqn{\nu} increases to \eqn{\infty},
 the Student's T converges to a Normal. The T distribution appears
 repeatedly throughout classic frequentist hypothesis testing when
 comparing group means.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

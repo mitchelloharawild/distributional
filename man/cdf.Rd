@@ -19,5 +19,5 @@ cdf(x, q, ..., log = FALSE)
 \item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

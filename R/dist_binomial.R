@@ -1,6 +1,7 @@
 #' The Binomial distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Binomial distributions are used to represent situations can that can
 #' be thought as the result of \eqn{n} Bernoulli experiments (here the

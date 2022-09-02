@@ -14,14 +14,14 @@ dist_negative_binomial(size, prob)
 \item{prob}{probability of success in each trial. \code{0 < prob <= 1}.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 A generalization of the geometric distribution. It is the number
 of failures in a sequence of i.i.d. Bernoulli trials before
 a specified number of successes (\code{size}) occur. The probability of success in
 each trial is given by \code{prob}.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

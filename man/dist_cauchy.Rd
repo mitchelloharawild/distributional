@@ -10,14 +10,14 @@ dist_cauchy(location, scale)
 \item{location, scale}{location and scale parameters.}
 }
 \description{
-\lifecycle{maturing}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The Cauchy distribution is the student's t distribution with one degree of
 freedom. The Cauchy distribution does not have a well defined mean or
 variance. Cauchy distributions often appear as priors in Bayesian contexts
 due to their heavy tails.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

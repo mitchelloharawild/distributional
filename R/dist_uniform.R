@@ -1,6 +1,7 @@
 #' The Uniform distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' A distribution with constant density on an interval.
 #'

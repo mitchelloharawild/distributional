@@ -14,5 +14,8 @@ new_dist(..., class = NULL, dimnames = NULL)
 \item{dimnames}{The names of the variables in the distribution (optional).}
 }
 \description{
-Create a new distribution
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+
+Allows extension package developers to define a new distribution class
+compatible with the distributional package.
 }

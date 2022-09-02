@@ -1,6 +1,7 @@
 #' The Multinomial distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The multinomial distribution is a generalization of the binomial
 #' distribution to multiple categories. It is perhaps easiest to think

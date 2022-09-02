@@ -1,6 +1,7 @@
 #' The log-normal distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The log-normal distribution is a commonly used transformation of the Normal
 #' distribution. If \eqn{X} follows a log-normal distribution, then \eqn{\ln{X}}

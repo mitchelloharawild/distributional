@@ -1,6 +1,7 @@
 #' The multivariate normal distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param mu A list of numeric vectors for the distribution's mean.
 #' @param sigma A list of matrices for the distribution's variance-covariance matrix.

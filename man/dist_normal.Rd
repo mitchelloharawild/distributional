@@ -16,9 +16,8 @@ Can be any positive number. If you would like a Normal distribution with
 common source of errors.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The Normal distribution is ubiquitous in statistics, partially because
 of the central limit theorem, which states that sums of i.i.d. random
 variables eventually become Normal. Linear transformations of Normal
@@ -28,7 +27,8 @@ distribution for Z-tests and in simple linear regression. Under
 regularity conditions, maximum likelihood estimators are
 asymptotically Normal. The Normal distribution is also called the
 gaussian distribution.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

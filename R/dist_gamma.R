@@ -1,6 +1,7 @@
 #' The Gamma distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Several important distributions are special cases of the Gamma
 #' distribution. When the shape parameter is `1`, the Gamma is an

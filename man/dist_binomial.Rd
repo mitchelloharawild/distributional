@@ -15,9 +15,8 @@ Bernoulli distribution. Often called \code{n} in textbooks.}
 value in \verb{[0, 1]}.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Binomial distributions are used to represent situations can that can
 be thought as the result of \eqn{n} Bernoulli experiments (here the
 \eqn{n} is defined as the \code{size} of the experiment). The classical
@@ -28,7 +27,8 @@ and the probability of having \eqn{x} equal results (\eqn{x} heads,
 for example), in \eqn{n} trials is given by the Binomial(n, p) distribution.
 The equation of the Binomial distribution is directly derived from
 the equation of the Bernoulli distribution.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

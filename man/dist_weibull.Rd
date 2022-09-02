@@ -10,12 +10,12 @@ dist_weibull(shape, scale)
 \item{shape, scale}{shape and scale parameters, the latter defaulting to 1.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Generalization of the gamma distribution. Often used in survival and
 time-to-event analyses.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

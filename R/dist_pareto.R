@@ -1,6 +1,7 @@
 #' The Pareto distribution
 #'
-#' \lifecycle{questioning}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams actuar::dpareto
 #'

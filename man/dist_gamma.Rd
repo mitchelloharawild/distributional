@@ -13,9 +13,8 @@ dist_gamma(shape, rate, scale = 1/rate)
 \item{rate}{an alternative way to specify the scale.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Several important distributions are special cases of the Gamma
 distribution. When the shape parameter is \code{1}, the Gamma is an
 exponential distribution with parameter \eqn{1/\beta}. When the
@@ -27,7 +26,8 @@ of the form \eqn{\frac{X_1}{X_1 + X_2}} \eqn{Beta(\alpha_1, \alpha_2)}.
 This last property frequently appears in another distributions, and it
 has extensively been used in multivariate methods. More about the Gamma
 distribution will be added soon.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

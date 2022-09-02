@@ -1,6 +1,7 @@
 #' The Hypergeometric distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' To understand the HyperGeometric distribution, consider a set of
 #' \eqn{r} objects, of which \eqn{m} are of the type I and

@@ -14,13 +14,13 @@ mean of the associated Normal distribution. Can be any real number.}
 Can be any positive number.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The log-normal distribution is a commonly used transformation of the Normal
 distribution. If \eqn{X} follows a log-normal distribution, then \eqn{\ln{X}}
 would be characteristed by a Normal distribution.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

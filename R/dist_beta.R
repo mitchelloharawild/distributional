@@ -1,6 +1,7 @@
 #' The Beta distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param shape1,shape2 The non-negative shape parameters of the Beta distribution.
 #'

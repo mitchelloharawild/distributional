@@ -1,6 +1,7 @@
 #' The Bernoulli distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Bernoulli distributions are used to represent events like coin flips
 #' when there is single trial that is either successful or unsuccessful.

@@ -10,13 +10,13 @@ dist_logistic(location, scale)
 \item{location, scale}{location and scale parameters.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 A continuous distribution on the real line. For binary outcomes
 the model given by \eqn{P(Y = 1 | X) = F(X \beta)} where
 \eqn{F} is the Logistic \code{\link[=cdf]{cdf()}} is called \emph{logistic regression}.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

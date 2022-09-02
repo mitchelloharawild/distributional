@@ -10,7 +10,7 @@ dist_beta(shape1, shape2)
 \item{shape1, shape2}{The non-negative shape parameters of the Beta distribution.}
 }
 \description{
-\lifecycle{maturing}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))

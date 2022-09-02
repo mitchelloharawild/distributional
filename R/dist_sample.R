@@ -1,6 +1,7 @@
 #' Sampling distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param x A list of sampled values.
 #'

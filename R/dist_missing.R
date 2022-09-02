@@ -1,6 +1,7 @@
 #' Missing distribution
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('maturing')`
 #'
 #' A placeholder distribution for handling missing values in a vector of
 #' distributions.

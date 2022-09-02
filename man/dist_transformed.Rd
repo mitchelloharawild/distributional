@@ -15,9 +15,8 @@ transformation should be monotonic over appropriate domain.}
 \item{inverse}{The inverse of the \code{transform} function.}
 }
 \description{
-\lifecycle{experimental}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+
 The \code{\link[=density]{density()}}, \code{\link[=mean]{mean()}}, and \code{\link[=variance]{variance()}} methods are approximate as
 they are based on numerical derivatives.
 }

@@ -12,7 +12,7 @@ dist_f(df1, df2, ncp = NULL)
 \item{ncp}{non-centrality parameter. If omitted the central F is assumed.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \details{
 We recommend reading this documentation on

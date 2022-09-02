@@ -12,10 +12,11 @@ hilo(x, ...)
 \item{...}{Additional arguments used by methods.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Used to extract a specified prediction interval at a particular confidence
 level from a distribution.
-}
-\details{
+
 The numeric lower and upper bounds can be extracted from the interval using
 \verb{<hilo>$lower} and \verb{<hilo>$upper} as shown in the examples below.
 }

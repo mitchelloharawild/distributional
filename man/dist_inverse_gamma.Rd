@@ -12,7 +12,7 @@ dist_inverse_gamma(shape, rate = 1/scale, scale)
 \item{rate}{an alternative way to specify the scale.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_inverse_gamma(shape = c(1,2,3,3), rate = c(1,1,1,2))

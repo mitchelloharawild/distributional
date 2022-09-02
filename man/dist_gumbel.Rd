@@ -12,13 +12,13 @@ dist_gumbel(alpha, scale)
 \item{scale}{parameter. Must be strictly positive.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The Gumbel distribution is a special case of the Generalized Extreme Value
 distribution, obtained when the GEV shape parameter \eqn{\xi} is equal to 0.
 It may be referred to as a type I extreme value distribution.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

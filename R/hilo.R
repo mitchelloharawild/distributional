@@ -1,5 +1,11 @@
 #' Construct hilo intervals
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
+#'
+#' Class constructor function to help with manually creating hilo interval
+#' objects.
+#'
 #' @param lower,upper A numeric vector of values for lower and upper limits.
 #' @param size Size of the interval between \[0, 100\].
 #'
@@ -29,6 +35,9 @@ new_hilo <- function(lower = double(), upper = double(), size = double()) {
 }
 
 #' Compute intervals
+#'
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Used to extract a specified prediction interval at a particular confidence
 #' level from a distribution.

@@ -15,7 +15,10 @@ new_hilo(lower = double(), upper = double(), size = double())
 A "hilo" vector
 }
 \description{
-Construct hilo intervals
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Class constructor function to help with manually creating hilo interval
+objects.
 }
 \examples{
 new_hilo(lower = rnorm(10), upper = rnorm(10) + 5, size = 95)

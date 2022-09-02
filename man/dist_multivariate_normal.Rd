@@ -12,7 +12,7 @@ dist_multivariate_normal(mu = 0, sigma = diag(1))
 \item{sigma}{A list of matrices for the distribution's variance-covariance matrix.}
 }
 \description{
-\lifecycle{maturing}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,3), ncol=2)))

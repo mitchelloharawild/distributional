@@ -11,14 +11,14 @@ dist_bernoulli(prob)
 value in \verb{[0, 1]}.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Bernoulli distributions are used to represent events like coin flips
 when there is single trial that is either successful or unsuccessful.
 The Bernoulli distribution is a special case of the \code{\link[=Binomial]{Binomial()}}
 distribution with \code{n = 1}.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

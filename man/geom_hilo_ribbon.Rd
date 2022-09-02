@@ -62,9 +62,12 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 }
 \description{
-\lifecycle{maturing}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is deprecated in favour of the ggdist package and will removed
+in a future release of this package. Consider using \code{\link[ggdist:stat_lineribbon]{ggdist::stat_lineribbon()}} or
+\code{\link[ggdist:geom_lineribbon]{ggdist::geom_lineribbon()}} as an appropriate alternative.
+
 \code{geom_hilo_ribbon()} displays the interval defined by a hilo object. The
 luminance of the shaded area indicates its confidence level. The shade colour
 can be controlled by the \code{fill} aesthetic, however the luminance will be

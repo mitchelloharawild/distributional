@@ -1,6 +1,7 @@
 #' The Normal distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The Normal distribution is ubiquitous in statistics, partially because
 #' of the central limit theorem, which states that sums of i.i.d. random

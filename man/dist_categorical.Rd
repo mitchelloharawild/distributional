@@ -12,15 +12,15 @@ dist_categorical(prob, outcomes = NULL)
 \item{outcomes}{The values used to represent each outcome.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Categorical distributions are used to represent events with multiple
 outcomes, such as what number appears on the roll of a dice. This is also
 referred to as the 'generalised Bernoulli' or 'multinoulli' distribution.
 The Cateogorical distribution is a special case of the \code{\link[=Multinomial]{Multinomial()}}
 distribution with \code{n = 1}.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

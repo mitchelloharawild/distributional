@@ -10,11 +10,11 @@ dist_uniform(min, max)
 \item{min, max}{lower and upper limits of the distribution.  Must be finite.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+A distribution with constant density on an interval.
 }
 \details{
-A distribution with constant density on an interval.
-
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

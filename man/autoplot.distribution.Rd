@@ -12,9 +12,8 @@ autoplot.distribution(x, ...)
 \item{...}{Unused.}
 }
 \description{
-\lifecycle{deprecated}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+
 This function is now defunct and can no longer be used. Instead consider using
 the {ggdist} package to produce your own distribution plots. You can learn
 more about how this plot can be produced using {ggdist} here:

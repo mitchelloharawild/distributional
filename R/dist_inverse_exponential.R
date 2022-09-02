@@ -1,6 +1,7 @@
 #' The Inverse Exponential distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams actuar::dinvexp
 #'

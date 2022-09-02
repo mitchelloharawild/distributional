@@ -10,9 +10,8 @@ dist_missing(length = 1)
 \item{length}{The number of missing distributions}
 }
 \description{
-\lifecycle{experimental}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+
 A placeholder distribution for handling missing values in a vector of
 distributions.
 }

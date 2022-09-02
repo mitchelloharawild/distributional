@@ -10,7 +10,7 @@ dist_pareto(shape, scale)
 \item{shape, scale}{parameters. Must be strictly positive.}
 }
 \description{
-\lifecycle{questioning}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))

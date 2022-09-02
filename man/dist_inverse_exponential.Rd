@@ -10,7 +10,7 @@ dist_inverse_exponential(rate)
 \item{rate}{an alternative way to specify the scale.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_inverse_exponential(rate = 1:5)

@@ -1,6 +1,7 @@
 #' The Studentized Range distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Tukey's studentized range distribution, used for Tukey's
 #' honestly significant differences test in ANOVA.

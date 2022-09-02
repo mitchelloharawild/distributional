@@ -12,7 +12,7 @@ dist_percentile(x, percentile)
 \item{percentile}{A list of percentiles}
 }
 \description{
-\lifecycle{maturing}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_normal()

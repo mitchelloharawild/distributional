@@ -10,7 +10,7 @@ dist_exponential(rate)
 \item{rate}{vector of rates.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_exponential(rate = c(2, 1, 2/3))

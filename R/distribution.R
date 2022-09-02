@@ -1,5 +1,11 @@
 #' Create a new distribution
 #'
+#' @description
+#' `r lifecycle::badge('maturing')`
+#'
+#' Allows extension package developers to define a new distribution class
+#' compatible with the distributional package.
+#'
 #' @param ... Parameters of the distribution (named).
 #' @param class The class of the distribution for S3 dispatch.
 #' @param dimnames The names of the variables in the distribution (optional).
@@ -45,7 +51,8 @@ dimnames.distribution <- function(x){
 
 #' The probability density/mass function
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Computes the probability density function for a continuous distribution, or
 #' the probability mass function for a discrete distribution.
@@ -74,7 +81,8 @@ log_density.distribution <- function(x, at, ...){
 
 #' Distribution Quantiles
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Computes the quantiles of a distribution.
 #'
@@ -101,7 +109,8 @@ log_quantile.distribution <- function(x, p, ...){
 
 #' The cumulative distribution function
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams density.distribution
 #' @param q The quantile at which the cdf is calculated.
@@ -129,7 +138,8 @@ log_cdf.distribution <- function(x, q, ...){
 
 #' Randomly sample values from a distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Generate random samples from probability distributions.
 #'
@@ -151,7 +161,8 @@ generate.distribution <- function(x, times, ...){
 
 #' The (log) likelihood of a sample matching a distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
@@ -191,7 +202,8 @@ log_likelihood.distribution <- function(x, sample, ...){
 
 #' Extract the parameters of a distribution
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('experimental')`
 #'
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
@@ -220,7 +232,8 @@ parameters.distribution <- function(x, ...) {
 
 #' Extract the name of the distribution family
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('experimental')`
 #'
 #' @param object The distribution(s).
 #' @param ... Additional arguments used by methods.
@@ -242,7 +255,8 @@ family.distribution <- function(object, ...) {
 
 #' Region of support of a distribution
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('experimental')`
 #'
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
@@ -261,7 +275,8 @@ support.distribution <- function(x, ...) {
 
 #' Mean of a probability distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Returns the empirical mean of the probability distribution. If the method
 #' does not exist, the mean of a random sample will be returned.
@@ -275,6 +290,9 @@ mean.distribution <- function(x, ...){
 }
 
 #' Variance
+#'
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' A generic function for computing the variance of an object.
 #'
@@ -315,7 +333,8 @@ variance.matrix <- function(x, ...){
 
 #' Variance of a probability distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Returns the empirical variance of the probability distribution. If the method
 #' does not exist, the variance of a random sample will be returned.
@@ -329,6 +348,9 @@ variance.distribution <- function(x, ...){
 }
 
 #' Covariance
+#'
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' A generic function for computing the covariance of an object.
 #'
@@ -355,7 +377,8 @@ covariance.numeric <- function(x, ...){
 }
 #' Covariance of a probability distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Returns the empirical covariance of the probability distribution. If the
 #' method does not exist, the covariance of a random sample will be returned.
@@ -370,7 +393,8 @@ covariance.distribution <- function(x, ...){
 
 #' Skewness of a probability distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
@@ -387,7 +411,8 @@ skewness.distribution <- function(x, ...){
 
 #' Kurtosis of a probability distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @param x The distribution(s).
 #' @param ... Additional arguments used by methods.
@@ -404,7 +429,8 @@ kurtosis.distribution <- function(x, ...){
 
 #' Median of a probability distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Returns the median (50th percentile) of a probability distribution. This is
 #' equivalent to `quantile(x, p=0.5)`.
@@ -421,7 +447,8 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 
 #' Probability intervals of a probability distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Returns a `hilo` central probability interval with probability coverage of
 #' `size`. By default, the distribution's [`quantile()`] will be used to compute
@@ -442,7 +469,8 @@ hilo.distribution <- function(x, size = 95, ...){
 
 #' Highest density regions of probability distributions
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('maturing')`
 #'
 #' This function is highly experimental and will change in the future. In
 #' particular, improved functionality for object classes and visualisation tools
@@ -545,8 +573,9 @@ vec_cast.character.distribution <- function(x, to, ...){
 #' Test if the object is a distribution
 #'
 #' @description
+#' `r lifecycle::badge('stable')`
+#'
 #' This function returns `TRUE` for distributions and `FALSE` for all other objects.
-#' \lifecycle{stable}
 #'
 #' @param x An object.
 #'

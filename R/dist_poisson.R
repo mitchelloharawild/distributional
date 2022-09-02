@@ -1,6 +1,7 @@
 #' The Poisson Distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' Poisson distributions are frequently used to model counts.
 #'

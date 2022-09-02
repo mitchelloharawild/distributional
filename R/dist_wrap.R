@@ -1,6 +1,7 @@
 #' Create a distribution from p/d/q/r style functions
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('maturing')`
 #'
 #' If a distribution is not yet supported, you can vectorise p/d/q/r functions
 #' using this function. `dist_wrap()` stores the distributions parameters, and

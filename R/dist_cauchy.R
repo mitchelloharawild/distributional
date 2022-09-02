@@ -1,6 +1,7 @@
 #' The Cauchy distribution
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The Cauchy distribution is the student's t distribution with one degree of
 #' freedom. The Cauchy distribution does not have a well defined mean or

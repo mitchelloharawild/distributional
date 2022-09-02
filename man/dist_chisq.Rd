@@ -12,13 +12,13 @@ dist_chisq(df, ncp = 0)
 \item{ncp}{non-centrality parameter (non-negative).}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Chi-square distributions show up often in frequentist settings
 as the sampling distribution of test statistics, especially
 in maximum likelihood estimation settings.
-
+}
+\details{
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

@@ -1,6 +1,7 @@
 #' The Burr distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams actuar::dburr
 #'

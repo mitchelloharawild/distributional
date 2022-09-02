@@ -1,6 +1,7 @@
 #' The F Distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams stats::df
 #'

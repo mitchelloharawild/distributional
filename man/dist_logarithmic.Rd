@@ -10,7 +10,7 @@ dist_logarithmic(prob)
 \item{prob}{parameter. \code{0 <= prob < 1}.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 dist <- dist_logarithmic(prob = c(0.33, 0.66, 0.99))

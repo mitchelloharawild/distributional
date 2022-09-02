@@ -12,9 +12,8 @@ dist_truncated(dist, lower = -Inf, upper = Inf)
 \item{lower, upper}{The range of values to keep from a distribution.}
 }
 \description{
-\lifecycle{experimental}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Note that the samples are generated using inverse transform sampling, and the
 means and variances are estimated from samples.
 }

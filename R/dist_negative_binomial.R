@@ -1,6 +1,7 @@
 #' The Negative Binomial distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' A generalization of the geometric distribution. It is the number
 #' of failures in a sequence of i.i.d. Bernoulli trials before

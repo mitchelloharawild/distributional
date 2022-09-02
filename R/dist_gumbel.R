@@ -1,6 +1,7 @@
 #' The Gumbel distribution
 #'
-#' \lifecycle{stable}
+#' @description
+#' `r lifecycle::badge('stable')`
 #'
 #' The Gumbel distribution is a special case of the Generalized Extreme Value
 #' distribution, obtained when the GEV shape parameter \eqn{\xi} is equal to 0.

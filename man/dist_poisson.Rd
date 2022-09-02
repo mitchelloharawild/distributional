@@ -10,11 +10,11 @@ dist_poisson(lambda)
 \item{lambda}{vector of (non-negative) means.}
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Poisson distributions are frequently used to model counts.
 }
 \details{
-Poisson distributions are frequently used to model counts.
-
 We recommend reading this documentation on
 \url{https://pkg.mitchelloharawild.com/distributional/}, where the math
 will render nicely.

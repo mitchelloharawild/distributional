@@ -12,9 +12,8 @@
 \item{...}{Additional arguments used by methods.}
 }
 \description{
-\lifecycle{stable}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Returns the empirical mean of the probability distribution. If the method
 does not exist, the mean of a random sample will be returned.
 }

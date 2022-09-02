@@ -16,9 +16,8 @@
 \item{...}{Additional arguments used by methods.}
 }
 \description{
-\lifecycle{experimental}
-}
-\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+
 This function is highly experimental and will change in the future. In
 particular, improved functionality for object classes and visualisation tools
 will be added in a future release.

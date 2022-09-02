@@ -1,6 +1,7 @@
 #' Plot a distribution
 #'
-#' \lifecycle{deprecated}
+#' @description
+#' `r lifecycle::badge('defunct')`
 #'
 #' This function is now defunct and can no longer be used. Instead consider using
 #' the {ggdist} package to produce your own distribution plots. You can learn

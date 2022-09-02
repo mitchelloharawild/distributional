@@ -1,6 +1,11 @@
 #' Ribbon plots for hilo intervals
 #'
-#' \lifecycle{maturing}
+#' @description
+#' `r lifecycle::badge('deprecated')`
+#'
+#' This function is deprecated in favour of the ggdist package and will removed
+#' in a future release of this package. Consider using [ggdist::stat_lineribbon()] or
+#' [ggdist::geom_lineribbon()] as an appropriate alternative.
 #'
 #' `geom_hilo_ribbon()` displays the interval defined by a hilo object. The
 #' luminance of the shaded area indicates its confidence level. The shade colour
@@ -81,7 +86,12 @@ GeomHiloRibbon <- ggplot2::ggproto(
 
 #' Line ranges for hilo intervals
 #'
-#' \lifecycle{experimental}
+#' @description
+#' `r lifecycle::badge('deprecated')`
+#'
+#' This function is deprecated in favour of the ggdist package and will removed
+#' in a future release of this package. Consider using [ggdist::stat_slabinterval()] or
+#' [ggdist::geom_slabinterval()] as an appropriate alternative.
 #'
 #' `geom_hilo_linerange()` displays the interval defined by a hilo object. The
 #' luminance of the shaded area indicates its confidence level. The shade colour

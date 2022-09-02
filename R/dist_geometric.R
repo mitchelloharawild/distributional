@@ -1,11 +1,13 @@
 #' The Geometric Distribution
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
+#'
 #' The Geometric distribution can be thought of as a generalization
 #' of the [dist_bernoulli()] distribution where we ask: "if I keep flipping a
 #' coin with probability `p` of heads, what is the probability I need
 #' \eqn{k} flips before I get my first heads?" The Geometric
 #' distribution is a special case of Negative Binomial distribution.
-#' \lifecycle{stable}
 #'
 #' @inheritParams stats::dgeom
 #'
