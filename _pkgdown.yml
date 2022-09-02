@@ -3,7 +3,9 @@ url: https://pkg.mitchelloharawild.com/distributional
 template:
   params:
     bootswatch: cosmo
-    ganalytics: UA-145121339-2
+  includes:
+    in_header: |
+      <script defer data-domain="pkg.mitchelloharawild.com/distributional" src="https://track.mitchelloharawild.com/js/plausible.js"></script>
 
 development:
   mode: auto
