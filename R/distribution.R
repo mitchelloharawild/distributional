@@ -14,10 +14,15 @@
 new_dist <- function(..., class = NULL, dimnames = NULL){
   args <- transpose(vctrs::vec_recycle_common(...))
   wrap_dist(
-    lapply(args, structure, class = c(class, "dist_default")),
+    lapply(args, enclass_dist, class = class),
     dimnames = dimnames
   )
 }
+
+enclass_dist <- function(x, class) {
+  structure(x, class = c(class, "dist_default"))
+}
+
 
 wrap_dist <- function(x, dimnames = NULL){
   vctrs::new_vctr(x, vars = dimnames, class = "distribution")

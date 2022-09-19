@@ -1,5 +1,9 @@
 # distributional (development version)
 
+## Bug fixes
+
+* Fixed object structure resulting from transforming sample distributions (#81).
+
 # distributional 0.3.1
 
 ## New features

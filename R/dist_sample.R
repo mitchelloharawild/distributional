@@ -133,7 +133,7 @@ skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
 #' @export
 Math.dist_sample <- function(x, ...) {
   x <- mapply(.Generic, parameters(x)$x, ..., SIMPLIFY = FALSE)
-  dist_sample(x)
+  enclass_dist(x, "dist_sample")
 }
 
 #' @method Ops dist_sample
@@ -148,5 +148,6 @@ Ops.dist_sample <- function(e1, e2) {
   }
 
   x <- mapply(.Generic, e1, e2, SIMPLIFY = FALSE)
-  dist_sample(x)
+  names(x) <- "x"
+  enclass_dist(x, "dist_sample")
 }
