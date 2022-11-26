@@ -26,3 +26,7 @@ test_that("Emperical/sample distribution", {
     dist + 1 - 1
   )
 })
+
+test_that("CDF of degenerate dist_sample() is correct", {
+  expect_equal(cdf(dist_sample(list(2)), 2)[[1]], 1)
+})
