@@ -30,7 +30,7 @@ dist_mixture <- function(..., weights = numeric()){
 format.dist_mixture <- function(x, ...){
   sprintf(
     "mixture(n=%i)",
-    length(x)
+    length(x[["dist"]])
   )
 }
 
