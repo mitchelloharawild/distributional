@@ -47,3 +47,22 @@ test_that("Mixture of different distributions", {
   expect_equal(mean(dist), 0)
   expect_equal(variance(dist), 1.175)
 })
+
+test_that("Mixture of point masses", {
+  dist <- dist_mixture(dist_degenerate(1), dist_degenerate(2), dist_degenerate(3), weights = c(0.1, 0.2, 0.7))
+
+  # format
+  expect_equal(format(dist), "mixture(n=3)")
+
+  # quantiles
+  expect_equal(quantile(dist, c(0, 0.1, 0.3, 1))[[1]], c(1, 1:3), tolerance = .Machine$double.eps^0.25)
+
+  # pmf
+  expect_equal(density(dist, 1:3)[[1]], c(0.1, 0.2, 0.7))
+
+  #cdf
+  expect_equal(cdf(dist, 1:3)[[1]], c(0.1, 0.3, 1))
+
+  #mean
+  expect_equal(mean(dist), 2.6)
+})
