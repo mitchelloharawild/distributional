@@ -30,7 +30,7 @@ dist_mixture <- function(..., weights = numeric()){
 format.dist_mixture <- function(x, ...){
   sprintf(
     "mixture(n=%i)",
-    length(x)
+    length(x[["dist"]])
   )
 }
 
@@ -52,10 +52,11 @@ quantile.dist_mixture <- function(x, p, ...){
   if(p == 1) return(max(dist_q))
 
   # Search the cdf() for appropriate quantile
-  stats::optimise(
-    function(pos) (p - cdf(x, pos, ...))^2,
-    interval = c(min(dist_q), max(dist_q))
-  )$minimum
+  stats::uniroot(
+    function(pos) p - cdf(x, pos, ...),
+    interval = c(min(dist_q), max(dist_q)),
+    extendInt = "yes"
+  )$root
 }
 
 #' @export

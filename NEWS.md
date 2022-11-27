@@ -3,6 +3,8 @@
 ## Bug fixes
 
 * Fixed object structure resulting from transforming sample distributions (#81).
+* Improved reliability of `quantile(<dist_mixture>)`.
+* Defined `cdf(<dist_sample>)` as Pr(X <= x), not Pr(X < x).
 
 # distributional 0.3.1
 

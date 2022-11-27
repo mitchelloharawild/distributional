@@ -89,7 +89,7 @@ cdf.dist_sample <- function(x, q, ..., na.rm = TRUE){
     )
   }
   if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
-  vapply(x, function(x, q) mean(x < q, ..., na.rm = na.rm), numeric(1L), q = q)
+  vapply(x, function(x, q) mean(x <= q, ..., na.rm = na.rm), numeric(1L), q = q)
 }
 
 #' @export
