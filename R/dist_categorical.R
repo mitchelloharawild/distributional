@@ -93,6 +93,7 @@ format.dist_categorical <- function(x, digits = 2, ...){
 #' @export
 density.dist_categorical <- function(x, at, ...){
   if(!is.null(x[["x"]])) at <- match(at, x[["x"]])
+  at[at <= 0] <- NA
   x[["p"]][at]
 }
 

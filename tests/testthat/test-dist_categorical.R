@@ -8,8 +8,11 @@ test_that("Categorical distribution", {
   expect_true(all(is.na(quantile(dist, 0.2))))
 
   # pdf
+  expect_equal(density(dist, -1), NA_real_)
+  expect_equal(density(dist, 0), NA_real_)
   expect_equal(density(dist, 1), 0.4)
   expect_equal(density(dist, 2), 0.2)
+  expect_equal(density(dist, 5), NA_real_)
 
   # cdf
   expect_true(all(is.na(cdf(dist, 1))))
