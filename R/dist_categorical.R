@@ -117,6 +117,15 @@ generate.dist_categorical <- function(x, times, ...){
 }
 
 #' @export
+support.dist_categorical <- function(x, ...) {
+  region <- if(is.null(x[["p"]])) seq_along(x[["p"]]) else x[["x"]]
+  new_support_region(
+    list(vctrs::vec_init(region, n = 0L)),
+    list(region)
+  )
+}
+
+#' @export
 mean.dist_categorical <- function(x, ...){
   NA_real_
 }
