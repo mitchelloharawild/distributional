@@ -102,7 +102,7 @@ quantile.distribution <- function(x, p, ..., log = FALSE){
   p <- arg_listable(p, .ptype = double())
   dist_apply(x, quantile, p = p, ...)
 }
-log_quantile <- function(x, q, ...) {
+log_quantile <- function(x, p, ...) {
   UseMethod("log_quantile")
 }
 #' @export
