@@ -49,11 +49,13 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
+<p>Small patch to resolve issues with CRAN checks.</p>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>Fixed object structure resulting from transforming sample distributions (<a href="https://github.com/mitchelloharawild/distributional/issues/81" class="external-link">#81</a>).</li>
 <li>Improved reliability of <code>quantile(&lt;dist_mixture&gt;)</code>.</li>
 <li>Defined <code>cdf(&lt;dist_sample&gt;)</code> as Pr(X &lt;= x), not Pr(X &lt; x).</li>
+<li>Fixed S3 generic argument name <code>p</code> for <code>log_quantile()</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
