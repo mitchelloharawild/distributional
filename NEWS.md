@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.3.2
 
 Small patch to resolve issues with CRAN checks.
 
