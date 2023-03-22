@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -48,6 +48,17 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.2" id="distributional-032">distributional 0.3.2<a class="anchor" aria-label="anchor" href="#distributional-032"></a></h2>
+<p>Small patch to resolve issues with CRAN checks.</p>
+<div class="section level3">
+<h3 id="bug-fixes-0-3-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-2"></a></h3>
+<ul><li>Fixed object structure resulting from transforming sample distributions (<a href="https://github.com/mitchelloharawild/distributional/issues/81" class="external-link">#81</a>).</li>
+<li>Improved reliability of <code>quantile(&lt;dist_mixture&gt;)</code>.</li>
+<li>Defined <code>cdf(&lt;dist_sample&gt;)</code> as Pr(X &lt;= x), not Pr(X &lt; x).</li>
+<li>Fixed S3 generic argument name <code>p</code> for <code>log_quantile()</code>.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.1" id="distributional-031">distributional 0.3.1<small>2022-09-02</small><a class="anchor" aria-label="anchor" href="#distributional-031"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-3-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-1"></a></h3>
@@ -65,7 +76,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-3-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-1"></a></h3>
-<ul><li>Fixed issue with computing multiple values from a univariate distribution with named dimensions (<a href="https://github.com/mitchelloharawild/distributional/issues/79" class="external-link">#79</a>).</li></ul></div>
+<ul><li>Fixed issue with computing multiple values from a univariate distribution with named dimensions (<a href="https://github.com/mitchelloharawild/distributional/issues/79" class="external-link">#79</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.0" id="distributional-030">distributional 0.3.0<small>2022-01-05</small><a class="anchor" aria-label="anchor" href="#distributional-030"></a></h2>
@@ -104,7 +116,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h3>
-<ul><li>Fixed fallback <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> function for distributions classes that have not defined this method (<a href="https://github.com/mitchelloharawild/distributional/issues/67" class="external-link">#67</a>).</li></ul></div>
+<ul><li>Fixed fallback <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> function for distributions classes that have not defined this method (<a href="https://github.com/mitchelloharawild/distributional/issues/67" class="external-link">#67</a>).</li>
+</ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
 <ul><li>
@@ -117,7 +130,8 @@
 <h2 class="page-header" data-toc-text="0.2.2" id="distributional-022">distributional 0.2.2<small>2021-02-02</small><a class="anchor" aria-label="anchor" href="#distributional-022"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-2-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-2"></a></h3>
-<ul><li>Added <code><a href="../reference/is-distribution.html">is_distribution()</a></code> to identify if an object is a distribution.</li></ul></div>
+<ul><li>Added <code><a href="../reference/is-distribution.html">is_distribution()</a></code> to identify if an object is a distribution.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="improvements-0-2-2">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-2-2"></a></h3>
 <ul><li>Improved NA structure of distributions, allowing it to work with <code><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na()</a></code> and <code>vctrs</code> vector resizing / filling functionality.</li>
@@ -125,7 +139,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-2-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-2"></a></h3>
-<ul><li>Fixed issue with <code><a href="../reference/hdr.html">hdr()</a></code> range <code>size</code> incorrectly being treated as <code>100-size</code>, giving 5% ranges for 95% sizes and vice-versa (<a href="https://github.com/mitchelloharawild/distributional/issues/61" class="external-link">#61</a>).</li></ul></div>
+<ul><li>Fixed issue with <code><a href="../reference/hdr.html">hdr()</a></code> range <code>size</code> incorrectly being treated as <code>100-size</code>, giving 5% ranges for 95% sizes and vice-versa (<a href="https://github.com/mitchelloharawild/distributional/issues/61" class="external-link">#61</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="distributional-021">distributional 0.2.1<small>2020-10-06</small><a class="anchor" aria-label="anchor" href="#distributional-021"></a></h2>
@@ -134,7 +149,8 @@
 <h3 id="new-features-0-2-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-1"></a></h3>
 <div class="section level4">
 <h4 id="probability-distributions-0-2-1">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-0-2-1"></a></h4>
-<ul><li>Added <code><a href="../reference/dist_missing.html">dist_missing()</a></code> for representing unknown or missing (NA) distributions.</li></ul></div>
+<ul><li>Added <code><a href="../reference/dist_missing.html">dist_missing()</a></code> for representing unknown or missing (NA) distributions.</li>
+</ul></div>
 </div>
 <div class="section level3">
 <h3 id="improvements-0-2-1">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-2-1"></a></h3>
@@ -161,7 +177,8 @@
 <h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
 <div class="section level4">
 <h4 id="probability-distributions-0-2-0">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-0-2-0"></a></h4>
-<ul><li>Added <code><a href="../reference/dist_wrap.html">dist_wrap()</a></code> for wrapping distributions not yet added in the package.</li></ul></div>
+<ul><li>Added <code><a href="../reference/dist_wrap.html">dist_wrap()</a></code> for wrapping distributions not yet added in the package.</li>
+</ul></div>
 <div class="section level4">
 <h4 id="methods-0-2-0">Methods<a class="anchor" aria-label="anchor" href="#methods-0-2-0"></a></h4>
 <ul><li>Added <code><a href="../reference/likelihood.html">likelihood()</a></code> for computing the likelihood of observing a sample from a distribution.</li>
@@ -181,7 +198,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="deprecated-features-0-2-0">Deprecated features<a class="anchor" aria-label="anchor" href="#deprecated-features-0-2-0"></a></h3>
-<ul><li>Graphics functionality provided by <code><a href="../reference/autoplot.distribution.html">autoplot.distribution()</a></code> is now deprecated in favour of using the <code>ggdist</code> package. The <code>ggdist</code> package allows distributions produced by distributional to be used directly with ggplot2 as aesthetics.</li></ul></div>
+<ul><li>Graphics functionality provided by <code><a href="../reference/autoplot.distribution.html">autoplot.distribution()</a></code> is now deprecated in favour of using the <code>ggdist</code> package. The <code>ggdist</code> package allows distributions produced by distributional to be used directly with ggplot2 as aesthetics.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="distributional-010">distributional 0.1.0<small>2020-06-09</small><a class="anchor" aria-label="anchor" href="#distributional-010"></a></h2>
@@ -257,7 +275,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
