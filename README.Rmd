@@ -45,8 +45,7 @@ remotes::install_github("mitchelloharawild/distributional")
 
 ## Examples
 
-Distributions are created using `dist_*()` functions.
-Currently only the normal distribution is supported for testing purposes.
+Distributions are created using `dist_*()` functions. A list of included distribution shapes can be found here: <https://pkg.mitchelloharawild.com/distributional/reference/>
 
 ```{r object}
 library(distributional)
