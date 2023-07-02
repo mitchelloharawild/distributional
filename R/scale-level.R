@@ -72,6 +72,9 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
     return()
   if(length(levels)<=guide$max_discrete){
     guide <- do.call("guide_legend", args)
+    if (inherits(guide, "Guide")) {
+      guide <- guide$params
+    }
     class(guide) <- c("guide", "guide_level")
     breaks <- levels
 
@@ -95,6 +98,10 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
   }
   else{
     guide <- do.call("guide_colourbar", args)
+    if (inherits(guide, "Guide")) {
+      guide <- guide$params
+      class(guide) <- c("guide", "guide_level")
+    }
     breaks <- scale$get_breaks()
     ticks <- as.data.frame(stats::setNames(list(scale$map(breaks)),
                                            aesthetic %||% scale$aesthetics[1]))
