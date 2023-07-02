@@ -131,8 +131,21 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
 #' @rdname guide-helpers
 guide_geom.guide_level <- function (guide, layers, default_mapping)
 {
-  class(guide) <- c("guide", "legend")
-  guide <- guide_geom(guide, layers, default_mapping)
+  if (utils::packageVersion("ggplot2") > "3.4.2") {
+    if ("bar" %in% names(guide)) {
+      colourbar <- guide_colourbar()
+      guide$decor <- guide$bar
+      names(guide$decor)[names(guide$decor) == "value"] <- ".value"
+      guide <- colourbar$get_layer_key(guide, layers)
+      return(guide)
+    }
+    legend <- guide_legend()
+    guide$geoms <- legend$get_layer_key(guide, layers)$decor
+  } else {
+    class(guide) <- c("guide", "legend")
+    guide <- guide_geom(guide, layers, default_mapping)
+  }
+
   guide$geoms <- lapply(guide$geoms, function(x){
     x$draw_key <- ggplot2::ggproto(NULL, NULL,
                                    draw_key = function(data, params, size){
