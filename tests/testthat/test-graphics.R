@@ -1,6 +1,9 @@
 dist <- c(dist_normal(0, 1), dist_beta(5, 1))
 
 test_that("geom_hilo_ribbon()", {
+
+  rlang::local_options(lifecycle_verbosity = "quiet")
+
   dist <- dist_normal(1:3, 1:3)
   p <- ggplot2::ggplot(
     data.frame(x = rep(1:3, 2), interval = c(hilo(dist, 80), hilo(dist, 95)))
@@ -17,6 +20,9 @@ test_that("geom_hilo_ribbon()", {
   )
 })
 test_that("geom_hilo_linerange()", {
+
+  rlang::local_options(lifecycle_verbosity = "quiet")
+
   dist <- dist_normal(1:3, 1:3)
   p <- ggplot2::ggplot(
     data.frame(x = rep(1:3, 2), interval = c(hilo(dist, 80), hilo(dist, 95)))
