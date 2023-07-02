@@ -3,11 +3,14 @@
 \name{guide_train.level_guide}
 \alias{guide_train.level_guide}
 \alias{guide_geom.guide_level}
+\alias{guide_gengrob.guide_level}
 \title{Helper methods for guides}
 \usage{
 \method{guide_train}{level_guide}(guide, scale, aesthetic)
 
 \method{guide_geom}{guide_level}(guide, layers, default_mapping)
+
+\method{guide_gengrob}{guide_level}(guide, theme)
 }
 \description{
 Helper methods for guides

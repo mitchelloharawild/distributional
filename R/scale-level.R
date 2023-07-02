@@ -167,3 +167,37 @@ guide_geom.guide_level <- function (guide, layers, default_mapping)
   })
   guide
 }
+
+#' @export
+#' @importFrom ggplot2 guide_gengrob
+#' @rdname guide-helpers
+guide_gengrob.guide_level <- function(guide, theme) {
+  if (utils::packageVersion("ggplot2") <= "3.4.2") {
+    out <- NextMethod()
+    return(out)
+  }
+  if ("bar" %in% names(guide)) {
+
+    # Make adjustments between versions
+    guide$label.position <- guide$label.position %||% switch(
+      guide$direction,
+      horizontal = "bottom", vertical = "right"
+    )
+    guide$key$.value <- scales::rescale(
+      guide$key$.value,
+      c(0.5, guide$nbin - 0.5) / guide$nbin,
+      guide$decor$.value[c(1, guide$nbin)]
+    )
+
+    # Use new guide for drawing
+    colourbar <- guide_colourbar()
+    colourbar$draw(theme, guide)
+  } else {
+    # Make adjustments between versions
+    guide$decor <- guide$geoms
+
+    # Use new guide for drawing
+    legend <- guide_legend()
+    legend$draw(theme, guide)
+  }
+}
