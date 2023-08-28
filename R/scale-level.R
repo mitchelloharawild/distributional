@@ -131,7 +131,7 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
 #' @rdname guide-helpers
 guide_geom.guide_level <- function (guide, layers, default_mapping)
 {
-  if (utils::packageVersion("ggplot2") > "3.4.2") {
+  if (inherits(ggplot2::guide_none(), "Guide")) {
     if ("bar" %in% names(guide)) {
       colourbar <- guide_colourbar()
       guide$decor <- guide$bar
@@ -172,7 +172,7 @@ guide_geom.guide_level <- function (guide, layers, default_mapping)
 #' @importFrom ggplot2 guide_gengrob
 #' @rdname guide-helpers
 guide_gengrob.guide_level <- function(guide, theme) {
-  if (utils::packageVersion("ggplot2") <= "3.4.2") {
+  if (!inherits(ggplot2::guide_none(), "Guide")) {
     out <- NextMethod()
     return(out)
   }
