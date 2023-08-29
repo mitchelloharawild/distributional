@@ -72,6 +72,9 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
     return()
   if(length(levels)<=guide$max_discrete){
     guide <- do.call("guide_legend", args)
+    if (inherits(guide, "Guide")) {
+      guide <- guide$params
+    }
     class(guide) <- c("guide", "guide_level")
     breaks <- levels
 
@@ -95,6 +98,10 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
   }
   else{
     guide <- do.call("guide_colourbar", args)
+    if (inherits(guide, "Guide")) {
+      guide <- guide$params
+      class(guide) <- c("guide", "guide_level")
+    }
     breaks <- scale$get_breaks()
     ticks <- as.data.frame(stats::setNames(list(scale$map(breaks)),
                                            aesthetic %||% scale$aesthetics[1]))
@@ -124,8 +131,21 @@ guide_train.level_guide <- function(guide, scale, aesthetic) {
 #' @rdname guide-helpers
 guide_geom.guide_level <- function (guide, layers, default_mapping)
 {
-  class(guide) <- c("guide", "legend")
-  guide <- guide_geom(guide, layers, default_mapping)
+  if (inherits(ggplot2::guide_none(), "Guide")) {
+    if ("bar" %in% names(guide)) {
+      colourbar <- guide_colourbar()
+      guide$decor <- guide$bar
+      names(guide$decor)[names(guide$decor) == "value"] <- ".value"
+      guide <- colourbar$get_layer_key(guide, layers)
+      return(guide)
+    }
+    legend <- guide_legend()
+    guide$geoms <- legend$get_layer_key(guide, layers)$decor
+  } else {
+    class(guide) <- c("guide", "legend")
+    guide <- guide_geom(guide, layers, default_mapping)
+  }
+
   guide$geoms <- lapply(guide$geoms, function(x){
     x$draw_key <- ggplot2::ggproto(NULL, NULL,
                                    draw_key = function(data, params, size){
@@ -146,4 +166,38 @@ guide_geom.guide_level <- function (guide, layers, default_mapping)
     x
   })
   guide
+}
+
+#' @export
+#' @importFrom ggplot2 guide_gengrob
+#' @rdname guide-helpers
+guide_gengrob.guide_level <- function(guide, theme) {
+  if (!inherits(ggplot2::guide_none(), "Guide")) {
+    out <- NextMethod()
+    return(out)
+  }
+  if ("bar" %in% names(guide)) {
+
+    # Make adjustments between versions
+    guide$label.position <- guide$label.position %||% switch(
+      guide$direction,
+      horizontal = "bottom", vertical = "right"
+    )
+    guide$key$.value <- scales::rescale(
+      guide$key$.value,
+      c(0.5, guide$nbin - 0.5) / guide$nbin,
+      guide$decor$.value[c(1, guide$nbin)]
+    )
+
+    # Use new guide for drawing
+    colourbar <- guide_colourbar()
+    colourbar$draw(theme, guide)
+  } else {
+    # Make adjustments between versions
+    guide$decor <- guide$geoms
+
+    # Use new guide for drawing
+    legend <- guide_legend()
+    legend$draw(theme, guide)
+  }
 }
