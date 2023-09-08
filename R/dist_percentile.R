@@ -34,7 +34,9 @@ format.dist_percentile <- function(x, ...){
 
 #' @export
 quantile.dist_percentile <- function(x, p, ...){
-  stats::approx(x = x[["percentile"]]/100, y = x[["x"]], xout = p)$y
+  out <- x[["x"]][match(p, x[["percentile"]])]
+  out[is.na(out)] <- stats::approx(x = x[["percentile"]]/100, y = x[["x"]], xout = p[is.na(out)])$y
+  out
 }
 
 #' @export
