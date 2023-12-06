@@ -33,8 +33,6 @@ Imports:
     generics,
     stats,
     numDeriv,
-    farver,
-    digest,
     utils,
     lifecycle
 Suggests: 
