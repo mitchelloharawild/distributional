@@ -1,6 +1,6 @@
 Package: distributional
 Title: Vectorised Probability Distributions
-Version: 0.3.2
+Version: 0.3.2.9000
 Authors@R: 
     c(person(given = "Mitchell",
              family = "O'Hara-Wild",
@@ -33,8 +33,6 @@ Imports:
     generics,
     stats,
     numDeriv,
-    ggplot2,
-    scales,
     farver,
     digest,
     utils,
@@ -52,4 +50,4 @@ BugReports: https://github.com/mitchelloharawild/distributional/issues
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
