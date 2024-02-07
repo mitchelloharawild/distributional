@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.4.0
 
 ## Breaking changes
 
