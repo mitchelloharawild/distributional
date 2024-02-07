@@ -40,7 +40,8 @@ Suggests:
     covr,
     mvtnorm,
     actuar (>= 2.0.0),
-    ggdist
+    ggdist,
+    ggplot2
 RdMacros: 
     lifecycle
 URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional
