@@ -28,9 +28,6 @@
     <loc>https://pkg.mitchelloharawild.com/distributional/news/index.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/autoplot.distribution.html</loc>
-  </url>
-  <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/cdf.html</loc>
   </url>
   <url>
@@ -169,18 +166,6 @@
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/generate.distribution.html</loc>
   </url>
   <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/geom_hilo_linerange.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/geom_hilo_ribbon.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/guide-helpers.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/guide_level.html</loc>
-  </url>
-  <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/hdr.distribution.html</loc>
   </url>
   <url>
@@ -236,12 +221,6 @@
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/scale_hilo_continuous.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.mitchelloharawild.com/distributional/reference/scale_level.html</loc>
   </url>
   <url>
     <loc>https://pkg.mitchelloharawild.com/distributional/reference/skewness.html</loc>

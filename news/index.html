@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -47,6 +47,13 @@
       <small>Source: <a href="https://github.com/mitchelloharawild/distributional/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.0" id="distributional-040">distributional 0.4.0<small>2024-02-07</small><a class="anchor" aria-label="anchor" href="#distributional-040"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
+<ul><li>All graphics related functionality has been removed from the package in favour of the ggdist (<a href="https://cran.r-project.org/package=ggdist" class="external-link uri">https://cran.r-project.org/package=ggdist</a>) package. This breaking change was done to substantially reduce the package’s dependencies, focusing the functionality on representing vectors of distributions.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.2" id="distributional-032">distributional 0.3.2<small>2023-03-22</small><a class="anchor" aria-label="anchor" href="#distributional-032"></a></h2>
 <p>Small patch to resolve issues with CRAN checks.</p>
@@ -198,7 +205,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="deprecated-features-0-2-0">Deprecated features<a class="anchor" aria-label="anchor" href="#deprecated-features-0-2-0"></a></h3>
-<ul><li>Graphics functionality provided by <code><a href="../reference/autoplot.distribution.html">autoplot.distribution()</a></code> is now deprecated in favour of using the <code>ggdist</code> package. The <code>ggdist</code> package allows distributions produced by distributional to be used directly with ggplot2 as aesthetics.</li>
+<ul><li>Graphics functionality provided by <code>autoplot.distribution()</code> is now deprecated in favour of using the <code>ggdist</code> package. The <code>ggdist</code> package allows distributions produced by distributional to be used directly with ggplot2 as aesthetics.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -240,7 +247,7 @@
 <div class="section level4">
 <h4 id="graphics-0-1-0">Graphics<a class="anchor" aria-label="anchor" href="#graphics-0-1-0"></a></h4>
 <ul><li>Added an <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method for visualising the probability density function ([<code><a href="https://rdrr.io/r/stats/density.html" class="external-link">density()</a></code>]) or cumulative distribution function ([<code><a href="../reference/cdf.html">cdf()</a></code>]) of one or more distribution.</li>
-<li>Added <code><a href="../reference/geom_hilo_ribbon.html">geom_hilo_ribbon()</a></code> and <code><a href="../reference/geom_hilo_linerange.html">geom_hilo_linerange()</a></code> geometries for ggplot2. These geoms allow uncertainty to be shown graphically with <code><a href="../reference/hilo.html">hilo()</a></code> intervals.</li>
+<li>Added <code>geom_hilo_ribbon()</code> and <code>geom_hilo_linerange()</code> geometries for ggplot2. These geoms allow uncertainty to be shown graphically with <code><a href="../reference/hilo.html">hilo()</a></code> intervals.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="probability-distributions-0-1-0">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-0-1-0"></a></h4>
