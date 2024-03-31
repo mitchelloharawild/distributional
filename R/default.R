@@ -266,6 +266,11 @@ Math.dist_default <- function(x, ...) {
 #' @method Ops dist_default
 #' @export
 Ops.dist_default <- function(e1, e2) {
+  if(.Generic %in% c("-", "+") && missing(e2)){
+    e2 <- e1
+    e1 <- if(.Generic == "+") 1 else -1
+    .Generic <- "*"
+  }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
   if(any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
     stop("Transformations of multivariate distributions are not yet supported.")
