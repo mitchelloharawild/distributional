@@ -10,6 +10,8 @@ new_support_region(x, limits = NULL, interval = list(c("closed", "closed")))
 \item{x}{A list of prototype vectors defining the distribution type.}
 
 \item{limits}{A list of value limits for the distribution.}
+
+\item{interval}{A list of interval types for the distribution.}
 }
 \description{
 Create a new support region vector
