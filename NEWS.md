@@ -4,6 +4,12 @@
 
 * Fixed error when using '-' as a unary operator on a distribution different from
  `dist_normal()` by @venpopov (#95)
+* Density for transformed distributions now correctly gives 0 instead of NaNs for 
+  values outside the support of the distribution (#97); by @venpopov
+
+## New features
+
+* support() now shows whether the interval of support is open or closed (#97); by @venpopov
 
 # distributional 0.4.0
 

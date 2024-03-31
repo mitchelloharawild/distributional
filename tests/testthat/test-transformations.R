@@ -148,3 +148,33 @@ test_that("unary negation operator works", {
   dist <- dist_student_t(3, mu = 1)
   expect_equal(density(-dist, 0.5), density(dist, -0.5))
 })
+
+test_that("transformed distributions pdf integrates to 1", {
+  dist_names <- c('norm', 'gamma', 'beta', 'chisq', 'exp',
+                  'logis', 't', 'unif', 'weibull')
+  dist_args <- list(list(mean = 1, sd = 1), list(shape = 2, rate = 1),
+                    list(shape1 = 3, shape2 = 5), list(df = 5),
+                    list(rate = 1),
+                    list(location = 1.5, scale = 1), list(df = 10),
+                    list(min = 0, max = 1), list(shape = 3, scale = 1))
+  names(dist_args) <- dist_names
+  dist <- lapply(dist_names, function(x) do.call(dist_wrap, c(x, dist_args[[x]])))
+  dist <- do.call(c, dist)
+  dfun <- function(x, id, transform) density(get(transform)(dist[id]), x)[[1]]
+  twoexp <- function(x) 2^x
+  square <- function(x) x^2
+  mult2 <- function(x) 2*x
+  identity <- function(x) x
+  tol <- 1e-5
+  for (i in 1:length(dist)) {
+    expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'identity')$value, 1, tolerance = tol)
+    expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'exp')$value, 1, tolerance = tol)
+    expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'twoexp')$value, 1, tolerance = tol)
+    expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'mult2')$value, 1, tolerance = tol)
+    if (near(vec_data(support(dist[[i]]))$lim[[1]][1],0)) {
+      expect_equal(integrate(dfun, -Inf, 5, id = i, transform = 'log')$value, 1, tolerance = tol)
+      expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'square')$value, 1, tolerance = tol)
+    }
+  }
+})
+
