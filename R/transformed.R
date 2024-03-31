@@ -38,6 +38,16 @@ format.dist_transformed <- function(x, ...){
 }
 
 #' @export
+support.dist_transformed <- function(x, ...) {
+  source_supp <- vec_data(support(x[["dist"]]))
+  new_support_region(
+    list(vctrs::vec_init(generate(x, 1), n = 0L)),
+    list(sort(x[['transform']](source_supp$lim[[1]]))),
+    list(source_supp$interval[[1]])
+  )
+}
+
+#' @export
 density.dist_transformed <- function(x, at, ...){
   density(x[["dist"]], x[["inverse"]](at))*abs(vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]]))
 }
