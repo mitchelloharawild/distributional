@@ -70,7 +70,13 @@ density.dist_transformed <- function(x, at, ...){
 
 #' @export
 cdf.dist_transformed <- function(x, q, ...){
-  cdf(x[["dist"]], x[["inverse"]](q), ...)
+  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  p <- cdf(x[["dist"]], inv(q), ...)
+  supp <- vec_data(support(x))
+  limits <- supp$lim[[1]]
+  p[which(q <= limits[1])] <- 0
+  p[which(q >= limits[2])] <- 1
+  p
 }
 
 #' @export

@@ -128,3 +128,12 @@ test_that("transformed distributions' density is 0 outside of the support region
   expect_equal(density(exp(dist), 0)[[1]], 0)
   expect_equal(density(exp(dist), 1)[[1]], 1)
 })
+
+
+test_that("transformed distributions' cdf is 0/1 outside of the support region", {
+  dist <- dist_wrap('norm')
+  expect_equal(cdf(exp(dist), 0)[[1]], 0)
+  expect_equal(cdf(exp(dist), -1)[[1]], 0)
+  expect_equal(cdf(-1*exp(dist), 0)[[1]], 1)
+  expect_equal(cdf(-1*exp(dist), 2)[[1]], 1)
+})
