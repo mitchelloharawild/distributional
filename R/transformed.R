@@ -49,7 +49,23 @@ support.dist_transformed <- function(x, ...) {
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  density(x[["dist"]], x[["inverse"]](at))*abs(vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]]))
+  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
+  d <- density(x[["dist"]], inv(at)) * abs(jacobian)
+  supp <- vec_data(support(x))
+  limits <- supp$lim[[1]]
+  interval <- supp$interval[[1]]
+  if (interval[1] == "closed") {
+    d[which(at < limits[1])] <- 0
+  } else {
+    d[which(at <= limits[1])] <- 0
+  }
+  if (interval[2] == "closed") {
+    d[which(at > limits[2])] <- 0
+  } else {
+    d[which(at >= limits[2])] <- 0
+  }
+  d
 }
 
 #' @export
