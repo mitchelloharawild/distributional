@@ -1,5 +1,10 @@
 # distributional (development version)
 
+## Bug fixes
+
+* Fixed error when using '-' as a unary operator on a distribution different from
+ `dist_normal()` by @venpopov (#95)
+
 # distributional 0.4.0
 
 ## Breaking changes
