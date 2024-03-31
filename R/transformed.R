@@ -42,7 +42,7 @@ support.dist_transformed <- function(x, ...) {
   source_supp <- vec_data(support(x[["dist"]]))
   new_support_region(
     list(vctrs::vec_init(generate(x, 1), n = 0L)),
-    list(sort(x[['transform']](source_supp$lim[[1]]))),
+    list(suppressWarnings(sort(x[['transform']](source_supp$lim[[1]])))),
     list(source_supp$interval[[1]])
   )
 }
@@ -126,6 +126,11 @@ Math.dist_transformed <- function(x, ...) {
 #' @method Ops dist_transformed
 #' @export
 Ops.dist_transformed <- function(e1, e2) {
+  if(.Generic %in% c("-", "+") && missing(e2)){
+    e2 <- e1
+    e1 <- if(.Generic == "+") 1 else -1
+    .Generic <- "*"
+  }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
   trans <- if(all(is_dist)) {
     if(identical(e1$dist, e2$dist)){

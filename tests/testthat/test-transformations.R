@@ -137,3 +137,14 @@ test_that("transformed distributions' cdf is 0/1 outside of the support region",
   expect_equal(cdf(-1*exp(dist), 0)[[1]], 1)
   expect_equal(cdf(-1*exp(dist), 2)[[1]], 1)
 })
+
+test_that("unary negation operator works", {
+  dist <- dist_normal(1,1)
+  expect_equal(density(-dist, 0.5), density(dist, -0.5))
+
+  dist <- dist_wrap('norm', mean = 1)
+  expect_equal(density(-dist, 0.5), density(dist, -0.5))
+
+  dist <- dist_student_t(3, mu = 1)
+  expect_equal(density(-dist, 0.5), density(dist, -0.5))
+})
