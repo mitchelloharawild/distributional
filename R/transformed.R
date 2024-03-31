@@ -20,12 +20,13 @@
 #' generate(dist, 10) # rlnorm(10, 0, 0.5)
 #'
 #' @export
-dist_transformed <- function(dist, transform, inverse){
+dist_transformed <- function(dist, transform, inverse, deriv){
   vec_is(dist, new_dist())
-  if(is.function(transform)) transform <- list(transform)
-  if(is.function(inverse)) inverse <- list(inverse)
+  if (is.function(transform)) transform <- list(transform)
+  if (is.function(inverse)) inverse <- list(inverse)
+  if (is.function(deriv)) deriv <- list(deriv)
   new_dist(dist = vec_data(dist),
-           transform = transform, inverse = inverse,
+           transform = transform, inverse = inverse, deriv = deriv,
            dimnames = dimnames(dist), class = "dist_transformed")
 }
 
@@ -50,10 +51,19 @@ support.dist_transformed <- function(x, ...) {
 }
 
 #' @export
-density.dist_transformed <- function(x, at, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
-  jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
-  d <- density(x[["dist"]], inv(at)) * abs(jacobian)
+density.dist_transformed <- function(x, at, deriv_method = "sym", ...){
+  inv <- x[["inverse"]]
+  if (is.null(x[['deriv']]) || deriv_method == "numeric") {
+    message('Using numerical differentiation.')
+    jacobian <- suppressWarnings(
+      vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
+    )
+  } else {
+    message('Using symbolic differentiation')
+    jacobian <- x[['deriv']](at)
+  }
+
+  d <- suppressWarnings(density(x[["dist"]], inv(at)) * abs(jacobian))
   limits <- field(support(x), "lim")[[1]]
   closed <- field(support(x), "closed")[[1]]
   if (!any(is.na(limits))) {
@@ -115,9 +125,13 @@ Math.dist_transformed <- function(x, ...) {
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
 
   inverse_fun <- get_unary_inverse(.Generic)
-  inverse <- new_function(exprs(x = ), body = expr((!!x$inverse)((!!inverse_fun)(x, !!!dots_list(...)))))
+  inverse <- new_function(exprs(x = , !!!dots_list(...)), body = body(inverse_fun))
+  deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
+  if(inherits(deriv, "try-error")) {
+    message('Cannot compute the derivative of the inverse function symbolicly.')
+  }
 
-  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse))[[1]]
+  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse, deriv))[[1]]
 }
 
 #' @method Ops dist_transformed
@@ -151,5 +165,10 @@ Ops.dist_transformed <- function(e1, e2) {
     new_function(exprs(x = ), body = expr((!!e2$inverse)((!!inverse_fun)(x))))
   }
 
-  vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))[[1]]
+  deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
+  if(inherits(deriv, "try-error")) {
+    message('Cannot compute the derivative of the inverse function symbolicly.')
+  }
+
+  vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse, deriv))[[1]]
 }
