@@ -118,3 +118,14 @@ test_that("inverses are applied automatically", {
   expect_equal(density(1/(1/dist_gamma(4, 3)), 0.5), density(dist_gamma(4, 3), 0.5))
 
 })
+
+test_that("unary negation operator works", {
+  dist <- dist_normal(1,1)
+  expect_equal(density(-dist, 0.5), density(dist, -0.5))
+
+  dist <- dist_wrap('norm', mean = 1)
+  expect_equal(density(-dist, 0.5), density(dist, -0.5))
+
+  dist <- dist_student_t(3, mu = 1)
+  expect_equal(density(-dist, 0.5), density(dist, -0.5))
+})
