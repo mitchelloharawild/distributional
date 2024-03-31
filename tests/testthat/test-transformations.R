@@ -118,3 +118,13 @@ test_that("inverses are applied automatically", {
   expect_equal(density(1/(1/dist_gamma(4, 3)), 0.5), density(dist_gamma(4, 3), 0.5))
 
 })
+
+test_that("transformed distributions' density is 0 outside of the support region", {
+  dist <- dist_wrap('norm')
+  expect_equal(density(exp(dist), 0)[[1]], 0)
+  expect_equal(density(exp(dist), -1)[[1]], 0)
+
+  dist <- dist_wrap('gamma', shape = 1, rate = 1)
+  expect_equal(density(exp(dist), 0)[[1]], 0)
+  expect_equal(density(exp(dist), 1)[[1]], 1)
+})
