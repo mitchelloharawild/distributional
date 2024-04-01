@@ -42,7 +42,9 @@ support.dist_transformed <- function(x, ...) {
   support <- support(x[["dist"]])
   lim <- field(support, "lim")[[1]]
   lim <- SW(x[['transform']](lim))
-  lim <- sort(lim)
+  if (all(!is.na(lim))) {
+    lim <- sort(lim)
+  }
   field(support, "lim")[[1]] <- lim
   support
 }
@@ -54,15 +56,10 @@ density.dist_transformed <- function(x, at, ...){
   d <- density(x[["dist"]], inv(at)) * abs(jacobian)
   limits <- field(support(x), "lim")[[1]]
   closed <- field(support(x), "closed")[[1]]
-  if (closed[1]) {
-    d[which(at < limits[1])] <- 0
-  } else {
-    d[which(at <= limits[1])] <- 0
-  }
-  if (closed[2]) {
-    d[which(at > limits[2])] <- 0
-  } else {
-    d[which(at >= limits[2])] <- 0
+  if (!any(is.na(limits))) {
+    `%op1%` <- if (closed[1]) `<` else `<=`
+    `%op2%` <- if (closed[2]) `>` else `>=`
+    d[which(at %op1% limits[1] | at %op2% limits[2])] <- 0
   }
   d
 }
@@ -72,8 +69,10 @@ cdf.dist_transformed <- function(x, q, ...){
   inv <- function(v) SW(x[["inverse"]](v))
   p <- cdf(x[["dist"]], inv(q), ...)
   limits <- field(support(x), "lim")[[1]]
-  p[q <= limits[1]] <- 0
-  p[q >= limits[2]] <- 1
+  if (!any(is.na(limits))) {
+    p[q <= limits[1]] <- 0
+    p[q >= limits[2]] <- 1
+  }
   p
 }
 
