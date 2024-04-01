@@ -74,7 +74,7 @@ support.dist_default <- function(x, ...) {
   new_support_region(
     list(vctrs::vec_init(generate(x, 1), n = 0L)),
     list(qs),
-    list(ifelse(near(ds, 0), FALSE, TRUE))
+    list(!near(ds, 0))
   )
 }
 
