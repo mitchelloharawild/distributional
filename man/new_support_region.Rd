@@ -4,14 +4,14 @@
 \alias{new_support_region}
 \title{Create a new support region vector}
 \usage{
-new_support_region(x, limits = NULL, interval = list(c("closed", "closed")))
+new_support_region(x, limits = NULL, closed = list(c(TRUE, TRUE)))
 }
 \arguments{
 \item{x}{A list of prototype vectors defining the distribution type.}
 
 \item{limits}{A list of value limits for the distribution.}
 
-\item{interval}{A list of interval types for the distribution.}
+\item{closed}{A list of logical(2L) indicating whether the limits are closed.}
 }
 \description{
 Create a new support region vector
