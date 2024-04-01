@@ -171,7 +171,8 @@ test_that("transformed distributions pdf integrates to 1", {
     expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'exp')$value, 1, tolerance = tol)
     expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'twoexp')$value, 1, tolerance = tol)
     expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'mult2')$value, 1, tolerance = tol)
-    if (near(vec_data(support(dist[[i]]))$lim[[1]][1],0)) {
+    lower_bound <- field(support(dist[[i]]), "lim")[[1]][1]
+    if (near(lower_bound, 0)) {
       expect_equal(integrate(dfun, -Inf, 5, id = i, transform = 'log')$value, 1, tolerance = tol)
       expect_equal(integrate(dfun, -Inf, Inf, id = i, transform = 'square')$value, 1, tolerance = tol)
     }

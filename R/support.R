@@ -2,10 +2,10 @@
 #'
 #' @param x A list of prototype vectors defining the distribution type.
 #' @param limits A list of value limits for the distribution.
-#' @param interval A list of interval types for the distribution.
+#' @param closed A list of logical(2L) indicating whether the limits are closed.
 #'
-new_support_region <- function(x, limits = NULL, interval = list(c('closed','closed'))) {
-  vctrs::new_rcrd(list(x = x, lim = limits, interval = interval), class = "support_region")
+new_support_region <- function(x, limits = NULL, closed = list(c(TRUE, TRUE))) {
+  vctrs::new_rcrd(list(x = x, lim = limits, closed = closed), class = "support_region")
 }
 
 #' @export
@@ -22,9 +22,10 @@ format.support_region <- function(x, digits = 3, ...) {
     }
     out
   }, FUN.VALUE = character(1L))
-  mapply(function(type, z, i) {
-    br1 <- switch(i[1], open = "(", closed = "[")
-    br2 <- switch(i[2], open = ")", closed = "]")
+  brackets <- list(c("(","["), c(")","]"))
+  mapply(function(type, z, closed) {
+    br1 <- brackets[[1]][closed[1] + 1L]
+    br2 <- brackets[[2]][closed[2] + 1L]
     fz <- sapply(z, function(x) format(x, digits = digits))
     fz <- gsub("3.14", "pi", fz, fixed = TRUE)
     if(any(is.na(z)) || all(is.infinite(z))) type
@@ -34,7 +35,7 @@ format.support_region <- function(x, digits = 3, ...) {
     else if (type == "R") paste0(br1, fz[1], ",", fz[2], br2)
     else if (type == "Z") paste0(br1, z[1], ",", z[1]+1L, ",...,", z[2], br2)
     else type
-  }, type, field(x, "lim"), field(x, "interval"))
+  }, type, field(x, "lim"), field(x, "closed"))
 }
 
 #' @export

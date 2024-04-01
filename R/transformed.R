@@ -39,28 +39,27 @@ format.dist_transformed <- function(x, ...){
 
 #' @export
 support.dist_transformed <- function(x, ...) {
-  source_supp <- vec_data(support(x[["dist"]]))
-  new_support_region(
-    list(vctrs::vec_init(generate(x, 1), n = 0L)),
-    list(suppressWarnings(sort(x[['transform']](source_supp$lim[[1]])))),
-    list(source_supp$interval[[1]])
-  )
+  support <- support(x[["dist"]])
+  lim <- field(support, "lim")[[1]]
+  lim <- SW(x[['transform']](lim))
+  lim <- sort(lim)
+  field(support, "lim")[[1]] <- lim
+  support
 }
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  inv <- function(v) SW(x[["inverse"]](v))
   jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
   d <- density(x[["dist"]], inv(at)) * abs(jacobian)
-  supp <- vec_data(support(x))
-  limits <- supp$lim[[1]]
-  interval <- supp$interval[[1]]
-  if (interval[1] == "closed") {
+  limits <- field(support(x), "lim")[[1]]
+  closed <- field(support(x), "closed")[[1]]
+  if (closed[1]) {
     d[which(at < limits[1])] <- 0
   } else {
     d[which(at <= limits[1])] <- 0
   }
-  if (interval[2] == "closed") {
+  if (closed[2]) {
     d[which(at > limits[2])] <- 0
   } else {
     d[which(at >= limits[2])] <- 0
@@ -70,12 +69,11 @@ density.dist_transformed <- function(x, at, ...){
 
 #' @export
 cdf.dist_transformed <- function(x, q, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  inv <- function(v) SW(x[["inverse"]](v))
   p <- cdf(x[["dist"]], inv(q), ...)
-  supp <- vec_data(support(x))
-  limits <- supp$lim[[1]]
-  p[which(q <= limits[1])] <- 0
-  p[which(q >= limits[2])] <- 1
+  limits <- field(support(x), "lim")[[1]]
+  p[q <= limits[1]] <- 0
+  p[q >= limits[2]] <- 1
   p
 }
 
