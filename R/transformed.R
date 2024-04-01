@@ -10,6 +10,15 @@
 #' @param transform A function used to transform the distribution. This
 #' transformation should be monotonic over appropriate domain.
 #' @param inverse The inverse of the `transform` function.
+#' @param deriv The derivative of the `inverse` function. If not provided, the
+#' derivative will be computed numerically.
+#'
+#' @description
+#' `dist_transformed()` requires you to explicitely provide the inverse and the
+#' derivative of the inverse functions. To attempt automatic symbolic computation
+#' of these functions, you can create a transformed distribution by appplying the
+#' transformation to an existing distribution object, e.g. `exp(dist_normal(0, 0.5))`.
+#'
 #'
 #' @examples
 #' # Create a log normal distribution
@@ -19,8 +28,11 @@
 #' quantile(dist, 0.1) # qlnorm(0.1, 0, 0.5)
 #' generate(dist, 10) # rlnorm(10, 0, 0.5)
 #'
+#' # provide a derivative of the inverse function to avoid numerical differentiation
+#' dist <- dist_transformed(dist_normal(0, 0.5), exp, log, function(x) 1/x)
+#'
 #' @export
-dist_transformed <- function(dist, transform, inverse, deriv){
+dist_transformed <- function(dist, transform, inverse, deriv = NULL){
   vec_is(dist, new_dist())
   if (is.function(transform)) transform <- list(transform)
   if (is.function(inverse)) inverse <- list(inverse)
@@ -125,7 +137,12 @@ Math.dist_transformed <- function(x, ...) {
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
 
   inverse_fun <- get_unary_inverse(.Generic)
-  inverse <- new_function(exprs(x = , !!!dots_list(...)), body = body(inverse_fun))
+  new_body <- Deriv::Simplify(do.call("replace_x", list(body(x$inverse), body(inverse_fun))))
+  env <- new.env()
+  env_bind(env, !!!dots_list(...))
+  env_bind(env, !!!as.list(environment(inverse_fun)))
+  env_bind(env, !!!as.list(environment(x$inverse)))
+  inverse <- new_function(exprs(x = , !!!dots_list(...)), body = new_body, env = env)
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
   if(inherits(deriv, "try-error")) {
     message('Cannot compute the derivative of the inverse function symbolicly.')
@@ -157,13 +174,20 @@ Ops.dist_transformed <- function(e1, e2) {
 
   inverse <- if(all(is_dist)) {
     invert_fail
-  } else if(is_dist[1]){
+  } else if (is_dist[1]) {
     inverse_fun <- get_binary_inverse_1(.Generic, e2)
-    new_function(exprs(x = ), body = expr((!!e1$inverse)((!!inverse_fun)(x))))
+    prev_inverse <- e1$inverse
   } else {
     inverse_fun <- get_binary_inverse_2(.Generic, e1)
-    new_function(exprs(x = ), body = expr((!!e2$inverse)((!!inverse_fun)(x))))
+    prev_inverse <- e2$inverse
   }
+
+  new_body <- Deriv::Simplify(do.call("replace_x", list(body(prev_inverse), body(inverse_fun))))
+  env <- new.env()
+  env_bind(env, !!!as.list(environment(inverse_fun)))
+  env_bind(env, !!!as.list(environment(prev_inverse)))
+  inverse <- new_function(exprs(x = ), body = new_body, env = env)
+
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
   if(inherits(deriv, "try-error")) {
