@@ -323,4 +323,10 @@ test_that('providing custom derivative functions works', {
   res2 <- expect_message(density(dist2, 0.5, verbose = TRUE), "Using numeric")
   res3 <- expect_message(density(dist3, 0.5, verbose = TRUE), "Using symbolic")
   expect_equal(res1, res2, res3)
+
+  # custom functions work even if they are primitives
+  dist4 <- dist_transformed(d, exp, log, function(x) 1/x)
+  dist5 <- log(dist4)
+  expect_equal(density(dist4, 0.5), density(exp(d), 0.5))
+  expect_equal(density(dist5, 0.5), density(d, 0.5))
 })

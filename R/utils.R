@@ -175,3 +175,14 @@ fget <- function(x, what) {
   if (length(fun) == 1) fun[[1]] else fun
 }
 
+
+# creates a wrapper function around primitive functions
+wrap_primitive <- function(fun) {
+  if (is.primitive(fun)) {
+    res <- sub("^\\.Primitive\\(\"(.+)\"\\)", "\\1", format(fun))
+    args <- formals(args(fun))
+    new_function(exprs(x = ), call2(res, sym(names(args)[1]), !!!args[-1]))
+  } else {
+    fun
+  }
+}

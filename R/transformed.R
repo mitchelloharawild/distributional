@@ -35,9 +35,9 @@
 dist_transformed <- function(dist, transform, inverse, deriv = NULL){
   # TODO: if deriv is not provided, we can still try to compute it symbolically
   vec_is(dist, new_dist())
-  if (is.function(transform)) transform <- list(transform)
-  if (is.function(inverse)) inverse <- list(inverse)
-  if (is.function(deriv)) deriv <- list(deriv)
+  if (is.function(transform)) transform <- list(wrap_primitive(transform))
+  if (is.function(inverse)) inverse <- list(wrap_primitive(inverse))
+  if (is.function(deriv)) deriv <- list(wrap_primitive(deriv))
   new_dist(dist = vec_data(dist),
            transform = transform, inverse = inverse, deriv = deriv,
            dimnames = dimnames(dist), class = "dist_transformed")
