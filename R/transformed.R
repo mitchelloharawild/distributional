@@ -144,16 +144,14 @@ Math.dist_transformed <- function(x, ...) {
 
   # get the inverse and replace any variables in the body either with the defaults
   # or with the arguments passed to ... in the Math call
-  inverse_fun <- get_unary_inverse(.Generic)
-  call <- call_match(expr(inverse_fun(x, !!!dots)), inverse_fun, defaults = T)
-  args <- as.list(call)[-1]
-  body <- substituteDirect(body(inverse_fun), args)
-  body <- substituteDirect(body(x$inverse), list(x = body))
-  inverse <- new_function(exprs(x = ), body = body)
-  inverse <- Deriv::Simplify(inverse)
+  prev_inverse <- x$inverse
+  current_inverse <- get_unary_inverse(.Generic)
+  current_inverse <- substitute_args_in_body(current_inverse, ...)
+  body(prev_inverse) <- substituteDirect(body(prev_inverse), list(x = body(current_inverse)))
+  inverse <- Deriv::Simplify(prev_inverse)
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if(inherits(deriv, "try-error")) {
+  if (inherits(deriv, "try-error")) {
     message('Cannot compute the derivative of the inverse function symbolicly.')
   }
 
@@ -184,15 +182,15 @@ Ops.dist_transformed <- function(e1, e2) {
   if (all(is_dist)) {
     inverse <- invert_fail
   } else if (is_dist[1]) {
-    inverse_fun <- get_binary_inverse_1(.Generic, e2)
+    current_inverse <- get_binary_inverse_1(.Generic, e2)
     prev_inverse <- e1$inverse
   } else {
-    inverse_fun <- get_binary_inverse_2(.Generic, e1)
+    current_inverse <- get_binary_inverse_2(.Generic, e1)
     prev_inverse <- e2$inverse
   }
 
   if (!all(is_dist)) {
-    body <- substituteDirect(body(prev_inverse), list(x = body(inverse_fun)))
+    body <- substituteDirect(body(prev_inverse), list(x = body(current_inverse)))
     inverse <- new_function(exprs(x = ), body = body)
   }
 
