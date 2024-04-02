@@ -260,12 +260,9 @@ get_binary_inverse_2 <- function(f, constant) {
 #' @export
 Math.dist_default <- function(x, ...) {
   if (dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
-  dots <- dots_list(...)
 
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots)))
+  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
 
-  # get the inverse and replace any variables in the body either with the defaults
-  # or with the arguments passed to ... in the Math call
   inverse <- get_unary_inverse(.Generic, ...)
   inverse <- Deriv::Simplify(inverse)
 
