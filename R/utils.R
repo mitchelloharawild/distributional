@@ -170,3 +170,25 @@ substitute_args_in_body <- function(fun, ...) {
   body <- substituteDirect(body(fun), args)
   new_function(exprs(x = ), body = body)
 }
+
+
+
+#' Get the transform, inverse or derivative functions from a distribution
+#'
+#' @param x A distribution object
+#' @param what A string or name indicating the function to extract
+#'
+#' @return A function or list of functions
+#' @export
+#'
+#' @examples
+#' d <- exp(dist_gamma(1,1))
+#' fget(d, "transform")
+#' fget(d, "inverse")
+#' fget(d, "deriv")
+fget <- function(x, what) {
+  data <- vec_data(x)
+  fun <- lapply(data, function(d) d[[enexpr(what)]])
+  if (length(fun) == 1) fun[[1]] else fun
+}
+
