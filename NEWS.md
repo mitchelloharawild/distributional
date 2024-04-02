@@ -10,6 +10,16 @@
 ## New features
 
 * support() now shows whether the interval of support is open or closed (#97); by @venpopov
+* automatic symbolic derivatives for transformed distributions (#101); by @venpopov
+* dist_transformed() now accepts a `deriv` argument for a user-supplied derivative
+  function on the inverse transformation (#101)
+* density() now accepts a `deriv_method` argument for specifying whether to use 
+  "numeric" or "symbolic" (the new default) derivatives. If "symbolic" is selected,
+  the package will attempt to use symbolic derivatives for transformed distributions
+  (#101)
+* density() now accepts a `verbose` (default is FALSE) argument for printing a message whether the computation 
+  of the density is done numerically or symbolically. This behavior can be set globally by 
+  `options(dist.verbose = TRUE)` (#101)
 
 # distributional 0.4.0
 

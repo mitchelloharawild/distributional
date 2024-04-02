@@ -66,8 +66,9 @@ support.dist_transformed <- function(x, ...) {
 }
 
 #' @export
-density.dist_transformed <- function(x, at, deriv_method = "sym",
+density.dist_transformed <- function(x, at, deriv_method = "symbolic",
                                      verbose = getOption('dist.verbose', FALSE), ...) {
+  deriv_method <- match.arg(deriv_method, c("symbolic", "numeric"))
   inv <- x[["inverse"]]
   if (is.null(x[['deriv']]) || deriv_method == "numeric") {
     if (verbose) message('Using numerical differentiation.')
