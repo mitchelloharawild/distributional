@@ -23,7 +23,7 @@ derivative will be computed numerically.}
 The \code{\link[=density]{density()}}, \code{\link[=mean]{mean()}}, and \code{\link[=variance]{variance()}} methods are approximate as
 they are based on numerical derivatives.
 
-\code{dist_transformed()} requires you to explicitely provide the inverse and the
+\code{dist_transformed()} requires you to explicitly provide the inverse and the
 derivative of the inverse functions. To attempt automatic symbolic computation
 of these functions, you can create a transformed distribution by appplying the
 transformation to an existing distribution object, e.g. \code{exp(dist_normal(0, 0.5))}.

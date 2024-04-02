@@ -14,7 +14,7 @@
 #' derivative will be computed numerically.
 #'
 #' @description
-#' `dist_transformed()` requires you to explicitely provide the inverse and the
+#' `dist_transformed()` requires you to explicitly provide the inverse and the
 #' derivative of the inverse functions. To attempt automatic symbolic computation
 #' of these functions, you can create a transformed distribution by appplying the
 #' transformation to an existing distribution object, e.g. `exp(dist_normal(0, 0.5))`.
@@ -33,6 +33,7 @@
 #'
 #' @export
 dist_transformed <- function(dist, transform, inverse, deriv = NULL){
+  # TODO: if deriv is not provided, we can still try to compute it symbolically
   vec_is(dist, new_dist())
   if (is.function(transform)) transform <- list(transform)
   if (is.function(inverse)) inverse <- list(inverse)

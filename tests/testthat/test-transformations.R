@@ -296,3 +296,31 @@ test_that('symbolic derivatives work', {
 
   expect_equal(get_deriv(dist2)(v), an_deriv(v))
 })
+
+
+test_that('providing custom derivative functions works', {
+  # base distribution
+  d <- dist_gamma(1,1)
+
+  # built-in transformation (uses symbolic derivatives)
+  dist1 <- log(1+exp(-d)^2)
+
+  # custom transformation without provided derivative function
+  dist2 <- dist_transformed(d,
+                            transform = vec_data(dist1)[[1]]$transform,
+                            inverse = vec_data(dist1)[[1]]$inverse
+  )
+
+  # custom transformation with provided derivative function
+  dist3 <- dist_transformed(d,
+                            transform = vec_data(dist1)[[1]]$transform,
+                            inverse = vec_data(dist1)[[1]]$inverse,
+                            deriv = vec_data(dist1)[[1]]$deriv
+  )
+
+
+  res1 <- expect_message(density(dist1, 0.5, verbose = TRUE), "Using symbolic")
+  res2 <- expect_message(density(dist2, 0.5, verbose = TRUE), "Using numeric")
+  res3 <- expect_message(density(dist3, 0.5, verbose = TRUE), "Using symbolic")
+  expect_equal(res1, res2, res3)
+})
