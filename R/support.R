@@ -4,7 +4,7 @@
 #' @param limits A list of value limits for the distribution.
 #' @param closed A list of logical(2L) indicating whether the limits are closed.
 #'
-new_support_region <- function(x, limits = NULL, closed = list(c(TRUE, TRUE))) {
+new_support_region <- function(x = numeric(), limits = list(), closed = list()) {
   vctrs::new_rcrd(list(x = x, lim = limits, closed = closed), class = "support_region")
 }
 
@@ -28,12 +28,13 @@ format.support_region <- function(x, digits = 3, ...) {
     br2 <- brackets[[2]][closed[2] + 1L]
     fz <- sapply(z, function(x) format(x, digits = digits))
     fz <- gsub("3.14", "pi", fz, fixed = TRUE)
-    if(any(is.na(z)) || all(is.infinite(z))) type
-    else if (type == "Z" && identical(z[2], Inf)) {
-      if(z[1] == 0L) "N0" else if (z[1] == 1L) "N+" else paste0(br1, z[1], ",", z[1]+1L, ",...,", z[2], br2)
+    if (any(is.na(z)) || all(is.infinite(z))) type
+    else if (type == "Z") {
+      if (identical(z, c(0L, Inf))) "N0"
+      else if (identical(z, c(1L, Inf))) "N+"
+      else paste0("{", z[1], ",", z[1]+1L, ",...,", z[2], "}")
     }
     else if (type == "R") paste0(br1, fz[1], ",", fz[2], br2)
-    else if (type == "Z") paste0(br1, z[1], ",", z[1]+1L, ",...,", z[2], br2)
     else type
   }, type, field(x, "lim"), field(x, "closed"))
 }
