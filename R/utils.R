@@ -154,23 +154,6 @@ near <- function(x, y) {
   abs(x - y) < tol
 }
 
-# A utility function for injecting default or new arguments into the function body
-# E.g. if fun <- function(x, y = 1) {x + y}, substitute_args_in_body(fun) will return
-# a new function with y replaced with 1: `function(x) x+1`. If a new
-# value of y is provided in the call, it will be used instead of the default. E.g.
-# substitute_args_in_body(fun, y = exp(2)) will return `function(x) x+exp(2)`.
-# it assumes that the first argument of fun is x. It works both with named and unnamed
-# arguments in the dots
-# @return A function with a single x arguments and the body of fun with the arguments
-# replaced with the defaults or the values passed in the dots
-substitute_args_in_body <- function(fun, ...) {
-  dots <- dots_list(...)
-  call <- call_match(expr(fun(x, !!!dots)), fun, defaults = TRUE)
-  args <- as.list(call)[-1]
-  body <- substituteDirect(body(fun), args)
-  new_function(exprs(x = ), body = body)
-}
-
 
 
 #' Get the transform, inverse or derivative functions from a distribution

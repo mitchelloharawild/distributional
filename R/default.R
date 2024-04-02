@@ -189,11 +189,14 @@ invert_fail <- function(...) stop("Inverting transformations for distributions i
 #' (a function that raises an error if called) if there is no known inverse.
 #' @param f string. Name of a function.
 #' @noRd
-get_unary_inverse <- function(f) {
+get_unary_inverse <- function(f, ...) {
   switch(f,
          sqrt = function(x) x^2,
          exp = function(x) log(x),
-         log = function(x, base = exp(1)) exp(x * log(base)),
+         log = (function(x, base) {
+           if (missing(base)) function(x) exp(x)
+           else new_function(exprs(x = ), expr((!!base)^x))
+         })(x, ...),
          log2 = function(x) 2^x,
          log10 = function(x) 10^x,
          expm1 = function(x) log1p(x),
@@ -263,8 +266,7 @@ Math.dist_default <- function(x, ...) {
 
   # get the inverse and replace any variables in the body either with the defaults
   # or with the arguments passed to ... in the Math call
-  inverse <- get_unary_inverse(.Generic)
-  inverse <- substitute_args_in_body(inverse, ...)
+  inverse <- get_unary_inverse(.Generic, ...)
   inverse <- Deriv::Simplify(inverse)
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))

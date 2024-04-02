@@ -142,11 +142,9 @@ Math.dist_transformed <- function(x, ...) {
   dots <- dots_list(...)
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots)))
 
-  # get the inverse and replace any variables in the body either with the defaults
-  # or with the arguments passed to ... in the Math call
+  # replace x in the previous inverse function body with the current inverse function body
   prev_inverse <- x$inverse
-  current_inverse <- get_unary_inverse(.Generic)
-  current_inverse <- substitute_args_in_body(current_inverse, ...)
+  current_inverse <- get_unary_inverse(.Generic, ...)
   body(prev_inverse) <- substituteDirect(body(prev_inverse), list(x = body(current_inverse)))
   inverse <- Deriv::Simplify(prev_inverse)
 
