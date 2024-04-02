@@ -69,9 +69,12 @@ family.dist_default <- function(object, ...) {
 
 #' @export
 support.dist_default <- function(x, ...) {
+  qs <- quantile(x, c(0, 1))
+  ds <- density(x, qs)
   new_support_region(
     list(vctrs::vec_init(generate(x, 1), n = 0L)),
-    list(quantile(x, c(0, 1)))
+    list(qs),
+    list(!near(ds, 0))
   )
 }
 

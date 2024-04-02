@@ -148,3 +148,8 @@ restore_rng <- function(expr, seed = NULL) {
 
   expr
 }
+
+near <- function(x, y) {
+  tol <- .Machine$double.eps^0.5
+  abs(x - y) < tol
+}

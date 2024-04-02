@@ -18,7 +18,11 @@ Authors@R:
       person(given = "Earo",
              family = "Wang",
              role = c("ctb"),
-             comment = c(ORCID = "0000-0001-6448-5260")))
+             comment = c(ORCID = "0000-0001-6448-5260")),
+      person(given = "Vencislav",
+             family = "Popov",
+             role = c("ctb"),
+             comment = c(ORCID = "0000-0002-8073-4199")))
 Description: Vectorised distribution objects with tools for manipulating, 
     visualising, and using probability distributions. Designed to allow model
     prediction outputs to return distributions rather than their parameters, 
@@ -49,4 +53,4 @@ BugReports: https://github.com/mitchelloharawild/distributional/issues
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

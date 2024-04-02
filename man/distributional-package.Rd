@@ -29,6 +29,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Earo Wang (\href{https://orcid.org/0000-0001-6448-5260}{ORCID}) [contributor]
+  \item Vencislav Popov (\href{https://orcid.org/0000-0002-8073-4199}{ORCID}) [contributor]
 }
 
 }

@@ -38,13 +38,42 @@ format.dist_transformed <- function(x, ...){
 }
 
 #' @export
+support.dist_transformed <- function(x, ...) {
+  support <- support(x[["dist"]])
+  lim <- field(support, "lim")[[1]]
+  lim <- suppressWarnings(x[['transform']](lim))
+  if (all(!is.na(lim))) {
+    lim <- sort(lim)
+  }
+  field(support, "lim")[[1]] <- lim
+  support
+}
+
+#' @export
 density.dist_transformed <- function(x, at, ...){
-  density(x[["dist"]], x[["inverse"]](at))*abs(vapply(at, numDeriv::jacobian, numeric(1L), func = x[["inverse"]]))
+  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
+  d <- density(x[["dist"]], inv(at)) * abs(jacobian)
+  limits <- field(support(x), "lim")[[1]]
+  closed <- field(support(x), "closed")[[1]]
+  if (!any(is.na(limits))) {
+    `%less_than%` <- if (closed[1]) `<` else `<=`
+    `%greater_than%` <- if (closed[2]) `>` else `>=`
+    d[which(at %less_than% limits[1] | at %greater_than% limits[2])] <- 0
+  }
+  d
 }
 
 #' @export
 cdf.dist_transformed <- function(x, q, ...){
-  cdf(x[["dist"]], x[["inverse"]](q), ...)
+  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  p <- cdf(x[["dist"]], inv(q), ...)
+  limits <- field(support(x), "lim")[[1]]
+  if (!any(is.na(limits))) {
+    p[q <= limits[1]] <- 0
+    p[q >= limits[2]] <- 1
+  }
+  p
 }
 
 #' @export
