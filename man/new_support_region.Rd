@@ -4,7 +4,7 @@
 \alias{new_support_region}
 \title{Create a new support region vector}
 \usage{
-new_support_region(x, limits = NULL, closed = list(c(TRUE, TRUE)))
+new_support_region(x = numeric(), limits = list(), closed = list())
 }
 \arguments{
 \item{x}{A list of prototype vectors defining the distribution type.}
