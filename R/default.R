@@ -191,27 +191,27 @@ invert_fail <- function(...) stop("Inverting transformations for distributions i
 #' @noRd
 get_unary_inverse <- function(f) {
   switch(f,
-    sqrt = function(x) x^2,
-    exp = function(x) log(x),
-    log = function(x, base = exp(1)) base ^ x,
-    log2 = function(x) 2^x,
-    log10 = function(x) 10^x,
-    expm1 = function(x) log1p(x),
-    log1p = function(x) expm1(x),
-    cos = function(x) acos(x),
-    sin = function(x) asin(x),
-    tan = function(x) atan(x),
-    acos = function(x) cos(x),
-    asin = function(x) sin(x),
-    atan = function(x) tan(x),
-    cosh = function(x) acosh(x),
-    sinh = function(x) asinh(x),
-    tanh = function(x) atanh(x),
-    acosh = function(x) cosh(x),
-    asinh = function(x) sinh(x),
-    atanh = function(x) tanh(x),
+         sqrt = function(x) x^2,
+         exp = function(x) log(x),
+         log = function(x, base = exp(1)) exp(x * log(base)),
+         log2 = function(x) 2^x,
+         log10 = function(x) 10^x,
+         expm1 = function(x) log1p(x),
+         log1p = function(x) expm1(x),
+         cos = function(x) acos(x),
+         sin = function(x) asin(x),
+         tan = function(x) atan(x),
+         acos = function(x) cos(x),
+         asin = function(x) sin(x),
+         atan = function(x) tan(x),
+         cosh = function(x) acosh(x),
+         sinh = function(x) asinh(x),
+         tanh = function(x) atanh(x),
+         acosh = function(x) cosh(x),
+         asinh = function(x) sinh(x),
+         atanh = function(x) tanh(x),
 
-    invert_fail
+         invert_fail
   )
 }
 
@@ -221,16 +221,15 @@ get_unary_inverse <- function(f) {
 #' @param constant a constant value
 #' @noRd
 get_binary_inverse_1 <- function(f, constant) {
-  force(constant)
 
   switch(f,
-    `+` = function(x) x - constant,
-    `-` = function(x) x + constant,
-    `*` = function(x) x / constant,
-    `/` = function(x) x * constant,
-    `^` = function(x) x ^ (1/constant),
+         `+` = new_function(exprs(x = ), body = expr(x - !!constant)),
+         `-` = new_function(exprs(x = ), body = expr(x + !!constant)),
+         `*` = new_function(exprs(x = ), body = expr(x / !!constant)),
+         `/` = new_function(exprs(x = ), body = expr(x * !!constant)),
+         `^` = new_function(exprs(x = ), body = expr(x ^ (1/!!constant))),
 
-    invert_fail
+         invert_fail
   )
 }
 
@@ -243,13 +242,13 @@ get_binary_inverse_2 <- function(f, constant) {
   force(constant)
 
   switch(f,
-    `+` = function(x) x - constant,
-    `-` = function(x) constant - x,
-    `*` = function(x) x / constant,
-    `/` = function(x) constant / x,
-    `^` = function(x) log(x, base = constant),
+         `+` = new_function(exprs(x = ), body = expr(x - !!constant)),
+         `-` = new_function(exprs(x = ), body = expr(!!constant - x)),
+         `*` = new_function(exprs(x = ), body = expr(x / !!constant)),
+         `/` = new_function(exprs(x = ), body = expr(!!constant / x)),
+         `^` = new_function(exprs(x = ), body = expr(log(x, base = !!constant))),
 
-    invert_fail
+         invert_fail
   )
 }
 
@@ -257,11 +256,18 @@ get_binary_inverse_2 <- function(f, constant) {
 #' @export
 Math.dist_default <- function(x, ...) {
   if (dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
+  dots <- dots_list(...)
 
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
+  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots)))
 
+  # get the inverse and replace any variables in the body either with the defaults
+  # or with the arguments passed to ... in the Math call
   inverse_fun <- get_unary_inverse(.Generic)
-  inverse <- new_function(exprs(x = , !!!dots_list(...)), body = body(inverse_fun))
+  call <- call_match(expr(inverse_fun(x, !!!dots)), inverse_fun, defaults = T)
+  args <- as.list(call)[-1]
+  body <- substituteDirect(body(inverse_fun), args)
+  inverse <- new_function(exprs(x =), body = body)
+  inverse <- Deriv::Simplify(inverse)
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
   if(inherits(deriv, "try-error")) {
