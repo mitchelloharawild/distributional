@@ -39,7 +39,8 @@ Imports:
     numDeriv,
     utils,
     lifecycle,
-    Deriv
+    Deriv,
+    methods
 Suggests: 
     testthat (>= 2.1.0),
     covr,

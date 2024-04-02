@@ -58,20 +58,23 @@ support.dist_transformed <- function(x, ...) {
   if (all(!is.na(lim))) {
     lim <- sort(lim)
   }
+  # temporary fix for 1/dist_wrap('norm')
+  if (identical(lim, c(0,0))) lim <- c(-Inf, Inf)
   field(support, "lim")[[1]] <- lim
   support
 }
 
 #' @export
-density.dist_transformed <- function(x, at, deriv_method = "sym", ...){
+density.dist_transformed <- function(x, at, deriv_method = "sym",
+                                     verbose = getOption('dist.verbose', FALSE), ...) {
   inv <- x[["inverse"]]
   if (is.null(x[['deriv']]) || deriv_method == "numeric") {
-    message('Using numerical differentiation.')
+    if (verbose) message('Using numerical differentiation.')
     jacobian <- suppressWarnings(
       vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
     )
   } else {
-    message('Using symbolic differentiation')
+    if (verbose) message('Using symbolic differentiation')
     jacobian <- suppressWarnings(x[['deriv']](at))
   }
 

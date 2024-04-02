@@ -154,7 +154,3 @@ near <- function(x, y) {
   abs(x - y) < tol
 }
 
-
-replace_x <- function(code, replacement) {
-  do.call("substitute", list(substitute(code), list(x = substitute(replacement))))
-}
