@@ -330,3 +330,61 @@ test_that('providing custom derivative functions works', {
   expect_equal(density(dist4, 0.5), density(exp(d), 0.5))
   expect_equal(density(dist5, 0.5), density(d, 0.5))
 })
+
+
+test_that("transforms with strange environments work", {
+  # https://github.com/mitchelloharawild/distributional/pull/101#issuecomment-2035083570
+
+  # functions with constants in the function environment
+  f = (function() {
+    b = 2
+    function(x) x * b
+  })()
+
+  f_inv = (function() {
+    b = 2
+    function(x) x / b
+  })()
+
+  d_f_inv = (function() {
+    b = 2
+    function(x) 1 / b
+  })()
+
+  d = dist_transformed(dist_normal(), f, f_inv, d_f_inv)
+  expect_equal(density(exp(d), 1), density(exp(2*dist_normal()), 1))
+
+  d <- f(dist_wrap('norm'))
+  expect_equal(density(exp(d), 1), density(exp(2*dist_normal()), 1))
+
+  # apply another function with same constant name but different value
+  f10 = (function() {
+    b = 10
+    function(x) x * b
+  })()
+
+  d10 <- f10(exp(d))
+  expect_equal(density(d10, 1), density(10*exp(2*dist_normal()), 1))
+
+  # functions with custom functions in the environment
+  fil <- (function() {
+    inv_logit <- function(x) 1 / (1 + exp(-x))
+    function(x) inv_logit(x)
+  })()
+
+  fil_inv <- (function() {
+    logit <- function(x) log(x) - log(1 - x)
+    function(x) logit(x)
+  })()
+
+  d_fil_inv <- (function() {
+    oneover <- function(x) 1 / (x * (1 - x))
+    function(x) oneover(x)
+  })()
+
+  d <- dist_transformed(dist_logistic(0, 1), fil, fil_inv, d_fil_inv)
+  expect_equal(density(d, 0.5), density(dist_uniform(0, 1), 0.5))
+  d2 <- -log(1/d - 1)
+  expect_equal(density(d2, 0), density(dist_logistic(0, 1), 0))
+
+})

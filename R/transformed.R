@@ -37,7 +37,13 @@ dist_transformed <- function(dist, transform, inverse, deriv = NULL){
   vec_is(dist, new_dist())
   if (is.function(transform)) transform <- list(wrap_primitive(transform))
   if (is.function(inverse)) inverse <- list(wrap_primitive(inverse))
-  if (is.function(deriv)) deriv <- list(wrap_primitive(deriv))
+  if (is.function(deriv)) {
+    deriv <- list(wrap_primitive(deriv))
+  } else if (is.list(deriv) && is.function(deriv[[1]])) {
+    deriv <- list(wrap_primitive(deriv[[1]]))
+  } else {
+    deriv <- NULL
+  }
   new_dist(dist = vec_data(dist),
            transform = transform, inverse = inverse, deriv = deriv,
            dimnames = dimnames(dist), class = "dist_transformed")
@@ -147,10 +153,10 @@ Math.dist_transformed <- function(x, ...) {
   prev_inverse <- x$inverse
   current_inverse <- get_unary_inverse(.Generic, ...)
   body(prev_inverse) <- substituteDirect(body(prev_inverse), list(x = body(current_inverse)))
-  inverse <- Deriv::Simplify(prev_inverse)
+  inverse <- Deriv::Simplify(prev_inverse, env = environment(prev_inverse))
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if (inherits(deriv, "try-error")) {
+  if (inherits(deriv, "try-error") && getOption('dist.verbose', FALSE)) {
     message('Cannot compute the derivative of the inverse function symbolicly.')
   }
 
@@ -190,12 +196,12 @@ Ops.dist_transformed <- function(e1, e2) {
 
   if (!all(is_dist)) {
     body <- substituteDirect(body(prev_inverse), list(x = body(current_inverse)))
-    inverse <- new_function(exprs(x = ), body = body)
+    inverse <- new_function(exprs(x = ), body = body, env = environment(prev_inverse))
   }
 
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if(inherits(deriv, "try-error")) {
+  if(inherits(deriv, "try-error") && getOption('dist.verbose', FALSE)) {
     message('Cannot compute the derivative of the inverse function symbolicly.')
   }
 
