@@ -197,3 +197,26 @@ eval_inverse.dist_default <- function(dist, at) {
 eval_inverse.dist_transformed <- function(dist, at) {
   dist$inverse(at)
 }
+
+
+# Functions for evaluating the derivative of the inverse transformation of a random variable at a vector of values
+eval_deriv <- function(dist, at) {
+  UseMethod("eval_deriv")
+}
+
+#' @export
+eval_deriv.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_deriv, at = at)
+}
+
+#' @export
+eval_deriv.dist_default <- function(dist, at) {
+  at
+}
+
+#' @export
+eval_deriv.dist_transformed <- function(dist, at) {
+  inv <- function(at) suppressWarnings(eval_inverse(dist, at))
+  vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
+}

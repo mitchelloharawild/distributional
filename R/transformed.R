@@ -52,7 +52,7 @@ support.dist_transformed <- function(x, ...) {
 #' @export
 density.dist_transformed <- function(x, at, ...){
   inv <- function(at) suppressWarnings(eval_inverse(x, at))
-  jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
+  jacobian <- eval_deriv(x, at)
   d <- density(x[["dist"]], inv(at)) * abs(jacobian)
   limits <- field(support(x), "lim")[[1]]
   closed <- field(support(x), "closed")[[1]]
