@@ -153,3 +153,47 @@ near <- function(x, y) {
   tol <- .Machine$double.eps^0.5
   abs(x - y) < tol
 }
+
+
+# Functions for evaluating the transformation of a random variable at a vector of values
+eval_transform <- function(dist, at) {
+  UseMethod("eval_transform")
+}
+
+#' @export
+eval_transform.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_transform, at = at)
+}
+
+#' @export
+eval_transform.dist_default <- function(dist, at) {
+  at
+}
+
+#' @export
+eval_transform.dist_transformed <- function(dist, at) {
+  dist$transform(at)
+}
+
+
+# Functions for evaluating the inverse transformation of a random variable at a vector of values
+eval_inverse <- function(dist, at) {
+  UseMethod("eval_inverse")
+}
+
+#' @export
+eval_inverse.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_inverse, at = at)
+}
+
+#' @export
+eval_inverse.dist_default <- function(dist, at) {
+  at
+}
+
+#' @export
+eval_inverse.dist_transformed <- function(dist, at) {
+  dist$inverse(at)
+}
