@@ -15,7 +15,7 @@ transformation should be monotonic over appropriate domain.}
 \item{inverse}{The inverse of the \code{transform} function.}
 
 \item{deriv}{The derivative of the \code{inverse} function. If not provided, the
-derivative will be computed numerically.}
+we will attempt to compute it symbolically, or use numerical differentiation.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}

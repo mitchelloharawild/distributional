@@ -1,3 +1,35 @@
+expect_correct_inverse <- function(dist, value) {
+  trans <- get_transform(dist)[[1]]
+  inv <- get_inverse(dist)[[1]]
+  tvalue <- seq_apply(rev(trans), value)
+  inv_tvalue <- seq_apply(inv, tvalue)
+  expect_equal(inv_tvalue, value)
+}
+
+expect_correct_derivative <- function(dist, expr, value) {
+  expr <- enexpr(expr)
+  if (is.symbol(expr)) {
+    expr <- eval(expr, parent.frame())
+  }
+  if (is.function(expr)) {
+    ref <- expr(value)
+  } else {
+    ref <- eval(expr, list(x = value), parent.frame())
+  }
+  derivs <- get_deriv(dist)[[1]]
+  inv <- get_inverse(dist)[[1]]
+  n <- length(derivs)
+  res <- derivs[[1]](value)
+  if (n > 1) {
+    for (i in 2:n) {
+      inv_value <- seq_apply(inv[1:(i-1)], value)
+      res <- res * derivs[[i]](inv_value)
+    }
+  }
+
+  expect_equal(res, ref)
+}
+
 test_that("hilo of transformed distributions", {
   expect_identical(
     hilo(exp(dist_poisson(3))),
@@ -180,12 +212,6 @@ test_that("transformed distributions pdf integrates to 1", {
 })
 
 test_that("inverses are correct", {
-  expect_correct_inverse <- function(dist, value) {
-    trans <- vec_data(dist)[[1]]$transform
-    inv <- vec_data(dist)[[1]]$inverse
-    expect_equal(inv(trans(value)), value)
-  }
-
   d <- dist_gamma(1,1)
   v <- runif(10)
 
@@ -222,6 +248,7 @@ test_that("inverses are correct", {
   expect_correct_inverse(constant * d, v)
   expect_correct_inverse(constant / d, v)
   expect_correct_inverse(constant ^ d, v)
+  expect_correct_inverse(-d, v)
 
   # custom functions
   myfun <- function(x) log(x + 1)
@@ -251,14 +278,6 @@ test_that("inverses are correct", {
 })
 
 test_that('symbolic derivatives work', {
-  get_deriv <- function(dist) {
-    vec_data(dist)[[1]]$deriv
-  }
-  expect_correct_derivative <- function(dist, expr, value) {
-    expr <- parse(text = deparse(substitute(expr)))
-    expect_equal(get_deriv(dist)(value),
-                 eval(expr, list(x = value)))
-  }
   d <- dist_gamma(1,1)
   v <- runif(10)
   expect_correct_derivative(exp(d), 1/x, v) # the derivative of the inverse log(x) is 1/x
@@ -282,8 +301,7 @@ test_that('symbolic derivatives work', {
   # get random values within the support and test the inverse
   lim <- field(support(dist2), 'lim')[[1]]
   v <- runif(10, lim[1], lim[2])
-  res <- exp(2-1/log(2+coshsquared_inv_logit(v), base = 10)^(0.4+0.1))
-  expect_equal(vec_data(dist2)[[1]]$inverse(res), v)
+  expect_correct_inverse(dist2, v)
 
   # monstrous analytical derivative based on wolfram alpha
   an_deriv <- function(x) {
@@ -294,7 +312,7 @@ test_that('symbolic derivatives work', {
     term1 / (term2 * term3 * term4 * (acosh(term3) - 1) * acosh(term3))
   }
 
-  expect_equal(get_deriv(dist2)(v), an_deriv(v))
+  expect_correct_derivative(dist2, an_deriv, v)
 })
 
 
@@ -304,23 +322,27 @@ test_that('providing custom derivative functions works', {
 
   # built-in transformation (uses symbolic derivatives)
   dist1 <- log(1+exp(-d)^2)
+  transforms <- rev(get_transform(dist1)[[1]])
+  invs <- rev(get_inverse(dist1)[[1]])
+  derivs <- rev(get_deriv(dist1)[[1]])
+  n <- length(transforms)
 
-  # custom transformation without provided derivative function
-  dist2 <- dist_transformed(d,
-                            transform = vec_data(dist1)[[1]]$transform,
-                            inverse = vec_data(dist1)[[1]]$inverse
-  )
+  # custom transformation without provided derivative function but we find the
+  # derivative symbolically
+  dist2 <- d
+  for (i in 1:n) {
+    dist2 <- dist_transformed(dist2, transforms[[i]], invs[[i]])
+  }
 
   # custom transformation with provided derivative function
-  dist3 <- dist_transformed(d,
-                            transform = vec_data(dist1)[[1]]$transform,
-                            inverse = vec_data(dist1)[[1]]$inverse,
-                            deriv = vec_data(dist1)[[1]]$deriv
-  )
+  dist3 <- d
+  for (i in 1:n) {
+    dist3 <- dist_transformed(dist3, transforms[[i]], invs[[i]], derivs[[i]])
+  }
 
 
   res1 <- expect_message(density(dist1, 0.5, verbose = TRUE), "Using symbolic")
-  res2 <- expect_message(density(dist2, 0.5, verbose = TRUE), "Using numeric")
+  res2 <- expect_message(density(dist2, 0.5, verbose = TRUE), "Using symbolic")
   res3 <- expect_message(density(dist3, 0.5, verbose = TRUE), "Using symbolic")
   expect_equal(res1, res2, res3)
 

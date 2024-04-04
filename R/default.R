@@ -264,10 +264,9 @@ Math.dist_default <- function(x, ...) {
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
 
   inverse <- get_unary_inverse(.Generic, ...)
-  inverse <- Deriv::Simplify(inverse)
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if(inherits(deriv, "try-error")) {
+  if (inherits(deriv, "try-error") && getOption('dist.verbose', FALSE)) {
     message('Cannot compute the derivative of the inverse function symbolicly.')
   }
 
@@ -277,13 +276,13 @@ Math.dist_default <- function(x, ...) {
 #' @method Ops dist_default
 #' @export
 Ops.dist_default <- function(e1, e2) {
-  if(.Generic %in% c("-", "+") && missing(e2)){
+  if (.Generic %in% c("-", "+") && missing(e2)){
     e2 <- e1
     e1 <- if(.Generic == "+") 1 else -1
     .Generic <- "*"
   }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
-  if(any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
+  if (any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
     stop("Transformations of multivariate distributions are not yet supported.")
   }
 
@@ -308,7 +307,7 @@ Ops.dist_default <- function(e1, e2) {
   }
 
   deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if(inherits(deriv, "try-error")) {
+  if (inherits(deriv, "try-error") && getOption('dist.verbose', FALSE)) {
     message('Cannot compute the derivative of the inverse function symbolicly.')
   }
 
