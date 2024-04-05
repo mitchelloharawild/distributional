@@ -179,3 +179,27 @@ test_that("transformed distributions pdf integrates to 1", {
   }
 })
 
+
+test_that("monotonically decreasing transformations (#100)", {
+  dist <- dist_lognormal()
+
+  expect_equal(
+    quantile(-dist, 0.2), -quantile(dist, 1 - 0.2)
+  )
+  expect_equal(
+    quantile(1/dist, 0.2), 1/quantile(dist, 1 - 0.2)
+  )
+  expect_equal(
+    quantile(-1/dist, 0.7), -1/quantile(dist, 0.7)
+  )
+
+  expect_equal(
+    cdf(-dist, -2), 1 - cdf(dist, 2)
+  )
+  expect_equal(
+    cdf(1/dist, 2), 1 - cdf(dist, 1/2)
+  )
+  expect_equal(
+    cdf(-1/dist, -2), cdf(dist, 1/2)
+  )
+})

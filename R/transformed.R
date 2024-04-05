@@ -68,6 +68,7 @@ density.dist_transformed <- function(x, at, ...){
 cdf.dist_transformed <- function(x, q, ...){
   inv <- function(v) suppressWarnings(x[["inverse"]](v))
   p <- cdf(x[["dist"]], inv(q), ...)
+  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   limits <- field(support(x), "lim")[[1]]
   if (!any(is.na(limits))) {
     p[q <= limits[1]] <- 0
@@ -78,6 +79,7 @@ cdf.dist_transformed <- function(x, q, ...){
 
 #' @export
 quantile.dist_transformed <- function(x, p, ...){
+  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   x[["transform"]](quantile(x[["dist"]], p, ...))
 }
 
@@ -152,4 +154,10 @@ Ops.dist_transformed <- function(e1, e2) {
   }
 
   vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))[[1]]
+}
+
+monotonic_increasing <- function(f, support) {
+  # Currently assumes (without checking, #9) monotonicity of f over the domain
+  x <- f(field(support, "lim")[[1]])
+  x[[2L]] > x[[1L]]
 }
