@@ -3,9 +3,11 @@
 ## Bug fixes
 
 * Fixed error when using '-' as a unary operator on a distribution different from
- `dist_normal()` by @venpopov (#95)
+ `dist_normal()` (@venpopov, #95)
 * Density for transformed distributions now correctly gives 0 instead of NaNs for 
-  values outside the support of the distribution (#97); by @venpopov
+  values outside the support of the distribution (@venpopov, #97)
+* Fixed `quantile()` and `cdf()` for transformed distributions with 
+  monotonically decreasing transformations (#100).
 
 ## New features
 
@@ -20,6 +22,8 @@
 * density() now accepts a `verbose` (default is FALSE) argument for printing a message whether the computation 
   of the density is done numerically or symbolically. This behavior can be set globally by 
   `options(dist.verbose = TRUE)` (#101)
+* `support()` now shows whether the interval of support is open or 
+  closed (@venpopov, #97)
 
 # distributional 0.4.0
 

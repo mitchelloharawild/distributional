@@ -51,13 +51,13 @@ test_that("chains of transformations", {
 
 test_that("handling of transformation arguments", {
   expect_identical(
-    hilo(logb(dist_normal(5, 1), base = 10)),
-    logb(hilo(dist_normal(5, 1)), base = 10)
+    hilo(logb(dist_uniform(0, 100), base = 10)),
+    logb(hilo(dist_uniform(0, 100)), base = 10)
   )
 
   expect_identical(
-    hilo(10^logb(dist_normal(5, 1), base = 10)),
-    10^logb(hilo(dist_normal(5, 1)), base = 10)
+    hilo(10^logb(dist_uniform(0, 100), base = 10)),
+    10^logb(hilo(dist_uniform(0, 100)), base = 10)
   )
 })
 
@@ -409,4 +409,28 @@ test_that("transforms with strange environments work", {
   d2 <- -log(1/d - 1)
   expect_equal(density(d2, 0), density(dist_logistic(0, 1), 0))
 
+})
+
+test_that("monotonically decreasing transformations (#100)", {
+  dist <- dist_lognormal()
+
+  expect_equal(
+    quantile(-dist, 0.2), -quantile(dist, 1 - 0.2)
+  )
+  expect_equal(
+    quantile(1/dist, 0.2), 1/quantile(dist, 1 - 0.2)
+  )
+  expect_equal(
+    quantile(-1/dist, 0.7), -1/quantile(dist, 0.7)
+  )
+
+  expect_equal(
+    cdf(-dist, -2), 1 - cdf(dist, 2)
+  )
+  expect_equal(
+    cdf(1/dist, 2), 1 - cdf(dist, 1/2)
+  )
+  expect_equal(
+    cdf(-1/dist, -2), cdf(dist, 1/2)
+  )
 })
