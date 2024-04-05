@@ -51,12 +51,14 @@
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Fixed error when using ‘-’ as a unary operator on a distribution different from <code><a href="../reference/dist_normal.html">dist_normal()</a></code> by <a href="https://github.com/venpopov" class="external-link">@venpopov</a> (<a href="https://github.com/mitchelloharawild/distributional/issues/95" class="external-link">#95</a>)</li>
-<li>Density for transformed distributions now correctly gives 0 instead of NaNs for values outside the support of the distribution (<a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>); by <a href="https://github.com/venpopov" class="external-link">@venpopov</a></li>
+<ul><li>Fixed error when using ‘-’ as a unary operator on a distribution different from <code><a href="../reference/dist_normal.html">dist_normal()</a></code> (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/95" class="external-link">#95</a>)</li>
+<li>Density for transformed distributions now correctly gives 0 instead of NaNs for values outside the support of the distribution (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>)</li>
+<li>Fixed <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> and <code><a href="../reference/cdf.html">cdf()</a></code> for transformed distributions with monotonically decreasing transformations (<a href="https://github.com/mitchelloharawild/distributional/issues/100" class="external-link">#100</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>support() now shows whether the interval of support is open or closed (<a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>); by <a href="https://github.com/venpopov" class="external-link">@venpopov</a></li>
+<ul><li>
+<code><a href="../reference/support.html">support()</a></code> now shows whether the interval of support is open or closed (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>)</li>
 </ul></div>
 </div>
     <div class="section level2">
