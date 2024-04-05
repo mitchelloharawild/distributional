@@ -19,13 +19,13 @@ test_that("chains of transformations", {
 
 test_that("handling of transformation arguments", {
   expect_identical(
-    hilo(logb(dist_normal(5, 1), base = 10)),
-    logb(hilo(dist_normal(5, 1)), base = 10)
+    hilo(logb(dist_uniform(0, 100), base = 10)),
+    logb(hilo(dist_uniform(0, 100)), base = 10)
   )
 
   expect_identical(
-    hilo(10^logb(dist_normal(5, 1), base = 10)),
-    10^logb(hilo(dist_normal(5, 1)), base = 10)
+    hilo(10^logb(dist_uniform(0, 100), base = 10)),
+    10^logb(hilo(dist_uniform(0, 100)), base = 10)
   )
 })
 
