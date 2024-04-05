@@ -1,3 +1,24 @@
+expect_correct_inverse <- function(dist, value) {
+  tvalue <- eval_transform(dist, value)[[1]]
+  inv_tvalue <- eval_inverse(dist, tvalue)[[1]]
+  expect_equal(inv_tvalue, value)
+}
+
+expect_correct_derivative <- function(dist, expr, value) {
+  expr <- enexpr(expr)
+  if (is.symbol(expr)) {
+    expr <- eval(expr, parent.frame())
+  }
+  if (is.function(expr)) {
+    ref <- expr(value)
+  } else {
+    ref <- eval(expr, list(x = value), parent.frame())
+  }
+  res <- eval_deriv(dist, value)[[1]]
+
+  expect_equal(res, ref, tolerance = 1e-5)
+}
+
 test_that("hilo of transformed distributions", {
   expect_identical(
     hilo(exp(dist_poisson(3))),
@@ -179,3 +200,108 @@ test_that("transformed distributions pdf integrates to 1", {
   }
 })
 
+
+test_that("inverses are correct", {
+  d <- dist_gamma(1,1)
+  v <- runif(10)
+
+  # single unary functions
+  expect_correct_inverse(sqrt(d), v)
+  expect_correct_inverse(exp(d), v)
+  expect_correct_inverse(log(d), v)
+  expect_correct_inverse(log(d, 2), v)
+  expect_correct_inverse(log(d, base = 10), v)
+  expect_correct_inverse(expm1(d), v)
+  expect_correct_inverse(log1p(d), v)
+  expect_correct_inverse(cos(d), v)
+  expect_correct_inverse(sin(d), v)
+  expect_correct_inverse(tan(d), v)
+  expect_correct_inverse(acos(d), v)
+  expect_correct_inverse(asin(d), v)
+  expect_correct_inverse(atan(d), v)
+  expect_correct_inverse(cosh(d), v)
+  expect_correct_inverse(sinh(d), v)
+  expect_correct_inverse(tanh(d), v)
+  expect_correct_inverse(acosh(d), v+1)
+  expect_correct_inverse(asinh(d), v)
+  expect_correct_inverse(atanh(d), v)
+
+  # binary functions
+  constant <- runif(1)
+  expect_correct_inverse(d + constant, v)
+  expect_correct_inverse(d - constant, v)
+  expect_correct_inverse(d * constant, v)
+  expect_correct_inverse(d / constant, v)
+  expect_correct_inverse(d ^ constant, v)
+  expect_correct_inverse(constant + d, v)
+  expect_correct_inverse(constant - d, v)
+  expect_correct_inverse(constant * d, v)
+  expect_correct_inverse(constant / d, v)
+  expect_correct_inverse(constant ^ d, v)
+  expect_correct_inverse(-d, v)
+
+  # custom functions
+  myfun <- function(x) log(x + 1)
+  inv_logit <- function(x) 1/(1 + exp(-x))
+  expect_correct_inverse(myfun(d), v)
+  expect_correct_inverse(inv_logit(d), v)
+
+  # unary after binary
+  expect_correct_inverse(log(d^2), v)
+  expect_correct_inverse(log(d^2, 2), v)
+  expect_correct_inverse(log(d^2, base = 10), v)
+  expect_correct_inverse(log(-d), -v)
+  expect_correct_inverse(exp(2^d), v)
+  expect_correct_inverse(exp(d-1), v)
+  expect_correct_inverse(cos(d/2), v)
+
+  # binary after unary
+  expect_correct_inverse(2^log(d), v)
+  expect_correct_inverse(2^log(d, 2), v)
+  expect_correct_inverse(2 + exp(d), v)
+
+  # multiple nested functions of various complexity
+  expect_correct_inverse(log(exp(d)), v)
+  expect_correct_inverse(exp(log(d)), v)
+  expect_correct_inverse(log(-log(d), base = 10), v)
+  expect_correct_inverse(sin(log(5-log(d), base = 10)^2/100), v)
+})
+
+
+test_that('derivatives are correct', {
+  d <- dist_gamma(1,1)
+  v <- runif(10)
+  expect_correct_derivative(exp(d), 1/x, v) # the derivative of the inverse log(x) is 1/x
+  expect_correct_derivative(log(d), exp(x), v)
+  expect_correct_derivative(log(d, 2), log(2)*2^x, v)
+  expect_correct_derivative(exp(2*d), 0.5/x, v)
+  expect_correct_derivative(log(-log(d)), -exp(-exp(x)+x), v)
+  expect_correct_derivative(sin(log(d) * 10),
+                            0.1 * (exp(asin(x)/10)/sqrt(1 - x^2)), v)
+
+  # with custom function and complex nesting
+  inv_logit <- function(x) 1/(1 + exp(-x))
+  expect_correct_derivative(acos(inv_logit(d)^2), tan(x)/(2*(sqrt(cos(x))-1)), v)
+
+  ### -------- a super complicated final case --------------
+  # nested custom functions involved in further nested transformation
+  inv_logit <- function(x) 1/(1 + exp(-x))
+  coshsquared_inv_logit <- function(x) cosh(inv_logit(x))^2
+  dist2 <- exp(2-1/log(2+coshsquared_inv_logit(d), base = 10)^(0.4+0.1))
+
+  # get random values within the support and test the inverse
+  lim <- field(support(dist2), 'lim')[[1]]
+  v <- runif(10, lim[1], lim[2])
+  expect_correct_inverse(dist2, v)
+
+  # monstrous analytical derivative based on wolfram alpha
+  an_deriv <- function(x) {
+    term1 <- (log(10) * 10^(1/((log(x) - 2)^2)))
+    term2 <- x * sqrt(10^(1/((log(x) - 2)^2)) - 3)
+    term3 <- sqrt(10^(1/((log(x) - 2)^2)) - 2)
+    term4 <- (log(x) - 2)^3
+    term1 / (term2 * term3 * term4 * (acosh(term3) - 1) * acosh(term3))
+  }
+
+  expect_correct_derivative(dist2, an_deriv, v)
+})

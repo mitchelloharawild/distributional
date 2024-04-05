@@ -155,7 +155,12 @@ near <- function(x, y) {
 }
 
 
-# Functions for evaluating the transformation of a random variable at a vector of values
+#' Evaluate the transformation, inverse or the jacobian of the inverse transformation of a random variable at a vector of values
+#' @name transformation-functions
+#' @param dist A distribution object
+#' @param at A vector of values at which to evaluate the transformation, inverse or jacobian
+#' @return A vector or list of numeric values. If length(at) = 1, a numeric vector the same length as `dist` is returned. If length(at) > 1, a list of numeric vectors is returned, each list entry corresponding to a distribution in `dist`, and each vector the same length as `at`.
+#' @export
 eval_transform <- function(dist, at) {
   UseMethod("eval_transform")
 }
@@ -177,7 +182,8 @@ eval_transform.dist_transformed <- function(dist, at) {
 }
 
 
-# Functions for evaluating the inverse transformation of a random variable at a vector of values
+#' @rdname transformation-functions
+#' @export
 eval_inverse <- function(dist, at) {
   UseMethod("eval_inverse")
 }
@@ -199,7 +205,8 @@ eval_inverse.dist_transformed <- function(dist, at) {
 }
 
 
-# Functions for evaluating the derivative of the inverse transformation of a random variable at a vector of values
+#' @rdname transformation-functions
+#' @export
 eval_deriv <- function(dist, at) {
   UseMethod("eval_deriv")
 }
