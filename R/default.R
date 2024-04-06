@@ -256,7 +256,6 @@ get_binary_inverse_2 <- function(f, constant) {
 }
 
 #' @method Math dist_default
-#' @importFrom methods substituteDirect
 #' @export
 Math.dist_default <- function(x, ...) {
   if (dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
