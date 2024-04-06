@@ -94,9 +94,9 @@ density.dist_transformed <- function(x, at, verbose = getOption('dist.verbose', 
 
 #' @export
 cdf.dist_transformed <- function(x, q, ...){
-  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   p <- cdf(x[["dist"]], eval_inverse(x, q), ...)
   limits <- field(support(x), "lim")[[1]]
+  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   if (!any(is.na(limits))) {
     p[q <= limits[1]] <- 0
     p[q >= limits[2]] <- 1
