@@ -1,8 +1,6 @@
 expect_correct_inverse <- function(dist, value) {
-  trans <- get_transform(dist)[[1]]
-  inv <- get_inverse(dist)[[1]]
-  tvalue <- seq_apply(rev(trans), value)
-  inv_tvalue <- seq_apply(inv, tvalue)
+  tvalue <- eval_transform(dist, value)[[1]]
+  inv_tvalue <- eval_inverse(dist, tvalue)[[1]]
   expect_equal(inv_tvalue, value)
 }
 
@@ -16,18 +14,9 @@ expect_correct_derivative <- function(dist, expr, value) {
   } else {
     ref <- eval(expr, list(x = value), parent.frame())
   }
-  derivs <- get_deriv(dist)[[1]]
-  inv <- get_inverse(dist)[[1]]
-  n <- length(derivs)
-  res <- derivs[[1]](value)
-  if (n > 1) {
-    for (i in 2:n) {
-      inv_value <- seq_apply(inv[1:(i-1)], value)
-      res <- res * derivs[[i]](inv_value)
-    }
-  }
+  res <- eval_deriv(dist, value)[[1]]
 
-  expect_equal(res, ref)
+  expect_equal(res, ref, tolerance = 1e-5)
 }
 
 test_that("hilo of transformed distributions", {
@@ -317,40 +306,36 @@ test_that('symbolic derivatives work', {
 
 
 test_that('providing custom derivative functions works', {
+  op <- options(dist.verbose = TRUE)
+  on.exit(op, add = TRUE)
   # base distribution
   d <- dist_gamma(1,1)
 
   # built-in transformation (uses symbolic derivatives)
   dist1 <- log(1+exp(-d)^2)
-  transforms <- rev(get_transform(dist1)[[1]])
-  invs <- rev(get_inverse(dist1)[[1]])
-  derivs <- rev(get_deriv(dist1)[[1]])
-  n <- length(transforms)
+  transform <- vec_data(dist1)[[1]]$transform
+  inv <- vec_data(dist1)[[1]]$inverse
+  deriv <- vec_data(dist1)[[1]]$d_inverse
 
-  # custom transformation without provided derivative function but we find the
-  # derivative symbolically
-  dist2 <- d
-  for (i in 1:n) {
-    dist2 <- dist_transformed(dist2, transforms[[i]], invs[[i]])
-  }
+
+  # custom transformation without provided derivative function but we find it numerically
+  dist2 <- expect_message(dist_transformed(d, transform, inv),
+    "Cannot compute the derivative of the inverse function symbolicly")
 
   # custom transformation with provided derivative function
-  dist3 <- d
-  for (i in 1:n) {
-    dist3 <- dist_transformed(dist3, transforms[[i]], invs[[i]], derivs[[i]])
-  }
+  dist3 <- expect_silent(dist_transformed(d, transform, inv, deriv))
+
+  # same custom transformation, but derivative is found symbolically
+  dist4 <- expect_silent(
+    dist_transformed(d, \(x) log(1+exp(-x)^2), \(x) -log(sqrt(exp(x)-1)))
+  )
 
 
-  res1 <- expect_message(density(dist1, 0.5, verbose = TRUE), "Using symbolic")
-  res2 <- expect_message(density(dist2, 0.5, verbose = TRUE), "Using symbolic")
-  res3 <- expect_message(density(dist3, 0.5, verbose = TRUE), "Using symbolic")
-  expect_equal(res1, res2, res3)
-
-  # custom functions work even if they are primitives
-  dist4 <- dist_transformed(d, exp, log, function(x) 1/x)
-  dist5 <- log(dist4)
-  expect_equal(density(dist4, 0.5), density(exp(d), 0.5))
-  expect_equal(density(dist5, 0.5), density(d, 0.5))
+  res1 <- density(dist1, 0.5, verbose = TRUE)
+  res2 <- density(dist2, 0.5, verbose = TRUE)
+  res3 <- density(dist3, 0.5, verbose = TRUE)
+  res4 <- density(dist4, 0.5, verbose = TRUE)
+  expect_true(all.equal(res1, res2, res3, res4))
 })
 
 

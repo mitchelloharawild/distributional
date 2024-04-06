@@ -10,7 +10,7 @@
 #' @param transform A function used to transform the distribution. This
 #' transformation should be monotonic over appropriate domain.
 #' @param inverse The inverse of the `transform` function.
-#' @param deriv The derivative of the `inverse` function. If not provided, the
+#' @param d_inverse The derivative of the `inverse` function. If not provided, the
 #' we will attempt to compute it symbolically, or use numerical differentiation.
 #'
 #' @description
@@ -32,25 +32,24 @@
 #' dist <- dist_transformed(dist_normal(0, 0.5), exp, log, function(x) 1/x)
 #'
 #' @export
-dist_transformed <- function(dist, transform, inverse, deriv = NULL){
+dist_transformed <- function(dist, transform, inverse, d_inverse = NULL){
   vec_is(dist, new_dist())
-  if (is.function(transform)) transform <- list(wrap_primitive(transform))
-  if (is.function(inverse)) inverse <- list(wrap_primitive(inverse))
-  if (is.null(deriv)) {
-    deriv <- lapply(inverse, function(inv){
-      suppressWarnings(try(Deriv::Deriv(inv, x = 'x'), silent = TRUE))
-    })
-  } else if (is.function(deriv)) {
-    deriv <- list(wrap_primitive(deriv))
-  } else if (is.list(deriv)) {
-    deriv <- lapply(deriv, wrap_primitive)
+  if (is.function(transform)) transform <- list(transform)
+  if (is.function(inverse)) inverse <- list(inverse)
+  if (is.null(d_inverse)) {
+    d_inverse <- lapply(inverse, function(inv) symbolic_derivative(inv))
+  } else if (is.function(d_inverse)) {
+    d_inverse <- list(d_inverse)
   }
 
-  deriv <- lapply(deriv, function(d) if(is.function(d)) d else NULL)
+  args <- vctrs::vec_recycle_common(dist = dist, transform = transform, inverse = inverse, d_inverse = d_inverse)
+  args <- transpose(args)
+  funs <- transpose(lapply(args, function(x) add_transform(x$dist, x)))
+  dist <- lapply(args, function(x) if (inherits(x$dist, "dist_transformed")) x$dist$dist else x$dist)
 
-  new_dist(dist = vec_data(dist),
-           transform = transform, inverse = inverse, deriv = deriv,
-           dimnames = dimnames(dist), class = "dist_transformed")
+  new_dist(dist = dist,
+           transform = funs$transform, inverse = funs$inverse, d_inverse = funs$d_inverse,
+           dimnames = dimnames(args$dist), class = "dist_transformed")
 }
 
 #' @export
@@ -65,7 +64,7 @@ format.dist_transformed <- function(x, ...){
 support.dist_transformed <- function(x, ...) {
   support <- support(x[["dist"]])
   lim <- field(support, "lim")[[1]]
-  lim <- suppressWarnings(x[['transform']](lim))
+  lim <- suppressWarnings(eval_transform(x, lim))
   if (all(!is.na(lim))) {
     lim <- sort(lim)
   }
@@ -76,21 +75,12 @@ support.dist_transformed <- function(x, ...) {
 }
 
 #' @export
-density.dist_transformed <- function(x, at, deriv_method = "symbolic",
-                                     verbose = getOption('dist.verbose', FALSE), ...) {
-  deriv_method <- match.arg(deriv_method, c("symbolic", "numeric"))
-  inv <- x[["inverse"]]
-  if (is.null(x[['deriv']]) || deriv_method == "numeric") {
-    if (verbose) message('Using numerical differentiation.')
-    jacobian <- suppressWarnings(
-      vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
-    )
-  } else {
-    if (verbose) message('Using symbolic differentiation')
-    jacobian <- suppressWarnings(x[['deriv']](at))
-  }
+density.dist_transformed <- function(x, at, verbose = getOption('dist.verbose', FALSE), ...) {
+  on.exit(options(dist.verbose = verbose), add = T)
+  inv <- eval_inverse(x, at)
+  jacobian <- eval_deriv(x, at)
 
-  d <- suppressWarnings(density(x[["dist"]], inv(at)) * abs(jacobian))
+  d <- density(x[["dist"]], inv) * abs(jacobian)
 
   limits <- field(support(x), "lim")[[1]]
   closed <- field(support(x), "closed")[[1]]
@@ -104,9 +94,8 @@ density.dist_transformed <- function(x, at, deriv_method = "symbolic",
 
 #' @export
 cdf.dist_transformed <- function(x, q, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
-  p <- cdf(x[["dist"]], inv(q), ...)
   if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
+  p <- cdf(x[["dist"]], eval_inverse(x, q), ...)
   limits <- field(support(x), "lim")[[1]]
   if (!any(is.na(limits))) {
     p[q <= limits[1]] <- 0
@@ -118,34 +107,38 @@ cdf.dist_transformed <- function(x, q, ...){
 #' @export
 quantile.dist_transformed <- function(x, p, ...){
   if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
-  x[["transform"]](quantile(x[["dist"]], p, ...))
+  q <- quantile(x[["dist"]], p, ...)
+  eval_transform(x, q)
 }
 
 #' @export
 generate.dist_transformed <- function(x, ...){
-  x[["transform"]](generate(x[["dist"]], ...))
+  y <- generate(x[["dist"]], ...)
+  eval_transform(x, y)
 }
 
 #' @export
 mean.dist_transformed <- function(x, ...){
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
+  trans <- function(value) eval_transform(x, value)
   if(is.na(sigma2)){
     # warning("Could not compute the transformed distribution's mean as the base distribution's variance is unknown. The transformed distribution's median has been returned instead.")
-    return(x[["transform"]](mu))
+    return(trans(mu))
   }
   drop(
-    x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))/2*sigma2
+    trans(mu) + numDeriv::hessian(trans, mu, method.args = list(d = 0.01))/2*sigma2
   )
 }
 
 #' @export
 covariance.dist_transformed <- function(x, ...){
+  trans <- function(value) eval_transform(x, value)
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
   if(is.na(sigma2)) return(NA_real_)
   drop(
-    numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))*sigma2)^2/2
+    numDeriv::jacobian(trans, mu)^2*sigma2 + (numDeriv::hessian(trans, mu, method.args=list(d = 0.01))*sigma2)^2/2
   )
 }
 
@@ -153,4 +146,26 @@ monotonic_increasing <- function(f, support) {
   # Currently assumes (without checking, #9) monotonicity of f over the domain
   x <- f(field(support, "lim")[[1]])
   x[[2L]] > x[[1L]]
+}
+
+# Add transform (to be incorporated in Math.dist_transformed and Ops.dist_transformed)
+#' @param .x a list of functions `transform`, `inverse`, `d_inverse`
+#' @param .y a list of functions `transform`, `inverse`, `d_inverse` to add to `.x`
+#' @noRd
+add_transform <- function(.x, .y) {
+  force(.x)
+  force(.y)
+  if (is.null(.x$transform)) {
+    list(
+      transform = .y$transform,
+      inverse = .y$inverse,
+      d_inverse = .y$d_inverse
+    )
+  } else {
+    list(
+      transform = function(x) .y$transform(.x$transform(x)),
+      inverse = function(x) .x$inverse(.y$inverse(x)),
+      d_inverse = chain_rule(.x$inverse, .y$inverse, .x$d_inverse, .y$d_inverse)
+    )
+  }
 }

@@ -261,16 +261,11 @@ get_binary_inverse_2 <- function(f, constant) {
 Math.dist_default <- function(x, ...) {
   if (dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
 
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
-
+  transform <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
   inverse <- get_unary_inverse(.Generic, ...)
+  d_inverse <- symbolic_derivative(inverse, fallback_numderiv = TRUE)
 
-  deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if (inherits(deriv, "try-error") && getOption('dist.verbose', FALSE)) {
-    message('Cannot compute the derivative of the inverse function symbolicly.')
-  }
-
-  vec_data(dist_transformed(wrap_dist(list(x)), trans, inverse, deriv))[[1]]
+  vec_data(dist_transformed(wrap_dist(list(x)), transform, inverse, d_inverse))[[1]]
 }
 
 #' @method Ops dist_default
@@ -286,19 +281,20 @@ Ops.dist_default <- function(e1, e2) {
     stop("Transformations of multivariate distributions are not yet supported.")
   }
 
-  trans <- if(all(is_dist)) {
-    if(identical(e1$dist, e2$dist)){
+  transform <- if (all(is_dist)) {
+    if (identical(e1$dist, e2$dist)){
       new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
     } else {
-      stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
+      stop(sprintf("The %s operation is not supported for <%s> and <%s>",
+                   .Generic, class(e1)[1], class(e2)[1]))
     }
-  } else if(is_dist[1]){
+  } else if (is_dist[1]){
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
   } else {
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
   }
 
-  inverse <- if(all(is_dist)) {
+  inverse <- if (all(is_dist)) {
     invert_fail
   } else if(is_dist[1]){
     get_binary_inverse_1(.Generic, e2)
@@ -306,10 +302,9 @@ Ops.dist_default <- function(e1, e2) {
     get_binary_inverse_2(.Generic, e1)
   }
 
-  deriv <- suppressWarnings(try(Deriv::Deriv(inverse, x = 'x'), silent = TRUE))
-  if (inherits(deriv, "try-error") && getOption('dist.verbose', FALSE)) {
-    message('Cannot compute the derivative of the inverse function symbolicly.')
-  }
+  d_inverse <- symbolic_derivative(inverse, fallback_numderiv = TRUE)
 
-  vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse, deriv))[[1]]
+  dist <- list(e1,e2)[which(is_dist)]
+
+  vec_data(dist_transformed(wrap_dist(dist), transform, inverse, d_inverse))[[1]]
 }

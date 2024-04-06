@@ -168,127 +168,76 @@ wrap_primitive <- function(fun) {
 
 
 
-#' Extract functions from a transformed distribution
-#'
-#' [get_transform()], [get_inverse()], and [get_deriv()] are used to extract
-#' a list of functions from a transformed distribution. [seq_apply()] can be
-#' used to apply the functions in sequence to a vector of values.
-#'
-#' @name get_transform
-#'
-#' @param x A distribution object
-#' @param fun_list A list of functions to apply in sequence to a vector of values
-#' @param values A vector of values to apply the functions to. `values` will be
-#' passed to the first function in `fun_list`, and the result will be passed to
-#' the next function, and so on.
-#' @return A list of lists of functions. Each list corresponds to one distribution
-#' in a distribution vector. Each list contains the functions for the transformations,
-#' inverses, and derivatives applied to the distribution. The entries are sorted
-#' in the reverse order of application.
-#'
+#' Evaluate the transformation, inverse or the jacobian of the inverse transformation of a random variable at a vector of values
+#' @name transformation-functions
+#' @param dist A distribution object
+#' @param at A vector of values at which to evaluate the transformation, inverse or jacobian
+#' @return A vector or list of numeric values. If length(at) = 1, a numeric vector the same length as `dist` is returned. If length(at) > 1, a list of numeric vectors is returned, each list entry corresponding to a distribution in `dist`, and each vector the same length as `at`.
 #' @export
-#' @examples
-#' # transform a uniform distribution into a gumbel distribution
-#' dist <- -log(-log(dist_uniform(0, 1)))
-#'
-#' # extract the functions from the transformed distribution
-#' (transforms <- get_transform(dist)[[1]])
-#' (inverses <- get_inverse(dist)[[1]])
-#' (derivatives <- get_deriv(dist)[[1]])
-#'
-#' # apply the functions in sequence
-#' res <- seq_apply(rev(transforms), 0.5) # use rev() to apply in the correct order
-#' inv <- seq_apply(inverses, res)
-#' identical(inv, 0.5)
-#'
-#' # manually calculate the density of the transformed distribution using the chain rule
-#' n <- length(derivatives)
-#' value <- 0
-#' inv <- seq_apply(inverses, value)
-#' res <- derivatives[[1]](value)
-#' if (n > 1) {
-#'   for (i in 2:n) {
-#'     value <- inverses[[i-1]](value)
-#'     res <- res * derivatives[[i]](value)
-#'   }
-#' }
-#'
-#' identical(density(dist_uniform(0, 1), inv)[[1]] * res, density(dist, 0))
-get_transform <- function(x) {
-  UseMethod("get_transform")
+eval_transform <- function(dist, at) {
+  UseMethod("eval_transform")
 }
 
 #' @export
-get_transform.distribution <- function(x) {
-  x <- vec_data(x)
-  lapply(x, get_transform)
+eval_transform.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_transform, at = at)
 }
 
 #' @export
-get_transform.dist_default <- function(x) {
-  NULL
+eval_transform.dist_default <- function(dist, at) {
+  at
 }
 
 #' @export
-get_transform.dist_transformed <- function(x) {
-  tr <- list(x[["transform"]])
-  c(tr, get_transform(x[["dist"]]))
+eval_transform.dist_transformed <- function(dist, at) {
+  suppressWarnings(dist$transform(at))
 }
 
-#' @rdname get_transform
-#' @export
-get_inverse <- function(x) {
-  UseMethod("get_inverse")
-}
 
+#' @rdname transformation-functions
 #' @export
-get_inverse.distribution <- function(x) {
-  x <- vec_data(x)
-  lapply(x, get_inverse)
+eval_inverse <- function(dist, at) {
+  UseMethod("eval_inverse")
 }
 
 #' @export
-get_inverse.dist_default <- function(x) {
-  NULL
+eval_inverse.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_inverse, at = at)
 }
 
 #' @export
-get_inverse.dist_transformed <- function(x) {
-  tr <- list(x[["inverse"]])
-  c(tr, get_inverse(x[["dist"]]))
-}
-
-#' @rdname get_transform
-#' @export
-get_deriv <- function(x) {
-  UseMethod("get_deriv")
+eval_inverse.dist_default <- function(dist, at) {
+  at
 }
 
 #' @export
-get_deriv.distribution <- function(x) {
-  x <- vec_data(x)
-  lapply(x, get_deriv)
+eval_inverse.dist_transformed <- function(dist, at) {
+  suppressWarnings(dist$inverse(at))
+}
+
+
+#' @rdname transformation-functions
+#' @export
+eval_deriv <- function(dist, at) {
+  UseMethod("eval_deriv")
 }
 
 #' @export
-get_deriv.dist_default <- function(x) {
-  NULL
+eval_deriv.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_deriv, at = at)
 }
 
 #' @export
-get_deriv.dist_transformed <- function(x) {
-  tr <- list(x[["deriv"]])
-  c(tr, get_deriv(x[["dist"]]))
+eval_deriv.dist_default <- function(dist, at) {
+  at
 }
-
 
 #' @export
-#' @rdname get_transform
-seq_apply <- function(fun_list, values) {
-  stopifnot()
-  out <- values
-  for (f in fun_list) {
-    out <- f(out)
-  }
-  out
+eval_deriv.dist_transformed <- function(dist, at) {
+  suppressWarnings(dist$d_inverse(at))
 }
+
+

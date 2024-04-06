@@ -38,7 +38,7 @@ reference:
     - skewness.distribution
     - kurtosis.distribution
     - is_distribution
-    - get_transform
+    - transformation-functions
 - title: Continuous distributions
   desc: >
     Continuous probability distributions.

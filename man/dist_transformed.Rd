@@ -4,7 +4,7 @@
 \alias{dist_transformed}
 \title{Modify a distribution with a transformation}
 \usage{
-dist_transformed(dist, transform, inverse, deriv = NULL)
+dist_transformed(dist, transform, inverse, d_inverse = NULL)
 }
 \arguments{
 \item{dist}{A univariate distribution vector.}
@@ -14,7 +14,7 @@ transformation should be monotonic over appropriate domain.}
 
 \item{inverse}{The inverse of the \code{transform} function.}
 
-\item{deriv}{The derivative of the \code{inverse} function. If not provided, the
+\item{d_inverse}{The derivative of the \code{inverse} function. If not provided, the
 we will attempt to compute it symbolically, or use numerical differentiation.}
 }
 \description{
