@@ -11,6 +11,9 @@
 
 ## New features
 
+* automatic symbolic derivatives for transformed distributions (@venpopov, #101)
+* dist_transformed() now accepts a `d_inverse` argument for a user-supplied derivative
+  function on the inverse transformation (#101)
 * `support()` now shows whether the interval of support is open or 
   closed (@venpopov, #97)
 

@@ -1,3 +1,24 @@
+expect_correct_inverse <- function(dist, value) {
+  tvalue <- eval_transform(dist, value)[[1]]
+  inv_tvalue <- eval_inverse(dist, tvalue)[[1]]
+  expect_equal(inv_tvalue, value)
+}
+
+expect_correct_derivative <- function(dist, expr, value) {
+  expr <- enexpr(expr)
+  if (is.symbol(expr)) {
+    expr <- eval(expr, parent.frame())
+  }
+  if (is.function(expr)) {
+    ref <- expr(value)
+  } else {
+    ref <- eval(expr, list(x = value), parent.frame())
+  }
+  res <- eval_deriv(dist, value)[[1]]
+
+  expect_equal(res, ref, tolerance = 1e-5)
+}
+
 test_that("hilo of transformed distributions", {
   expect_identical(
     hilo(exp(dist_poisson(3))),
@@ -179,6 +200,201 @@ test_that("transformed distributions pdf integrates to 1", {
   }
 })
 
+test_that("inverses are correct", {
+  d <- dist_gamma(1,1)
+  v <- runif(10)
+
+  # single unary functions
+  expect_correct_inverse(sqrt(d), v)
+  expect_correct_inverse(exp(d), v)
+  expect_correct_inverse(log(d), v)
+  expect_correct_inverse(log(d, 2), v)
+  expect_correct_inverse(log(d, base = 10), v)
+  expect_correct_inverse(expm1(d), v)
+  expect_correct_inverse(log1p(d), v)
+  expect_correct_inverse(cos(d), v)
+  expect_correct_inverse(sin(d), v)
+  expect_correct_inverse(tan(d), v)
+  expect_correct_inverse(acos(d), v)
+  expect_correct_inverse(asin(d), v)
+  expect_correct_inverse(atan(d), v)
+  expect_correct_inverse(cosh(d), v)
+  expect_correct_inverse(sinh(d), v)
+  expect_correct_inverse(tanh(d), v)
+  expect_correct_inverse(acosh(d), v+1)
+  expect_correct_inverse(asinh(d), v)
+  expect_correct_inverse(atanh(d), v)
+
+  # binary functions
+  constant <- runif(1)
+  expect_correct_inverse(d + constant, v)
+  expect_correct_inverse(d - constant, v)
+  expect_correct_inverse(d * constant, v)
+  expect_correct_inverse(d / constant, v)
+  expect_correct_inverse(d ^ constant, v)
+  expect_correct_inverse(constant + d, v)
+  expect_correct_inverse(constant - d, v)
+  expect_correct_inverse(constant * d, v)
+  expect_correct_inverse(constant / d, v)
+  expect_correct_inverse(constant ^ d, v)
+  expect_correct_inverse(-d, v)
+
+  # custom functions
+  myfun <- function(x) log(x + 1)
+  inv_logit <- function(x) 1/(1 + exp(-x))
+  expect_correct_inverse(myfun(d), v)
+  expect_correct_inverse(inv_logit(d), v)
+
+  # unary after binary
+  expect_correct_inverse(log(d^2), v)
+  expect_correct_inverse(log(d^2, 2), v)
+  expect_correct_inverse(log(d^2, base = 10), v)
+  expect_correct_inverse(log(-d), -v)
+  expect_correct_inverse(exp(2^d), v)
+  expect_correct_inverse(exp(d-1), v)
+  expect_correct_inverse(cos(d/2), v)
+
+  # binary after unary
+  expect_correct_inverse(2^log(d), v)
+  expect_correct_inverse(2^log(d, 2), v)
+  expect_correct_inverse(2 + exp(d), v)
+
+  # multiple nested functions of various complexity
+  expect_correct_inverse(log(exp(d)), v)
+  expect_correct_inverse(exp(log(d)), v)
+  expect_correct_inverse(log(-log(d), base = 10), v)
+  expect_correct_inverse(sin(log(5-log(d), base = 10)^2/100), v)
+})
+
+test_that('symbolic derivatives work', {
+  d <- dist_gamma(1,1)
+  v <- runif(10)
+  expect_correct_derivative(exp(d), 1/x, v) # the derivative of the inverse log(x) is 1/x
+  expect_correct_derivative(log(d), exp(x), v)
+  expect_correct_derivative(log(d, 2), log(2)*2^x, v)
+  expect_correct_derivative(exp(2*d), 0.5/x, v)
+  expect_correct_derivative(log(-log(d)), -exp(-exp(x)+x), v)
+  expect_correct_derivative(sin(log(d) * 10),
+                            0.1 * (exp(asin(x)/10)/sqrt(1 - x^2)), v)
+
+  # with custom function and complex nesting
+  inv_logit <- function(x) 1/(1 + exp(-x))
+  expect_correct_derivative(acos(inv_logit(d)^2), tan(x)/(2*(sqrt(cos(x))-1)), v)
+
+  ### -------- a super complicated final case --------------
+  # nested custom functions involved in further nested transformation
+  inv_logit <- function(x) 1/(1 + exp(-x))
+  coshsquared_inv_logit <- function(x) cosh(inv_logit(x))^2
+  dist2 <- exp(2-1/log(2+coshsquared_inv_logit(d), base = 10)^(0.4+0.1))
+
+  # get random values within the support and test the inverse
+  lim <- field(support(dist2), 'lim')[[1]]
+  v <- runif(10, lim[1], lim[2])
+  expect_correct_inverse(dist2, v)
+
+  # monstrous analytical derivative based on wolfram alpha
+  an_deriv <- function(x) {
+    term1 <- (log(10) * 10^(1/((log(x) - 2)^2)))
+    term2 <- x * sqrt(10^(1/((log(x) - 2)^2)) - 3)
+    term3 <- sqrt(10^(1/((log(x) - 2)^2)) - 2)
+    term4 <- (log(x) - 2)^3
+    term1 / (term2 * term3 * term4 * (acosh(term3) - 1) * acosh(term3))
+  }
+
+  expect_correct_derivative(dist2, an_deriv, v)
+})
+
+
+test_that('providing custom derivative functions works', {
+  op <- options(dist.verbose = TRUE)
+  on.exit(op, add = TRUE)
+  # base distribution
+  d <- dist_gamma(1,1)
+
+  # built-in transformation (uses symbolic derivatives)
+  dist1 <- log(1+exp(-d)^2)
+  transform <- vec_data(dist1)[[1]]$transform
+  inv <- vec_data(dist1)[[1]]$inverse
+  deriv <- vec_data(dist1)[[1]]$d_inverse
+
+
+  # custom transformation without provided derivative function but we find it numerically
+  dist2 <- expect_message(dist_transformed(d, transform, inv),
+    "Cannot compute the derivative of the inverse function symbolicly")
+
+  # custom transformation with provided derivative function
+  dist3 <- expect_silent(dist_transformed(d, transform, inv, deriv))
+
+  # same custom transformation, but derivative is found symbolically
+  dist4 <- expect_silent(
+    dist_transformed(d, \(x) log(1+exp(-x)^2), \(x) -log(sqrt(exp(x)-1)))
+  )
+
+
+  res1 <- density(dist1, 0.5, verbose = TRUE)
+  res2 <- density(dist2, 0.5, verbose = TRUE)
+  res3 <- density(dist3, 0.5, verbose = TRUE)
+  res4 <- density(dist4, 0.5, verbose = TRUE)
+  expect_true(all.equal(res1, res2, res3, res4))
+})
+
+
+test_that("transforms with strange environments work", {
+  # https://github.com/mitchelloharawild/distributional/pull/101#issuecomment-2035083570
+
+  # functions with constants in the function environment
+  f = (function() {
+    b = 2
+    function(x) x * b
+  })()
+
+  f_inv = (function() {
+    b = 2
+    function(x) x / b
+  })()
+
+  d_f_inv = (function() {
+    b = 2
+    function(x) 1 / b
+  })()
+
+  d = dist_transformed(dist_normal(), f, f_inv, d_f_inv)
+  expect_equal(density(exp(d), 1), density(exp(2*dist_normal()), 1))
+
+  d <- f(dist_wrap('norm'))
+  expect_equal(density(exp(d), 1), density(exp(2*dist_normal()), 1))
+
+  # apply another function with same constant name but different value
+  f10 = (function() {
+    b = 10
+    function(x) x * b
+  })()
+
+  d10 <- f10(exp(d))
+  expect_equal(density(d10, 1), density(10*exp(2*dist_normal()), 1))
+
+  # functions with custom functions in the environment
+  fil <- (function() {
+    inv_logit <- function(x) 1 / (1 + exp(-x))
+    function(x) inv_logit(x)
+  })()
+
+  fil_inv <- (function() {
+    logit <- function(x) log(x) - log(1 - x)
+    function(x) logit(x)
+  })()
+
+  d_fil_inv <- (function() {
+    oneover <- function(x) 1 / (x * (1 - x))
+    function(x) oneover(x)
+  })()
+
+  d <- dist_transformed(dist_logistic(0, 1), fil, fil_inv, d_fil_inv)
+  expect_equal(density(d, 0.5), density(dist_uniform(0, 1), 0.5))
+  d2 <- -log(1/d - 1)
+  expect_equal(density(d2, 0), density(dist_logistic(0, 1), 0))
+
+})
 
 test_that("monotonically decreasing transformations (#100)", {
   dist <- dist_lognormal()

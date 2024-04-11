@@ -189,29 +189,32 @@ invert_fail <- function(...) stop("Inverting transformations for distributions i
 #' (a function that raises an error if called) if there is no known inverse.
 #' @param f string. Name of a function.
 #' @noRd
-get_unary_inverse <- function(f) {
+get_unary_inverse <- function(f, ...) {
   switch(f,
-    sqrt = function(x) x^2,
-    exp = log,
-    log = function(x, base = exp(1)) base ^ x,
-    log2 = function(x) 2^x,
-    log10 = function(x) 10^x,
-    expm1 = log1p,
-    log1p = expm1,
-    cos = acos,
-    sin = asin,
-    tan = atan,
-    acos = cos,
-    asin = sin,
-    atan = tan,
-    cosh = acosh,
-    sinh = asinh,
-    tanh = atanh,
-    acosh = cosh,
-    asinh = sinh,
-    atanh = tanh,
+         sqrt = function(x) x^2,
+         exp = function(x) log(x),
+         log = (function(x, base) {
+           if (missing(base)) function(x) exp(x)
+           else new_function(exprs(x = ), expr((!!base)^x))
+         })(x, ...),
+         log2 = function(x) 2^x,
+         log10 = function(x) 10^x,
+         expm1 = function(x) log1p(x),
+         log1p = function(x) expm1(x),
+         cos = function(x) acos(x),
+         sin = function(x) asin(x),
+         tan = function(x) atan(x),
+         acos = function(x) cos(x),
+         asin = function(x) sin(x),
+         atan = function(x) tan(x),
+         cosh = function(x) acosh(x),
+         sinh = function(x) asinh(x),
+         tanh = function(x) atanh(x),
+         acosh = function(x) cosh(x),
+         asinh = function(x) sinh(x),
+         atanh = function(x) tanh(x),
 
-    invert_fail
+         invert_fail
   )
 }
 
@@ -221,16 +224,15 @@ get_unary_inverse <- function(f) {
 #' @param constant a constant value
 #' @noRd
 get_binary_inverse_1 <- function(f, constant) {
-  force(constant)
 
   switch(f,
-    `+` = function(x) x - constant,
-    `-` = function(x) x + constant,
-    `*` = function(x) x / constant,
-    `/` = function(x) x * constant,
-    `^` = function(x) x ^ (1/constant),
+         `+` = new_function(exprs(x = ), body = expr(x - !!constant)),
+         `-` = new_function(exprs(x = ), body = expr(x + !!constant)),
+         `*` = new_function(exprs(x = ), body = expr(x / !!constant)),
+         `/` = new_function(exprs(x = ), body = expr(x * !!constant)),
+         `^` = new_function(exprs(x = ), body = expr(x ^ (1/!!constant))),
 
-    invert_fail
+         invert_fail
   )
 }
 
@@ -243,55 +245,55 @@ get_binary_inverse_2 <- function(f, constant) {
   force(constant)
 
   switch(f,
-    `+` = function(x) x - constant,
-    `-` = function(x) constant - x,
-    `*` = function(x) x / constant,
-    `/` = function(x) constant / x,
-    `^` = function(x) log(x, base = constant),
+         `+` = new_function(exprs(x = ), body = expr(x - !!constant)),
+         `-` = new_function(exprs(x = ), body = expr(!!constant - x)),
+         `*` = new_function(exprs(x = ), body = expr(x / !!constant)),
+         `/` = new_function(exprs(x = ), body = expr(!!constant / x)),
+         `^` = new_function(exprs(x = ), body = expr(log(x, base = !!constant))),
 
-    invert_fail
+         invert_fail
   )
 }
 
 #' @method Math dist_default
 #' @export
 Math.dist_default <- function(x, ...) {
-  if(dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
+  if (dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
 
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
+  transform <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
+  inverse <- get_unary_inverse(.Generic, ...)
+  d_inverse <- symbolic_derivative(inverse, fallback_numderiv = TRUE)
 
-  inverse_fun <- get_unary_inverse(.Generic)
-  inverse <- new_function(exprs(x = ), body = expr((!!inverse_fun)(x, !!!dots_list(...))))
-
-  vec_data(dist_transformed(wrap_dist(list(x)), trans, inverse))[[1]]
+  vec_data(dist_transformed(wrap_dist(list(x)), transform, inverse, d_inverse))[[1]]
 }
 
 #' @method Ops dist_default
 #' @export
 Ops.dist_default <- function(e1, e2) {
-  if(.Generic %in% c("-", "+") && missing(e2)){
+  if (.Generic %in% c("-", "+") && missing(e2)){
     e2 <- e1
     e1 <- if(.Generic == "+") 1 else -1
     .Generic <- "*"
   }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
-  if(any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
+  if (any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
     stop("Transformations of multivariate distributions are not yet supported.")
   }
 
-  trans <- if(all(is_dist)) {
-    if(identical(e1$dist, e2$dist)){
+  transform <- if (all(is_dist)) {
+    if (identical(e1$dist, e2$dist)){
       new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
     } else {
-      stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
+      stop(sprintf("The %s operation is not supported for <%s> and <%s>",
+                   .Generic, class(e1)[1], class(e2)[1]))
     }
-  } else if(is_dist[1]){
+  } else if (is_dist[1]){
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
   } else {
     new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
   }
 
-  inverse <- if(all(is_dist)) {
+  inverse <- if (all(is_dist)) {
     invert_fail
   } else if(is_dist[1]){
     get_binary_inverse_1(.Generic, e2)
@@ -299,5 +301,9 @@ Ops.dist_default <- function(e1, e2) {
     get_binary_inverse_2(.Generic, e1)
   }
 
-  vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))[[1]]
+  d_inverse <- symbolic_derivative(inverse, fallback_numderiv = TRUE)
+
+  dist <- list(e1,e2)[which(is_dist)]
+
+  vec_data(dist_transformed(wrap_dist(dist), transform, inverse, d_inverse))[[1]]
 }

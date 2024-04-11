@@ -4,7 +4,7 @@
 \alias{dist_transformed}
 \title{Modify a distribution with a transformation}
 \usage{
-dist_transformed(dist, transform, inverse)
+dist_transformed(dist, transform, inverse, d_inverse = NULL)
 }
 \arguments{
 \item{dist}{A univariate distribution vector.}
@@ -13,19 +13,42 @@ dist_transformed(dist, transform, inverse)
 transformation should be monotonic over appropriate domain.}
 
 \item{inverse}{The inverse of the \code{transform} function.}
+
+\item{d_inverse}{The derivative of the \code{inverse} function. If not provided, the
+we will attempt to compute it symbolically, or use numerical differentiation.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 
 The \code{\link[=density]{density()}}, \code{\link[=mean]{mean()}}, and \code{\link[=variance]{variance()}} methods are approximate as
 they are based on numerical derivatives.
+
+\code{dist_transformed()} requires you to explicitly provide the inverse and the
+derivative of the inverse functions. To attempt automatic symbolic computation
+of these functions, you can create a transformed distribution by appplying the
+transformation to an existing distribution object, e.g. \code{exp(dist_normal(0, 0.5))}.
 }
 \examples{
-# Create a log normal distribution
+# Create a log normal distribution - the derivative is found symbolically if possible
 dist <- dist_transformed(dist_normal(0, 0.5), exp, log)
 density(dist, 1) # dlnorm(1, 0, 0.5)
 cdf(dist, 4) # plnorm(4, 0, 0.5)
 quantile(dist, 0.1) # qlnorm(0.1, 0, 0.5)
 generate(dist, 10) # rlnorm(10, 0, 0.5)
+
+# provide a derivative of the inverse function to avoid numerical differentiation
+box_cox_transform <- function(x, lambda = 3) {
+  if (lambda == 0) return(log(x))
+  (x^lambda - 1) / lambda
+}
+box_cox_inv <- function(x, lambda = 3) {
+ if (lambda == 0) return(exp(x))
+ (lambda * x + 1)^(1/lambda)
+}
+box_cox_deriv <- function(x, lambda = 3) {
+ if (lambda == 0) return(exp(x))
+ (lambda * x + 1)^(1/lambda - 1)
+}
+dist <- dist_transformed(dist_normal(0, 0.5), box_cox_transform, box_cox_inv, box_cox_deriv)
 
 }

@@ -153,3 +153,91 @@ near <- function(x, y) {
   tol <- .Machine$double.eps^0.5
   abs(x - y) < tol
 }
+
+
+# creates a wrapper function around primitive functions
+wrap_primitive <- function(fun) {
+  if (is.primitive(fun)) {
+    res <- sub("^\\.Primitive\\(\"(.+)\"\\)", "\\1", format(fun))
+    args <- formals(args(fun))
+    new_function(exprs(x = ), call2(res, sym(names(args)[1]), !!!args[-1]))
+  } else {
+    fun
+  }
+}
+
+
+
+#' Evaluate the transformation, inverse or the jacobian of the inverse transformation of a random variable at a vector of values
+#' @name transformation-functions
+#' @param dist A distribution object
+#' @param at A vector of values at which to evaluate the transformation, inverse or jacobian
+#' @return A vector or list of numeric values. If length(at) = 1, a numeric vector the same length as `dist` is returned. If length(at) > 1, a list of numeric vectors is returned, each list entry corresponding to a distribution in `dist`, and each vector the same length as `at`.
+#' @export
+eval_transform <- function(dist, at) {
+  UseMethod("eval_transform")
+}
+
+#' @export
+eval_transform.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_transform, at = at)
+}
+
+#' @export
+eval_transform.dist_default <- function(dist, at) {
+  at
+}
+
+#' @export
+eval_transform.dist_transformed <- function(dist, at) {
+  suppressWarnings(dist$transform(at))
+}
+
+
+#' @rdname transformation-functions
+#' @export
+eval_inverse <- function(dist, at) {
+  UseMethod("eval_inverse")
+}
+
+#' @export
+eval_inverse.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_inverse, at = at)
+}
+
+#' @export
+eval_inverse.dist_default <- function(dist, at) {
+  at
+}
+
+#' @export
+eval_inverse.dist_transformed <- function(dist, at) {
+  suppressWarnings(dist$inverse(at))
+}
+
+
+#' @rdname transformation-functions
+#' @export
+eval_deriv <- function(dist, at) {
+  UseMethod("eval_deriv")
+}
+
+#' @export
+eval_deriv.distribution <- function(dist, at) {
+  at <- arg_listable(at, .ptype = NULL)
+  dist_apply(dist, eval_deriv, at = at)
+}
+
+#' @export
+eval_deriv.dist_default <- function(dist, at) {
+  at
+}
+
+#' @export
+eval_deriv.dist_transformed <- function(dist, at) {
+  suppressWarnings(dist$d_inverse(at))
+}
+
+
