@@ -21,7 +21,7 @@
 #'
 #'
 #' @examples
-#' # Create a log normal distribution
+#' # Create a log normal distribution - the derivative is found symbolically if possible
 #' dist <- dist_transformed(dist_normal(0, 0.5), exp, log)
 #' density(dist, 1) # dlnorm(1, 0, 0.5)
 #' cdf(dist, 4) # plnorm(4, 0, 0.5)
@@ -29,17 +29,28 @@
 #' generate(dist, 10) # rlnorm(10, 0, 0.5)
 #'
 #' # provide a derivative of the inverse function to avoid numerical differentiation
-#' dist <- dist_transformed(dist_normal(0, 0.5), exp, log, function(x) 1/x)
+#' box_cox_transform <- function(x, lambda = 3) {
+#'   if (lambda == 0) return(log(x))
+#'   (x^lambda - 1) / lambda
+#' }
+#' box_cox_inv <- function(x, lambda = 3) {
+#'  if (lambda == 0) return(exp(x))
+#'  (lambda * x + 1)^(1/lambda)
+#' }
+#' box_cox_deriv <- function(x, lambda = 3) {
+#'  if (lambda == 0) return(exp(x))
+#'  (lambda * x + 1)^(1/lambda - 1)
+#' }
+#' dist <- dist_transformed(dist_normal(0, 0.5), box_cox_transform, box_cox_inv, box_cox_deriv)
 #'
 #' @export
 dist_transformed <- function(dist, transform, inverse, d_inverse = NULL){
   vec_is(dist, new_dist())
   if (is.function(transform)) transform <- list(transform)
   if (is.function(inverse)) inverse <- list(inverse)
+  if (is.function(d_inverse)) d_inverse <- list(d_inverse)
   if (is.null(d_inverse)) {
-    d_inverse <- lapply(inverse, function(inv) symbolic_derivative(inv))
-  } else if (is.function(d_inverse)) {
-    d_inverse <- list(d_inverse)
+    d_inverse <- lapply(inverse, symbolic_derivative)
   }
 
   args <- vctrs::vec_recycle_common(dist = dist, transform = transform, inverse = inverse, d_inverse = d_inverse)
