@@ -135,6 +135,7 @@ test_that("Recycling rules and output for applying multiple inputs over multiple
     )
   )
 
+  skip_if_not_installed("mvtnorm")
   expect_equal(
     density(dist, cbind(2, 3)),
     c(0.046649277604197, 0.0215708514518913)
