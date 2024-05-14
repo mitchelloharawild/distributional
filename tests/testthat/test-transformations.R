@@ -114,6 +114,7 @@ test_that("inverses are applied automatically", {
   expect_equal(density(dist * 2 / 2, 0.5), density(dist, 0.5))
 
   # inverting a gamma distribution
+  skip_if_not_installed("actuar")
   expect_equal(density(1/dist_gamma(4, 3), 0.5), density(dist_inverse_gamma(4, 1/3), 0.5))
   expect_equal(density(1/(1/dist_gamma(4, 3)), 0.5), density(dist_gamma(4, 3), 0.5))
 
