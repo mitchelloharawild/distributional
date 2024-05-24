@@ -28,11 +28,18 @@ dist_mixture <- function(..., weights = numeric()){
 
 #' @export
 format.dist_mixture <- function(x, ...){
-  sprintf(
+  dists <- lapply(x[["dist"]], format) |>
+    unlist()
+  weights <- paste0("w = ", x[["w"]], ": " )
+  dist_info <- paste0("[", weights, dists, "]") |>
+    paste0(collapse = ", ")
+  mix_info <- sprintf(
     "mixture(n=%i)",
     length(x[["dist"]])
   )
+  paste0(mix_info," {", dist_info, "}")
 }
+
 
 #' @export
 density.dist_mixture <- function(x, at, ...){
