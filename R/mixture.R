@@ -27,14 +27,16 @@ dist_mixture <- function(..., weights = numeric()){
 }
 
 #' @export
-format.dist_mixture <- function(x, ...){
+format.dist_mixture <- function(x, width = getOption("width"), ...){
   dists <- lapply(x[["dist"]], format) |>
     unlist()
 
   dist_info <- paste0(x[["w"]], "*", dists) |>
     paste0(collapse = ", ")
 
-  paste0("mixture(", dist_info, ")")
+  long_dist <- paste0("mixture(", dist_info, ")")
+  short_dist <- paste0("mixture(", length(dists), ")")
+  ifelse(nchar(long_dist) <= width, long_dist, short_dist)
 }
 
 #' @export
