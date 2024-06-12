@@ -35,7 +35,7 @@ format.dist_mixture <- function(x, width = getOption("width"), ...){
     paste0(collapse = ", ")
 
   long_dist <- paste0("mixture(", dist_info, ")")
-  short_dist <- paste0("mixture(", length(dists), ")")
+  short_dist <- paste0("mixture(n=", length(dists), ")")
   ifelse(nchar(long_dist) <= width, long_dist, short_dist)
 }
 

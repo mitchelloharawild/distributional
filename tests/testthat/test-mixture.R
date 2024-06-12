@@ -2,7 +2,7 @@ test_that("Mixture of Normals", {
   dist <- dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.5, 0.5))
 
   # format
-  expect_equal(format(dist), "mixture(n=2)")
+  expect_equal(format(dist), "mixture(0.5*N(0, 1), 0.5*N(10, 16))")
 
   # quantiles
   expect_equal(quantile(dist, 0.5), 2, tolerance = 1e-5)
@@ -27,7 +27,7 @@ test_that("Mixture of different distributions", {
   dist <- dist_mixture(dist_normal(0, 1), dist_student_t(10), weights = c(0.3, 0.7))
 
   # format
-  expect_equal(format(dist), "mixture(n=2)")
+  expect_equal(format(dist), "mixture(0.3*N(0, 1), 0.7*t(10, 0, 1))")
 
   # quantiles
   expect_equal(quantile(dist, 0.5), 0, tolerance = 1e-5)
@@ -52,7 +52,8 @@ test_that("Mixture of point masses", {
   dist <- dist_mixture(dist_degenerate(1), dist_degenerate(2), dist_degenerate(3), weights = c(0.1, 0.2, 0.7))
 
   # format
-  expect_equal(format(dist), "mixture(n=3)")
+  expect_equal(format(dist,  width = 10), "mixture(n=3)")
+  expect_equal(format(dist), "mixture(0.1*1, 0.2*2, 0.7*3)")
 
   # quantiles
   expect_equal(quantile(dist, c(0, 0.1, 0.3, 1))[[1]], c(1, 1:3), tolerance = .Machine$double.eps^0.25)
