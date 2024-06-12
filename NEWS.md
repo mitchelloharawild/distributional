@@ -14,6 +14,11 @@
 * `support()` now shows whether the interval of support is open or 
   closed (@venpopov, #97)
 
+## Improvements
+
+* `dist_mixture()` now displays the components of the mixture when the output
+  width is sufficiently wide (@statasaurus, #112).
+
 # distributional 0.4.0
 
 ## Breaking changes
