@@ -38,7 +38,8 @@ Imports:
     stats,
     numDeriv,
     utils,
-    lifecycle
+    lifecycle,
+    pillar
 Suggests: 
     testthat (>= 2.1.0),
     covr,

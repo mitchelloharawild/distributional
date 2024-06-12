@@ -41,6 +41,33 @@ format.distribution <- function(x, ...){
   out
 }
 
+#' @importFrom pillar pillar_shaft new_pillar_shaft get_max_extent
+#' @export
+pillar_shaft.distribution <- function(x, ...) {
+  dist = format(x)
+  dist_min = format(x, width = 30)
+
+  pillar::new_pillar_shaft(
+    list(dist = dist,
+         dist_min = dist_min),
+    width = pillar::get_max_extent(dist),
+    min_width = pillar::get_max_extent(dist_min),
+    class = "pillar_distribution"
+  )
+}
+
+#' @export
+#' @importFrom pillar new_ornament
+format.pillar_distribution <- function(x, width, ...) {
+  if (get_max_extent(x$dist) <= width) {
+    ornament <- x$dist
+  } else {
+    ornament <- x$dist_min
+  }
+
+  pillar::new_ornament(ornament, align = "right")
+}
+
 #' @export
 `dimnames<-.distribution` <- function(x, value){
   attr(x, "vars") <- value
