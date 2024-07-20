@@ -99,12 +99,12 @@ density.dist_categorical <- function(x, at, ...){
 
 #' @export
 quantile.dist_categorical <- function(x, p, ...){
-  NA_real_
+  rep_len(NA_real_, length(p))
 }
 
 #' @export
 cdf.dist_categorical <- function(x, q, ...){
-  NA_real_
+  rep_len(NA_real_, length(q))
 }
 
 #' @export
