@@ -40,7 +40,7 @@ format.dist_na <- function(x, ...) {
 
 #' @export
 density.dist_na <- function(x, at, ...){
-  NA_real_
+  rep_len(NA_real_, length(at))
 }
 
 #' @export
@@ -48,14 +48,14 @@ log_density.dist_na <- density.dist_na
 
 #' @export
 quantile.dist_na <- function(x, p, ...){
-  NA_real_
+  rep_len(NA_real_, length(p))
 }
 #' @export
 log_quantile.dist_na <- quantile.dist_na
 
 #' @export
 cdf.dist_na <- function(x, q, ...){
-  NA_real_
+  rep_len(NA_real_, length(q))
 }
 #' @export
 log_cdf.dist_na <- cdf.dist_na
