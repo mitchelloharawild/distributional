@@ -41,7 +41,7 @@ format.dist_transformed <- function(x, ...){
 support.dist_transformed <- function(x, ...) {
   support <- support(x[["dist"]])
   lim <- field(support, "lim")[[1]]
-  lim <- suppressWarnings(x[['transform']](lim))
+  lim <- suppressWarnings(eval_transform(x, lim))
   if (all(!is.na(lim))) {
     lim <- sort(lim)
   }
@@ -51,8 +51,8 @@ support.dist_transformed <- function(x, ...) {
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
-  jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
+  inv <- function(at) suppressWarnings(eval_inverse(x, at))
+  jacobian <- eval_deriv(x, at)
   d <- density(x[["dist"]], inv(at)) * abs(jacobian)
   limits <- field(support(x), "lim")[[1]]
   closed <- field(support(x), "closed")[[1]]
@@ -66,7 +66,7 @@ density.dist_transformed <- function(x, at, ...){
 
 #' @export
 cdf.dist_transformed <- function(x, q, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
+  inv <- function(at) suppressWarnings(eval_inverse(x, at))
   p <- cdf(x[["dist"]], inv(q), ...)
   if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   limits <- field(support(x), "lim")[[1]]
@@ -79,36 +79,45 @@ cdf.dist_transformed <- function(x, q, ...){
 
 #' @export
 quantile.dist_transformed <- function(x, p, ...){
-  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
-  x[["transform"]](quantile(x[["dist"]], p, ...))
+  q <- quantile(x[["dist"]], p, ...)
+  eval_transform(x, q)
+  trans <- function(at) eval_transform(x, at)
+  if(!monotonic_increasing(trans, support(x[["dist"]]))) p <- 1 - p
+  q <- quantile(x[["dist"]], p, ...)
+  trans(q)
 }
 
 #' @export
 generate.dist_transformed <- function(x, ...){
-  x[["transform"]](generate(x[["dist"]], ...))
+  y <- generate(x[["dist"]], ...)
+  eval_transform(x, y)
 }
 
 #' @export
 mean.dist_transformed <- function(x, ...){
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
-  if(is.na(sigma2)){
+  trans <- function(at) eval_transform(x, at)
+  if (is.na(sigma2)) {
     # warning("Could not compute the transformed distribution's mean as the base distribution's variance is unknown. The transformed distribution's median has been returned instead.")
-    return(x[["transform"]](mu))
+    return(trans(mu))
   }
-  drop(
-    x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))/2*sigma2
-  )
+  term1 <- trans(mu)
+  term2 <- numDeriv::hessian(trans, mu, method.args = list(d = 0.01))
+  term3 <- sigma2/2
+  drop(term1 + term2*term3)
 }
 
 #' @export
 covariance.dist_transformed <- function(x, ...){
+  trans <- function(at) eval_transform(x, at)
   mu <- mean(x[["dist"]])
   sigma2 <- variance(x[["dist"]])
-  if(is.na(sigma2)) return(NA_real_)
-  drop(
-    numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))*sigma2)^2/2
-  )
+  if (is.na(sigma2)) return(NA_real_)
+  term1 <- numDeriv::jacobian(trans, mu)^2 * sigma2
+  term2 <- numDeriv::hessian(trans, mu, method.args = list(d = 0.01))
+  term2 <- (term2 * sigma2)^2 / 2
+  drop(term1 + term2)
 }
 
 #' @method Math dist_transformed
