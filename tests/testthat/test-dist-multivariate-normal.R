@@ -29,7 +29,7 @@ test_that("Multivariate normal distribution", {
 
   # cdf
   expect_equivalent(cdf(dist, cbind(1, 2)), mvtnorm::pmvnorm(upper = c(1,2), mean = mu, sigma = sigma))
-  expect_equivalent(cdf(dist, cbind(-3, 4)), mvtnorm::pmvnorm(c(-3, 4), mean = mu, sigma = sigma))
+  expect_equivalent(cdf(dist, cbind(-3, 4)), mvtnorm::pmvnorm(upper = c(-3, 4), mean = mu, sigma = sigma))
 
   # F(Finv(a)) ~= a
   # expect_equal(cdf(dist, list(as.numeric(quantile(dist, 0.53)))), 0.53, tolerance = 1e-3)
