@@ -73,7 +73,7 @@ quantile.dist_mvnorm <- function(x, p, type = c("univariate", "equicoordinate"),
 cdf.dist_mvnorm <- function(x, q, ..., na.rm = FALSE){
   if(is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ...))
   require_package("mvtnorm")
-  mvtnorm::pmvnorm(as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
+  mvtnorm::pmvnorm(upper = as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
 }
 
 #' @export
