@@ -117,7 +117,7 @@ test_that("Mixture of multivariate distributions", {
   dist <- dist_multivariate_normal(mu = list(mu2), sigma = list(sigma2))
   mdist <- dist_mixture(dist, dist, weights = c(w1, w2))
   expect_equal(mean(dist), mean(mdist))
-  expect_equal(unname(density(dist, rbind(mu))), density(mdist, rbind(mu)))
+  expect_equal(unname(density(dist, rbind(mu1))), density(mdist, rbind(mu1)))
   set.seed(1)
   expect_equal(cdf(dist, rbind(c(0, 0))), cdf(mdist, rbind(c(0, 0))),
     tolerance = 0.001
