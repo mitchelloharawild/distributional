@@ -180,7 +180,8 @@ print.dist_default <- function(x, ...){
 
 #' @export
 dim.dist_default <- function(x){
-  1
+  # Quick and dirty dimension calculation
+  NCOL(generate(x, times = 1))
 }
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")
