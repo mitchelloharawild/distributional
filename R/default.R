@@ -26,11 +26,18 @@ log_quantile.dist_default <- function(x, p, ...){
   quantile(x, exp(p), ...)
 }
 #' @export
-cdf.dist_default <- function(x, ...){
-  abort(
-    sprintf("The distribution class `%s` does not support `cdf()`",
-            class(x)[1])
-  )
+cdf.dist_default <- function(x, q, times = 1e5,...){
+  # Use Monte Carlo integration
+  r <- generate(x, times = times)
+  if(is.list(q)) {
+    # Turn into matrix
+    q <- do.call(rbind, q)
+  }
+  out <- numeric(NROW(q))
+  for(i in seq_along(out)) {
+    out[i] <- mean(apply(sweep(r, 2, q[i,]) < 0, 1, all))
+  }
+  return(out)
 }
 #' @export
 log_cdf.dist_default <- function(x, q, ...){

@@ -73,17 +73,7 @@ cdf.dist_mixture <- function(x, q, times = 1e5, ...){
     if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
     sum(x[["w"]]*vapply(x[["dist"]], cdf, numeric(1L), q = q, ...))
   } else {
-    # Use Monte Carlo integration
-    r <- generate(x, times = times)
-    if(is.list(q)) {
-      # Turn back into matrix
-      q <- do.call(rbind, q)
-    }
-    out <- numeric(NROW(q))
-    for(i in seq_along(out)) {
-      out[i] <- mean(apply(sweep(r, 2, q[i,]) < 0, 1, all))
-    }
-    return(out)
+    NextMethod()
   }
 }
 
