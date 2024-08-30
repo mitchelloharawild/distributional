@@ -87,8 +87,7 @@ generate.dist_mixture <- function(x, times, ...){
       r[r_pos,] <- generate(x[["dist"]][[i]], sum(r_pos), ...)
     }
   }
-  if(NCOL(r) == 1L) r <- r[,1]
-  return(r)
+  r[,seq(NCOL(r)), drop = TRUE]
 }
 
 #' @export
@@ -112,7 +111,14 @@ covariance.dist_mixture <- function(x, ...){
     m2 <- sum(x[["w"]]*(m^2 + v))
     m2 - m1^2
   } else {
-    stop("Covariance is not implemented for multivariate mixtures.")
+    m <- lapply(x[["dist"]], mean)
+    w <- as.list(x[["w"]])
+    mbar <- mapply("*", m, w, SIMPLIFY = FALSE)
+    mbar <- do.call("+", mbar)
+    m <- lapply(m, function(u){u - mbar})
+    v <- lapply(x[["dist"]], function(u){covariance(u)[[1]]})
+    cov <- mapply(function(m,v,w) {w * ( t(m) %*% m + v ) }, m, v, w, SIMPLIFY = FALSE)
+    list(do.call("+", cov))
   }
 }
 

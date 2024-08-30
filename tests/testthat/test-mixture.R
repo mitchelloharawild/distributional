@@ -94,8 +94,7 @@ test_that("Mixture of multivariate distributions", {
   )
   # Mean
   expect_equal(mean(dist), rbind(w1 * mu1 + w2 * mu2, w3 * mu3 + w4 * mu4))
-  # Covariance and quantile not yet implemented
-  expect_error(covariance(dist))
+  # Quantile
   expect_error(quantile(dist, 0.5))
   # CDF
   at <- matrix(rnorm(4), 2, 2)
@@ -117,6 +116,7 @@ test_that("Mixture of multivariate distributions", {
   dist <- dist_multivariate_normal(mu = list(mu2), sigma = list(sigma2))
   mdist <- dist_mixture(dist, dist, weights = c(w1, w2))
   expect_equal(mean(dist), mean(mdist))
+  expect_equal(covariance(dist), covariance(mdist))
   expect_equal(unname(density(dist, rbind(mu1))), density(mdist, rbind(mu1)))
   set.seed(1)
   expect_equal(cdf(dist, rbind(c(0, 0))), cdf(mdist, rbind(c(0, 0))),
