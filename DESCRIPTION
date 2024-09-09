@@ -45,6 +45,7 @@ Suggests:
     covr,
     mvtnorm,
     actuar (>= 2.0.0),
+    evd,
     ggdist,
     ggplot2
 RdMacros: 
@@ -54,4 +55,4 @@ BugReports: https://github.com/mitchelloharawild/distributional/issues
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
