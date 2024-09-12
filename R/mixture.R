@@ -5,12 +5,15 @@
 #'
 #' @param ... Distributions to be used in the mixture.
 #' @param weights The weight of each distribution passed to `...`.
+#' @param type The type of mixture to use, either 'probability' or 'quantile'.
 #'
 #' @examples
 #' dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))
 #'
 #' @export
-dist_mixture <- function(..., weights = numeric()){
+dist_mixture <- function(..., weights = numeric(),
+                         type = c("probability", "quantile")){
+  type <- match.arg(type)
   dist <- dots_list(...)
   dn <- unique(lapply(dist, dimnames))
   dn <- if(length(dn) == 1) dn[[1]] else NULL
@@ -22,8 +25,13 @@ dist_mixture <- function(..., weights = numeric()){
   if(any(weights < 0)){
     abort("All weights in a mixtue model must be non-negative.")
   }
-  new_dist(dist = transpose(dist), w = list(weights),
-           class = "dist_mixture", dimnames = dn)
+  new_dist(
+    dist = transpose(dist), w = list(weights),
+    class = c(
+      switch(type, probability = "dist_mixture_p", quantile = "dist_mixture_q"),
+      "dist_mixture"
+    ), dimnames = dn
+  )
 }
 
 #' @export
@@ -40,14 +48,19 @@ format.dist_mixture <- function(x, width = getOption("width"), ...){
 }
 
 #' @export
-density.dist_mixture <- function(x, at, ...){
+density.dist_mixture_p <- function(x, at, ...){
   if(length(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
-
   sum(x[["w"]]*vapply(x[["dist"]], density, numeric(1L), at = at, ...))
 }
 
 #' @export
-quantile.dist_mixture <- function(x, p, ...){
+density.dist_mixture_q <- function(x, at, ...){
+  p <- tryCatch(cdf(x, at), warning = function(w) browser())
+  1/vapply(p, numDeriv::jacobian, numeric(1L), func = function(p) quantile(x, p))
+}
+
+#' @export
+quantile.dist_mixture_p <- function(x, p, ...){
   if(length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
 
   # Find bounds for optimisation based on range of each quantile
@@ -65,14 +78,41 @@ quantile.dist_mixture <- function(x, p, ...){
 }
 
 #' @export
-cdf.dist_mixture <- function(x, q, ...){
+quantile.dist_mixture_q <- function(x, p, ...){
+  if(length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
+
+  sum(x[["w"]]*vapply(x[["dist"]], quantile, numeric(1L), p = p, ...))
+}
+
+
+#' @export
+cdf.dist_mixture_p <- function(x, q, ...){
   if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
 
   sum(x[["w"]]*vapply(x[["dist"]], cdf, numeric(1L), q = q, ...))
 }
 
 #' @export
-generate.dist_mixture <- function(x, times, ...){
+cdf.dist_mixture_q <- function(x, q, ...){
+  if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
+
+  # Find bounds for optimisation based on range of each quantile
+  dist_p <- vapply(x[["dist"]], cdf, numeric(1L), q, ..., USE.NAMES = FALSE)
+  if(vctrs::vec_unique_count(dist_p) == 1) return(dist_p[1])
+  if(q == 0) return(min(dist_p))
+  if(q == 1) return(max(dist_p))
+
+  # Search the quantile() for appropriate cdf
+  stats::uniroot(
+    function(pos) q - quantile(x, pos, ...),
+    interval = c(min(dist_p), max(dist_p)),
+    extendInt = "yes"
+  )$root
+
+}
+
+#' @export
+generate.dist_mixture_p <- function(x, times, ...){
   dist_idx <- .bincode(stats::runif(times), breaks = c(0, cumsum(x[["w"]])))
   r <- numeric(times)
   for(i in seq_along(x[["dist"]])){
@@ -83,15 +123,31 @@ generate.dist_mixture <- function(x, times, ...){
 }
 
 #' @export
-mean.dist_mixture <- function(x, ...){
+mean.dist_mixture_p <- function(x, ...){
   sum(x[["w"]]*vapply(x[["dist"]], mean, numeric(1L), ...))
 }
 
 #' @export
-covariance.dist_mixture <- function(x, ...){
+mean.dist_mixture_q <- function(x, ...){
+  stats::integrate(quantile, x = x, lower = 0, upper = 1)$value
+}
+
+#' @export
+covariance.dist_mixture_p <- function(x, ...){
   m <- vapply(x[["dist"]], mean, numeric(1L), ...)
   v <- vapply(x[["dist"]], variance, numeric(1L), ...)
   m1 <- sum(x[["w"]]*m)
   m2 <- sum(x[["w"]]*(m^2 + v))
   m2 - m1^2
+}
+
+#' @export
+support.dist_mixture <- function(x, ...) {
+  qs <- quantile(x, c(0, 1))
+  open <- vapply(qs, function(at) any(near(vapply(x[["dist"]], density, numeric(1L), at = at), 0)), logical(1L))
+  new_support_region(
+    list(vctrs::vec_init(qs, n = 0L)),
+    list(qs),
+    list(!open)
+  )
 }

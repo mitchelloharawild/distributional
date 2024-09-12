@@ -4,12 +4,14 @@
 \alias{dist_mixture}
 \title{Create a mixture of distributions}
 \usage{
-dist_mixture(..., weights = numeric())
+dist_mixture(..., weights = numeric(), type = c("probability", "quantile"))
 }
 \arguments{
 \item{...}{Distributions to be used in the mixture.}
 
 \item{weights}{The weight of each distribution passed to \code{...}.}
+
+\item{type}{The type of mixture to use, either 'probability' or 'quantile'.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
