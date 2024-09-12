@@ -27,10 +27,12 @@ format.dist_percentile <- function(x, ...){
   )
 }
 
-# #' @export
-# density.dist_percentile <- function(x, at, ...){
-# }
-#
+#' @export
+density.dist_percentile <- function(x, at, ...){
+  d <- density(generate(x, 1000), from = min(at), to = max(at), ..., na.rm=TRUE)
+  stats::approx(d$x, d$y, xout = at)$y
+}
+
 
 #' @export
 quantile.dist_percentile <- function(x, p, ...){
@@ -46,5 +48,31 @@ cdf.dist_percentile <- function(x, q, ...){
 
 #' @export
 generate.dist_percentile <- function(x, times, ...){
-  stats::approx(x[["percentile"]]/100, x[["x"]], xout=stats::runif(times,0,1))$y
+  stats::approx(x[["percentile"]], x[["x"]], xout=stats::runif(times,min(x[["percentile"]]),max(x[["percentile"]])))$y
+}
+
+#' @export
+mean.dist_percentile <- function(x, ...) {
+  # assumes percentile is sorted
+  # probs <- x[["percentile"]]/100
+  # i <- seq_along(probs)
+  #
+  # weights <- (probs[pmin(i+1, length(probs))] - probs[pmax(i-1, 1)]) / 2
+  # sum(x[["x"]] * weights)
+
+
+  # Fit a spline to the percentiles
+  spline_fit <- stats::splinefun(x[["percentile"]], x[["x"]])
+
+  # Use numerical integration to estimate the mean
+  stats::integrate(spline_fit, lower = 0, upper = 1)$value
+}
+
+#' @export
+support.dist_percentile <- function(x, ...) {
+  new_support_region(
+    list(vctrs::vec_init(x[["x"]], n = 0L)),
+    list(range(x[["x"]])),
+    list(!near(range(x[["percentile"]]), 0))
+  )
 }
