@@ -16,7 +16,8 @@
 
 ### Probability distributions
 
-* Added `dist_gk()` for the g-and-k distributions.
+* Added `dist_gk()` for g-and-k distributions.
+* Added `dist_gh()` for g-and-h distributions.
 
 ## Improvements
 

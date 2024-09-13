@@ -41,7 +41,7 @@
 #'   The cumulative distribution function is typically evaluated numerically due to the lack
 #'   of a closed-form expression.
 #'
-#' @seealso [gk::gk]
+#' @seealso [gk::dgk], [distributional::dist_gh]
 #'
 #' @examples
 #' dist <- dist_gk(A = 0, B = 1, g = 0, k = 0.5)

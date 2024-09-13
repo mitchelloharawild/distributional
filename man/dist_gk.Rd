@@ -74,5 +74,5 @@ quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[gk:gk]{gk::gk}
+\link[gk:g-and-k]{gk::dgk}, \link{dist_gh}
 }
