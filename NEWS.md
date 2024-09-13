@@ -13,6 +13,8 @@
 
 * `support()` now shows whether the interval of support is open or 
   closed (@venpopov, #97)
+* Added `dist_gev()` for the Generalised Extreme Value distribution and
+  `dist_gpd()` for the Generalised Pareto distribution (@robjhyndman, #124).
 
 ## Improvements
 

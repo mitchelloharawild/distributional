@@ -24,6 +24,7 @@ Authors:
 \itemize{
   \item Matthew Kay (\href{https://orcid.org/0000-0001-9446-0419}{ORCID})
   \item Alex Hayes (\href{https://orcid.org/0000-0002-4985-5160}{ORCID})
+  \item Rob Hyndman (\href{https://orcid.org/0000-0002-2140-5352}{ORCID})
 }
 
 Other contributors:
