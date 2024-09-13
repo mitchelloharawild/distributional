@@ -14,6 +14,10 @@
 * `support()` now shows whether the interval of support is open or 
   closed (@venpopov, #97)
 
+### Probability distributions
+
+* Added `dist_gk()` for the g-and-k distributions.
+
 ## Improvements
 
 * `dist_mixture()` now displays the components of the mixture when the output
