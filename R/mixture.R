@@ -10,6 +10,21 @@
 #' @examples
 #' dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))
 #'
+#' dist_df <- data.frame(
+#'   type = c("N(1,3)", "N(10,1)", "probability", "quantile"),
+#'   dist = c(
+#'     dist_normal(1, 3),
+#'     dist_normal(10, 1),
+#'     dist_mixture(dist_normal(1, 3), dist_normal(10, 1), weights = c(0.5, 0.5), type = "probability"),
+#'     dist_mixture(dist_normal(1, 3), dist_normal(10, 1), weights = c(0.5, 0.5), type = "quantile")
+#'   )
+#' )
+#' library(ggdist)
+#' library(ggplot2)
+#' dist_df |>
+#'   ggplot(aes(y = type, xdist = dist)) +
+#'   stat_slab()
+#'
 #' @export
 dist_mixture <- function(..., weights = numeric(),
                          type = c("probability", "quantile")){
@@ -56,7 +71,7 @@ density.dist_mixture_p <- function(x, at, ...){
 #' @export
 density.dist_mixture_q <- function(x, at, ...){
   p <- tryCatch(cdf(x, at), warning = function(w) browser())
-  1/vapply(p, numDeriv::jacobian, numeric(1L), func = function(p) quantile(x, p))
+  1/vapply(p, numDeriv::jacobian, numeric(1L), func = function(p) quantile(x, pmin(pmax(p, 0), 1)))
 }
 
 #' @export
