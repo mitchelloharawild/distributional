@@ -16,6 +16,11 @@
 * Added `dist_gev()` for the Generalised Extreme Value distribution and
   `dist_gpd()` for the Generalised Pareto distribution (@robjhyndman, #124).
 
+### Probability distributions
+
+* Added `dist_gk()` for g-and-k distributions.
+* Added `dist_gh()` for g-and-h distributions.
+
 ## Improvements
 
 * `dist_mixture()` now displays the components of the mixture when the output

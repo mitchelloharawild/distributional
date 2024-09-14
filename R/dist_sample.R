@@ -54,12 +54,19 @@ density.dist_sample <- function(x, at, ..., na.rm = TRUE){
       )
     )
   }
+  z <- numeric(length(at))
+  zi <- is.finite(at)
+  at <- at[zi]
+  zl <- vec_size(at)
+
   # Shortcut if only one point in density is needed
-  if(vec_size(at) == 1){
-    return(density(x[["x"]], from = at, to = at, n = 1)$y)
+  if(zl == 1){
+    z[zi] <- density(x[["x"]], from = at, to = at, n = 1)$y
+  } else if (zl > 1) {
+    d <- density(x[["x"]], from = min(at), to = max(at), ..., na.rm=na.rm)
+    z[zi] <- stats::approx(d$x, d$y, xout = at)$y
   }
-  d <- density(x[["x"]], from = min(at), to = max(at), ..., na.rm=na.rm)
-  stats::approx(d$x, d$y, xout = at)$y
+  z
 }
 
 
