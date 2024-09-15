@@ -8,6 +8,8 @@
   values outside the support of the distribution (@venpopov, #97)
 * Fixed `quantile()` and `cdf()` for transformed distributions with 
   monotonically decreasing transformations (#100).
+* The `mean()` method for `dist_sample()` now correctly returns a matrix for
+  multivariate sample distributions.
 
 ## New features
 

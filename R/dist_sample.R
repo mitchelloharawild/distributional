@@ -107,7 +107,11 @@ generate.dist_sample <- function(x, times, ...){
 
 #' @export
 mean.dist_sample <- function(x, ...){
-  if(is.matrix(x$x)) apply(x$x, 2, mean, ...) else mean(x$x, ...)
+  if(is.matrix(x$x)) {
+    matrix(colMeans(x$x, ...), nrow = 1L)
+  } else {
+    mean(x$x, ...)
+  }
 }
 
 #' @export
