@@ -72,7 +72,7 @@ quantile.dist_sample <- function(x, p, type = "marginal", ..., na.rm = TRUE){
   if(is.matrix(x$x)) {
     # Marginal quantiles
     return(
-      matrix(apply(x$x, 2, quantile, p = p, ..., na.rm = na.rm), nrow = 1)
+      matrix(apply(x$x, 2, quantile, p = p, ..., na.rm = na.rm), nrow = length(p))
     )
   }
   quantile(x$x, probs = p, ..., na.rm = na.rm, names = FALSE)
@@ -106,7 +106,7 @@ mean.dist_sample <- function(x, ...){
 #' @export
 median.dist_sample <- function(x, na.rm = FALSE, ...){
   if(is.matrix(x$x))
-    apply(x$x, 2, median, na.rm = na.rm, ...)
+    matrix(apply(x$x, 2, median, na.rm = na.rm, ...), nrow = 1L)
   else
     median(x$x, na.rm = na.rm, ...)
 }
