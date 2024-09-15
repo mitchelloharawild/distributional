@@ -12,6 +12,8 @@
   results correctly as matrices.
 * The `cdf()` method for `dist_multivariate_normal()` now gives the P(X <= q)
   rather than P(X > q) for consistency with all other `cdf()` methods.
+* The `quantile()` method for `dist_multivariate_normal()` now correctly gives
+  the boundaries when `p=0` or `p=1` when `type="equicoordinate"`.
 
 ## New features
 
@@ -29,7 +31,6 @@
 
 * `dist_mixture()` now displays the components of the mixture when the output
   width is sufficiently wide (@statasaurus, #112).
-
 
 ## Breaking changes
 

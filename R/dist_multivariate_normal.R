@@ -10,6 +10,7 @@
 #'
 #' @examples
 #' dist <- dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,3), ncol=2)))
+#' dimnames(dist) <- c("x", "y")
 #' dist
 #'
 #' @examplesIf requireNamespace("mvtnorm", quietly = TRUE)
@@ -62,7 +63,10 @@ quantile.dist_mvnorm <- function(x, p, type = c("equicoordinate", "marginal"),
                  sd = rep(diag(sqrt(x[["sigma"]])), each = length(p)), ...)
   } else {
     require_package("mvtnorm")
-    vapply(p, function(...) mvtnorm::qmvnorm(...)$quantile, numeric(1L), mean = x[["mu"]], sigma = x[["sigma"]], ...)
+    vapply(p, function(p, ...) {
+      if (p == 0) return(-Inf) else if (p == 1) return(Inf)
+      mvtnorm::qmvnorm(p, ...)$quantile
+    }, numeric(1L), mean = x[["mu"]], sigma = x[["sigma"]], ...)
   }
 
   matrix(q, nrow = length(p), ncol = dim(x))
