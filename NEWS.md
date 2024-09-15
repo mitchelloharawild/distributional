@@ -1,5 +1,23 @@
 # distributional (development version)
 
+## New features
+
+* `support()` now shows whether the interval of support is open or 
+  closed (@venpopov, #97)
+
+### Probability distributions
+
+* Added `dist_gk()` for g-and-k distributions.
+* Added `dist_gh()` for g-and-h distributions.
+* Added `dist_gev()` for the Generalised Extreme Value distribution and
+  `dist_gpd()` for the Generalised Pareto distribution (@robjhyndman, #124).
+
+## Improvements
+
+* `dist_mixture()` now displays the components of the mixture when the output
+  width is sufficiently wide (@statasaurus, #112).
+* `generate()` now respects `dimnames()` for multivariate distributions.
+
 ## Bug fixes
 
 * Fixed error when using '-' as a unary operator on a distribution different from
@@ -15,22 +33,6 @@
 * The `quantile()` method for `dist_multivariate_normal()` now correctly gives
   the boundaries when `p=0` or `p=1` when `type="equicoordinate"`.
 
-## New features
-
-* `support()` now shows whether the interval of support is open or 
-  closed (@venpopov, #97)
-* Added `dist_gev()` for the Generalised Extreme Value distribution and
-  `dist_gpd()` for the Generalised Pareto distribution (@robjhyndman, #124).
-
-### Probability distributions
-
-* Added `dist_gk()` for g-and-k distributions.
-* Added `dist_gh()` for g-and-h distributions.
-
-## Improvements
-
-* `dist_mixture()` now displays the components of the mixture when the output
-  width is sufficiently wide (@statasaurus, #112).
 
 ## Breaking changes
 

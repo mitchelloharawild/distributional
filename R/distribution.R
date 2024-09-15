@@ -183,10 +183,12 @@ log_cdf.distribution <- function(x, q, ...){
 generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
+  dn <- dimnames(x)
   x <- vec_data(x)
   dist_is_na <- vapply(x, is.null, logical(1L))
   x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
-  mapply(generate, x, times = times, ..., SIMPLIFY = FALSE)
+  mapply(function(x, ...) `colnames<-`(generate(x, ...), dn),
+         x, times = times, ..., SIMPLIFY = FALSE)
   # dist_apply(x, generate, times = times, ...)
   # Needs work to structure MV appropriately.
 }
