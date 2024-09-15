@@ -54,26 +54,25 @@ log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
 }
 
 #' @export
-quantile.dist_mvnorm <- function(x, p, type = c("univariate", "equicoordinate"),
+quantile.dist_mvnorm <- function(x, p, type = c("equicoordinate", "marginal"),
                                  ..., na.rm = FALSE){
   type <- match.arg(type)
-  if (type == "univariate") {
-    matrix(
-      stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
-                   sd = rep(diag(sqrt(x[["sigma"]])), each = length(p)), ...),
-      nrow = length(p)
-    )
+  q <- if (type == "marginal") {
+    stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
+                 sd = rep(diag(sqrt(x[["sigma"]])), each = length(p)), ...)
   } else {
     require_package("mvtnorm")
     mvtnorm::qmvnorm(p, mean = x[["mu"]], sigma = x[["sigma"]], ...)$quantile
   }
+
+  matrix(q, nrow = length(p), ncol = dim(x))
 }
 
 #' @export
 cdf.dist_mvnorm <- function(x, q, ..., na.rm = FALSE){
   if(is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ...))
   require_package("mvtnorm")
-  mvtnorm::pmvnorm(as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
+  mvtnorm::pmvnorm(upper = as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
 }
 
 #' @export

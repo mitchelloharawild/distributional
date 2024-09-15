@@ -10,6 +10,8 @@
   monotonically decreasing transformations (#100).
 * Fixed multivariate `dist_sample()` methods not structuring multivariate 
   results correctly as matrices.
+* The `cdf()` method for `dist_multivariate_normal()` now gives the P(X <= q)
+  rather than P(X > q) for consistency with all other `cdf()` methods.
 
 ## New features
 
@@ -27,6 +29,13 @@
 
 * `dist_mixture()` now displays the components of the mixture when the output
   width is sufficiently wide (@statasaurus, #112).
+
+
+## Breaking changes
+
+* The `quantile()` method for `dist_multivariate_normal()` now defaults to 
+  equicoordinate quantiles. To obtain marginal quantiles, you should use 
+  `quantile(dist, p, type = "marginal")`.
 
 # distributional 0.4.0
 
