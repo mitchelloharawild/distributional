@@ -19,14 +19,14 @@
 #'
 #' # Multivariate numeric samples
 #' dist <- dist_sample(x = list(cbind(rnorm(100), rnorm(100, 10))))
+#' dimnames(dist) <- c("x", "y")
 #'
 #' dist
 #' mean(dist)
 #' variance(dist)
-#' skewness(dist)
 #' generate(dist, 10)
-#'
-#' density(dist, 1)
+#' quantile(dist, 0.4) # Returns the marginal quantiles
+#' cdf(dist, matrix(c(0.3,9), nrow = 1))
 #'
 #' @export
 dist_sample <- function(x){
@@ -47,12 +47,7 @@ format.dist_sample <- function(x, ...){
 density.dist_sample <- function(x, at, ..., na.rm = TRUE){
   # Apply independently over sample variates
   if(is.matrix(x$x)) {
-    return(
-      apply(x$x, 2,
-        function(x, ...) density.dist_sample(list(x=x), ...),
-        at = at, ..., na.rm = TRUE
-      )
-    )
+    abort("Multivariate sample density is not yet implemented.")
   }
   z <- numeric(length(at))
   zi <- is.finite(at)
@@ -71,14 +66,13 @@ density.dist_sample <- function(x, at, ..., na.rm = TRUE){
 
 
 #' @export
-quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
+quantile.dist_sample <- function(x, p, type = "marginal", ..., na.rm = TRUE){
+  type <- match.arg(type)
   # Apply independently over sample variates
   if(is.matrix(x$x)) {
+    # Marginal quantiles
     return(
-      apply(x$x, 2,
-            function(x, ...) quantile.dist_sample(list(x=x), ...),
-            p = p, ..., na.rm = TRUE
-      )
+      matrix(apply(x$x, 2, quantile, p = p, ..., na.rm = na.rm), nrow = 1)
     )
   }
   quantile(x$x, probs = p, ..., na.rm = na.rm, names = FALSE)
@@ -86,17 +80,12 @@ quantile.dist_sample <- function(x, p, ..., na.rm = TRUE){
 
 #' @export
 cdf.dist_sample <- function(x, q, ..., na.rm = TRUE){
-  # Apply independently over sample variates
+  if(vec_size(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
   if(is.matrix(x$x)) {
-    return(
-      apply(x$x, 2,
-            function(x, ...) cdf.dist_sample(list(x=x), ...),
-            q = q, ..., na.rm = TRUE
-      )
-    )
+    return(mean(x$x <= vec_recycle(q, vec_size(x$x))))
   }
-  if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
-  vapply(x, function(x, q) mean(x <= q, ..., na.rm = na.rm), numeric(1L), q = q)
+  mean(x <= q, ..., na.rm = na.rm)
+  # vapply(x, function(x, q) mean(x <= q, ..., na.rm = na.rm), numeric(1L), q = q)
 }
 
 #' @export
@@ -129,7 +118,7 @@ covariance.dist_sample <- function(x, ...){
 
 #' @export
 skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
-  if(is.matrix(x)) {abort("Multivariate sample skewness is not yet implemented.")}
+  if(is.matrix(x$x)) {abort("Multivariate sample skewness is not yet implemented.")}
   n <- lengths(x, use.names = FALSE)
   x <- lapply(x, function(.) . - mean(., na.rm = na.rm))
   sum_x2 <- vapply(x, function(.) sum(.^2, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)

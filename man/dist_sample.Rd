@@ -26,13 +26,13 @@ density(dist, 1)
 
 # Multivariate numeric samples
 dist <- dist_sample(x = list(cbind(rnorm(100), rnorm(100, 10))))
+dimnames(dist) <- c("x", "y")
 
 dist
 mean(dist)
 variance(dist)
-skewness(dist)
 generate(dist, 10)
-
-density(dist, 1)
+quantile(dist, 0.4) # Returns the marginal quantiles
+cdf(dist, matrix(c(0.3,9), nrow = 1))
 
 }
