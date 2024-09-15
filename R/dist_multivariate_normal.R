@@ -62,7 +62,7 @@ quantile.dist_mvnorm <- function(x, p, type = c("equicoordinate", "marginal"),
                  sd = rep(diag(sqrt(x[["sigma"]])), each = length(p)), ...)
   } else {
     require_package("mvtnorm")
-    mvtnorm::qmvnorm(p, mean = x[["mu"]], sigma = x[["sigma"]], ...)$quantile
+    vapply(p, function(...) mvtnorm::qmvnorm(...)$quantile, numeric(1L), mean = x[["mu"]], sigma = x[["sigma"]], ...)
   }
 
   matrix(q, nrow = length(p), ncol = dim(x))
