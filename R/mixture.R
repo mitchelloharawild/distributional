@@ -41,13 +41,15 @@ format.dist_mixture <- function(x, width = getOption("width"), ...){
 
 #' @export
 density.dist_mixture <- function(x, at, ...){
-  if(length(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
-
+  if(NROW(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
   sum(x[["w"]]*vapply(x[["dist"]], density, numeric(1L), at = at, ...))
 }
 
 #' @export
 quantile.dist_mixture <- function(x, p, ...){
+  d <- dim(x)
+  if(d > 1)
+    stop("quantile is not implemented for multivariate mixtures.")
   if(length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
 
   # Find bounds for optimisation based on range of each quantile
@@ -65,33 +67,62 @@ quantile.dist_mixture <- function(x, p, ...){
 }
 
 #' @export
-cdf.dist_mixture <- function(x, q, ...){
-  if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
-
-  sum(x[["w"]]*vapply(x[["dist"]], cdf, numeric(1L), q = q, ...))
+cdf.dist_mixture <- function(x, q, times = 1e5, ...){
+  d <- dim(x)
+  if(d == 1L) {
+    if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
+    sum(x[["w"]]*vapply(x[["dist"]], cdf, numeric(1L), q = q, ...))
+  } else {
+    NextMethod()
+  }
 }
 
 #' @export
 generate.dist_mixture <- function(x, times, ...){
   dist_idx <- .bincode(stats::runif(times), breaks = c(0, cumsum(x[["w"]])))
-  r <- numeric(times)
+  r <- matrix(nrow = times, ncol = dim(x))
   for(i in seq_along(x[["dist"]])){
     r_pos <- dist_idx == i
-    r[r_pos] <- generate(x[["dist"]][[i]], sum(r_pos), ...)
+    if(any(r_pos)) {
+      r[r_pos,] <- generate(x[["dist"]][[i]], sum(r_pos), ...)
+    }
   }
-  r
+  r[,seq(NCOL(r)), drop = TRUE]
 }
 
 #' @export
 mean.dist_mixture <- function(x, ...){
-  sum(x[["w"]]*vapply(x[["dist"]], mean, numeric(1L), ...))
+  d <- dim(x)
+  m <- vapply(x[["dist"]], mean, numeric(d), ...)
+  if(d == 1L) {
+    sum(x[["w"]] * m)
+  } else {
+    matrix(x[["w"]], ncol = d, nrow = 1) %*% t(m)
+  }
 }
 
 #' @export
 covariance.dist_mixture <- function(x, ...){
-  m <- vapply(x[["dist"]], mean, numeric(1L), ...)
-  v <- vapply(x[["dist"]], variance, numeric(1L), ...)
-  m1 <- sum(x[["w"]]*m)
-  m2 <- sum(x[["w"]]*(m^2 + v))
-  m2 - m1^2
+  d <- dim(x)
+  if(d == 1L) {
+    m <- vapply(x[["dist"]], mean, numeric(1L), ...)
+    v <- vapply(x[["dist"]], variance, numeric(1L), ...)
+    m1 <- sum(x[["w"]]*m)
+    m2 <- sum(x[["w"]]*(m^2 + v))
+    m2 - m1^2
+  } else {
+    m <- lapply(x[["dist"]], mean)
+    w <- as.list(x[["w"]])
+    mbar <- mapply("*", m, w, SIMPLIFY = FALSE)
+    mbar <- do.call("+", mbar)
+    m <- lapply(m, function(u){u - mbar})
+    v <- lapply(x[["dist"]], function(u){covariance(u)[[1]]})
+    cov <- mapply(function(m,v,w) {w * ( t(m) %*% m + v ) }, m, v, w, SIMPLIFY = FALSE)
+    list(do.call("+", cov))
+  }
+}
+
+#' @export
+dim.dist_mixture <- function(x){
+  dim(x[["dist"]][[1]])
 }
