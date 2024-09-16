@@ -60,7 +60,7 @@ quantile.dist_mvnorm <- function(x, p, type = c("equicoordinate", "marginal"),
   type <- match.arg(type)
   q <- if (type == "marginal") {
     stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
-                 sd = rep(diag(sqrt(x[["sigma"]])), each = length(p)), ...)
+                 sd = rep(sqrt(diag(x[["sigma"]])), each = length(p)), ...)
   } else {
     require_package("mvtnorm")
     vapply(p, function(p, ...) {

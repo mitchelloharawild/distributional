@@ -32,6 +32,8 @@
   rather than P(X > q) for consistency with all other `cdf()` methods.
 * The `quantile()` method for `dist_multivariate_normal()` now correctly gives
   the boundaries when `p=0` or `p=1` when `type="equicoordinate"`.
+* The `quantile()` method for `dist_multivariate_normal()` now only square roots
+  the diagonal elements when `type="marginal"`.
 
 
 ## Breaking changes
