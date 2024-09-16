@@ -50,20 +50,36 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Fixed error when using ‘-’ as a unary operator on a distribution different from <code><a href="../reference/dist_normal.html">dist_normal()</a></code> (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/95" class="external-link">#95</a>)</li>
-<li>Density for transformed distributions now correctly gives 0 instead of NaNs for values outside the support of the distribution (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>)</li>
-<li>Fixed <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> and <code><a href="../reference/cdf.html">cdf()</a></code> for transformed distributions with monotonically decreasing transformations (<a href="https://github.com/mitchelloharawild/distributional/issues/100" class="external-link">#100</a>).</li>
-</ul></div>
-<div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>
 <code><a href="../reference/support.html">support()</a></code> now shows whether the interval of support is open or closed (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>)</li>
+</ul><div class="section level4">
+<h4 id="probability-distributions-development-version">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-development-version"></a></h4>
+<ul><li>Added <code><a href="../reference/dist_gk.html">dist_gk()</a></code> for g-and-k distributions.</li>
+<li>Added <code><a href="../reference/dist_gh.html">dist_gh()</a></code> for g-and-h distributions.</li>
+<li>Added <code><a href="../reference/dist_gev.html">dist_gev()</a></code> for the Generalised Extreme Value distribution and <code><a href="../reference/dist_gpd.html">dist_gpd()</a></code> for the Generalised Pareto distribution (<a href="https://github.com/robjhyndman" class="external-link">@robjhyndman</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/124" class="external-link">#124</a>).</li>
 </ul></div>
+</div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
 <ul><li>
 <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> now displays the components of the mixture when the output width is sufficiently wide (<a href="https://github.com/statasaurus" class="external-link">@statasaurus</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/112" class="external-link">#112</a>).</li>
+<li>
+<code><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate()</a></code> now respects <code><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames()</a></code> for multivariate distributions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Fixed error when using ‘-’ as a unary operator on a distribution different from <code><a href="../reference/dist_normal.html">dist_normal()</a></code> (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/95" class="external-link">#95</a>)</li>
+<li>Density for transformed distributions now correctly gives 0 instead of NaNs for values outside the support of the distribution (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>)</li>
+<li>Fixed <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> and <code><a href="../reference/cdf.html">cdf()</a></code> for transformed distributions with monotonically decreasing transformations (<a href="https://github.com/mitchelloharawild/distributional/issues/100" class="external-link">#100</a>).</li>
+<li>Fixed multivariate <code><a href="../reference/dist_sample.html">dist_sample()</a></code> methods not structuring multivariate results correctly as matrices.</li>
+<li>The <code><a href="../reference/cdf.html">cdf()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now gives the P(X &lt;= q) rather than P(X &gt; q) for consistency with all other <code><a href="../reference/cdf.html">cdf()</a></code> methods.</li>
+<li>The <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now correctly gives the boundaries when <code>p=0</code> or <code>p=1</code> when <code>type="equicoordinate"</code>.</li>
+<li>The <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now only square roots the diagonal elements when <code>type="marginal"</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>The <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now defaults to equicoordinate quantiles. To obtain marginal quantiles, you should use <code>quantile(dist, p, type = "marginal")</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -297,7 +313,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Mitchell O’Hara-Wild, Matthew Kay, Alex Hayes.</p>
+  <p></p><p>Developed by Mitchell O’Hara-Wild, Matthew Kay, Alex Hayes, Rob Hyndman.</p>
 </div>
 
 <div class="pkgdown">
