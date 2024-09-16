@@ -47,7 +47,7 @@
 #' dist <- dist_gh(A = 0, B = 1, g = 0, h = 0.5)
 #' dist
 #'
-#' @examplesIf requireNamespace("gh", quietly = TRUE)
+#' @examplesIf requireNamespace("gk", quietly = TRUE)
 #' mean(dist)
 #' variance(dist)
 #' support(dist)
@@ -88,30 +88,30 @@ format.dist_gh <- function(x, digits = 2, ...){
 
 #' @export
 density.dist_gh <- function(x, at, ...){
-  require_package("gh")
+  require_package("gk")
   gk::dgh(at, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
 }
 
 #' @export
 log_density.dist_gh <- function(x, at, ...){
-  require_package("gh")
+  require_package("gk")
   gk::dgh(at, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]], log = TRUE)
 }
 
 #' @export
 quantile.dist_gh <- function(x, p, ...){
-  require_package("gh")
+  require_package("gk")
   gk::qgh(p, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
 }
 
 #' @export
 cdf.dist_gh <- function(x, q, ...){
-  require_package("gh")
+  require_package("gk")
   gk::pgh(q, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
 }
 
 #' @export
 generate.dist_gh <- function(x, times, ...){
-  require_package("gh")
+  require_package("gk")
   gk::rgh(times, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
 }

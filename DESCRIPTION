@@ -43,8 +43,7 @@ Imports:
     numDeriv,
     utils,
     lifecycle,
-    pillar,
-    gk
+    pillar
 Suggests: 
     testthat (>= 2.1.0),
     covr,
@@ -52,7 +51,8 @@ Suggests:
     actuar (>= 2.0.0),
     evd,
     ggdist,
-    ggplot2
+    ggplot2,
+    gk
 RdMacros: 
     lifecycle
 URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional
