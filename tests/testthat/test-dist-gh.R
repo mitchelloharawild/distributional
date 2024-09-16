@@ -11,7 +11,7 @@ test_that("g-and-h distribution", {
   expect_equal(format(dist), "gh(A = 0, B = 1, g = 0, h = 0.5)")
 
   # Require package installed
-  skip_if_not_installed("gh", "0.1.0")
+  skip_if_not_installed("gk", "0.1.0")
 
   # quantiles
   expect_equal(quantile(dist, 0.1), gk::qgh(0.1, A, B, g, h, c))

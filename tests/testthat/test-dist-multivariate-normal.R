@@ -15,13 +15,16 @@ test_that("Multivariate normal distribution", {
 
   # quantiles
   expect_equal(
-    quantile(dist, 0.1),
+    quantile(dist, 0.1, type = "marginal"),
     matrix(c(qnorm(0.1, mu[1], sqrt(sigma[1,1])), qnorm(0.1, mu[2], sqrt(sigma[2,2]))),
            nrow = 1, dimnames = list(NULL, c("a", "b")))
   )
 
   skip_if_not_installed("mvtnorm")
-  expect_equivalent(quantile(dist, 0.1, type = "equicoordinate"), mvtnorm::qmvnorm(0.1, mean = mu, sigma = sigma)$quantile)
+  expect_equivalent(
+    quantile(dist, 0.1, type = "equicoordinate"),
+    rep(mvtnorm::qmvnorm(0.1, mean = mu, sigma = sigma)$quantile, 2)
+  )
 
   # pdf
   expect_equal(density(dist, cbind(1, 2)), mvtnorm::dmvnorm(c(1, 2), mean = mu, sigma = sigma))
@@ -29,7 +32,7 @@ test_that("Multivariate normal distribution", {
 
   # cdf
   expect_equivalent(cdf(dist, cbind(1, 2)), mvtnorm::pmvnorm(upper = c(1,2), mean = mu, sigma = sigma))
-  expect_equivalent(cdf(dist, cbind(-3, 4)), mvtnorm::pmvnorm(c(-3, 4), mean = mu, sigma = sigma))
+  expect_equivalent(cdf(dist, cbind(-3, 4)), mvtnorm::pmvnorm(upper = c(-3, 4), mean = mu, sigma = sigma))
 
   # F(Finv(a)) ~= a
   # expect_equal(cdf(dist, list(as.numeric(quantile(dist, 0.53)))), 0.53, tolerance = 1e-3)
