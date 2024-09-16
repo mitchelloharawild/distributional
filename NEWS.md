@@ -3,7 +3,9 @@
 ## New features
 
 * `support()` now shows whether the interval of support is open or 
-  closed (@venpopov, #97)
+  closed (@venpopov, #97).
+* Added default method for `cdf()` which estimates the CDF using Monte Carlo
+  integration (@robjhyndman, #122).
 
 ### Probability distributions
 
@@ -17,6 +19,7 @@
 * `dist_mixture()` now displays the components of the mixture when the output
   width is sufficiently wide (@statasaurus, #112).
 * `generate()` now respects `dimnames()` for multivariate distributions.
+* `dist_mixture()` now supports multivariate distributions (@robjhyndman, #122).
 
 ## Bug fixes
 
