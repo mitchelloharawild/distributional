@@ -25,12 +25,13 @@ variance(dist)
 support(dist)
 generate(dist, 10)
 
-density(dist, c(2, 1))
-density(dist, c(2, 1), log = TRUE)
+density(dist, cbind(2, 1))
+density(dist, cbind(2, 1), log = TRUE)
 
 cdf(dist, 4)
 
 quantile(dist, 0.7)
+quantile(dist, 0.7, type = "marginal")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
