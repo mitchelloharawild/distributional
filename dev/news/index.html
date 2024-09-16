@@ -52,7 +52,8 @@
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>
-<code><a href="../reference/support.html">support()</a></code> now shows whether the interval of support is open or closed (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>)</li>
+<code><a href="../reference/support.html">support()</a></code> now shows whether the interval of support is open or closed (<a href="https://github.com/venpopov" class="external-link">@venpopov</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/97" class="external-link">#97</a>).</li>
+<li>Added default method for <code><a href="../reference/cdf.html">cdf()</a></code> which estimates the CDF using Monte Carlo integration (<a href="https://github.com/robjhyndman" class="external-link">@robjhyndman</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/122" class="external-link">#122</a>).</li>
 </ul><div class="section level4">
 <h4 id="probability-distributions-development-version">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-development-version"></a></h4>
 <ul><li>Added <code><a href="../reference/dist_gk.html">dist_gk()</a></code> for g-and-k distributions.</li>
@@ -66,6 +67,8 @@
 <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> now displays the components of the mixture when the output width is sufficiently wide (<a href="https://github.com/statasaurus" class="external-link">@statasaurus</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/112" class="external-link">#112</a>).</li>
 <li>
 <code><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate()</a></code> now respects <code><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames()</a></code> for multivariate distributions.</li>
+<li>
+<code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> now supports multivariate distributions (<a href="https://github.com/robjhyndman" class="external-link">@robjhyndman</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/122" class="external-link">#122</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
