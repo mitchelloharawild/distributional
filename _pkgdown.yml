@@ -49,6 +49,10 @@ reference:
     - dist_exponential
     - dist_f
     - dist_gamma
+    - dist_gev
+    - dist_gh
+    - dist_gk
+    - dist_gpd
     - dist_gumbel
     - dist_hypergeometric
     - dist_inverse_exponential
