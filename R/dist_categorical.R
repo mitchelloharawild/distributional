@@ -121,7 +121,8 @@ support.dist_categorical <- function(x, ...) {
   region <- if(is.null(x[["p"]])) seq_along(x[["p"]]) else x[["x"]]
   new_support_region(
     list(vctrs::vec_init(region, n = 0L)),
-    list(region)
+    list(region),
+    list(c(TRUE, TRUE))
   )
 }
 
