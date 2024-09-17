@@ -68,7 +68,8 @@ density.dist_transformed <- function(x, at, ...){
 cdf.dist_transformed <- function(x, q, ...){
   inv <- function(v) suppressWarnings(x[["inverse"]](v))
   p <- cdf(x[["dist"]], inv(q), ...)
-  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
+  # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
+  if(!is.null(x[["dist"]]) && !monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   limits <- field(support(x), "lim")[[1]]
   if (!any(is.na(limits))) {
     p[q <= limits[1]] <- 0
@@ -79,7 +80,8 @@ cdf.dist_transformed <- function(x, q, ...){
 
 #' @export
 quantile.dist_transformed <- function(x, p, ...){
-  if(!monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
+  # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
+  if(!is.null(x[["dist"]]) && !monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
   x[["transform"]](quantile(x[["dist"]], p, ...))
 }
 
