@@ -70,10 +70,14 @@ cdf.dist_transformed <- function(x, q, ...){
   p <- cdf(x[["dist"]], inv(q), ...)
   # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
   if(!is.null(x[["dist"]]) && !monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
-  limits <- field(support(x), "lim")[[1]]
-  if (!any(is.na(limits))) {
-    p[q <= limits[1]] <- 0
-    p[q >= limits[2]] <- 1
+
+  # TODO: Rework for support of closed limits and prevent computation
+  x_sup <- support(x)
+  x_lim <- field(x_sup, "lim")[[1]]
+  x_cls <- field(x_sup, "closed")[[1]]
+  if (!any(is.na(x_lim))) {
+    p[q <= x_lim[1] & !x_cls[1]] <- 0
+    p[q >= x_lim[2] & !x_cls[2]] <- 1
   }
   p
 }
