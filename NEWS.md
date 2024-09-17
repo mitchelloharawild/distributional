@@ -1,5 +1,11 @@
 # distributional (development version)
 
+## Breaking changes
+
+* The `quantile()` method for `dist_multivariate_normal()` now defaults to 
+  equicoordinate quantiles. To obtain marginal quantiles, you should use 
+  `quantile(dist, p, type = "marginal")`.
+
 # distributional 0.5.0
 
 ## New features
