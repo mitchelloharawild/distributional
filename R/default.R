@@ -80,7 +80,9 @@ support.dist_default <- function(x, ...) {
   closed <- if(any(is.na(lims))) {
     c(FALSE, FALSE)
   } else {
-    !near(density(x, lims), 0)
+    # Default to open limits on error
+    lim_dens <- tryCatch(density(x, lims), error = function(e) c(0,0))
+    !near(lim_dens, 0)
   }
   new_support_region(
     list(vctrs::vec_init(generate(x, 1), n = 0L)),
