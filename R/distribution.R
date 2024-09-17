@@ -187,8 +187,14 @@ generate.distribution <- function(x, times, ...){
   x <- vec_data(x)
   dist_is_na <- vapply(x, is.null, logical(1L))
   x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
-  mapply(function(x, ...) `colnames<-`(generate(x, ...), dn),
-         x, times = times, ..., SIMPLIFY = FALSE)
+  mapply(
+    function(x, ...) {
+      y <- generate(x, ...)
+      if (is.matrix(y)) colnames(y) <- dn
+      y
+    }, x, times = times, ...,
+    SIMPLIFY = FALSE
+  )
   # dist_apply(x, generate, times = times, ...)
   # Needs work to structure MV appropriately.
 }
