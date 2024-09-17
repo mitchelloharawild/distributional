@@ -85,13 +85,13 @@ transformation should be monotonic over appropriate domain.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># dlnorm(1, 0, 0.5)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7978846</span>
 <span class="r-in"><span><span class="fu"><a href="cdf.html">cdf</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">4</span><span class="op">)</span> <span class="co"># plnorm(4, 0, 0.5)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.name(names(formals(f))):</span> invalid type/length (symbol/0) in vector allocation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9972194</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">0.1</span><span class="op">)</span> <span class="co"># qlnorm(0.1, 0, 0.5)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.name(names(formals(f))):</span> invalid type/length (symbol/0) in vector allocation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5268835</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># rlnorm(10, 0, 0.5)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.4054475 1.0932901 0.7688275 1.2215165 0.9405469 0.9649562 2.8515628</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.9368081 1.8226281 0.6764226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.2215165 0.9405469 0.9649562 2.8515628 1.9368081 1.8226281 0.6764226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.8019266 0.8842512 1.2006896</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
