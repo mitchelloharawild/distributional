@@ -159,6 +159,9 @@ Ops.dist_transformed <- function(e1, e2) {
 }
 
 monotonic_increasing <- function(f, support) {
+  # Shortcut for identity function (used widely in ggdist)
+  if(identical(body(f), as.name(names(formals(f))))) return(TRUE)
+
   # Currently assumes (without checking, #9) monotonicity of f over the domain
   x <- f(field(support, "lim")[[1]])
   x[[2L]] > x[[1L]]
