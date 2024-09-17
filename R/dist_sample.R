@@ -127,7 +127,14 @@ skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
   y * ((1 - 1/n))^(3/2)
 }
 
-
+#' @export
+support.dist_sample <- function(x, ...) {
+  new_support_region(
+    list(vctrs::vec_init(x$x, n = 0L)),
+    list(range(x$x)),
+    list(rep(TRUE, 2))
+  )
+}
 
 #' @method Math dist_sample
 #' @export
