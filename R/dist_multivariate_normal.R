@@ -56,7 +56,7 @@ log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
 }
 
 #' @export
-quantile.dist_mvnorm <- function(x, p, type = c("equicoordinate", "marginal"),
+quantile.dist_mvnorm <- function(x, p, type = c("marginal", "equicoordinate"),
                                  ..., na.rm = FALSE){
   type <- match.arg(type)
   q <- if (type == "marginal") {
