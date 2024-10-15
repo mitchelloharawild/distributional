@@ -43,15 +43,15 @@ test_that("GEV", {
   # Generate
   set.seed(123)
   rand_dist <- distributional::generate(dist, times = 1e6)
-  expect_equal(lapply(rand_dist[1:2], mean) |> unlist(),
+  expect_equal(unlist(lapply(rand_dist[1:2], mean)),
     mean(dist)[1:2],
     tolerance = 0.01
   )
-  expect_equal(lapply(rand_dist[1:2], var) |> unlist(),
+  expect_equal(unlist(lapply(rand_dist[1:2], var)),
     distributional::variance(dist)[1:2],
     tolerance = 0.01
   )
-  expect_equal(lapply(rand_dist, median) |> unlist(),
+  expect_equal(unlist(lapply(rand_dist, median)),
     median(dist),
     tolerance = 0.01
   )
