@@ -170,5 +170,5 @@ monotonic_increasing <- function(f, support) {
 
   # Currently assumes (without checking, #9) monotonicity of f over the domain
   x <- f(field(support, "lim")[[1]])
-  isTRUE(x[[2L]] > x[[1L]])
+  isTRUE(x[[2L]] >= x[[1L]])
 }

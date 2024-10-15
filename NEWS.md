@@ -1,5 +1,10 @@
 # distributional (development version)
 
+## Improvements
+
+* Transformed distributions now work better for monotonic increasing functions 
+  when the domain of the untransformed distribution is R (#129).
+
 ## Breaking changes
 
 * The `quantile()` method for `dist_multivariate_normal()` now defaults to 
