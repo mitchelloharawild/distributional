@@ -50,12 +50,16 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
 <div class="section level3">
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>Transformed distributions now work better for monotonic increasing functions when the domain of the untransformed distribution is R (<a href="https://github.com/mitchelloharawild/distributional/issues/129" class="external-link">#129</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
 <ul><li>The <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now defaults to equicoordinate quantiles. To obtain marginal quantiles, you should use <code>quantile(dist, p, type = "marginal")</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.5.0" id="distributional-050">distributional 0.5.0<a class="anchor" aria-label="anchor" href="#distributional-050"></a></h2>
+<h2 class="page-header" data-toc-text="0.5.0" id="distributional-050">distributional 0.5.0<small>2024-09-17</small><a class="anchor" aria-label="anchor" href="#distributional-050"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h3>
 <ul><li>
@@ -323,7 +327,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
