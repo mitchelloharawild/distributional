@@ -31,7 +31,10 @@ dist_missing <- function(length = 1) {
   vctrs::vec_rep(NA_dist_, length)
 }
 
-NA_dist_ <- structure(list(NULL), class = c("distribution", "vctrs_vctr", "list"))
+NA_dist_ <- structure(
+  structure(list(NULL), class = c("dist_na", "dist_default")),
+  class = c("distribution", "vctrs_vctr", "list")
+)
 
 #' @export
 format.dist_na <- function(x, ...) {
