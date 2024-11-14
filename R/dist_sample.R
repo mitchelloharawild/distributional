@@ -139,7 +139,7 @@ support.dist_sample <- function(x, ...) {
 #' @method Math dist_sample
 #' @export
 Math.dist_sample <- function(x, ...) {
-  x <- mapply(.Generic, parameters(x)$x, ..., SIMPLIFY = FALSE)
+  x <- .mapply(.Generic, list(parameters(x)$x, ...))
   names(x) <- "x"
   enclass_dist(x, "dist_sample")
 }
@@ -155,7 +155,7 @@ Ops.dist_sample <- function(e1, e2) {
     e2 <- parameters(e2)$x
   }
 
-  x <- mapply(.Generic, e1, e2, SIMPLIFY = FALSE)
+  x <- .mapply(.Generic, list(e1, e2))
   names(x) <- "x"
   enclass_dist(x, "dist_sample")
 }

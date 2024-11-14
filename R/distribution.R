@@ -552,7 +552,7 @@ vec_arith.distribution.default <- function(op, x, y, ...){
     y <- x[["y"]]
     if(is_distribution(y)) y <- vec_data(y)
     x <- x[["x"]]
-    out <- mapply(get(op), x = vec_data(x), y = y, SIMPLIFY = FALSE)
+    out <- .mapply(get(op), list(x = vec_data(x), y = y))
   }
   vec_restore(out, x)
 }
@@ -563,7 +563,7 @@ vec_arith.numeric.distribution <- function(op, x, y, ...){
   x <- vec_recycle_common(x = x, y = y)
   y <- x[["y"]]
   x <- x[["x"]]
-  out <- mapply(get(op), x = x, y = vec_data(y), SIMPLIFY = FALSE)
+  out <- .mapply(get(op), list(x = x, y = vec_data(y)))
   vec_restore(out, y)
 }
 
