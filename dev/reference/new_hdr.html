@@ -86,8 +86,7 @@ and upper bounds.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">new_hdr</span><span class="op">(</span>lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">95</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hdr[2]&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] [1, 10]80      [3, 5][6, 8]95</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .mapply(function(l, u) if (any(u &lt; l, na.rm = TRUE)) abort("`upper` can't be lower than `lower`."),     list(l = out[["lower"]], u = out[["upper"]])):</span> argument "MoreArgs" is missing, with no default</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
