@@ -5,6 +5,10 @@
 * Transformed distributions now work better for monotonic increasing functions 
   when the domain of the untransformed distribution is R (#129).
 
+## Bug fixes
+
+* Fixed `dist_gamma()` not allowing the `scale` parameter to be used (#132).
+
 ## Breaking changes
 
 * The `quantile()` method for `dist_multivariate_normal()` now defaults to 
