@@ -54,6 +54,10 @@
 <ul><li>Transformed distributions now work better for monotonic increasing functions when the domain of the untransformed distribution is R (<a href="https://github.com/mitchelloharawild/distributional/issues/129" class="external-link">#129</a>).</li>
 </ul></div>
 <div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Fixed <code><a href="../reference/dist_gamma.html">dist_gamma()</a></code> not allowing the <code>scale</code> parameter to be used (<a href="https://github.com/mitchelloharawild/distributional/issues/132" class="external-link">#132</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
 <ul><li>The <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now defaults to equicoordinate quantiles. To obtain marginal quantiles, you should use <code>quantile(dist, p, type = "marginal")</code>.</li>
 </ul></div>
