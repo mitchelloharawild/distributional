@@ -33,6 +33,7 @@ test_that("Normal distribution", {
   expect_equal(variance(dist*3+1), (sigma*3)^2)
   expect_equal(mean(dist + dist), mean(dist) + mean(dist))
   expect_equal(variance(dist + dist), variance(dist) + variance(dist))
+  expect_equal(dist_normal() * 2, dist_normal(0, 2))
 
   # density
   expect_equal(
