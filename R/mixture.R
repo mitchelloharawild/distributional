@@ -16,7 +16,8 @@ dist_mixture <- function(..., weights = numeric()){
   dn <- if(length(dn) == 1) dn[[1]] else NULL
 
   vec_is(weights, numeric(), length(dist))
-  if(!all.equal(sum(weights),1)){
+
+  if(!is.logical(all.equal(sum(weights), 1))){
     abort("Weights of a mixture model must sum to 1.")
   }
   if(any(weights < 0)){

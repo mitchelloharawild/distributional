@@ -123,3 +123,25 @@ test_that("Mixture of multivariate distributions", {
     tolerance = 0.001
   )
 })
+
+test_that("Mixture with bad weights",{
+
+  expect_error(
+    dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.6, 0.5))
+  )
+
+  expect_error(
+    dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.4, 0.5))
+  )
+
+  dist <- dist_mixture(dist_normal(0, 1),
+               dist_normal(10, 4),
+               dist_normal(5, 2),
+               weights = c(0.2177682569661155698,
+                           0.0491619687405063024,
+                           0.7330697742933780514))
+  expect_equal(
+    class(dist)[1],
+    "distribution")
+
+})
