@@ -17,7 +17,7 @@ dist_mixture <- function(..., weights = numeric()){
 
   vec_is(weights, numeric(), length(dist))
 
-  if(!abs(sum(weights)-1) <= sqrt(.Machine$double.eps)){
+  if(!abs(sum(weights)-1) < sqrt(.Machine$double.eps)){
     abort("Weights of a mixture model must sum to 1.")
   }
   if(any(weights < 0)){
