@@ -8,6 +8,8 @@
 ## Bug fixes
 
 * Fixed `dist_gamma()` not allowing the `scale` parameter to be used (#132).
+* Fixed floating point issue that caused to incorrectly `dist_mixture()` throw an error when weights did sum to 1 (@statasaurus
+ #134)
 
 ## Breaking changes
 
