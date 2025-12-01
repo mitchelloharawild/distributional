@@ -4,6 +4,8 @@
 
 * Transformed distributions now work better for monotonic increasing functions 
   when the domain of the untransformed distribution is R (#129).
+* Added cdf() and quantile() methods for dist_categorical() distributions with
+  ordered factors (#136).
 
 ## Bug fixes
 

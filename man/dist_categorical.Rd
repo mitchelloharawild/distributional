@@ -9,7 +9,7 @@ dist_categorical(prob, outcomes = NULL)
 \arguments{
 \item{prob}{A list of probabilities of observing each outcome category.}
 
-\item{outcomes}{The values used to represent each outcome.}
+\item{outcomes}{The list of vectors where each value represents each outcome.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -62,12 +62,18 @@ density(dist, 2)
 density(dist, 2, log = TRUE)
 
 # The outcomes aren't ordered, so many statistics are not applicable.
-cdf(dist, 4)
+cdf(dist, 0.6)
 quantile(dist, 0.7)
 mean(dist)
 variance(dist)
 skewness(dist)
 kurtosis(dist)
+
+# Some of these statistics are meaningful for ordered outcomes
+dist <- dist_categorical(list(rpois(26, 3)), list(ordered(letters)))
+dist
+cdf(dist, "m")
+quantile(dist, 0.5)
 
 dist <- dist_categorical(
   prob = list(c(0.05, 0.5, 0.15, 0.2, 0.1), c(0.3, 0.1, 0.6)),

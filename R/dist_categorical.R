@@ -10,7 +10,7 @@
 #' distribution with `n = 1`.
 #'
 #' @param prob A list of probabilities of observing each outcome category.
-#' @param outcomes The values used to represent each outcome.
+#' @param outcomes The list of vectors where each value represents each outcome.
 #' @details
 #'
 #'   We recommend reading this documentation on
@@ -54,12 +54,18 @@
 #' density(dist, 2, log = TRUE)
 #'
 #' # The outcomes aren't ordered, so many statistics are not applicable.
-#' cdf(dist, 4)
+#' cdf(dist, 0.6)
 #' quantile(dist, 0.7)
 #' mean(dist)
 #' variance(dist)
 #' skewness(dist)
 #' kurtosis(dist)
+#' 
+#' # Some of these statistics are meaningful for ordered outcomes
+#' dist <- dist_categorical(list(rpois(26, 3)), list(ordered(letters)))
+#' dist
+#' cdf(dist, "m")
+#' quantile(dist, 0.5)
 #'
 #' dist <- dist_categorical(
 #'   prob = list(c(0.05, 0.5, 0.15, 0.2, 0.1), c(0.3, 0.1, 0.6)),
@@ -93,17 +99,23 @@ format.dist_categorical <- function(x, digits = 2, ...){
 #' @export
 density.dist_categorical <- function(x, at, ...){
   if(!is.null(x[["x"]])) at <- match(at, x[["x"]])
-  at[at <= 0] <- NA
+  at[at <= 0] <- NA_real_
   x[["p"]][at]
 }
 
 #' @export
 quantile.dist_categorical <- function(x, p, ...){
+  if(is.ordered(x[["x"]])) {
+    return(x[["x"]][findInterval(p, cumsum(x[["p"]]))])
+  }
   rep_len(NA_real_, length(p))
 }
 
 #' @export
 cdf.dist_categorical <- function(x, q, ...){
+  if(is.ordered(x[["x"]])) {
+    return(cumsum(x[["p"]])[match(q, x[["x"]])])
+  }
   rep_len(NA_real_, length(q))
 }
 
