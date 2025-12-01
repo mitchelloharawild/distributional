@@ -16,7 +16,7 @@ dist_pareto(shape, scale)
 dist <- dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))
 dist
 
-\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mean(dist)
 variance(dist)
 support(dist)

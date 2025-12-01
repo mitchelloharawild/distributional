@@ -4,7 +4,7 @@
 \alias{dist_gamma}
 \title{The Gamma distribution}
 \usage{
-dist_gamma(shape, rate, scale = 1/rate)
+dist_gamma(shape, rate = 1/scale, scale = 1/rate)
 }
 \arguments{
 \item{shape, scale}{shape and scale parameters.  Must be positive,

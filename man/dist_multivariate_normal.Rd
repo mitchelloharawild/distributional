@@ -19,7 +19,7 @@ dist <- dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,
 dimnames(dist) <- c("x", "y")
 dist
 
-\dontshow{if (requireNamespace("mvtnorm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("mvtnorm", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mean(dist)
 variance(dist)
 support(dist)

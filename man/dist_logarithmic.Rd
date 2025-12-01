@@ -16,7 +16,7 @@ dist_logarithmic(prob)
 dist <- dist_logarithmic(prob = c(0.33, 0.66, 0.99))
 dist
 
-\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mean(dist)
 variance(dist)
 support(dist)

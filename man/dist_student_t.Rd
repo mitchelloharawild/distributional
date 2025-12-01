@@ -16,7 +16,7 @@ If \code{ncp == 0} (or \code{NULL}), this is the median.}
 \item{sigma}{The scale parameter of the distribution.}
 
 \item{ncp}{non-centrality parameter \eqn{\delta}{delta};
-    currently except for \code{rt()}, only for \code{abs(ncp) <= 37.62}.
+    currently except for \code{rt()}, accurate only for \code{abs(ncp) <= 37.62}.
     If omitted, use the central t distribution.}
 }
 \description{

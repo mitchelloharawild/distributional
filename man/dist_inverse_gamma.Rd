@@ -18,7 +18,7 @@ dist_inverse_gamma(shape, rate = 1/scale, scale)
 dist <- dist_inverse_gamma(shape = c(1,2,3,3), rate = c(1,1,1,2))
 dist
 
-\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mean(dist)
 variance(dist)
 support(dist)

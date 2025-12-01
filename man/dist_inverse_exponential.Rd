@@ -16,7 +16,7 @@ dist_inverse_exponential(rate)
 dist <- dist_inverse_exponential(rate = 1:5)
 dist
 
-\dontshow{if (requireNamespace("actuar", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("actuar", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mean(dist)
 variance(dist)
 support(dist)

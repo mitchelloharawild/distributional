@@ -59,7 +59,7 @@ of a closed-form expression.
 dist <- dist_gk(A = 0, B = 1, g = 0, k = 0.5)
 dist
 
-\dontshow{if (requireNamespace("gk", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("gk", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mean(dist)
 variance(dist)
 support(dist)
