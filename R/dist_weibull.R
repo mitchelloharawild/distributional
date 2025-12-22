@@ -121,7 +121,7 @@ skewness.dist_weibull <- function(x, ...) {
   mu <- mean(x)
   sigma <- sqrt(variance(x))
   r <- mu / sigma
-  gamma(1 + 3/x[["shape"]]) * (x[["scale"]]/sigma)^3 - 3*r - 3^r
+  gamma(1 + 3/x[["shape"]]) * (x[["scale"]]/sigma)^3 - 3*r - r^3
 }
 
 #' @export
