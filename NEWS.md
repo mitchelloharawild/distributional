@@ -1,5 +1,9 @@
 # distributional (development version)
 
+## New features
+
+* Added `has_symmetry()` generic to identify if a distribution is symmetric.
+
 ## Improvements
 
 * Transformed distributions now work better for monotonic increasing functions 

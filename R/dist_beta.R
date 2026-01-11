@@ -97,3 +97,10 @@ kurtosis.dist_beta <- function(x, ...) {
   denom <- a * b * (a + b + 2) * (a + b + 3)
   num / denom
 }
+
+#' @export
+has_symmetry.dist_beta <- function(x, ...) {
+  a <- x[["shape1"]]
+  b <- x[["shape2"]]
+  a == b
+}

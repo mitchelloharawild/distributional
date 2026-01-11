@@ -130,3 +130,6 @@ skewness.dist_cauchy <- function(x, ...){
 kurtosis.dist_cauchy <- function(x, ...){
   NA_real_
 }
+
+#' @export
+has_symmetry.dist_cauchy <- function(x, ...) TRUE

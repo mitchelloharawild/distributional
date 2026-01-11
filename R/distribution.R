@@ -629,5 +629,37 @@ vec_cast.character.distribution <- function(x, to, ...){
 #' is_distribution("distributional")
 #' @export
 is_distribution <- function(x) {
-    inherits(x, "distribution")
+  inherits(x, "distribution")
+}
+
+
+#' Check if a distribution is symmetric
+#'
+#' @description
+#' `r lifecycle::badge('experimental')`
+#'
+#' Determines whether a probability distribution is symmetric around its center.
+#'
+#' @param x The distribution(s).
+#' @param ... Additional arguments used by methods.
+#'
+#' @return A logical value indicating whether the distribution is symmetric.
+#'
+#' @examples
+#' # Normal distribution is symmetric
+#' has_symmetry(dist_normal(mu = 0, sigma = 1))
+#' has_symmetry(dist_normal(mu = 5, sigma = 2))
+#'
+#' # Beta distribution symmetry depends on parameters
+#' has_symmetry(dist_beta(shape1 = 2, shape2 = 2))  # symmetric
+#' has_symmetry(dist_beta(shape1 = 2, shape2 = 5))  # not symmetric
+#'
+#' @export
+has_symmetry <- function(x, ...) {
+  UseMethod("has_symmetry")
+}
+
+#' @export
+has_symmetry.distribution <- function(x, ...) {
+  dist_apply(x, has_symmetry, ...)
 }

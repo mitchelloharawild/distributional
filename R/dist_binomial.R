@@ -157,3 +157,6 @@ kurtosis.dist_binomial <- function(x, ...) {
   q <- 1 - p
   (1 - (6 * p * q)) / (n * p * q)
 }
+
+#' @export
+has_symmetry.dist_binomial <- function(x, ...) x[["p"]] == 0.5

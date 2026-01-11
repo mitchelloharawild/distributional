@@ -151,3 +151,6 @@ covariance.dist_student_t <- function(x, ...){
     ((df*(1+ncp^2))/(df-2) - (ncp * sqrt(df/2) * (gamma((df-1)/2)/gamma(df/2)))^2) * x[["sigma"]]^2
   }
 }
+
+#' @export
+has_symmetry.dist_student_t <- function(x, ...) TRUE

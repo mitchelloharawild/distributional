@@ -156,6 +156,9 @@ skewness.dist_normal <- function(x, ...) 0
 kurtosis.dist_normal <- function(x, ...) 0
 
 #' @export
+has_symmetry.dist_normal <- function(x, ...) TRUE
+
+#' @export
 Ops.dist_normal <- function(e1, e2){
   ok <- switch(.Generic, `+` = , `-` = , `*` = , `/` = TRUE, FALSE)
   if (!ok) {

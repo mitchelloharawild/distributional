@@ -95,6 +95,13 @@ support.dist_default <- function(x, ...) {
 }
 
 #' @export
+has_symmetry.dist_default <- function(x, ...){
+  # Crude test that works in *most* cases.
+  # Should be replaced with a more robust check.
+  isTRUE(skewness(x) == 0)
+}
+
+#' @export
 mean.dist_default <- function(x, ...){
   x_sup <- support(x)
   dist_type <- field(x_sup, "x")[[1]]

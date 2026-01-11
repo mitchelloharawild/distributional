@@ -146,3 +146,6 @@ skewness.dist_uniform <- function(x, ...) 0
 
 #' @export
 kurtosis.dist_uniform <- function(x, ...) -6/5
+
+#' @export
+has_symmetry.dist_uniform <- function(x, ...) TRUE

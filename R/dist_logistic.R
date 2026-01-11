@@ -128,3 +128,6 @@ skewness.dist_logistic <- function(x, ...) 0
 
 #' @export
 kurtosis.dist_logistic <- function(x, ...) 6 / 5
+
+#' @export
+has_symmetry.dist_logistic <- function(x, ...) TRUE
