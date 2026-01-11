@@ -4,6 +4,10 @@
 
 * Added `has_symmetry()` generic to identify if a distribution is symmetric.
 
+### Probability distributions
+
+* Added `dist_laplace()` for the Laplace distribution.
+
 ## Improvements
 
 * `hdr()` now produces exact results for symmetric distributions (#123).
@@ -16,8 +20,7 @@
 ## Bug fixes
 
 * Fixed `dist_gamma()` not allowing the `scale` parameter to be used (#132).
-* Fixed floating point issue that caused to incorrectly `dist_mixture()` throw an error when weights did sum to 1 (@statasaurus
- #134)
+* Fixed floating point issue that caused `dist_mixture()` to incorrectly throw an error when weights did sum to 1 (@statasaurus, #134)
 
 ## Breaking changes
 
