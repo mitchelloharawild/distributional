@@ -50,63 +50,31 @@
           <h2 id="methods">Methods <a href="#methods" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Methods for interacting with distributions.</p>
         </th>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="probability-functions">Probability functions <a href="#probability-functions" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Cumulative distribution, probability density, quantile, and random generation functions. These are equivalent to the p/d/q/r functions commonly used in R for probability distributions.</p>
+        </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="density.distribution.html">density(<i>&lt;distribution&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>The probability density/mass function</p></td>
-      </tr><tr><td>
           <p><code><a href="cdf.html">cdf()</a></code> </p>
         </td>
         <td><p>The cumulative distribution function</p></td>
       </tr><tr><td>
-          <p><code><a href="generate.distribution.html">generate(<i>&lt;distribution&gt;</i>)</a></code> </p>
+          <p><code><a href="density.distribution.html">density(<i>&lt;distribution&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Randomly sample values from a distribution</p></td>
+        <td><p>The probability density/mass function</p></td>
       </tr><tr><td>
           <p><code><a href="quantile.distribution.html">quantile(<i>&lt;distribution&gt;</i>)</a></code> </p>
         </td>
         <td><p>Distribution Quantiles</p></td>
       </tr><tr><td>
-          <p><code><a href="likelihood.html">likelihood()</a></code> <code><a href="likelihood.html">log_likelihood()</a></code> </p>
+          <p><code><a href="generate.distribution.html">generate(<i>&lt;distribution&gt;</i>)</a></code> </p>
         </td>
-        <td><p>The (log) likelihood of a sample matching a distribution</p></td>
-      </tr><tr><td>
-          <p><code><a href="hilo.distribution.html">hilo(<i>&lt;distribution&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Probability intervals of a probability distribution</p></td>
-      </tr><tr><td>
-          <p><code><a href="hilo.html">hilo()</a></code> </p>
-        </td>
-        <td><p>Compute intervals</p></td>
-      </tr><tr><td>
-          <p><code><a href="is_hilo.html">is_hilo()</a></code> </p>
-        </td>
-        <td><p>Is the object a hilo</p></td>
-      </tr><tr><td>
-          <p><code><a href="hdr.distribution.html">hdr(<i>&lt;distribution&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Highest density regions of probability distributions</p></td>
-      </tr><tr><td>
-          <p><code><a href="hdr.html">hdr()</a></code> </p>
-        </td>
-        <td><p>Compute highest density regions</p></td>
-      </tr><tr><td>
-          <p><code><a href="is_hdr.html">is_hdr()</a></code> </p>
-        </td>
-        <td><p>Is the object a hdr</p></td>
-      </tr><tr><td>
-          <p><code><a href="support.html">support()</a></code> </p>
-        </td>
-        <td><p>Region of support of a distribution</p></td>
-      </tr><tr><td>
-          <p><code><a href="family.distribution.html">family(<i>&lt;distribution&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Extract the name of the distribution family</p></td>
-      </tr><tr><td>
-          <p><code><a href="parameters.html">parameters()</a></code> </p>
-        </td>
-        <td><p>Extract the parameters of a distribution</p></td>
-      </tr><tr><td>
+        <td><p>Randomly sample values from a distribution</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="summary-statistics">Summary statistics <a href="#summary-statistics" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="mean.distribution.html">mean(<i>&lt;distribution&gt;</i>)</a></code> </p>
         </td>
         <td><p>Mean of a probability distribution</p></td>
@@ -139,9 +107,61 @@
         </td>
         <td><p>Kurtosis of a probability distribution</p></td>
       </tr><tr><td>
+          <p><code><a href="likelihood.html">likelihood()</a></code> <code><a href="likelihood.html">log_likelihood()</a></code> </p>
+        </td>
+        <td><p>The (log) likelihood of a sample matching a distribution</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="distribution-properties">Distribution properties <a href="#distribution-properties" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="family.distribution.html">family(<i>&lt;distribution&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Extract the name of the distribution family</p></td>
+      </tr><tr><td>
+          <p><code><a href="parameters.html">parameters()</a></code> </p>
+        </td>
+        <td><p>Extract the parameters of a distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="support.html">support()</a></code> </p>
+        </td>
+        <td><p>Region of support of a distribution</p></td>
+      </tr><tr><td>
           <p><code><a href="is-distribution.html">is_distribution()</a></code> </p>
         </td>
         <td><p>Test if the object is a distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="has_symmetry.html">has_symmetry()</a></code> </p>
+        </td>
+        <td><p>Check if a distribution is symmetric</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="intervals-and-regions">Intervals and regions <a href="#intervals-and-regions" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="hilo.distribution.html">hilo(<i>&lt;distribution&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Probability intervals of a probability distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="hilo.html">hilo()</a></code> </p>
+        </td>
+        <td><p>Compute intervals</p></td>
+      </tr><tr><td>
+          <p><code><a href="is_hilo.html">is_hilo()</a></code> </p>
+        </td>
+        <td><p>Is the object a hilo</p></td>
+      </tr><tr><td>
+          <p><code><a href="hdr.distribution.html">hdr(<i>&lt;distribution&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Highest density regions of probability distributions</p></td>
+      </tr><tr><td>
+          <p><code><a href="hdr.html">hdr()</a></code> </p>
+        </td>
+        <td><p>Compute highest density regions</p></td>
+      </tr><tr><td>
+          <p><code><a href="is_hdr.html">is_hdr()</a></code> </p>
+        </td>
+        <td><p>Is the object a hdr</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="continuous-distributions">Continuous distributions <a href="#continuous-distributions" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Continuous probability distributions.</p>
@@ -210,6 +230,10 @@
           <p><code><a href="dist_inverse_gaussian.html">dist_inverse_gaussian()</a></code> </p>
         </td>
         <td><p>The Inverse Gaussian distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="dist_laplace.html">dist_laplace()</a></code> </p>
+        </td>
+        <td><p>The Laplace distribution</p></td>
       </tr><tr><td>
           <p><code><a href="dist_logistic.html">dist_logistic()</a></code> </p>
         </td>
