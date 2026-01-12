@@ -14,21 +14,17 @@ reference:
 - title: Methods
   desc: >
     Methods for interacting with distributions.
+- subtitle: Probability functions
+  desc: >
+    Cumulative distribution, probability density, quantile, and random generation functions.
+    These are equivalent to the p/d/q/r functions commonly used in R for probability distributions.
   contents:
-    - density.distribution
     - cdf.distribution
-    - generate.distribution
+    - density.distribution
     - quantile.distribution
-    - likelihood.distribution
-    - hilo.distribution
-    - hilo
-    - is_hilo
-    - hdr.distribution
-    - hdr
-    - is_hdr
-    - support.distribution
-    - family.distribution
-    - parameters.distribution
+    - generate.distribution
+- subtitle: Summary statistics
+  contents:
     - mean.distribution
     - median.distribution
     - variance
@@ -37,7 +33,23 @@ reference:
     - covariance.distribution
     - skewness.distribution
     - kurtosis.distribution
+    - likelihood.distribution
+- subtitle: Distribution properties
+  contents:
+    - family.distribution
+    - parameters.distribution
+    - support.distribution
     - is_distribution
+    - has_symmetry
+- subtitle: Intervals and regions
+  contents:
+    - hilo.distribution
+    - hilo
+    - is_hilo
+    - hdr.distribution
+    - hdr
+    - is_hdr
+
 - title: Continuous distributions
   desc: >
     Continuous probability distributions.
