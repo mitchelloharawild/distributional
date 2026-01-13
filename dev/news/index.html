@@ -60,12 +60,14 @@
 </div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
-<ul><li>
+<ul><li>Extended documentation for many distributions to include detailed mathematical formulas for the statistics of each distribution.</li>
+<li>
 <code><a href="../reference/hdr.html">hdr()</a></code> now produces exact results for symmetric distributions (<a href="https://github.com/mitchelloharawild/distributional/issues/123" class="external-link">#123</a>).</li>
 <li>
 <code><a href="../reference/hdr.html">hdr()</a></code> uses more quantiles by default (512 -&gt; 4096) for more accurate HDRs (<a href="https://github.com/mitchelloharawild/distributional/issues/123" class="external-link">#123</a>).</li>
 <li>Transformed distributions now work better for monotonic increasing functions when the domain of the untransformed distribution is R (<a href="https://github.com/mitchelloharawild/distributional/issues/129" class="external-link">#129</a>).</li>
 <li>Added cdf() and quantile() methods for dist_categorical() distributions with ordered factors (<a href="https://github.com/mitchelloharawild/distributional/issues/136" class="external-link">#136</a>).</li>
+<li>Added support() method for <code><a href="../reference/dist_gpd.html">dist_gpd()</a></code> distributions.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
