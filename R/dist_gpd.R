@@ -122,3 +122,26 @@ covariance.dist_gpd <- function(x, ...) {
     Inf
   }
 }
+
+#' @export
+support.dist_gpd <- function(x, ...) {
+  shape <- x[["shape"]]
+  location <- x[["location"]]
+  scale <- x[["scale"]]
+  
+  # Determine limits based on shape parameter
+  if (shape >= 0) {
+    # Support: [location, Inf)
+    lims <- list(c(location, Inf))
+    closed <- list(c(TRUE, FALSE))
+  } else {
+    # Support: [location, location - scale/shape]
+    upper <- location - scale / shape
+    lims <- list(c(location, upper))
+    closed <- list(c(TRUE, TRUE))
+  }
+  
+  x_proto <- list(vctrs::vec_init(numeric(), n = 0L))
+  
+  new_support_region(x_proto, lims, closed)
+}

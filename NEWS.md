@@ -11,12 +11,15 @@
 
 ## Improvements
 
+* Extended documentation for many distributions to include detailed 
+  mathematical formulas for the statistics of each distribution.
 * `hdr()` now produces exact results for symmetric distributions (#123).
 * `hdr()` uses more quantiles by default (512 -> 4096) for more accurate HDRs (#123).
 * Transformed distributions now work better for monotonic increasing functions 
   when the domain of the untransformed distribution is R (#129).
 * Added cdf() and quantile() methods for dist_categorical() distributions with
   ordered factors (#136).
+* Added support() method for `dist_gpd()` distributions.
 
 ## Bug fixes
 
