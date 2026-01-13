@@ -128,7 +128,7 @@ cdf.dist_laplace <- function(x, q, ...) {
 generate.dist_laplace <- function(x, times, ...) {
   mu <- x[["mu"]]
   sigma <- x[["sigma"]]
-  u <- runif(times) - 0.5
+  u <- stats::runif(times) - 0.5
   mu - sigma * sign(u) * log(1 - 2 * abs(u))
 }
 
