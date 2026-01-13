@@ -7,6 +7,7 @@
 ### Probability distributions
 
 * Added `dist_laplace()` for the Laplace distribution.
+* Added `dist_multivariate_t()` for the multivariate t-distribution.
 
 ## Improvements
 

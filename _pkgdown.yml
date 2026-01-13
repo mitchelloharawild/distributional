@@ -74,6 +74,7 @@ reference:
     - dist_logistic
     - dist_lognormal
     - dist_multivariate_normal
+    - dist_multivariate_t
     - dist_normal
     - dist_pareto
     - dist_student_t

@@ -35,6 +35,8 @@ Description: Vectorised distribution objects with tools for manipulating,
     p/d/q/r functions, other useful statistics can be computed including means,
     variances, intervals, and highest density regions.
 License: GPL-3
+Depends:
+    R (>= 4.0.0)
 Imports: 
     vctrs (>= 0.3.0),
     rlang (>= 0.4.5),
