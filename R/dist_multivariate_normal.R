@@ -78,8 +78,8 @@
 #'
 #' cdf(dist, 4)
 #'
-#' quantile(dist, 0.7)
-#' quantile(dist, 0.7, type = "marginal")
+#' quantile(dist, 0.7, kind = "equicoordinate")
+#' quantile(dist, 0.7, kind = "marginal")
 #'
 #' @export
 dist_multivariate_normal <- function(mu = 0, sigma = diag(1)){
@@ -110,10 +110,10 @@ log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
 }
 
 #' @export
-quantile.dist_mvnorm <- function(x, p, type = c("marginal", "equicoordinate"),
+quantile.dist_mvnorm <- function(x, p, kind = c("marginal", "equicoordinate"),
                                  ..., na.rm = FALSE){
-  type <- match.arg(type)
-  q <- if (type == "marginal") {
+  kind <- match.arg(kind)
+  q <- if (kind == "marginal") {
     stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
                  sd = rep(sqrt(diag(x[["sigma"]])), each = length(p)), ...)
   } else {

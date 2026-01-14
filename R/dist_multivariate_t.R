@@ -151,10 +151,10 @@ log_density.dist_mvt <- function(x, at, ..., na.rm = FALSE) {
 }
 
 #' @export
-quantile.dist_mvt <- function(x, p, type = c("equicoordinate", "marginal"),
+quantile.dist_mvt <- function(x, p, kind = c("equicoordinate", "marginal"),
                                ..., na.rm = FALSE) {
-  type <- match.arg(type)
-  q <- if (type == "marginal") {
+  kind <- match.arg(kind)
+  q <- if (kind == "marginal") {
     scale <- sqrt(diag(x[["sigma"]]))
     stats::qt(p, df = rep(x[["df"]], each = length(p))) * 
       rep(scale, each = length(p)) + 
