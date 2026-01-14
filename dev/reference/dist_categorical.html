@@ -3,7 +3,7 @@
 Categorical distributions are used to represent events with multiple
 outcomes, such as what number appears on the roll of a dice. This is also
 referred to as the 'generalised Bernoulli' or 'multinoulli' distribution.
-The Cateogorical distribution is a special case of the Multinomial()
+The Categorical distribution is a special case of the Multinomial()
 distribution with n = 1."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -58,7 +58,7 @@ distribution with n = 1."><meta name="robots" content="noindex"><!-- mathjax -->
 <p>Categorical distributions are used to represent events with multiple
 outcomes, such as what number appears on the roll of a dice. This is also
 referred to as the 'generalised Bernoulli' or 'multinoulli' distribution.
-The Cateogorical distribution is a special case of the <code><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">Multinomial()</a></code>
+The Categorical distribution is a special case of the <code><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">Multinomial()</a></code>
 distribution with <code>n = 1</code>.</p>
     </div>
 
@@ -80,24 +80,45 @@ distribution with <code>n = 1</code>.</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_categorical.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_categorical.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_categorical.html</a></p>
 <p>In the following, let \(X\) be a Categorical random variable with
-probability parameters <code>p</code> = \(\{p_1, p_2, \ldots, p_k\}\).</p>
+probability parameters <code>prob</code> = \(\{p_1, p_2, \ldots, p_k\}\).</p>
 <p>The Categorical probability distribution is widely used to model the
 occurance of multiple events. A simple example is the roll of a dice, where
 \(p = \{1/6, 1/6, 1/6, 1/6, 1/6, 1/6\}\) giving equal chance of observing
 each number on a 6 sided dice.</p>
 <p><strong>Support</strong>: \(\{1, \ldots, k\}\)</p>
-<p><strong>Mean</strong>: \(p\)</p>
-<p><strong>Variance</strong>: \(p \cdot (1 - p) = p \cdot q\)</p>
+<p><strong>Mean</strong>: Not defined for unordered categories. For ordered categories with
+integer outcomes \(\{1, 2, \ldots, k\}\), the mean is:</p>
+<p>$$
+    E(X) = \sum_{i=1}^{k} i \cdot p_i
+  $$</p>
+<p><strong>Variance</strong>: Not defined for unordered categories. For ordered categories
+with integer outcomes \(\{1, 2, \ldots, k\}\), the variance is:</p>
+<p>$$
+    \text{Var}(X) = \sum_{i=1}^{k} i^2 \cdot p_i - \left(\sum_{i=1}^{k} i \cdot p_i\right)^2
+  $$</p>
 <p><strong>Probability mass function (p.m.f)</strong>:</p>
 <p>$$
     P(X = i) = p_i
   $$</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
-<p>The cdf() of a categorical distribution is undefined as the outcome categories aren't ordered.</p>
+<p>The c.d.f is undefined for unordered categories. For ordered categories
+with outcomes \(x_1 &lt; x_2 &lt; \ldots &lt; x_k\), the c.d.f is:</p>
+<p>$$
+    P(X \le x_j) = \sum_{i=1}^{j} p_i
+  $$</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = \sum_{i=1}^{k} e^{tx_i} \cdot p_i
+  $$</p>
+<p><strong>Skewness</strong>: Approximated numerically for ordered categories.</p>
+<p><strong>Kurtosis</strong>: Approximated numerically for ordered categories.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>stats::Multinomial</p></div>
     </div>
 
     <div id="ref-examples">

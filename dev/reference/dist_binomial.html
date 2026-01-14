@@ -93,9 +93,8 @@ value in <code>[0, 1]</code>.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_binomial.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_binomial.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_binomial.html</a></p>
 <p>The Binomial distribution comes up when you are interested in the portion
 of people who do a thing. The Binomial distribution
 also comes up in the sign test, sometimes called the Binomial test
@@ -119,6 +118,18 @@ or called \(\pi\) instead of \(p\).</p>
 <p>$$
     E(e^{tX}) = (1 - p + p e^t)^n
   $$</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \frac{1 - 2p}{\sqrt{np(1-p)}}
+  $$</p>
+<p><strong>Excess kurtosis</strong>:</p>
+<p>$$
+    \frac{1 - 6p(1-p)}{np(1-p)}
+  $$</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">stats::Binomial</a></p></div>
     </div>
 
     <div id="ref-examples">

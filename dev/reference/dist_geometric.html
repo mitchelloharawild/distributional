@@ -76,26 +76,33 @@ distribution is a special case of Negative Binomial distribution.</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_geometric.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_geometric.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_geometric.html</a></p>
 <p>In the following, let \(X\) be a Geometric random variable with
-success probability <code>p</code> = \(p\). Note that there are multiple
+success probability <code>prob</code> = \(p\). Note that there are multiple
 parameterizations of the Geometric distribution.</p>
-<p><strong>Support</strong>: 0 &lt; p &lt; 1, \(x = 0, 1, \dots\)</p>
+<p><strong>Support</strong>: \(\{0, 1, 2, 3, ...\}\)</p>
 <p><strong>Mean</strong>: \(\frac{1-p}{p}\)</p>
 <p><strong>Variance</strong>: \(\frac{1-p}{p^2}\)</p>
 <p><strong>Probability mass function (p.m.f)</strong>:</p>
 <p>$$
-    P(X = x) = p(1-p)^x,
-   $$</p>
+    P(X = k) = p(1-p)^k
+  $$</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
 <p>$$
-    P(X \le x) = 1 - (1-p)^{x+1}
+    P(X \le k) = 1 - (1-p)^{k+1}
   $$</p>
 <p><strong>Moment generating function (m.g.f)</strong>:</p>
 <p>$$
     E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
+  $$</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \frac{2 - p}{\sqrt{1 - p}}
+  $$</p>
+<p><strong>Excess Kurtosis</strong>:</p>
+<p>$$
+    6 + \frac{p^2}{1 - p}
   $$</p>
     </div>
     <div id="see-also">

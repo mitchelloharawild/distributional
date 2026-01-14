@@ -89,6 +89,12 @@ the calling environment's search path is used to find the distribution
 functions. Alternatively, an arbitrary environment can also be provided here.</p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The <code>dist_wrap()</code> function provides a generic interface to create distribution
+objects from any set of p/d/q/r style functions. The statistical properties
+depend on the specific distribution being wrapped.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -102,16 +108,16 @@ functions. Alternatively, an arbitrary environment can also be provided here.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  6.879892 19.639676  6.919928</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># rnorm()</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2.3766064 -3.5659096 -0.3268495 -4.3198306  2.6168558  3.1669739</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  2.7488731  2.6120601  1.8567092 -3.4461724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.04031571  2.21273044  1.88709435  1.38154203  1.48255602  2.68471415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.22733842  4.67140595  2.73203794 -4.57542060</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  24.1725690   3.1861372  -0.2752582  10.9194594 -10.0428080  12.2225859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]   2.5075583   2.3429460  -1.8721169  -2.9840424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -4.5507240 -0.3860259  8.4099989  2.8877848  3.3906777 -5.7413831</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 15.5056304 -0.2615464  1.7102251  0.6360116</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.4177056  1.8905859  4.5593463  3.8416753  1.8329399  4.7260604</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.9002432  0.2466074  3.9574080  2.7724005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6.0032349  4.2228545  3.3303173 -0.8040526 -0.5045239 -1.9516686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  2.5836857  3.9533931  3.5787646  3.5629141</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gitlab.com/vigou3/actuar" class="external-link">actuar</a></span><span class="op">)</span></span></span>
@@ -132,8 +138,8 @@ functions. Alternatively, an arbitrary environment can also be provided here.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.429922</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># actuar::rinvparalogis()</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.52331814 3.16018547 0.51435528 0.79184045 0.61768860 3.00652264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.79587997 0.32590212 0.09984114 0.88841976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.2723132 0.9162852 0.9274380 0.1671189 2.2747885 0.8201524 0.7197810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.5851103 0.9608384 0.6067325</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

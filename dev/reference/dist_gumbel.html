@@ -76,28 +76,63 @@ It may be referred to as a type I extreme value distribution.</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_gumbel.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_gumbel.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_gumbel.html</a></p>
 <p>In the following, let \(X\) be a Gumbel random variable with location
-parameter  <code>mu</code> = \(\mu\), scale parameter <code>sigma</code> = \(\sigma\).</p>
+parameter  <code>alpha</code> = \(\alpha\) and scale parameter <code>scale</code> = \(\sigma\).</p>
 <p><strong>Support</strong>: \(R\), the set of all real numbers.</p>
-<p><strong>Mean</strong>: \(\mu + \sigma\gamma\), where \(\gamma\) is Euler's
-constant, approximately equal to 0.57722.</p>
-<p><strong>Median</strong>: \(\mu - \sigma\ln(\ln 2)\).</p>
-<p><strong>Variance</strong>: \(\sigma^2 \pi^2 / 6\).</p>
+<p><strong>Mean</strong>:</p>
+<p>$$
+    E(X) = \alpha + \sigma\gamma
+  $$</p>
+<p>where \(\gamma\) is the Euler-Mascheroni constant,
+approximately equal to 0.5772157.</p>
+<p><strong>Variance</strong>:</p>
+<p>$$
+    \textrm{Var}(X) = \frac{\pi^2 \sigma^2}{6}
+  $$</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \textrm{Skew}(X) = \frac{12\sqrt{6}\zeta(3)}{\pi^3} \approx 1.1395
+  $$</p>
+<p>where \(\zeta(3)\) is Apery's constant,
+approximately equal to 1.2020569. Note that skewness is independent
+of the distribution parameters.</p>
+<p><strong>Kurtosis (excess)</strong>:</p>
+<p>$$
+    \textrm{Kurt}(X) = \frac{12}{5} = 2.4
+  $$</p>
+<p>Note that excess kurtosis is independent of the distribution parameters.</p>
+<p><strong>Median</strong>:</p>
+<p>$$
+    \textrm{Median}(X) = \alpha - \sigma\ln(\ln 2)
+  $$</p>
 <p><strong>Probability density function (p.d.f)</strong>:</p>
-<p>$$f(x) = \sigma ^ {-1} \exp[-(x - \mu) / \sigma]%
-        \exp\{-\exp[-(x - \mu) / \sigma] \}$$
-for \(x\) in \(R\), the set of all real numbers.</p>
+<p>$$
+    f(x) = \frac{1}{\sigma} \exp\left[-\frac{x - \alpha}{\sigma}\right]
+           \exp\left\{-\exp\left[-\frac{x - \alpha}{\sigma}\right]\right\}
+  $$</p>
+<p>for \(x\) in \(R\), the set of all real numbers.</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
-<p>In the \(\xi = 0\) (Gumbel) special case
-$$F(x) = \exp\{-\exp[-(x - \mu) / \sigma] \}$$
-for \(x\) in \(R\), the set of all real numbers.</p>
+<p>$$
+    F(x) = \exp\left\{-\exp\left[-\frac{x - \alpha}{\sigma}\right]\right\}
+  $$</p>
+<p>for \(x\) in \(R\), the set of all real numbers.</p>
+<p><strong>Quantile function (inverse c.d.f)</strong>:</p>
+<p>$$
+    F^{-1}(p) = \alpha - \sigma \ln(-\ln p)
+  $$</p>
+<p>for \(p\) in (0, 1).</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = \Gamma(1 - \sigma t) e^{\alpha t}
+  $$</p>
+<p>for \(\sigma t &lt; 1\), where \(\Gamma\) is the gamma function.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::Gumbel</a></p></div>
+    <div class="dont-index"><p><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::Gumbel</a>, <code><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::dgumbel()</a></code>, <code><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::pgumbel()</a></code>,
+<code><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::qgumbel()</a></code>, <code><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::rgumbel()</a></code>, <code><a href="https://rdrr.io/pkg/actuar/man/Gumbel.html" class="external-link">actuar::mgumbel()</a></code></p></div>
     </div>
 
     <div id="ref-examples">
@@ -120,20 +155,20 @@ for \(x\) in \(R\), the set of all real numbers.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] R R R R</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2.43301238  1.25527203  0.14122908  2.86081746 -0.46040931  2.80515404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.28782154 -0.04898373 -0.17817910  2.03511618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.41889426 -0.33196998  0.30320168 -0.02307647  6.80543721  2.54901883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.12571773  3.96614323  1.21625715  1.43533491</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.43028240  3.68099364 -0.50901250  0.09043377  1.41662259  9.40864060</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  3.32040311  2.09532911  2.74602530 -0.49615066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3.4955069 -0.5627131  2.5642517  3.1329347  1.8938184  3.1516692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  3.4493220  1.4966659  1.8503559  3.8646221</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 12.8664060 -0.5700085  2.8945412  5.0372538  1.1973296  6.4322466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  3.8596798  7.0047243  2.4083106 -0.8774248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2.6477044  0.9863052 -0.7162495  2.3457499  0.4453724  4.3364459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.1407257  3.9195029  2.5251400  8.4871423</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 12.86590884 -0.02023614  9.56917971 -1.35188636 11.89418140 19.58967017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  2.83778852  1.33606003  2.60640336  1.95384705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.6612332  4.5940818  3.4847620  2.2096418  1.0569414 12.0380034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  7.7679624  3.8375724  0.9458804  7.5231271</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

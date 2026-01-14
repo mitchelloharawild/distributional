@@ -79,13 +79,22 @@ honestly significant differences test in ANOVA.</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_studentized_range.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_studentized_range.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_studentized_range.html</a></p>
+<p>In the following, let \(Q\) be a Studentized Range random variable with
+parameters <code>nmeans</code> = \(k\) (number of groups), <code>df</code> = \(\nu\) (degrees
+of freedom), and <code>nranges</code> = \(n\) (number of ranges).</p>
 <p><strong>Support</strong>: \(R^+\), the set of positive real numbers.</p>
-<p>Other properties of Tukey's Studentized Range Distribution
-are omitted, largely because the distribution is not fun
-to work with.</p>
+<p><strong>Mean</strong>: Approximated numerically.</p>
+<p><strong>Variance</strong>: Approximated numerically.</p>
+<p><strong>Probability density function (p.d.f)</strong>: The density does not have a
+closed-form expression and is computed numerically.</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>: The c.d.f does not have a
+simple closed-form expression. For \(n = 1\) (single range), it involves
+integration over the joint distribution of the sample range and an
+independent chi-square variable. The general form is computed numerically
+using algorithms described in the references for <code><a href="https://rdrr.io/r/stats/Tukey.html" class="external-link">stats::ptukey()</a></code>.</p>
+<p><strong>Moment generating function (m.g.f)</strong>: Does not exist in closed form.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>

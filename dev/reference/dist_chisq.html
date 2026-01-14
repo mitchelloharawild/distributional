@@ -67,41 +67,67 @@ in maximum likelihood estimation settings.</p>
 
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
-<dd><p>degrees of freedom (non-negative, but can be non-integer).</p></dd>
+<dd><p>Degrees of freedom (non-centrality parameter). Can be any
+positive real number.</p></dd>
 
 
 <dt id="arg-ncp">ncp<a class="anchor" aria-label="anchor" href="#arg-ncp"></a></dt>
-<dd><p>non-centrality parameter (non-negative).</p></dd>
+<dd><p>Non-centrality parameter. Can be any non-negative real number.
+Defaults to 0 (central chi-squared distribution).</p></dd>
 
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_chisq.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_chisq.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_chisq.html</a></p>
 <p>In the following, let \(X\) be a \(\chi^2\) random variable with
-<code>df</code> = \(k\).</p>
+<code>df</code> = \(k\) and <code>ncp</code> = \(\lambda\).</p>
 <p><strong>Support</strong>: \(R^+\), the set of positive real numbers</p>
-<p><strong>Mean</strong>: \(k\)</p>
-<p><strong>Variance</strong>: \(2k\)</p>
+<p><strong>Mean</strong>: \(k + \lambda\)</p>
+<p><strong>Variance</strong>: \(2(k + 2\lambda)\)</p>
 <p><strong>Probability density function (p.d.f)</strong>:</p>
+<p>For the central chi-squared distribution (\(\lambda = 0\)):</p>
 <p>$$
-    f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2}
+    f(x) = \frac{1}{2^{k/2} \Gamma(k/2)} x^{k/2 - 1} e^{-x/2}
   $$</p>
+<p>For the non-central chi-squared distribution (\(\lambda &gt; 0\)):</p>
+<p>$$
+    f(x) = \frac{1}{2} e^{-(x+\lambda)/2} \left(\frac{x}{\lambda}\right)^{k/4-1/2} I_{k/2-1}\left(\sqrt{\lambda x}\right)
+  $$</p>
+<p>where \(I_\nu(z)\) is the modified Bessel function of the first kind.</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
-<p>The cumulative distribution function has the form</p>
+<p>For the central chi-squared distribution (\(\lambda = 0\)):</p>
 <p>$$
-    F(t) = \int_{-\infty}^t \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2} dx
+    F(x) = \frac{\gamma(k/2, x/2)}{\Gamma(k/2)} = P(k/2, x/2)
   $$</p>
-<p>but this integral does not have a closed form solution and must be
-approximated numerically. The c.d.f. of a standard normal is sometimes
-called the "error function". The notation \(\Phi(t)\) also stands
-for the c.d.f. of a standard normal evaluated at \(t\). Z-tables
-list the value of \(\Phi(t)\) for various \(t\).</p>
+<p>where \(\gamma(s, x)\) is the lower incomplete gamma function and
+\(P(s, x)\) is the regularized gamma function.</p>
+<p>For the non-central chi-squared distribution (\(\lambda &gt; 0\)):</p>
+<p>$$
+    F(x) = \sum_{j=0}^{\infty} \frac{e^{-\lambda/2} (\lambda/2)^j}{j!} P(k/2 + j, x/2)
+  $$</p>
+<p>This is approximated numerically.</p>
 <p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>For the central chi-squared distribution (\(\lambda = 0\)):</p>
 <p>$$
-    E(e^{tX}) = e^{\mu t + \sigma^2 t^2 / 2}
+    E(e^{tX}) = (1 - 2t)^{-k/2}, \quad t &lt; 1/2
   $$</p>
+<p>For the non-central chi-squared distribution (\(\lambda &gt; 0\)):</p>
+<p>$$
+    E(e^{tX}) = \frac{e^{\lambda t / (1 - 2t)}}{(1 - 2t)^{k/2}}, \quad t &lt; 1/2
+  $$</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \gamma_1 = \frac{2^{3/2}(k + 3\lambda)}{(k + 2\lambda)^{3/2}}
+  $$</p>
+<p>For the central case (\(\lambda = 0\)), this simplifies to
+\(\sqrt{8/k}\).</p>
+<p><strong>Excess Kurtosis</strong>:</p>
+<p>$$
+    \gamma_2 = \frac{12(k + 4\lambda)}{(k + 2\lambda)^2}
+  $$</p>
+<p>For the central case (\(\lambda = 0\)), this simplifies to
+\(12/k\).</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>

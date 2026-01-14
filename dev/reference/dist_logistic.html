@@ -72,9 +72,8 @@ the model given by \(P(Y = 1 | X) = F(X \beta)\) where
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_logistic.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_logistic.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_logistic.html</a></p>
 <p>In the following, let \(X\) be a Logistic random variable with
 <code>location</code> = \(\mu\) and <code>scale</code> = \(s\).</p>
 <p><strong>Support</strong>: \(R\), the set of all real numbers</p>
@@ -82,17 +81,17 @@ will render nicely.</p>
 <p><strong>Variance</strong>: \(s^2 \pi^2 / 3\)</p>
 <p><strong>Probability density function (p.d.f)</strong>:</p>
 <p>$$
-    f(x) = \frac{e^{-(\frac{x - \mu}{s})}}{s [1 + \exp(-(\frac{x - \mu}{s})) ]^2}
+    f(x) = \frac{e^{-\frac{x - \mu}{s}}}{s \left[1 + e^{-\frac{x - \mu}{s}}\right]^2}
   $$</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
 <p>$$
-    F(t) = \frac{1}{1 + e^{-(\frac{t - \mu}{s})}}
+    F(x) = \frac{1}{1 + e^{-\frac{x - \mu}{s}}}
   $$</p>
 <p><strong>Moment generating function (m.g.f)</strong>:</p>
 <p>$$
-    E(e^{tX}) = e^{\mu t} \beta(1 - st, 1 + st)
+    E(e^{tX}) = e^{\mu t} B(1 - st, 1 + st)
   $$</p>
-<p>where \(\beta(x, y)\) is the Beta function.</p>
+<p>for \(-1 &lt; st &lt; 1\), where \(B(a, b)\) is the Beta function.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -117,24 +116,24 @@ will render nicely.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3.9198135  5.9095136  4.3096764  2.3788653  7.0171758  4.6759724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.5958953  7.4184125  0.5330548 -2.2592846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  8.2223978 -4.4679426  5.8098434  4.7912034  4.1133553  3.4858621</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.4602222  4.1015136  7.6100285  6.8622069</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  7.1846305  6.8318444  9.4969201  9.9118064  5.5559692  1.1791204</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 16.8942920  0.8879751  7.5442209  6.3250813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.690350  8.013465  1.288287 10.127270 11.033204  9.529907 12.832450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.317185  2.028726 17.382650</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.5421503  7.9451784 14.8372588  3.7567963 13.3736460 15.1457423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 17.3898227 -7.1910529 20.7830915  2.4948760</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 18.084640 12.677283 11.311742  8.619429 -5.320800  8.044197  6.840444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.704457 15.753774 12.415708</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  5.4152949  6.1095161  1.2191988  7.4700863 10.2742579  5.7024351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.9309029  6.1953637  4.8157117  1.8288897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 7.201262 4.122606 8.157090 9.128393 7.735058 3.694441 5.768837 1.629513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 8.017381 8.397474</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -2.0807049  1.7171365  2.5416021  2.2533944 -0.7934841  7.5080787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.6861697  2.2468881  3.5158053  1.7994089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 5.0972523 1.3240557 1.0431446 1.5912701 0.8472879 1.4071233 1.2101524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 4.0637497 0.6964656 1.2828856</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

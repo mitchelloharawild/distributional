@@ -86,23 +86,32 @@ variable \(X\).</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_hypergeometric.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_hypergeometric.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_hypergeometric.html</a></p>
 <p>In the following, let \(X\) be a HyperGeometric random variable with
 success probability <code>p</code> = \(p = m/(m+n)\).</p>
-<p><strong>Support</strong>: \(x \in { \{\max{(0, k-n)}, \dots, \min{(k,m)}}\}\)</p>
-<p><strong>Mean</strong>: \(\frac{km}{n+m} = kp\)</p>
-<p><strong>Variance</strong>: \(\frac{km(n)(n+m-k)}{(n+m)^2 (n+m-1)} =
-  kp(1-p)(1 - \frac{k-1}{m+n-1})\)</p>
+<p><strong>Support</strong>: \(x \in \{\max(0, k-n), \dots, \min(k,m)\}\)</p>
+<p><strong>Mean</strong>: \(\frac{km}{m+n} = kp\)</p>
+<p><strong>Variance</strong>: \(\frac{kmn(m+n-k)}{(m+n)^2 (m+n-1)} =
+  kp(1-p)\left(1 - \frac{k-1}{m+n-1}\right)\)</p>
 <p><strong>Probability mass function (p.m.f)</strong>:</p>
 <p>$$
     P(X = x) = \frac{{m \choose x}{n \choose k-x}}{{m+n \choose k}}
   $$</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
 <p>$$
-    P(X \le k) \approx \Phi\Big(\frac{x - kp}{\sqrt{kp(1-p)}}\Big)
- $$</p>
+    P(X \le x) = \sum_{i = \max(0, k-n)}^{\lfloor x \rfloor}
+    \frac{{m \choose i}{n \choose k-i}}{{m+n \choose k}}
+  $$</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = \frac{{m \choose k}}{{m+n \choose k}}{}_2F_1(-m, -k; m+n-k+1; e^t)
+  $$</p>
+<p>where \(_2F_1\) is the hypergeometric function.</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \frac{(m+n-2k)(m+n-1)^{1/2}(m+n-2n)}{[kmn(m+n-k)]^{1/2}(m+n-2)}
+  $$</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -132,13 +141,13 @@ success probability <code>p</code> = \(p = m/(m+n)\).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 95 90 92 90 91 92 97 91 89 90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 89 91 90 93 89 89 93 93 93 89</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 178 179 177 177 179 175 179 182 176 172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 179 175 178 180 178 172 175 180 185 180</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 267 262 261 263 271 263 264 260 266 265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 262 271 260 267 265 260 260 264 261 259</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

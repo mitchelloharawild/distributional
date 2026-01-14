@@ -70,23 +70,49 @@ time-to-event analyses.</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_weibull.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_weibull.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_weibull.html</a></p>
 <p>In the following, let \(X\) be a Weibull random variable with
-success probability <code>p</code> = \(p\).</p>
-<p><strong>Support</strong>: \(R^+\) and zero.</p>
-<p><strong>Mean</strong>: \(\lambda \Gamma(1+1/k)\), where \(\Gamma\) is
-the gamma function.</p>
-<p><strong>Variance</strong>: \(\lambda [ \Gamma (1 + \frac{2}{k} ) - (\Gamma(1+ \frac{1}{k}))^2 ]\)</p>
+shape parameter <code>shape</code> = \(k\) and scale parameter <code>scale</code> = \(\lambda\).</p>
+<p><strong>Support</strong>: \([0, \infty)\)</p>
+<p><strong>Mean</strong>:</p>
+<p>$$
+    E(X) = \lambda \Gamma\left(1 + \frac{1}{k}\right)
+  $$</p>
+<p>where \(\Gamma\) is the gamma function.</p>
+<p><strong>Variance</strong>:</p>
+<p>$$
+    \text{Var}(X) = \lambda^2 \left[\Gamma\left(1 + \frac{2}{k}\right) - \left(\Gamma\left(1 + \frac{1}{k}\right)\right)^2\right]
+  $$</p>
 <p><strong>Probability density function (p.d.f)</strong>:</p>
 <p>$$
-    f(x) = \frac{k}{\lambda}(\frac{x}{\lambda})^{k-1}e^{-(x/\lambda)^k}, x \ge 0
+    f(x) = \frac{k}{\lambda}\left(\frac{x}{\lambda}\right)^{k-1}e^{-(x/\lambda)^k}, \quad x \ge 0
   $$</p>
 <p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
-<p>$$F(x) = 1 - e^{-(x/\lambda)^k}, x \ge 0$$</p>
+<p>$$
+    F(x) = 1 - e^{-(x/\lambda)^k}, \quad x \ge 0
+  $$</p>
 <p><strong>Moment generating function (m.g.f)</strong>:</p>
-<p>$$\sum_{n=0}^\infty \frac{t^n\lambda^n}{n!} \Gamma(1+n/k), k \ge 1$$</p>
+<p>$$
+    E(e^{tX}) = \sum_{n=0}^\infty \frac{t^n\lambda^n}{n!} \Gamma\left(1+\frac{n}{k}\right)
+  $$</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \gamma_1 = \frac{\mu^3 - 3\mu\sigma^2 - \mu^3}{\sigma^3}
+  $$</p>
+<p>where \(\mu = E(X)\), \(\sigma^2 = \text{Var}(X)\), and the third
+raw moment is</p>
+<p>$$
+    \mu^3 = \lambda^3 \Gamma\left(1 + \frac{3}{k}\right)
+  $$</p>
+<p><strong>Excess Kurtosis</strong>:</p>
+<p>$$
+    \gamma_2 = \frac{\mu^4 - 4\gamma_1\mu\sigma^3 - 6\mu^2\sigma^2 - \mu^4}{\sigma^4} - 3
+  $$</p>
+<p>where the fourth raw moment is</p>
+<p>$$
+    \mu^4 = \lambda^4 \Gamma\left(1 + \frac{4}{k}\right)
+  $$</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -111,20 +137,20 @@ the gamma function.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.751148688 2.058494147 0.076607196 5.991060997 8.230360442 1.384622234</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.151628729 0.006103309 1.761819366 1.414293833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.12985326 2.79840475 0.82237508 2.28172454 0.08071613 0.15435895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.04662277 2.03797278 0.52734513 3.11475146</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.08853199 0.69471841 1.32325063 0.03799496 5.81675909 0.16390942</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.84713002 1.27039842 1.99171437 2.89010171</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.21724873 1.94406276 2.09893558 1.67297842 0.47080664 0.29018893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.18420845 3.94555377 0.57654543 0.04616827</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.32666814 1.10619679 1.23307471 1.30339543 0.04956993 0.43969720</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.55350892 0.41009800 0.47669383 0.41210531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.3896612 0.9017225 1.0083867 0.5520320 1.1774084 1.2346541 1.3792851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.2343888 0.4730064 0.7167316</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9728860 1.0386876 0.9508414 1.1689965 1.1512289 1.0567811 1.0400614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.7549093 0.8189566 0.9086103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7811030 0.7172108 0.6794230 1.1696433 1.1575174 0.9394019 1.0234917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9699172 0.4173383 0.7891443</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

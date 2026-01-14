@@ -49,6 +49,7 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
+<p>Extensively updated documentation for each distribution to include additional details about the statistics associated with each distribution.</p>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>Added <code><a href="../reference/has_symmetry.html">has_symmetry()</a></code> generic to identify if a distribution is symmetric.</li>
@@ -60,18 +61,20 @@
 </div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
-<ul><li>Extended documentation for many distributions to include detailed mathematical formulas for the statistics of each distribution.</li>
+<ul><li>Extended documentation for many distributions to include detailed mathematical formulas for the statistics of each distribution (<a href="https://github.com/mitchelloharawild/distributional/issues/141" class="external-link">#141</a>).</li>
 <li>
 <code><a href="../reference/hdr.html">hdr()</a></code> now produces exact results for symmetric distributions (<a href="https://github.com/mitchelloharawild/distributional/issues/123" class="external-link">#123</a>).</li>
 <li>
 <code><a href="../reference/hdr.html">hdr()</a></code> uses more quantiles by default (512 -&gt; 4096) for more accurate HDRs (<a href="https://github.com/mitchelloharawild/distributional/issues/123" class="external-link">#123</a>).</li>
 <li>Transformed distributions now work better for monotonic increasing functions when the domain of the untransformed distribution is R (<a href="https://github.com/mitchelloharawild/distributional/issues/129" class="external-link">#129</a>).</li>
-<li>Added cdf() and quantile() methods for dist_categorical() distributions with ordered factors (<a href="https://github.com/mitchelloharawild/distributional/issues/136" class="external-link">#136</a>).</li>
-<li>Added support() method for <code><a href="../reference/dist_gpd.html">dist_gpd()</a></code> distributions.</li>
+<li>Added <code><a href="../reference/cdf.html">cdf()</a></code> and <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> methods for dist_categorical() distributions with ordered factors (<a href="https://github.com/mitchelloharawild/distributional/issues/136" class="external-link">#136</a>).</li>
+<li>Added <code><a href="../reference/support.html">support()</a></code> method for <code><a href="../reference/dist_gpd.html">dist_gpd()</a></code> distributions.</li>
+<li>Added <code><a href="../reference/cdf.html">cdf()</a></code> method for <code><a href="../reference/dist_multinomial.html">dist_multinomial()</a></code> distributions.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>Fixed <code><a href="../reference/dist_gamma.html">dist_gamma()</a></code> not allowing the <code>scale</code> parameter to be used (<a href="https://github.com/mitchelloharawild/distributional/issues/132" class="external-link">#132</a>).</li>
+<li>Fixed <code><a href="../reference/dist_negative_binomial.html">dist_negative_binomial()</a></code> calculation of skewness and kurtosis for p!=0.5.</li>
 <li>Fixed floating point issue that caused <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> to incorrectly throw an error when weights did sum to 1 (<a href="https://github.com/statasaurus" class="external-link">@statasaurus</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/134" class="external-link">#134</a>)</li>
 </ul></div>
 <div class="section level3">

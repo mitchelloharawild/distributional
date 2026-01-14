@@ -46,7 +46,7 @@ means and variances are estimated from samples."><meta name="robots" content="no
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Truncate a distribution</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/main/R/truncated.R" class="external-link"><code>R/truncated.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/main/R/dist_truncated.R" class="external-link"><code>R/dist_truncated.R</code></a></small>
     <div class="hidden name"><code>dist_truncated.Rd</code></div>
     </div>
 
@@ -72,6 +72,46 @@ means and variances are estimated from samples.</p>
 <dd><p>The range of values to keep from a distribution.</p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_truncated.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_truncated.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_truncated.html</a></p>
+<p>In the following, let \(X\) be a truncated random variable with
+underlying distribution \(Y\), truncation bounds <code>lower</code> = \(a\) and
+<code>upper</code> = \(b\), where \(F_Y(x)\) is the c.d.f. of \(Y\) and
+\(f_Y(x)\) is the p.d.f. of \(Y\).</p>
+<p><strong>Support</strong>: \([a, b]\)</p>
+<p><strong>Mean</strong>: For the general case, the mean is approximated numerically.
+For a truncated Normal distribution with underlying mean \(\mu\) and
+standard deviation \(\sigma\), the mean is:</p>
+<p>$$
+    E(X) = \mu + \frac{\phi(\alpha) - \phi(\beta)}{\Phi(\beta) - \Phi(\alpha)} \sigma
+  $$</p>
+<p>where \(\alpha = (a - \mu)/\sigma\), \(\beta = (b - \mu)/\sigma\),
+\(\phi\) is the standard Normal p.d.f., and \(\Phi\) is the
+standard Normal c.d.f.</p>
+<p><strong>Variance</strong>: Approximated numerically for all distributions.</p>
+<p><strong>Probability density function (p.d.f)</strong>:</p>
+<p>$$
+    f(x) = \begin{cases}
+      \frac{f_Y(x)}{F_Y(b) - F_Y(a)} &amp; \text{if } a \le x \le b \\
+      0 &amp; \text{otherwise}
+    \end{cases}
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
+<p>$$
+    F(x) = \begin{cases}
+      0 &amp; \text{if } x &lt; a \\
+      \frac{F_Y(x) - F_Y(a)}{F_Y(b) - F_Y(a)} &amp; \text{if } a \le x \le b \\
+      1 &amp; \text{if } x &gt; b
+    \end{cases}
+  $$</p>
+<p><strong>Quantile function</strong>:</p>
+<p>$$
+    Q(p) = F_Y^{-1}(F_Y(a) + p(F_Y(b) - F_Y(a)))
+  $$</p>
+<p>clamped to the interval \([a, b]\).</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -87,8 +127,8 @@ means and variances are estimated from samples.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.968820 2.041437 4.283152 2.140718 1.169889 3.677305 2.636664 1.509318</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 2.104426 3.436268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.7415534 0.7471783 2.6599636 2.4990165 2.9423018 1.9174482 3.7826920</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.4461079 3.6731440 1.4203806</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

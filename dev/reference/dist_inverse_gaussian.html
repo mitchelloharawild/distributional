@@ -65,6 +65,42 @@
     values are supported.</p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The inverse Gaussian distribution (also known as the Wald distribution) is
+commonly used to model positive-valued data, particularly in contexts
+involving first passage times and reliability analysis.</p>
+<p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gaussian.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gaussian.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gaussian.html</a></p>
+<p>In the following, let \(X\) be an Inverse Gaussian random variable with
+parameters <code>mean</code> = \(\mu\) and <code>shape</code> = \(\lambda\).</p>
+<p><strong>Support</strong>: \((0, \infty)\)</p>
+<p><strong>Mean</strong>: \(\mu\)</p>
+<p><strong>Variance</strong>: \(\frac{\mu^3}{\lambda}\)</p>
+<p><strong>Probability density function (p.d.f)</strong>:</p>
+<p>$$
+    f(x) = \sqrt{\frac{\lambda}{2\pi x^3}}
+    \exp\left(-\frac{\lambda(x - \mu)^2}{2\mu^2 x}\right)
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>:</p>
+<p>$$
+    F(x) = \Phi\left(\sqrt{\frac{\lambda}{x}}
+    \left(\frac{x}{\mu} - 1\right)\right) +
+    \exp\left(\frac{2\lambda}{\mu}\right)
+    \Phi\left(-\sqrt{\frac{\lambda}{x}}
+    \left(\frac{x}{\mu} + 1\right)\right)
+  $$</p>
+<p>where \(\Phi\) is the standard normal c.d.f.</p>
+<p><strong>Moment generating function (m.g.f)</strong>:</p>
+<p>$$
+    E(e^{tX}) = \exp\left(\frac{\lambda}{\mu}
+    \left(1 - \sqrt{1 - \frac{2\mu^2 t}{\lambda}}\right)\right)
+  $$</p>
+<p>for \(t &lt; \frac{\lambda}{2\mu^2}\).</p>
+<p><strong>Skewness</strong>: \(3\sqrt{\frac{\mu}{\lambda}}\)</p>
+<p><strong>Excess Kurtosis</strong>: \(\frac{15\mu}{\lambda}\)</p>
+<p><strong>Quantiles</strong>: No closed-form expression, approximated numerically.</p>
+    </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="https://rdrr.io/pkg/actuar/man/InverseGaussian.html" class="external-link">actuar::InverseGaussian</a></p></div>
@@ -86,24 +122,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] (0,Inf) (0,Inf) (0,Inf) (0,Inf) (0,Inf)</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.44221500 0.42266603 0.61138719 0.24526529 0.17005923 0.37573229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.29076388 0.60747745 0.09121629 0.05818179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.23598105 0.08006889 0.33919253 0.61672841 0.28186065 0.08434745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.05161679 0.88082116 1.14277182 0.17594975</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 3.6306493 0.6181951 0.8617749 0.3536870 1.5111288 0.8424185 0.5102226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.3448769 0.7794094 1.9101659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.0545783 2.3970749 0.4062618 0.9615467 1.3424244 1.1620347 0.7534668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.2788239 5.1941938 1.3168952</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0050053 0.6345726 0.7578513 1.9837121 2.1491551 1.4146754 0.9516136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.6061891 0.4733082 0.8259032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.9777257 0.3816014 0.5849503 0.3229107 0.8470528 0.8547789 0.6516648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2986537 0.8589305 0.5138983</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.1611114  2.4141789  4.4531859 13.4142255  0.1088043  0.1929419</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.4708840  0.2155539  0.5118344 10.7073180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.89911667  0.13454877  0.55805566  0.35584563  0.03372935  0.78571274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.83868554 11.76129911  0.19872379 13.10506917</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 6.3215046 6.8465416 0.6763357 0.6129132 5.7630632 0.1865290 6.4877121</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 6.1879454 3.1268424 0.5509342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.8966069 13.2374730  0.3268188  3.9699604  8.4845770  0.3806452</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.4311800  0.7250842  2.4687375  0.5400341</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

@@ -104,12 +104,12 @@
 <span><span class="co">#&gt; [1] -1.281552 -1.372184</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># list(rnorm(10, mean = 0, sd = 1), rt(10, df = 10))</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt;  [1]  1.262954285 -0.326233361  1.329799263  1.272429321  0.414641434</span></span>
-<span><span class="co">#&gt;  [6] -1.539950042 -0.928567035 -0.294720447 -0.005767173  2.404653389</span></span>
+<span><span class="co">#&gt;  [1]  1.262954285 -0.326233361  1.329799263  1.272429321  0.414641434 -1.539950042</span></span>
+<span><span class="co">#&gt;  [7] -0.928567035 -0.294720447 -0.005767173  2.404653389</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt;  [1]  0.99165484 -1.36999677 -0.40943004 -0.85261144 -1.37728388  0.81020460</span></span>
-<span><span class="co">#&gt;  [7] -1.82965813 -0.06142032 -1.33933588 -0.28491414</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1]  0.99165484 -1.36999677 -0.40943004 -0.85261144 -1.37728388  0.81020460 -1.82965813</span></span>
+<span><span class="co">#&gt;  [8] -0.06142032 -1.33933588 -0.28491414</span></span></code></pre></div>
 <p>You can also compute intervals using <code><a href="reference/hilo.html">hilo()</a></code></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/hilo.html">hilo</a></span><span class="op">(</span><span class="va">my_dist</span>, <span class="fl">0.95</span><span class="op">)</span></span>
@@ -150,7 +150,7 @@
 <ul>
 <li>stats provides functions to work with possibly multiple distributions (comparisons made below).</li>
 <li>
-<a href="https://cran.r-project.org/package=distributions3" class="external-link">distributions3</a> represents singular distributions using S3, with particularly nice documentation. This package makes use of some code and documentation from this package.</li>
+<a href="https://cran.r-project.org/package=distributions3" class="external-link">distributions3</a> represents singular distributions using S3, with particularly nice documentation.</li>
 <li>
 <a href="https://cran.r-project.org/package=distr" class="external-link">distr</a> represents singular distributions using S4.</li>
 <li>

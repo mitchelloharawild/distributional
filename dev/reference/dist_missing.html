@@ -68,6 +68,42 @@ distributions.</p>
 <dd><p>The number of missing distributions</p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_missing.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_missing.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_missing.html</a></p>
+<p>The missing distribution represents the absence of distributional
+information. It is used as a placeholder when distribution values are
+not available or not applicable, similar to how <code>NA</code> is used for missing
+scalar values.</p>
+<p><strong>Support</strong>: Undefined</p>
+<p><strong>Mean</strong>: \(\text{NA}\)</p>
+<p><strong>Variance</strong>: \(\text{NA}\)</p>
+<p><strong>Skewness</strong>: \(\text{NA}\)</p>
+<p><strong>Kurtosis</strong>: \(\text{NA}\)</p>
+<p><strong>Probability density function (p.d.f)</strong>: Undefined</p>
+<p>$$
+    f(x) = \text{NA}
+  $$</p>
+<p><strong>Cumulative distribution function (c.d.f)</strong>: Undefined</p>
+<p>$$
+    F(t) = \text{NA}
+  $$</p>
+<p><strong>Quantile function</strong>: Undefined</p>
+<p>$$
+    Q(p) = \text{NA}
+  $$</p>
+<p><strong>Moment generating function (m.g.f)</strong>: Undefined</p>
+<p>$$
+    E(e^{tX}) = \text{NA}
+  $$</p>
+<p>All statistical operations on missing distributions return <code>NA</code> values
+of appropriate length, propagating the missingness through calculations.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="https://rdrr.io/r/base/NA.html" class="external-link">base::NA</a></p></div>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>

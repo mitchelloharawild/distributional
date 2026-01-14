@@ -75,11 +75,10 @@ value in <code>[0, 1]</code>.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>We recommend reading this documentation on
-<a href="https://pkg.mitchelloharawild.com/distributional/">https://pkg.mitchelloharawild.com/distributional/</a>, where the math
-will render nicely.</p>
+    <p>We recommend reading this documentation on <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_bernoulli.html">pkgdown</a> which renders math nicely.
+<a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_bernoulli.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_bernoulli.html</a></p>
 <p>In the following, let \(X\) be a Bernoulli random variable with parameter
-<code>p</code> = \(p\). Some textbooks also define \(q = 1 - p\), or use
+<code>prob</code> = \(p\). Some textbooks also define \(q = 1 - p\), or use
 \(\pi\) instead of \(p\).</p>
 <p>The Bernoulli probability  distribution is widely used to model
 binary variables, such as 'failure' and 'success'. The most
@@ -108,6 +107,18 @@ probability of flipping a tail.</p>
 <p>$$
     E(e^{tX}) = (1 - p) + p e^t
   $$</p>
+<p><strong>Skewness</strong>:</p>
+<p>$$
+    \frac{1 - 2p}{\sqrt{p(1-p)}} = \frac{q - p}{\sqrt{pq}}
+  $$</p>
+<p><strong>Excess Kurtosis</strong>:</p>
+<p>$$
+    \frac{1 - 6p(1-p)}{p(1-p)} = \frac{1 - 6pq}{pq}
+  $$</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">stats::Binomial</a></p></div>
     </div>
 
     <div id="ref-examples">
