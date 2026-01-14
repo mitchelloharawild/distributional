@@ -50,7 +50,11 @@ reference:
     - hdr
     - is_hdr
 
-- title: Continuous distributions
+- title: Probability distributions
+  desc: >
+    Probability distributions for modeling random variables.
+
+- subtitle: Continuous distributions
   desc: >
     Continuous probability distributions.
   contents:
@@ -81,7 +85,8 @@ reference:
     - dist_studentized_range
     - dist_uniform
     - dist_weibull
-- title: Discrete distributions
+
+- subtitle: Discrete distributions
   desc: >
     Discrete probability distributions.
   contents:
@@ -94,7 +99,8 @@ reference:
     - dist_negative_binomial
     - dist_poisson
     - dist_poisson_inverse_gaussian
-- title: Miscellaneous distributions
+
+- subtitle: Miscellaneous distributions
   desc: >
     Degenerate and non-standard probability distributions.
   contents:
@@ -103,7 +109,8 @@ reference:
     - dist_percentile
     - dist_sample
     - dist_wrap
-- title: Distribution modifiers
+
+- subtitle: Distribution modifiers
   desc: >
     Modifiers which change the nature of a distribution.
   contents:
