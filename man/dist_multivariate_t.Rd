@@ -115,7 +115,7 @@ density(dist, cbind(2, 1), log = TRUE)
 cdf(dist, 4)
 
 quantile(dist, 0.7)
-quantile(dist, 0.7, type = "marginal")
+quantile(dist, 0.7, kind = "marginal")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

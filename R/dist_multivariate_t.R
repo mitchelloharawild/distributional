@@ -108,7 +108,7 @@
 #' cdf(dist, 4)
 #'
 #' quantile(dist, 0.7)
-#' quantile(dist, 0.7, type = "marginal")
+#' quantile(dist, 0.7, kind = "marginal")
 #'
 #' @name dist_multivariate_t
 #' @export
