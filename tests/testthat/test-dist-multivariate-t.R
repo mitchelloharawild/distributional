@@ -20,7 +20,7 @@ test_that("Multivariate t distribution", {
   # quantiles - marginal
   # For marginal t distribution: scale = sqrt(diag(sigma))
   expect_equal(
-    quantile(dist, 0.1, type = "marginal"),
+    quantile(dist, 0.1, kind = "marginal"),
     matrix(c(
       qt(0.1, df) * sqrt(sigma[1, 1]) + mu[1],
       qt(0.1, df) * sqrt(sigma[2, 2]) + mu[2]
@@ -32,7 +32,7 @@ test_that("Multivariate t distribution", {
   
   # quantiles - equicoordinate
   expect_equivalent(
-    quantile(dist, 0.1, type = "equicoordinate"),
+    quantile(dist, 0.1, kind = "equicoordinate"),
     rep(mvtnorm::qmvt(0.1, delta = mu, sigma = sigma, df = df)$quantile, 2),
     tolerance = 1e-3
   )

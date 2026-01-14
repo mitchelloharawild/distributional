@@ -84,27 +84,27 @@ test_that("Recycling rules and output for applying multiple inputs over multiple
   dimnames(dist_named) <- c("a", "b")
 
   expect_equal(
-    quantile(dist, 0.5, type = "marginal"),
+    quantile(dist, 0.5, kind = "marginal"),
     matrix(c(1,3,2,5), nrow = 2)
   )
   expect_equal(
-    quantile(dist_named, 0.5, type = "marginal"),
+    quantile(dist_named, 0.5, kind = "marginal"),
     matrix(c(1,3,2,5), nrow = 2, dimnames = list(NULL, c("a", "b")))
   )
 
   expect_equal(
-    quantile(dist, c(0.5, 0.9), type = "marginal"),
+    quantile(dist, c(0.5, 0.9), kind = "marginal"),
     list(matrix(c(1, 3.5631031310892, 2, 4.21971242404268), ncol = 2),
          matrix(c(3, 5.86563641722901, 5, 7.5631031310892), ncol = 2))
   )
   expect_equal(
-    quantile(dist_named, c(0.5, 0.9), type = "marginal"),
+    quantile(dist_named, c(0.5, 0.9), kind = "marginal"),
     list(matrix(c(1, 3.5631031310892, 2, 4.21971242404268), ncol = 2, dimnames = list(NULL, c("a", "b"))),
          matrix(c(3, 5.86563641722901, 5, 7.5631031310892), ncol = 2, dimnames = list(NULL, c("a", "b"))))
   )
 
   expect_equal(
-    quantile(dist, c(0.5, 0.9, 0.95), type = "marginal"),
+    quantile(dist, c(0.5, 0.9, 0.95), kind = "marginal"),
     list(
       matrix(c(1, 3.5631031310892, 4.28970725390294, 2, 4.21971242404268, 4.84897005289389),
              ncol = 2),
@@ -113,7 +113,7 @@ test_that("Recycling rules and output for applying multiple inputs over multiple
     )
   )
   expect_equal(
-    quantile(dist_named, c(0.5, 0.9, 0.95), type = "marginal"),
+    quantile(dist_named, c(0.5, 0.9, 0.95), kind = "marginal"),
     list(
       matrix(c(1, 3.5631031310892, 4.28970725390294, 2, 4.21971242404268, 4.84897005289389),
              ncol = 2, dimnames = list(NULL, c("a","b"))),

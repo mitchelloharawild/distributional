@@ -15,14 +15,14 @@ test_that("Multivariate normal distribution", {
 
   # quantiles
   expect_equal(
-    quantile(dist, 0.1, type = "marginal"),
+    quantile(dist, 0.1, kind = "marginal"),
     matrix(c(qnorm(0.1, mu[1], sqrt(sigma[1,1])), qnorm(0.1, mu[2], sqrt(sigma[2,2]))),
            nrow = 1, dimnames = list(NULL, c("a", "b")))
   )
 
   skip_if_not_installed("mvtnorm")
   expect_equivalent(
-    quantile(dist, 0.1, type = "equicoordinate"),
+    quantile(dist, 0.1, kind = "equicoordinate"),
     rep(mvtnorm::qmvnorm(0.1, mean = mu, sigma = sigma)$quantile, 2)
   )
 
