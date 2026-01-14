@@ -111,7 +111,15 @@ log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
 
 #' @export
 quantile.dist_mvnorm <- function(x, p, kind = c("marginal", "equicoordinate"),
-                                 ..., na.rm = FALSE){
+                                 ..., type = lifecycle::deprecated(), na.rm = FALSE){
+  if (lifecycle::is_present(type)) {
+    lifecycle::deprecate_warn(
+      "0.6.0", "quantile.dist_mvnorm(type)", "quantile.dist_mvnorm(kind)",
+      # Force removal of the 'contact author' footer since it doesn't work here.
+      user_env = .GlobalEnv
+    )
+    kind <- type
+  }
   kind <- match.arg(kind)
   q <- if (kind == "marginal") {
     stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
