@@ -82,7 +82,7 @@
 #' quantile(dist, 0.7, kind = "marginal")
 #'
 #' @export
-dist_multivariate_normal <- function(mu = 0, sigma = diag(1)){
+dist_multivariate_normal <- function(mu = 0, sigma = list(diag(1))){
   new_dist(mu = mu, sigma = sigma,
            dimnames = colnames(sigma[[1]]), class = "dist_mvnorm")
 }

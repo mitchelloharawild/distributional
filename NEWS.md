@@ -1,5 +1,9 @@
 # distributional (development version)
 
+## Improvements
+
+* Fixed default argument `sigma` for `dist_multivariate_normal()` (#118).
+
 # distributional 0.6.0
 
 Extensively updated documentation for each distribution to include additional details about the statistics associated with each distribution.

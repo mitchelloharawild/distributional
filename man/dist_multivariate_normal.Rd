@@ -4,7 +4,7 @@
 \alias{dist_multivariate_normal}
 \title{The multivariate normal distribution}
 \usage{
-dist_multivariate_normal(mu = 0, sigma = diag(1))
+dist_multivariate_normal(mu = 0, sigma = list(diag(1)))
 }
 \arguments{
 \item{mu}{A list of numeric vectors for the distribution's mean.}
