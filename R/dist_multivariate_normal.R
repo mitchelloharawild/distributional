@@ -146,6 +146,9 @@ mean.dist_mvnorm <- function(x, ...){
 }
 
 #' @export
+median.dist_mvnorm <- mean.dist_mvnorm
+
+#' @export
 covariance.dist_mvnorm <- function(x, ...){
   # Wrap in list to preserve matrix structure
   list(x[["sigma"]])
