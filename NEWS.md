@@ -25,6 +25,7 @@
 ## Bug fixes
 
 * Fixed `dist_gamma()` not allowing the `scale` parameter to be used (#132).
+* Fixed `dist_negative_binomial()` calculation of skewness and kurtosis for p!=0.5.
 * Fixed floating point issue that caused `dist_mixture()` to incorrectly throw an error when weights did sum to 1 (@statasaurus, #134)
 
 ## Breaking changes

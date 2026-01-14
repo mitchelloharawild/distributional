@@ -23,9 +23,9 @@
 #'
 #'   **Support**: \eqn{\{0, 1, 2, 3, ...\}}
 #'
-#'   **Mean**: \eqn{\frac{p r}{1-p}}
+#'   **Mean**: \eqn{\frac{r(1-p)}{p}}
 #'
-#'   **Variance**: \eqn{\frac{pr}{(1-p)^2}}
+#'   **Variance**: \eqn{\frac{r(1-p)}{p^2}}
 #'
 #'   **Probability mass function (p.m.f)**:
 #'
@@ -124,10 +124,10 @@ covariance.dist_negbin <- function(x, ...){
 
 #' @export
 skewness.dist_negbin <- function(x, ...) {
-  (1 + x[["p"]]) / sqrt(x[["p"]] * x[["n"]])
+  (2 - x[["p"]]) / sqrt(x[["n"]] * (1 - x[["p"]]))
 }
 
 #' @export
 kurtosis.dist_negbin <- function(x, ...) {
-  6 / x[["n"]] + (1 - x[["p"]])^2 / x[["n"]] * x[["p"]]
+  6 / x[["n"]] + x[["p"]]^2 / (x[["n"]] * (1 - x[["p"]]))
 }
