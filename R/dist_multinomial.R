@@ -119,6 +119,7 @@ density.dist_multinomial <- function(x, at, ...){
 
 #' @export
 log_density.dist_multinomial <- function(x, at, ...){
+  if(is.list(at)) return(vapply(at, log_density, numeric(1L), x = x, ...))
   stats::dmultinom(at, x[["s"]], x[["p"]], log = TRUE)
 }
 
