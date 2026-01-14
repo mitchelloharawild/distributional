@@ -19,15 +19,14 @@ coin with probability \code{p} of heads, what is the probability I need
 distribution is a special case of Negative Binomial distribution.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_geometric.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_geometric.html}
 
 In the following, let \eqn{X} be a Geometric random variable with
-success probability \code{p} = \eqn{p}. Note that there are multiple
+success probability \code{prob} = \eqn{p}. Note that there are multiple
 parameterizations of the Geometric distribution.
 
-\strong{Support}: 0 < p < 1, \eqn{x = 0, 1, \dots}
+\strong{Support}: \eqn{\{0, 1, 2, 3, ...\}}{{0, 1, 2, 3, ...}}
 
 \strong{Mean}: \eqn{\frac{1-p}{p}}
 
@@ -36,13 +35,17 @@ parameterizations of the Geometric distribution.
 \strong{Probability mass function (p.m.f)}:
 
 \deqn{
-    P(X = x) = p(1-p)^x,
-   }
+    P(X = k) = p(1-p)^k
+  }{
+    P(X = k) = p(1-p)^k
+  }
 
 \strong{Cumulative distribution function (c.d.f)}:
 
 \deqn{
-    P(X \le x) = 1 - (1-p)^{x+1}
+    P(X \le k) = 1 - (1-p)^{k+1}
+  }{
+    P(X \le k) = 1 - (1-p)^(k+1)
   }
 
 \strong{Moment generating function (m.g.f)}:
@@ -50,7 +53,23 @@ parameterizations of the Geometric distribution.
 \deqn{
     E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
   }{
-    E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
+    E(e^(tX)) = pe^t / (1 - (1-p)e^t)
+  }
+
+\strong{Skewness}:
+
+\deqn{
+    \frac{2 - p}{\sqrt{1 - p}}
+  }{
+    (2 - p) / sqrt(1 - p)
+  }
+
+\strong{Excess Kurtosis}:
+
+\deqn{
+    6 + \frac{p^2}{1 - p}
+  }{
+    6 + p^2 / (1 - p)
   }
 }
 \examples{

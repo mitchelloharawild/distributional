@@ -24,33 +24,54 @@ type I elements observed in this sample is set to be our random
 variable \eqn{X}.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_hypergeometric.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_hypergeometric.html}
 
 In the following, let \eqn{X} be a HyperGeometric random variable with
 success probability \code{p} = \eqn{p = m/(m+n)}.
 
-\strong{Support}: \eqn{x \in { \{\max{(0, k-n)}, \dots, \min{(k,m)}}\}}
+\strong{Support}: \eqn{x \in \{\max(0, k-n), \dots, \min(k,m)\}}{\max(0, k-n), ..., min(k,m)}
 
-\strong{Mean}: \eqn{\frac{km}{n+m} = kp}
+\strong{Mean}: \eqn{\frac{km}{m+n} = kp}
 
-\strong{Variance}: \eqn{\frac{km(n)(n+m-k)}{(n+m)^2 (n+m-1)} =
-  kp(1-p)(1 - \frac{k-1}{m+n-1})}
+\strong{Variance}: \eqn{\frac{kmn(m+n-k)}{(m+n)^2 (m+n-1)} =
+  kp(1-p)\left(1 - \frac{k-1}{m+n-1}\right)}
 
 \strong{Probability mass function (p.m.f)}:
 
 \deqn{
     P(X = x) = \frac{{m \choose x}{n \choose k-x}}{{m+n \choose k}}
   }{
-    P(X = x) = \frac{{m \choose x}{n \choose k-x}}{{m+n \choose k}}
+    P(X = x) = choose(m, x) * choose(n, k-x) / choose(m+n, k)
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
 
 \deqn{
-    P(X \le k) \approx \Phi\Big(\frac{x - kp}{\sqrt{kp(1-p)}}\Big)
- }
+    P(X \le x) = \sum_{i = \max(0, k-n)}^{\lfloor x \rfloor}
+    \frac{{m \choose i}{n \choose k-i}}{{m+n \choose k}}
+  }{
+    P(X <= x) = sum_{i = max(0, k-n)}^floor(x)
+    choose(m, i) * choose(n, k-i) / choose(m+n, k)
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \frac{{m \choose k}}{{m+n \choose k}}{}_2F_1(-m, -k; m+n-k+1; e^t)
+  }{
+    E(e^(tX)) = choose(m, k) / choose(m+n, k) * 2F1(-m, -k; m+n-k+1; e^t)
+  }
+
+where \eqn{_2F_1} is the hypergeometric function.
+
+\strong{Skewness}:
+
+\deqn{
+    \frac{(m+n-2k)(m+n-1)^{1/2}(m+n-2n)}{[kmn(m+n-k)]^{1/2}(m+n-2)}
+  }{
+    [(m+n-2k) * sqrt(m+n-1) * (m+n-2n)] / [sqrt(k*m*n*(m+n-k)) * (m+n-2)]
+  }
 }
 \examples{
 dist <- dist_hypergeometric(m = rep(500, 3), n = c(50, 60, 70), k = c(100, 200, 300))

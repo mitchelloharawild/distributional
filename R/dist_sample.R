@@ -3,7 +3,90 @@
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
-#' @param x A list of sampled values.
+#' The sampling distribution represents an empirical distribution based on
+#' observed samples. It is useful for bootstrapping, representing posterior
+#' distributions from Markov Chain Monte Carlo (MCMC) algorithms, or working
+#' with any empirical data where the parametric form is unknown. Unlike
+#' parametric distributions, the sampling distribution makes no assumptions
+#' about the underlying data-generating process and instead uses the sample
+#' itself to estimate distributional properties. The distribution can handle
+#' both univariate and multivariate samples.
+#'
+#' @param x A list of sampled values. For univariate distributions, each
+#'   element should be a numeric vector. For multivariate distributions, each
+#'   element should be a matrix where columns represent variables and rows
+#'   represent observations.
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_sample")`
+#'
+#'   In the following, let \eqn{X} be a random variable with sample
+#'   \eqn{x_1, x_2, \ldots, x_n} of size \eqn{n}.
+#'
+#'   **Support**: The observed range of the sample
+#'
+#'   **Mean** (univariate):
+#'
+#'   \deqn{
+#'     \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+#'   }{
+#'     mean(x) = (1/n) sum(x_i)
+#'   }
+#'
+#'   **Mean** (multivariate): Computed independently for each variable.
+#'
+#'   **Variance** (univariate):
+#'
+#'   \deqn{
+#'     s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2
+#'   }{
+#'     s^2 = (1/(n-1)) sum((x_i - mean(x))^2)
+#'   }
+#'
+#'   **Covariance** (multivariate): The sample covariance matrix.
+#'
+#'   **Skewness** (univariate):
+#'
+#'   \deqn{
+#'     g_1 = \frac{\sqrt{n} \sum_{i=1}^{n} (x_i - \bar{x})^3}{\left(\sum_{i=1}^{n} (x_i - \bar{x})^2\right)^{3/2}} \left(1 - \frac{1}{n}\right)^{3/2}
+#'   }{
+#'     g_1 = (sqrt(n) sum((x_i - mean(x))^3) / (sum((x_i - mean(x))^2)^(3/2))) * (1 - 1/n)^(3/2)
+#'   }
+#'
+#'   **Probability density function**: Approximated numerically using
+#'   kernel density estimation.
+#'
+#'   **Cumulative distribution function** (univariate):
+#'
+#'   \deqn{
+#'     F(q) = \frac{1}{n} \sum_{i=1}^{n} I(x_i \leq q)
+#'   }{
+#'     F(q) = (1/n) sum(I(x_i <= q))
+#'   }
+#'
+#'   where \eqn{I(\cdot)} is the indicator function.
+#'
+#'   **Cumulative distribution function** (multivariate):
+#'
+#'   \deqn{
+#'     F(\mathbf{q}) = \frac{1}{n} \sum_{i=1}^{n} I(\mathbf{x}_i \leq \mathbf{q})
+#'   }{
+#'     F(q) = (1/n) sum(I(x_i <= q))
+#'   }
+#'
+#'   where the inequality is applied element-wise.
+#'
+#'   **Quantile function** (univariate): The sample quantile, computed using
+#'   the specified quantile type (see [stats::quantile()]).
+#'
+#'   **Quantile function** (multivariate): Marginal quantiles are computed
+#'   independently for each variable.
+#'
+#'   **Random generation**: Bootstrap sampling with replacement from the
+#'   empirical sample.
+#'
+#' @seealso [stats::density()], [stats::quantile()], [stats::cov()]
 #'
 #' @examples
 #' # Univariate numeric samples
@@ -28,6 +111,7 @@
 #' quantile(dist, 0.4) # Returns the marginal quantiles
 #' cdf(dist, matrix(c(0.3,9), nrow = 1))
 #'
+#' @name dist_sample
 #' @export
 dist_sample <- function(x){
   vec_assert(x, list())

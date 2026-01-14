@@ -11,6 +11,31 @@ test_that("Multinomial distribution", {
   expect_equal(density(dist, cbind(1, 2, 1)), dmultinom(c(1, 2, 1), 4, p))
 
   # cdf
+  # For multinomial, CDF is the probability that each category count is <= given values
+  # This requires summing probabilities over all valid outcomes within the bounds
+  
+  # CDF should be 1 when bounds allow all possible outcomes
+  expect_equal(cdf(dist, cbind(4, 4, 4)), 1)
+  
+  # CDF at a specific point should be >= PDF at that point
+  test_point <- cbind(1, 2, 1)
+  expect_gte(cdf(dist, test_point), density(dist, test_point))
+  
+  # CDF should be monotonically increasing
+  expect_gte(cdf(dist, cbind(2, 2, 2)), cdf(dist, cbind(1, 1, 1)))
+  
+  # CDF at tight bounds should match the single point probability if only one outcome is possible
+  # When bounds are (0, 0, 4), only the outcome (0, 0, 4) is valid
+  expect_equal(cdf(dist, cbind(0, 0, 4)), dmultinom(c(0, 0, 4), 4, p))
+  
+  # CDF at bounds (1, 1, 4) should include multiple valid outcomes:
+  # (0,0,4), (0,1,3), (1,0,3), (1,1,2)
+  valid_outcomes <- rbind(c(0,0,4), c(0,1,3), c(1,0,3), c(1,1,2))
+  expected_cdf <- sum(apply(valid_outcomes, 1, function(x) dmultinom(x, 4, p)))
+  expect_equal(cdf(dist, cbind(1, 1, 4)), expected_cdf)
+  
+  # CDF at impossible values (where sum of bounds < size) should be 0
+  expect_equal(cdf(dist, cbind(0, 0, 0)), 0)
 
   # F(Finv(a)) ~= a
 

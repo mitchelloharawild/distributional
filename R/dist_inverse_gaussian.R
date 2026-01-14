@@ -1,9 +1,68 @@
 #' The Inverse Gaussian distribution
 #'
+#' The inverse Gaussian distribution (also known as the Wald distribution) is
+#' commonly used to model positive-valued data, particularly in contexts
+#' involving first passage times and reliability analysis.
+#' 
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
 #' @inheritParams actuar::dinvgauss
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_inverse_gaussian")`
+#'
+#'   In the following, let \eqn{X} be an Inverse Gaussian random variable with
+#'   parameters `mean` = \eqn{\mu} and `shape` = \eqn{\lambda}.
+#'
+#'   **Support**: \eqn{(0, \infty)}
+#'
+#'   **Mean**: \eqn{\mu}
+#'
+#'   **Variance**: \eqn{\frac{\mu^3}{\lambda}}
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \sqrt{\frac{\lambda}{2\pi x^3}}
+#'     \exp\left(-\frac{\lambda(x - \mu)^2}{2\mu^2 x}\right)
+#'   }{
+#'     f(x) = sqrt(\lambda / (2 \pi x^3))
+#'     exp(-\lambda (x - \mu)^2 / (2 \mu^2 x))
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(x) = \Phi\left(\sqrt{\frac{\lambda}{x}}
+#'     \left(\frac{x}{\mu} - 1\right)\right) +
+#'     \exp\left(\frac{2\lambda}{\mu}\right)
+#'     \Phi\left(-\sqrt{\frac{\lambda}{x}}
+#'     \left(\frac{x}{\mu} + 1\right)\right)
+#'   }{
+#'     F(x) = \Phi(sqrt(\lambda/x) (x/\mu - 1)) +
+#'     exp(2\lambda/\mu) \Phi(-sqrt(\lambda/x) (x/\mu + 1))
+#'   }
+#'
+#'   where \eqn{\Phi} is the standard normal c.d.f.
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   \deqn{
+#'     E(e^{tX}) = \exp\left(\frac{\lambda}{\mu}
+#'     \left(1 - \sqrt{1 - \frac{2\mu^2 t}{\lambda}}\right)\right)
+#'   }{
+#'     E(e^(tX)) = exp((\lambda/\mu) (1 - sqrt(1 - 2\mu^2 t/\lambda)))
+#'   }
+#'
+#'   for \eqn{t < \frac{\lambda}{2\mu^2}}.
+#'
+#'   **Skewness**: \eqn{3\sqrt{\frac{\mu}{\lambda}}}
+#'
+#'   **Excess Kurtosis**: \eqn{\frac{15\mu}{\lambda}}
+#'
+#'   **Quantiles**: No closed-form expression, approximated numerically.
 #'
 #' @seealso [actuar::InverseGaussian]
 #'

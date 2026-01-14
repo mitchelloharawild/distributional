@@ -10,15 +10,28 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_studentized_range")`
+#'
+#'   In the following, let \eqn{Q} be a Studentized Range random variable with
+#'   parameters `nmeans` = \eqn{k} (number of groups), `df` = \eqn{\nu} (degrees
+#'   of freedom), and `nranges` = \eqn{n} (number of ranges).
 #'
 #'   **Support**: \eqn{R^+}, the set of positive real numbers.
 #'
-#'   Other properties of Tukey's Studentized Range Distribution
-#'   are omitted, largely because the distribution is not fun
-#'   to work with.
+#'   **Mean**: Approximated numerically.
+#'
+#'   **Variance**: Approximated numerically.
+#'
+#'   **Probability density function (p.d.f)**: The density does not have a
+#'   closed-form expression and is computed numerically.
+#'
+#'   **Cumulative distribution function (c.d.f)**: The c.d.f does not have a
+#'   simple closed-form expression. For \eqn{n = 1} (single range), it involves
+#'   integration over the joint distribution of the sample range and an
+#'   independent chi-square variable. The general form is computed numerically
+#'   using algorithms described in the references for [stats::ptukey()].
+#'
+#'   **Moment generating function (m.g.f)**: Does not exist in closed form.
 #'
 #' @seealso [stats::Tukey]
 #'

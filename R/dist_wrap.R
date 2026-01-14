@@ -21,6 +21,12 @@
 # #' @param p,d,q,r The functions used to compute the p/d/q/r
 # #' (pdf/cdf/quantile/generate)
 #'
+#' @details
+#'
+#' The `dist_wrap()` function provides a generic interface to create distribution
+#' objects from any set of p/d/q/r style functions. The statistical properties
+#' depend on the specific distribution being wrapped.
+#' 
 #' @examples
 #' dist <- dist_wrap("norm", mean = 1:3, sd = c(3, 9, 2))
 #'

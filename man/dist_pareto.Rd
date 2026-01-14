@@ -2,7 +2,7 @@
 % Please edit documentation in R/dist_pareto.R
 \name{dist_pareto}
 \alias{dist_pareto}
-\title{The Pareto distribution}
+\title{The Pareto Distribution}
 \usage{
 dist_pareto(shape, scale)
 }
@@ -11,6 +11,55 @@ dist_pareto(shape, scale)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The Pareto distribution is a power-law probability distribution commonly used
+in actuarial science to model loss severity and in economics to model income
+distributions and firm sizes.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_pareto.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_pareto.html}
+
+In the following, let \eqn{X} be a Pareto random variable with parameters
+\code{shape} = \eqn{\alpha} and \code{scale} = \eqn{\theta}.
+
+\strong{Support}: \eqn{(0, \infty)}{(0, Inf)}
+
+\strong{Mean}: \eqn{\frac{\theta}{\alpha - 1}}{\theta / (\alpha - 1)} for \eqn{\alpha > 1},
+undefined otherwise
+
+\strong{Variance}: \eqn{\frac{\alpha\theta^2}{(\alpha - 1)^2(\alpha - 2)}}{\alpha\theta^2 / ((\alpha - 1)^2(\alpha - 2))}
+for \eqn{\alpha > 2}, undefined otherwise
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{\alpha\theta^\alpha}{(x + \theta)^{\alpha + 1}}
+  }{
+    f(x) = \alpha\theta^\alpha / (x + \theta)^(\alpha + 1)
+  }
+
+for \eqn{x > 0}, \eqn{\alpha > 0} and \eqn{\theta > 0}.
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = 1 - \left(\frac{\theta}{x + \theta}\right)^\alpha
+  }{
+    F(x) = 1 - (\theta / (x + \theta))^\alpha
+  }
+
+for \eqn{x > 0}.
+
+\strong{Moment generating function (m.g.f)}:
+
+Does not exist in closed form, but the \eqn{k}th raw moment \eqn{E[X^k]} exists
+for \eqn{-1 < k < \alpha}.
+}
+\note{
+There are many different definitions of the Pareto distribution in the
+literature; see Arnold (2015) or Kleiber and Kotz (2003). This implementation
+uses the Pareto distribution without a location parameter as described in \link[actuar:Pareto]{actuar::Pareto}.
 }
 \examples{
 dist <- dist_pareto(shape = c(10, 3, 2, 1), scale = rep(1, 4))
@@ -29,6 +78,13 @@ cdf(dist, 4)
 
 quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
+}
+\references{
+Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions in Economics
+and Actuarial Sciences}, Wiley.
+
+Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012), \emph{Loss Models, From
+Data to Decisions, Fourth Edition}, Wiley.
 }
 \seealso{
 \link[actuar:Pareto]{actuar::Pareto}

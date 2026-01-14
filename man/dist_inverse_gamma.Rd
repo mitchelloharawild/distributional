@@ -13,6 +13,58 @@ dist_inverse_gamma(shape, rate = 1/scale, scale)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The Inverse Gamma distribution is commonly used as a prior distribution
+in Bayesian statistics, particularly for variance parameters.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gamma.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gamma.html}
+
+In the following, let \eqn{X} be an Inverse Gamma random variable with
+shape parameter \code{shape} = \eqn{\alpha} and rate parameter
+\code{rate} = \eqn{\beta} (equivalently, scale = \eqn{1/\beta}).
+
+\strong{Support}: \eqn{x \in (0, \infty)}
+
+\strong{Mean}: \eqn{\frac{\beta}{\alpha - 1}} for \eqn{\alpha > 1},
+otherwise undefined
+
+\strong{Variance}: \eqn{\frac{\beta^2}{(\alpha - 1)^2 (\alpha - 2)}}
+for \eqn{\alpha > 2}, otherwise undefined
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{-\alpha - 1} 
+    e^{-\beta/x}
+  }{
+    f(x) = \beta^\alpha / \Gamma(\alpha) x^(-\alpha - 1) e^(-\beta/x)
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = \frac{\Gamma(\alpha, \beta/x)}{\Gamma(\alpha)} = 
+    Q(\alpha, \beta/x)
+  }{
+    F(x) = \Gamma(\alpha, \beta/x) / \Gamma(\alpha) = Q(\alpha, \beta/x)
+  }
+
+where \eqn{\Gamma(\alpha, z)} is the upper incomplete gamma function and
+\eqn{Q} is the regularized incomplete gamma function.
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    M_X(t) = \frac{2 (-\beta t)^{\alpha/2}}{\Gamma(\alpha)} 
+    K_\alpha\left(\sqrt{-4\beta t}\right)
+  }{
+    M_X(t) = 2 (-\beta t)^(\alpha/2) / \Gamma(\alpha) K_\alpha(sqrt(-4\beta t))
+  }
+
+for \eqn{t < 0}, where \eqn{K_\alpha} is the modified Bessel function
+of the second kind. The MGF does not exist for \eqn{t \ge 0}.
 }
 \examples{
 dist <- dist_inverse_gamma(shape = c(1,2,3,3), rate = c(1,1,1,2))

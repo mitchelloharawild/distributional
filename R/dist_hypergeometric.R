@@ -17,33 +17,55 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_hypergeometric")`
+#'
 #'
 #'   In the following, let \eqn{X} be a HyperGeometric random variable with
 #'   success probability `p` = \eqn{p = m/(m+n)}.
 #'
-#'   **Support**: \eqn{x \in { \{\max{(0, k-n)}, \dots, \min{(k,m)}}\}}
+#'   **Support**: \eqn{x \in \{\max(0, k-n), \dots, \min(k,m)\}}{\max(0, k-n), ..., min(k,m)}
 #'
-#'   **Mean**: \eqn{\frac{km}{n+m} = kp}
+#'   **Mean**: \eqn{\frac{km}{m+n} = kp}
 #'
-#'   **Variance**: \eqn{\frac{km(n)(n+m-k)}{(n+m)^2 (n+m-1)} =
-#'   kp(1-p)(1 - \frac{k-1}{m+n-1})}
+#'   **Variance**: \eqn{\frac{kmn(m+n-k)}{(m+n)^2 (m+n-1)} =
+#'   kp(1-p)\left(1 - \frac{k-1}{m+n-1}\right)}
 #'
 #'   **Probability mass function (p.m.f)**:
 #'
 #'   \deqn{
 #'     P(X = x) = \frac{{m \choose x}{n \choose k-x}}{{m+n \choose k}}
 #'   }{
-#'     P(X = x) = \frac{{m \choose x}{n \choose k-x}}{{m+n \choose k}}
+#'     P(X = x) = choose(m, x) * choose(n, k-x) / choose(m+n, k)
 #'   }
 #'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
 #'   \deqn{
-#'     P(X \le k) \approx \Phi\Big(\frac{x - kp}{\sqrt{kp(1-p)}}\Big)
-#'  }
+#'     P(X \le x) = \sum_{i = \max(0, k-n)}^{\lfloor x \rfloor}
+#'     \frac{{m \choose i}{n \choose k-i}}{{m+n \choose k}}
+#'   }{
+#'     P(X <= x) = sum_{i = max(0, k-n)}^floor(x)
+#'     choose(m, i) * choose(n, k-i) / choose(m+n, k)
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   \deqn{
+#'     E(e^{tX}) = \frac{{m \choose k}}{{m+n \choose k}}{}_2F_1(-m, -k; m+n-k+1; e^t)
+#'   }{
+#'     E(e^(tX)) = choose(m, k) / choose(m+n, k) * 2F1(-m, -k; m+n-k+1; e^t)
+#'   }
+#'
+#'   where \eqn{_2F_1} is the hypergeometric function.
+#'
+#'   **Skewness**:
+#'
+#'   \deqn{
+#'     \frac{(m+n-2k)(m+n-1)^{1/2}(m+n-2n)}{[kmn(m+n-k)]^{1/2}(m+n-2)}
+#'   }{
+#'     [(m+n-2k) * sqrt(m+n-1) * (m+n-2n)] / [sqrt(k*m*n*(m+n-k)) * (m+n-2)]
+#'   }
+#'
 #'
 #' @seealso [stats::Hypergeometric]
 #'

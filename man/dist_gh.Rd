@@ -24,23 +24,23 @@ The generalised g-and-h distribution is a flexible distribution used to model un
 It is known for its ability to handle skewness and heavy-tailed behavior.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_gh.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_gh.html}
 
 In the following, let \eqn{X} be a g-and-h random variable with parameters
-\code{A}, \code{B}, \code{g}, \code{h}, and \code{c}.
+\code{A} = \eqn{A}, \code{B} = \eqn{B}, \code{g} = \eqn{g}, \code{h} = \eqn{h}, and \code{c} = \eqn{c}.
 
-\strong{Support}: \eqn{(-\infty, \infty)}
+\strong{Support}: \eqn{(-\infty, \infty)}{R}
 
-\strong{Mean}: Not available in closed form.
+\strong{Mean}: Does not have a closed-form expression. Approximated numerically.
 
-\strong{Variance}: Not available in closed form.
+\strong{Variance}: Does not have a closed-form expression. Approximated numerically.
 
 \strong{Probability density function (p.d.f)}:
 
-The g-and-h distribution does not have a closed-form expression for its density. Instead,
-it is defined through its quantile function:
+The g-and-h distribution does not have a closed-form expression for its density.
+The density is approximated numerically from the quantile function.
+The distribution is defined through its quantile function:
 
 \deqn{
     Q(u) = A + B \left( 1 + c \frac{1 - \exp(-gz(u))}{1 + \exp(-gz(u))} \right) \exp(h z(u)^2/2) z(u)
@@ -48,12 +48,22 @@ it is defined through its quantile function:
     Q(u) = A + B * (1 + c * ((1 - exp(-g * z(u))) / (1 + exp(-g * z(u))))) * exp(h * z(u)^2/2) * z(u)
   }
 
-where \eqn{z(u) = \Phi^{-1}(u)}
+where \eqn{z(u) = \Phi^{-1}(u)} is the standard normal quantile function.
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-The cumulative distribution function is typically evaluated numerically due to the lack
-of a closed-form expression.
+Does not have a closed-form expression. The cumulative distribution function is
+approximated numerically by inverting the quantile function.
+
+\strong{Quantile function}:
+
+\deqn{
+    Q(p) = A + B \left( 1 + c \frac{1 - \exp(-g\Phi^{-1}(p))}{1 + \exp(-g\Phi^{-1}(p))} \right) \exp(h (\Phi^{-1}(p))^2/2) \Phi^{-1}(p)
+  }{
+    Q(p) = A + B * (1 + c * ((1 - exp(-g * qnorm(p))) / (1 + exp(-g * qnorm(p))))) * exp(h * qnorm(p)^2/2) * qnorm(p)
+  }
+
+where \eqn{\Phi^{-1}(p)} is the standard normal quantile function.
 }
 \examples{
 dist <- dist_gh(A = 0, B = 1, g = 0, h = 0.5)
@@ -74,5 +84,5 @@ quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[gk:g-and-h]{gk::dgh}, \link{dist_gk}
+\code{\link[gk:g-and-h]{gk::dgh()}}, \code{\link[gk:g-and-h]{gk::pgh()}}, \code{\link[gk:g-and-h]{gk::qgh()}}, \code{\link[gk:g-and-h]{gk::rgh()}}, \code{\link[=dist_gk]{dist_gk()}}
 }

@@ -13,6 +13,65 @@ dist_inverse_gaussian(mean, shape)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
+\details{
+The inverse Gaussian distribution (also known as the Wald distribution) is
+commonly used to model positive-valued data, particularly in contexts
+involving first passage times and reliability analysis.
+
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gaussian.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gaussian.html}
+
+In the following, let \eqn{X} be an Inverse Gaussian random variable with
+parameters \code{mean} = \eqn{\mu} and \code{shape} = \eqn{\lambda}.
+
+\strong{Support}: \eqn{(0, \infty)}
+
+\strong{Mean}: \eqn{\mu}
+
+\strong{Variance}: \eqn{\frac{\mu^3}{\lambda}}
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \sqrt{\frac{\lambda}{2\pi x^3}}
+    \exp\left(-\frac{\lambda(x - \mu)^2}{2\mu^2 x}\right)
+  }{
+    f(x) = sqrt(\lambda / (2 \pi x^3))
+    exp(-\lambda (x - \mu)^2 / (2 \mu^2 x))
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = \Phi\left(\sqrt{\frac{\lambda}{x}}
+    \left(\frac{x}{\mu} - 1\right)\right) +
+    \exp\left(\frac{2\lambda}{\mu}\right)
+    \Phi\left(-\sqrt{\frac{\lambda}{x}}
+    \left(\frac{x}{\mu} + 1\right)\right)
+  }{
+    F(x) = \Phi(sqrt(\lambda/x) (x/\mu - 1)) +
+    exp(2\lambda/\mu) \Phi(-sqrt(\lambda/x) (x/\mu + 1))
+  }
+
+where \eqn{\Phi} is the standard normal c.d.f.
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \exp\left(\frac{\lambda}{\mu}
+    \left(1 - \sqrt{1 - \frac{2\mu^2 t}{\lambda}}\right)\right)
+  }{
+    E(e^(tX)) = exp((\lambda/\mu) (1 - sqrt(1 - 2\mu^2 t/\lambda)))
+  }
+
+for \eqn{t < \frac{\lambda}{2\mu^2}}.
+
+\strong{Skewness}: \eqn{3\sqrt{\frac{\mu}{\lambda}}}
+
+\strong{Excess Kurtosis}: \eqn{\frac{15\mu}{\lambda}}
+
+\strong{Quantiles}: No closed-form expression, approximated numerically.
+}
 \examples{
 dist <- dist_inverse_gaussian(mean = c(1,1,1,3,3), shape = c(0.2, 1, 3, 0.2, 1))
 dist

@@ -12,12 +12,10 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_bernoulli")`
 #'
 #'   In the following, let \eqn{X} be a Bernoulli random variable with parameter
-#'   `p` = \eqn{p}. Some textbooks also define \eqn{q = 1 - p}, or use
+#'   `prob` = \eqn{p}. Some textbooks also define \eqn{q = 1 - p}, or use
 #'   \eqn{\pi} instead of \eqn{p}.
 #'
 #'   The Bernoulli probability  distribution is widely used to model
@@ -63,6 +61,24 @@
 #'     E(e^(tX)) = (1 - p) + p e^t
 #'   }
 #'
+#'   **Skewness**:
+#'
+#'   \deqn{
+#'     \frac{1 - 2p}{\sqrt{p(1-p)}} = \frac{q - p}{\sqrt{pq}}
+#'   }{
+#'     (1 - 2p) / sqrt(p(1-p))
+#'   }
+#'
+#'   **Excess Kurtosis**:
+#'
+#'   \deqn{
+#'     \frac{1 - 6p(1-p)}{p(1-p)} = \frac{1 - 6pq}{pq}
+#'   }{
+#'     (1 - 6p(1-p)) / (p(1-p))
+#'   }
+#'
+#' @seealso [stats::Binomial]
+#'
 #' @examples
 #' dist <- dist_bernoulli(prob = c(0.05, 0.5, 0.3, 0.9, 0.1))
 #'
@@ -81,6 +97,7 @@
 #'
 #' quantile(dist, 0.7)
 #'
+#' @name dist_bernoulli
 #' @export
 dist_bernoulli <- function(prob){
   prob <- vec_cast(prob, double())

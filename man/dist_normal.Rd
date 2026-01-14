@@ -29,9 +29,8 @@ asymptotically Normal. The Normal distribution is also called the
 gaussian distribution.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_normal.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_normal.html}
 
 In the following, let \eqn{X} be a Normal random variable with mean
 \code{mu} = \eqn{\mu} and standard deviation \code{sigma} = \eqn{\sigma}.
@@ -52,15 +51,13 @@ In the following, let \eqn{X} be a Normal random variable with mean
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-The cumulative distribution function has the form
-
 \deqn{
     F(t) = \int_{-\infty}^t \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x - \mu)^2 / 2 \sigma^2} dx
   }{
     F(t) = integral_{-\infty}^t 1 / sqrt(2 \pi \sigma^2) exp(-(x - \mu)^2 / (2 \sigma^2)) dx
   }
 
-but this integral does not have a closed form solution and must be
+This integral does not have a closed form solution and is
 approximated numerically. The c.d.f. of a standard Normal is sometimes
 called the "error function". The notation \eqn{\Phi(t)} also stands
 for the c.d.f. of a standard Normal evaluated at \eqn{t}. Z-tables

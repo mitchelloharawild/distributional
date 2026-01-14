@@ -21,15 +21,29 @@ Tukey's studentized range distribution, used for Tukey's
 honestly significant differences test in ANOVA.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_studentized_range.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_studentized_range.html}
+
+In the following, let \eqn{Q} be a Studentized Range random variable with
+parameters \code{nmeans} = \eqn{k} (number of groups), \code{df} = \eqn{\nu} (degrees
+of freedom), and \code{nranges} = \eqn{n} (number of ranges).
 
 \strong{Support}: \eqn{R^+}, the set of positive real numbers.
 
-Other properties of Tukey's Studentized Range Distribution
-are omitted, largely because the distribution is not fun
-to work with.
+\strong{Mean}: Approximated numerically.
+
+\strong{Variance}: Approximated numerically.
+
+\strong{Probability density function (p.d.f)}: The density does not have a
+closed-form expression and is computed numerically.
+
+\strong{Cumulative distribution function (c.d.f)}: The c.d.f does not have a
+simple closed-form expression. For \eqn{n = 1} (single range), it involves
+integration over the joint distribution of the sample range and an
+independent chi-square variable. The general form is computed numerically
+using algorithms described in the references for \code{\link[stats:Tukey]{stats::ptukey()}}.
+
+\strong{Moment generating function (m.g.f)}: Does not exist in closed form.
 }
 \examples{
 dist <- dist_studentized_range(nmeans = c(6, 2), df = c(5, 4), nranges = c(1, 1))

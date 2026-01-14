@@ -7,7 +7,7 @@
 dist_degenerate(x)
 }
 \arguments{
-\item{x}{The value of the distribution.}
+\item{x}{The value of the distribution (location parameter). Can be any real number.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -17,45 +17,42 @@ observed. It takes a single parameter, which is the value that is observed
 by the distribution.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_degenerate.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_degenerate.html}
 
 In the following, let \eqn{X} be a degenerate random variable with value
 \code{x} = \eqn{k_0}.
 
-\strong{Support}: \eqn{R}, the set of all real numbers
+\strong{Support}: \eqn{\{k_0\}}, a single point
 
-\strong{Mean}: \eqn{k_0}
+\strong{Mean}: \eqn{\mu = k_0}
 
-\strong{Variance}: \eqn{0}
+\strong{Variance}: \eqn{\sigma^2 = 0}
 
 \strong{Probability density function (p.d.f)}:
 
 \deqn{
-    f(x) = 1 for x = k_0
+    f(x) = 1 \textrm{ for } x = k_0
   }{
     f(x) = 1 for x = k_0
   }
 \deqn{
-    f(x) = 0 for x \neq k_0
+    f(x) = 0 \textrm{ for } x \neq k_0
   }{
-    f(x) = 0 for x \neq k_0
+    f(x) = 0 for x != k_0
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-The cumulative distribution function has the form
-
 \deqn{
-    F(x) = 0 for x < k_0
+    F(t) = 0 \textrm{ for } t < k_0
   }{
-    F(x) = 0 for x < k_0
+    F(t) = 0 for t < k_0
   }
 \deqn{
-    F(x) = 1 for x \ge k_0
+    F(t) = 1 \textrm{ for } t \ge k_0
   }{
-    F(x) = 1 for x \ge k_0
+    F(t) = 1 for t >= k_0
   }
 
 \strong{Moment generating function (m.g.f)}:
@@ -65,8 +62,30 @@ The cumulative distribution function has the form
   }{
     E(e^(tX)) = e^(k_0 t)
   }
+
+\strong{Skewness}: Undefined (NA)
+
+\strong{Excess Kurtosis}: Undefined (NA)
 }
 \examples{
-dist_degenerate(x = 1:5)
+dist <- dist_degenerate(x = 1:5)
 
+dist
+mean(dist)
+variance(dist)
+skewness(dist)
+kurtosis(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
+
+}
+\seealso{
+\link[stats:Distributions]{stats::Distributions}
 }

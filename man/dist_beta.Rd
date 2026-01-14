@@ -11,6 +11,56 @@ dist_beta(shape1, shape2)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The Beta distribution is a continuous probability distribution defined on the
+interval [0, 1], commonly used to model probabilities and proportions.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_beta.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_beta.html}
+
+In the following, let \eqn{X} be a Beta random variable with parameters
+\code{shape1} = \eqn{\alpha} and \code{shape2} = \eqn{\beta}.
+
+\strong{Support}: \eqn{x \in [0, 1]}
+
+\strong{Mean}: \eqn{\frac{\alpha}{\alpha + \beta}}
+
+\strong{Variance}: \eqn{\frac{\alpha\beta}{(\alpha + \beta)^2(\alpha + \beta + 1)}}
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{x^{\alpha - 1}(1-x)^{\beta - 1}}{B(\alpha, \beta)} = 
+    \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} x^{\alpha - 1}(1-x)^{\beta - 1}
+  }{
+    f(x) = x^(alpha - 1) * (1-x)^(beta - 1) / B(alpha, beta)
+  }
+
+where \eqn{B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}}
+is the Beta function.
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = I_x(alpha, beta) = \frac{B(x; \alpha, \beta)}{B(\alpha, \beta)}
+  }{
+    F(x) = I_x(\alpha, \beta)
+  }
+
+where \eqn{I_x(\alpha, \beta)} is the regularized incomplete beta function and
+\eqn{B(x; \alpha, \beta) = \int_0^x t^{\alpha-1}(1-t)^{\beta-1} dt}.
+
+\strong{Moment generating function (m.g.f)}:
+
+The moment generating function does not have a simple closed form, but the
+moments can be calculated as:
+
+\deqn{
+    E(X^k) = \prod_{r=0}^{k-1} \frac{\alpha + r}{\alpha + \beta + r}
+  }{
+    E(X^k) = prod((alpha + r) / (alpha + beta + r)) for r = 0, ..., k-1
+  }
 }
 \examples{
 dist <- dist_beta(shape1 = c(0.5, 5, 1, 2, 2), shape2 = c(0.5, 1, 3, 2, 5))

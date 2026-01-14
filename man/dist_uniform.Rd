@@ -15,62 +15,52 @@ dist_uniform(min, max)
 A distribution with constant density on an interval.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_uniform.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_uniform.html}
 
-In the following, let \eqn{X} be a Poisson random variable with parameter
-\code{lambda} = \eqn{\lambda}.
+In the following, let \eqn{X} be a Uniform random variable with parameters
+\code{min} = \eqn{a} and \code{max} = \eqn{b}.
 
-\strong{Support}: \eqn{[a,b]}{[a,b]}
+\strong{Support}: \eqn{[a, b]}
 
-\strong{Mean}: \eqn{\frac{1}{2}(a+b)}
+\strong{Mean}: \eqn{\frac{a + b}{2}}
 
-\strong{Variance}: \eqn{\frac{1}{12}(b-a)^2}
+\strong{Variance}: \eqn{\frac{(b - a)^2}{12}}
 
-\strong{Probability mass function (p.m.f)}:
+\strong{Probability density function (p.d.f)}:
 
 \deqn{
-    f(x) = \frac{1}{b-a} for x \in [a,b]
+    f(x) = \frac{1}{b - a}
   }{
-    f(x) = \frac{1}{b-a} for x in [a,b]
+    f(x) = 1 / (b - a)
   }
-\deqn{
-    f(x) = 0 otherwise
-  }{
-    f(x) = 0 otherwise
-  }
+
+for \eqn{x \in [a, b]}{x in [a, b]}, and \eqn{f(x) = 0} otherwise.
 
 \strong{Cumulative distribution function (c.d.f)}:
 
 \deqn{
-    F(x) = 0 for x < a
+    F(x) = \frac{x - a}{b - a}
   }{
-    F(x) = 0 for x < a
+    F(x) = (x - a) / (b - a)
   }
-\deqn{
-    F(x) = \frac{x - a}{b-a} for x \in [a,b]
-  }{
-    F(x) = \frac{x - a}{b-a} for x in [a,b]
-  }
-\deqn{
-    F(x) = 1 for x > b
-  }{
-    F(x) = 1 for x > b
-  }
+
+for \eqn{x \in [a, b]}{x in [a, b]}, with \eqn{F(x) = 0} for \eqn{x < a}
+and \eqn{F(x) = 1} for \eqn{x > b}.
 
 \strong{Moment generating function (m.g.f)}:
 
 \deqn{
-    E(e^{tX}) = \frac{e^{tb} - e^{ta}}{t(b-a)} for t \neq 0
+    E(e^{tX}) = \frac{e^{tb} - e^{ta}}{t(b - a)}
   }{
-    E(e^(tX)) = \frac{e^{tb} - e^{ta}}{t(b-a)} for t \neq 0
+    E(e^(tX)) = (e^(tb) - e^(ta)) / (t(b - a))
   }
-\deqn{
-    E(e^{tX}) = 1 for t = 0
-  }{
-    E(e^(tX)) = 1 for t = 0
-  }
+
+for \eqn{t \neq 0}{t != 0}, and \eqn{E(e^{tX}) = 1} for \eqn{t = 0}.
+
+\strong{Skewness}: \eqn{0}
+
+\strong{Excess Kurtosis}: \eqn{-\frac{6}{5}}{-6/5}
 }
 \examples{
 dist <- dist_uniform(min = c(3, -2), max = c(5, 4))

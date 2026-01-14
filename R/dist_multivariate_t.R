@@ -13,21 +13,27 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_multivariate_t")`
 #'
 #'   In the following, let \eqn{\mathbf{X}} be a multivariate t random vector
 #'   with degrees of freedom `df` = \eqn{\nu}, location parameter
 #'   `mu` = \eqn{\boldsymbol{\mu}}, and scale matrix
 #'   `sigma` = \eqn{\boldsymbol{\Sigma}}.
 #'
-#'   **Support**: \eqn{\mathbf{x} \in \mathbb{R}^k}
+#'   **Support**: \eqn{\mathbf{x} \in \mathbb{R}^k}, where \eqn{k} is the
+#'   dimension of the distribution
 #'
 #'   **Mean**: \eqn{\boldsymbol{\mu}} for \eqn{\nu > 1}, undefined otherwise
 #'
-#'   **Variance**: \eqn{\frac{\nu}{\nu - 2} \boldsymbol{\Sigma}} for \eqn{\nu > 2},
-#'   undefined otherwise
+#'   **Covariance matrix**: 
+#'   
+#'   \deqn{
+#'     \text{Cov}(\mathbf{X}) = \frac{\nu}{\nu - 2} \boldsymbol{\Sigma}
+#'   }{
+#'     Cov(X) = \nu / (\nu - 2) \Sigma
+#'   }
+#'   
+#'   for \eqn{\nu > 2}, undefined otherwise
 #'
 #'   **Probability density function (p.d.f)**:
 #'
@@ -45,7 +51,41 @@
 #'   where \eqn{k} is the dimension of the distribution and \eqn{\Gamma(\cdot)} is
 #'   the gamma function.
 #'
-#' @seealso [mvtnorm::dmvt], [mvtnorm::qmvt]
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(\mathbf{t}) = \int_{-\infty}^{t_1} \cdots \int_{-\infty}^{t_k} f(\mathbf{x}) \, d\mathbf{x}
+#'   }{
+#'     F(t) = integral_{-\infty}^{t_1} ... integral_{-\infty}^{t_k} f(x) dx
+#'   }
+#'
+#'   This integral does not have a closed form solution and is approximated numerically.
+#'
+#'   **Quantile function**:
+#'
+#'   The equicoordinate quantile function finds \eqn{q} such that:
+#'
+#'   \deqn{
+#'     P(X_1 \leq q, \ldots, X_k \leq q) = p
+#'   }{
+#'     P(X_1 <= q, ..., X_k <= q) = p
+#'   }
+#'
+#'   This does not have a closed form solution and is approximated numerically.
+#'
+#'   The marginal quantile function for each dimension \eqn{i} is:
+#'
+#'   \deqn{
+#'     Q_i(p) = \mu_i + \sqrt{\Sigma_{ii}} \cdot t_{\nu}^{-1}(p)
+#'   }{
+#'     Q_i(p) = \mu_i + sqrt(\Sigma_{ii}) * t_\nu^(-1)(p)
+#'   }
+#'
+#'   where \eqn{t_{\nu}^{-1}(p)} is the quantile function of the univariate
+#'   Student's t-distribution with \eqn{\nu} degrees of freedom, and
+#'   \eqn{\Sigma_{ii}} is the \eqn{i}-th diagonal element of `sigma`.
+#'
+#' @seealso [mvtnorm::dmvt], [mvtnorm::pmvt], [mvtnorm::qmvt], [mvtnorm::rmvt]
 #'
 #' @examples
 #' dist <- dist_multivariate_t(

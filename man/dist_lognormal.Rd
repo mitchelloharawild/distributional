@@ -6,54 +6,51 @@
 \usage{
 dist_lognormal(mu = 0, sigma = 1)
 }
-\arguments{
-\item{mu}{The mean (location parameter) of the distribution, which is the
-mean of the associated Normal distribution. Can be any real number.}
-
-\item{sigma}{The standard deviation (scale parameter) of the distribution.
-Can be any positive number.}
-}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 The log-normal distribution is a commonly used transformation of the Normal
 distribution. If \eqn{X} follows a log-normal distribution, then \eqn{\ln{X}}
-would be characteristed by a Normal distribution.
+would be characterised by a Normal distribution.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_lognormal.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_lognormal.html}
 
-In the following, let \eqn{Y} be a Normal random variable with mean
-\code{mu} = \eqn{\mu} and standard deviation \code{sigma} = \eqn{\sigma}. The
-log-normal distribution \eqn{X = exp(Y)} is characterised by:
+In the following, let \eqn{X} be a log-normal random variable with
+\code{mu} = \eqn{\mu} and \code{sigma} = \eqn{\sigma}.
 
-\strong{Support}: \eqn{R+}, the set of all real numbers greater than or equal to 0.
+\strong{Support}: \eqn{R^+}, the set of positive real numbers.
 
-\strong{Mean}: \eqn{e^(\mu + \sigma^2/2}
+\strong{Mean}: \eqn{e^{\mu + \sigma^2/2}}{exp(\mu + \sigma^2/2)}
 
-\strong{Variance}: \eqn{(e^(\sigma^2)-1) e^(2\mu + \sigma^2}
+\strong{Variance}: \eqn{(e^{\sigma^2} - 1) e^{2\mu + \sigma^2}}{(exp(\sigma^2) - 1) exp(2\mu + \sigma^2)}
+
+\strong{Skewness}: \eqn{(e^{\sigma^2} + 2) \sqrt{e^{\sigma^2} - 1}}{(exp(\sigma^2) + 2) sqrt(exp(\sigma^2) - 1)}
+
+\strong{Excess Kurtosis}: \eqn{e^{4\sigma^2} + 2 e^{3\sigma^2} + 3 e^{2\sigma^2} - 6}{exp(4\sigma^2) + 2 exp(3\sigma^2) + 3 exp(2\sigma^2) - 6}
 
 \strong{Probability density function (p.d.f)}:
 
 \deqn{
-    f(x) = \frac{1}{x\sqrt{2 \pi \sigma^2}} e^{-(\ln{x} - \mu)^2 / 2 \sigma^2}
+    f(x) = \frac{1}{x\sqrt{2 \pi \sigma^2}} e^{-(\ln{x} - \mu)^2 / (2 \sigma^2)}
   }{
-    f(x) = 1 / (x * sqrt(2 \pi \sigma^2)) exp(-(log(x) - \mu)^2 / (2 \sigma^2))
+    f(x) = 1 / (x sqrt(2 \pi \sigma^2)) exp(-(\log(x) - \mu)^2 / (2 \sigma^2))
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-The cumulative distribution function has the form
-
 \deqn{
-    F(x) = \Phi((\ln{x} - \mu)/\sigma)
+    F(x) = \Phi\left(\frac{\ln{x} - \mu}{\sigma}\right)
   }{
-    F(x) = Phi((log(x) - \mu)/\sigma)
+    F(x) = \Phi((\log(x) - \mu) / \sigma)
   }
 
-Where \eqn{Phi}{Phi} is the CDF of a standard Normal distribution, N(0,1).
+where \eqn{\Phi} is the c.d.f. of the standard Normal distribution.
+
+\strong{Moment generating function (m.g.f)}:
+
+Does not exist in closed form.
 }
 \examples{
 dist <- dist_lognormal(mu = 1:5, sigma = 0.1)

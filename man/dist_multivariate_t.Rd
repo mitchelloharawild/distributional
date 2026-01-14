@@ -2,8 +2,7 @@
 % Please edit documentation in R/dist_multivariate_t.R
 \name{dist_multivariate_t}
 \alias{dist_multivariate_t}
-\title{Student's t-distribution to multiple dimensions. It is commonly used for
-modeling heavy-tailed multivariate data and in robust statistics.}
+\title{The multivariate t-distribution}
 \usage{
 dist_multivariate_t(df = 1, mu = 0, sigma = diag(1))
 }
@@ -15,25 +14,35 @@ dist_multivariate_t(df = 1, mu = 0, sigma = diag(1))
 \item{sigma}{A list of matrices for the distribution scale matrix.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The multivariate t-distribution is a generalization of the univariate
 Student's t-distribution to multiple dimensions. It is commonly used for
 modeling heavy-tailed multivariate data and in robust statistics.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_multivariate_t.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_multivariate_t.html}
 
 In the following, let \eqn{\mathbf{X}} be a multivariate t random vector
 with degrees of freedom \code{df} = \eqn{\nu}, location parameter
 \code{mu} = \eqn{\boldsymbol{\mu}}, and scale matrix
 \code{sigma} = \eqn{\boldsymbol{\Sigma}}.
 
-\strong{Support}: \eqn{\mathbf{x} \in \mathbb{R}^k}
+\strong{Support}: \eqn{\mathbf{x} \in \mathbb{R}^k}, where \eqn{k} is the
+dimension of the distribution
 
 \strong{Mean}: \eqn{\boldsymbol{\mu}} for \eqn{\nu > 1}, undefined otherwise
 
-\strong{Variance}: \eqn{\frac{\nu}{\nu - 2} \boldsymbol{\Sigma}} for \eqn{\nu > 2},
-undefined otherwise
+\strong{Covariance matrix}:
+
+\deqn{
+    \text{Cov}(\mathbf{X}) = \frac{\nu}{\nu - 2} \boldsymbol{\Sigma}
+  }{
+    Cov(X) = \nu / (\nu - 2) \Sigma
+  }
+
+for \eqn{\nu > 2}, undefined otherwise
 
 \strong{Probability density function (p.d.f)}:
 
@@ -50,6 +59,40 @@ undefined otherwise
 
 where \eqn{k} is the dimension of the distribution and \eqn{\Gamma(\cdot)} is
 the gamma function.
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(\mathbf{t}) = \int_{-\infty}^{t_1} \cdots \int_{-\infty}^{t_k} f(\mathbf{x}) \, d\mathbf{x}
+  }{
+    F(t) = integral_{-\infty}^{t_1} ... integral_{-\infty}^{t_k} f(x) dx
+  }
+
+This integral does not have a closed form solution and is approximated numerically.
+
+\strong{Quantile function}:
+
+The equicoordinate quantile function finds \eqn{q} such that:
+
+\deqn{
+    P(X_1 \leq q, \ldots, X_k \leq q) = p
+  }{
+    P(X_1 <= q, ..., X_k <= q) = p
+  }
+
+This does not have a closed form solution and is approximated numerically.
+
+The marginal quantile function for each dimension \eqn{i} is:
+
+\deqn{
+    Q_i(p) = \mu_i + \sqrt{\Sigma_{ii}} \cdot t_{\nu}^{-1}(p)
+  }{
+    Q_i(p) = \mu_i + sqrt(\Sigma_{ii}) * t_\nu^(-1)(p)
+  }
+
+where \eqn{t_{\nu}^{-1}(p)} is the quantile function of the univariate
+Student's t-distribution with \eqn{\nu} degrees of freedom, and
+\eqn{\Sigma_{ii}} is the \eqn{i}-th diagonal element of \code{sigma}.
 }
 \examples{
 dist <- dist_multivariate_t(
@@ -76,5 +119,5 @@ quantile(dist, 0.7, type = "marginal")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[mvtnorm:Mvt]{mvtnorm::dmvt}, \link[mvtnorm:qmvt]{mvtnorm::qmvt}
+\link[mvtnorm:Mvt]{mvtnorm::dmvt}, \link[mvtnorm:pmvt]{mvtnorm::pmvt}, \link[mvtnorm:qmvt]{mvtnorm::qmvt}, \link[mvtnorm:Mvt]{mvtnorm::rmvt}
 }

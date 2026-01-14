@@ -3,7 +3,49 @@
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
+#' Exponential distributions are frequently used to model waiting times and the
+#' time between events in a Poisson process.
+#'
 #' @inheritParams stats::dexp
+#'
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_exponential")`
+#' 
+#'
+#'   In the following, let \eqn{X} be an Exponential random variable with
+#'   parameter `rate` = \eqn{\lambda}.
+#'
+#'   **Support**: \eqn{x \in [0, \infty)}{x >= 0}
+#'
+#'   **Mean**: \eqn{\frac{1}{\lambda}}{1 / \lambda}
+#'
+#'   **Variance**: \eqn{\frac{1}{\lambda^2}}{1 / \lambda^2}
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \lambda e^{-\lambda x}
+#'   }{
+#'     f(x) = \lambda e^(-\lambda x)
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(x) = 1 - e^{-\lambda x}
+#'   }{
+#'     F(x) = 1 - e^(-\lambda x)
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   \deqn{
+#'     E(e^{tX}) = \frac{\lambda}{\lambda - t}, \quad t < \lambda
+#'   }{
+#'     E(e^(tX)) = \lambda / (\lambda - t), for t < \lambda
+#'   }
 #'
 #' @seealso [stats::Exponential]
 #'

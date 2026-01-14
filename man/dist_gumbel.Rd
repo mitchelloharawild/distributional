@@ -19,36 +19,103 @@ distribution, obtained when the GEV shape parameter \eqn{\xi} is equal to 0.
 It may be referred to as a type I extreme value distribution.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_gumbel.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_gumbel.html}
 
 In the following, let \eqn{X} be a Gumbel random variable with location
-parameter  \code{mu} = \eqn{\mu}, scale parameter \code{sigma} = \eqn{\sigma}.
+parameter  \code{alpha} = \eqn{\alpha} and scale parameter \code{scale} = \eqn{\sigma}.
 
 \strong{Support}: \eqn{R}, the set of all real numbers.
 
-\strong{Mean}: \eqn{\mu + \sigma\gamma}, where \eqn{\gamma} is Euler's
-constant, approximately equal to 0.57722.
+\strong{Mean}:
 
-\strong{Median}: \eqn{\mu - \sigma\ln(\ln 2)}{\mu - \sigma ln(ln 2)}.
+\deqn{
+    E(X) = \alpha + \sigma\gamma
+  }{
+    E(X) = alpha + sigma*gamma
+  }
 
-\strong{Variance}: \eqn{\sigma^2 \pi^2 / 6}.
+where \eqn{\gamma} is the Euler-Mascheroni constant,
+approximately equal to 0.5772157.
+
+\strong{Variance}:
+
+\deqn{
+    \textrm{Var}(X) = \frac{\pi^2 \sigma^2}{6}
+  }{
+    Var(X) = (pi^2 * sigma^2) / 6
+  }
+
+\strong{Skewness}:
+
+\deqn{
+    \textrm{Skew}(X) = \frac{12\sqrt{6}\zeta(3)}{\pi^3} \approx 1.1395
+  }{
+    Skew(X) = (12*sqrt(6)*zeta(3)) / pi^3
+  }
+
+where \eqn{\zeta(3)} is Apery's constant,
+approximately equal to 1.2020569. Note that skewness is independent
+of the distribution parameters.
+
+\strong{Kurtosis (excess)}:
+
+\deqn{
+    \textrm{Kurt}(X) = \frac{12}{5} = 2.4
+  }{
+    Kurt(X) = 12/5
+  }
+
+Note that excess kurtosis is independent of the distribution parameters.
+
+\strong{Median}:
+
+\deqn{
+    \textrm{Median}(X) = \alpha - \sigma\ln(\ln 2)
+  }{
+    Median(X) = alpha - sigma*ln(ln(2))
+  }
 
 \strong{Probability density function (p.d.f)}:
 
-\deqn{f(x) = \sigma ^ {-1} \exp[-(x - \mu) / \sigma]%
-        \exp\{-\exp[-(x - \mu) / \sigma] \}}{%
-       f(x) = (1 / \sigma) exp[-(x - \mu) / \sigma]%
-        exp{-exp[-(x - \mu) / \sigma]}}
+\deqn{
+    f(x) = \frac{1}{\sigma} \exp\left[-\frac{x - \alpha}{\sigma}\right]
+           \exp\left\{-\exp\left[-\frac{x - \alpha}{\sigma}\right]\right\}
+  }{
+    f(x) = (1/sigma) * exp[-(x - alpha)/sigma] * exp(-exp[-(x - alpha)/sigma])
+  }
+
 for \eqn{x} in \eqn{R}, the set of all real numbers.
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-In the \eqn{\xi = 0} (Gumbel) special case
-\deqn{F(x) = \exp\{-\exp[-(x - \mu) / \sigma] \}}{%
-        F(x) = exp{ - exp[-(x - \mu) / \sigma]} }
+\deqn{
+    F(x) = \exp\left\{-\exp\left[-\frac{x - \alpha}{\sigma}\right]\right\}
+  }{
+    F(x) = exp(-exp[-(x - alpha)/sigma])
+  }
+
 for \eqn{x} in \eqn{R}, the set of all real numbers.
+
+\strong{Quantile function (inverse c.d.f)}:
+
+\deqn{
+    F^{-1}(p) = \alpha - \sigma \ln(-\ln p)
+  }{
+    F^(-1)(p) = alpha - sigma * ln(-ln(p))
+  }
+
+for \eqn{p} in (0, 1).
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \Gamma(1 - \sigma t) e^{\alpha t}
+  }{
+    E(e^(tX)) = Gamma(1 - sigma*t) * e^(alpha*t)
+  }
+
+for \eqn{\sigma t < 1}, where \eqn{\Gamma} is the gamma function.
 }
 \examples{
 dist <- dist_gumbel(alpha = c(0.5, 1, 1.5, 3), scale = c(2, 2, 3, 4))
@@ -71,5 +138,6 @@ quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[actuar:Gumbel]{actuar::Gumbel}
+\link[actuar:Gumbel]{actuar::Gumbel}, \code{\link[actuar:Gumbel]{actuar::dgumbel()}}, \code{\link[actuar:Gumbel]{actuar::pgumbel()}},
+\code{\link[actuar:Gumbel]{actuar::qgumbel()}}, \code{\link[actuar:Gumbel]{actuar::rgumbel()}}, \code{\link[actuar:Gumbel]{actuar::mgumbel()}}
 }

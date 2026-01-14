@@ -10,23 +10,22 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_gh")`
 #'
 #'   In the following, let \eqn{X} be a g-and-h random variable with parameters
-#'   `A`, `B`, `g`, `h`, and `c`.
+#'   `A` = \eqn{A}, `B` = \eqn{B}, `g` = \eqn{g}, `h` = \eqn{h}, and `c` = \eqn{c}.
 #'
-#'   **Support**: \eqn{(-\infty, \infty)}
+#'   **Support**: \eqn{(-\infty, \infty)}{R}
 #'
-#'   **Mean**: Not available in closed form.
+#'   **Mean**: Does not have a closed-form expression. Approximated numerically.
 #'
-#'   **Variance**: Not available in closed form.
+#'   **Variance**: Does not have a closed-form expression. Approximated numerically.
 #'
 #'   **Probability density function (p.d.f)**:
 #'
-#'   The g-and-h distribution does not have a closed-form expression for its density. Instead,
-#'   it is defined through its quantile function:
+#'   The g-and-h distribution does not have a closed-form expression for its density.
+#'   The density is approximated numerically from the quantile function.
+#'   The distribution is defined through its quantile function:
 #'
 #'   \deqn{
 #'     Q(u) = A + B \left( 1 + c \frac{1 - \exp(-gz(u))}{1 + \exp(-gz(u))} \right) \exp(h z(u)^2/2) z(u)
@@ -34,14 +33,24 @@
 #'     Q(u) = A + B * (1 + c * ((1 - exp(-g * z(u))) / (1 + exp(-g * z(u))))) * exp(h * z(u)^2/2) * z(u)
 #'   }
 #'
-#'   where \eqn{z(u) = \Phi^{-1}(u)}
+#'   where \eqn{z(u) = \Phi^{-1}(u)} is the standard normal quantile function.
 #'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
-#'   The cumulative distribution function is typically evaluated numerically due to the lack
-#'   of a closed-form expression.
+#'   Does not have a closed-form expression. The cumulative distribution function is
+#'   approximated numerically by inverting the quantile function.
 #'
-#' @seealso [gk::dgh], [distributional::dist_gk]
+#'   **Quantile function**:
+#'
+#'   \deqn{
+#'     Q(p) = A + B \left( 1 + c \frac{1 - \exp(-g\Phi^{-1}(p))}{1 + \exp(-g\Phi^{-1}(p))} \right) \exp(h (\Phi^{-1}(p))^2/2) \Phi^{-1}(p)
+#'   }{
+#'     Q(p) = A + B * (1 + c * ((1 - exp(-g * qnorm(p))) / (1 + exp(-g * qnorm(p))))) * exp(h * qnorm(p)^2/2) * qnorm(p)
+#'   }
+#'
+#'   where \eqn{\Phi^{-1}(p)} is the standard normal quantile function.
+#'
+#' @seealso [gk::dgh()], [gk::pgh()], [gk::qgh()], [gk::rgh()], [distributional::dist_gk()]
 #'
 #' @examples
 #' dist <- dist_gh(A = 0, B = 1, g = 0, h = 0.5)

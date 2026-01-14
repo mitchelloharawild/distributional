@@ -13,6 +13,59 @@ dist_multivariate_normal(mu = 0, sigma = diag(1))
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The multivariate normal distribution is a generalization of the univariate
+normal distribution to higher dimensions. It is widely used in multivariate
+statistics and describes the joint distribution of multiple correlated
+continuous random variables.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_multivariate_normal.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_multivariate_normal.html}
+
+In the following, let \eqn{\mathbf{X}} be a \eqn{k}-dimensional multivariate
+normal random variable with mean vector \code{mu} = \eqn{\boldsymbol{\mu}} and
+variance-covariance matrix \code{sigma} = \eqn{\boldsymbol{\Sigma}}.
+
+\strong{Support}: \eqn{\mathbf{x} \in \mathbb{R}^k}
+
+\strong{Mean}: \eqn{\boldsymbol{\mu}}
+
+\strong{Variance-covariance matrix}: \eqn{\boldsymbol{\Sigma}}
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(\mathbf{x}) = \frac{1}{(2\pi)^{k/2} |\boldsymbol{\Sigma}|^{1/2}}
+    \exp\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^T
+    \boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)
+  }{
+    f(x) = 1 / ((2\pi)^(k/2) |\Sigma|^(1/2))
+    exp(-1/2 (x - \mu)^T \Sigma^(-1) (x - \mu))
+  }
+
+where \eqn{|\boldsymbol{\Sigma}|}{|\Sigma|} is the determinant of
+\eqn{\boldsymbol{\Sigma}}{\Sigma}.
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    P(\mathbf{X} \le \mathbf{q}) = P(X_1 \le q_1, \ldots, X_k \le q_k)
+  }{
+    P(X \le q) = P(X_1 \le q_1, ..., X_k \le q_k)
+  }
+
+The c.d.f. does not have a closed-form expression and is computed numerically.
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    M(\mathbf{t}) = E(e^{\mathbf{t}^T \mathbf{X}}) =
+    \exp\left(\mathbf{t}^T \boldsymbol{\mu} + \frac{1}{2}\mathbf{t}^T
+    \boldsymbol{\Sigma} \mathbf{t}\right)
+  }{
+    M(t) = E(e^(t^T X)) = exp(t^T \mu + 1/2 t^T \Sigma t)
+  }
 }
 \examples{
 dist <- dist_multivariate_normal(mu = list(c(1,2)), sigma = list(matrix(c(4,2,2,3), ncol=2)))
@@ -35,5 +88,6 @@ quantile(dist, 0.7, type = "marginal")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[mvtnorm:Mvnorm]{mvtnorm::dmvnorm}, \link[mvtnorm:qmvnorm]{mvtnorm::qmvnorm}
+\code{\link[mvtnorm:Mvnorm]{mvtnorm::dmvnorm()}}, \code{\link[mvtnorm:pmvnorm]{mvtnorm::pmvnorm()}}, \code{\link[mvtnorm:qmvnorm]{mvtnorm::qmvnorm()}},
+\code{\link[mvtnorm:Mvnorm]{mvtnorm::rmvnorm()}}
 }

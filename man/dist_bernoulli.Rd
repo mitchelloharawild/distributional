@@ -19,12 +19,11 @@ The Bernoulli distribution is a special case of the \code{\link[=Binomial]{Binom
 distribution with \code{n = 1}.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_bernoulli.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_bernoulli.html}
 
 In the following, let \eqn{X} be a Bernoulli random variable with parameter
-\code{p} = \eqn{p}. Some textbooks also define \eqn{q = 1 - p}, or use
+\code{prob} = \eqn{p}. Some textbooks also define \eqn{q = 1 - p}, or use
 \eqn{\pi} instead of \eqn{p}.
 
 The Bernoulli probability  distribution is widely used to model
@@ -69,6 +68,22 @@ probability of flipping a tail.
   }{
     E(e^(tX)) = (1 - p) + p e^t
   }
+
+\strong{Skewness}:
+
+\deqn{
+    \frac{1 - 2p}{\sqrt{p(1-p)}} = \frac{q - p}{\sqrt{pq}}
+  }{
+    (1 - 2p) / sqrt(p(1-p))
+  }
+
+\strong{Excess Kurtosis}:
+
+\deqn{
+    \frac{1 - 6p(1-p)}{p(1-p)} = \frac{1 - 6pq}{pq}
+  }{
+    (1 - 6p(1-p)) / (p(1-p))
+  }
 }
 \examples{
 dist <- dist_bernoulli(prob = c(0.05, 0.5, 0.3, 0.9, 0.1))
@@ -88,4 +103,7 @@ cdf(dist, 4)
 
 quantile(dist, 0.7)
 
+}
+\seealso{
+\link[stats:Binomial]{stats::Binomial}
 }

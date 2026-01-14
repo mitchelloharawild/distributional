@@ -1,5 +1,7 @@
 # distributional (development version)
 
+Extensively updated documentation for each distribution to include additional details about the statistics associated with each distribution.
+
 ## New features
 
 * Added `has_symmetry()` generic to identify if a distribution is symmetric.
@@ -12,7 +14,7 @@
 ## Improvements
 
 * Extended documentation for many distributions to include detailed 
-  mathematical formulas for the statistics of each distribution.
+  mathematical formulas for the statistics of each distribution (#141).
 * `hdr()` now produces exact results for symmetric distributions (#123).
 * `hdr()` uses more quantiles by default (512 -> 4096) for more accurate HDRs (#123).
 * Transformed distributions now work better for monotonic increasing functions 

@@ -3,7 +3,51 @@
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
+#' The Inverse Exponential distribution is used to model the reciprocal of 
+#' exponentially distributed variables.
+#'
 #' @inheritParams actuar::dinvexp
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_inverse_exponential")`
+#'
+#'   In the following, let \eqn{X} be an Inverse Exponential random variable 
+#'   with parameter `rate` = \eqn{\lambda}.
+#'
+#'   **Support**: \eqn{x > 0}
+#'
+#'   **Mean**: Does not exist, returns NA
+#'
+#'   **Variance**: Does not exist, returns NA
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \frac{\lambda}{x^2} e^{-\lambda/x}
+#'   }{
+#'     f(x) = \lambda / x^2 * e^(-\lambda/x)
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(x) = e^{-\lambda/x}
+#'   }{
+#'     F(x) = e^(-\lambda/x)
+#'   }
+#'
+#'   **Quantile function (inverse c.d.f)**:
+#'
+#'   \deqn{
+#'     F^{-1}(p) = -\frac{\lambda}{\log(p)}
+#'   }{
+#'     F^(-1)(p) = -\lambda / log(p)
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   Does not exist (divergent integral).
 #'
 #' @seealso [actuar::InverseExponential]
 #'

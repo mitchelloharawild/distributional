@@ -1,9 +1,65 @@
-#' The Pareto distribution
+#' The Pareto Distribution
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
+#' The Pareto distribution is a power-law probability distribution commonly used
+#' in actuarial science to model loss severity and in economics to model income
+#' distributions and firm sizes.
+#'
 #' @inheritParams actuar::dpareto
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_pareto")`
+#'
+#'   In the following, let \eqn{X} be a Pareto random variable with parameters
+#'   `shape` = \eqn{\alpha} and `scale` = \eqn{\theta}.
+#'
+#'   **Support**: \eqn{(0, \infty)}{(0, Inf)}
+#'
+#'   **Mean**: \eqn{\frac{\theta}{\alpha - 1}}{\theta / (\alpha - 1)} for \eqn{\alpha > 1}, 
+#'   undefined otherwise
+#'
+#'   **Variance**: \eqn{\frac{\alpha\theta^2}{(\alpha - 1)^2(\alpha - 2)}}{\alpha\theta^2 / ((\alpha - 1)^2(\alpha - 2))} 
+#'   for \eqn{\alpha > 2}, undefined otherwise
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \frac{\alpha\theta^\alpha}{(x + \theta)^{\alpha + 1}}
+#'   }{
+#'     f(x) = \alpha\theta^\alpha / (x + \theta)^(\alpha + 1)
+#'   }
+#'
+#'   for \eqn{x > 0}, \eqn{\alpha > 0} and \eqn{\theta > 0}.
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(x) = 1 - \left(\frac{\theta}{x + \theta}\right)^\alpha
+#'   }{
+#'     F(x) = 1 - (\theta / (x + \theta))^\alpha
+#'   }
+#'
+#'   for \eqn{x > 0}.
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   Does not exist in closed form, but the \eqn{k}th raw moment \eqn{E[X^k]} exists
+#'   for \eqn{-1 < k < \alpha}.
+#'
+#' @note
+#' There are many different definitions of the Pareto distribution in the
+#' literature; see Arnold (2015) or Kleiber and Kotz (2003). This implementation
+#' uses the Pareto distribution without a location parameter as described in [actuar::Pareto].
+#'
+#' @references
+#' Kleiber, C. and Kotz, S. (2003), *Statistical Size Distributions in Economics
+#' and Actuarial Sciences*, Wiley.
+#'
+#' Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012), *Loss Models, From
+#' Data to Decisions, Fourth Edition*, Wiley.
 #'
 #' @seealso [actuar::Pareto]
 #'

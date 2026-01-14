@@ -7,11 +7,10 @@
 dist_negative_binomial(size, prob)
 }
 \arguments{
-\item{size}{target for number of successful trials, or dispersion
-    parameter (the shape parameter of the gamma mixing distribution).
-    Must be strictly positive, need not be integer.}
+\item{size}{The number of successful trials (target number of successes).
+Must be a positive number. Also called the dispersion parameter.}
 
-\item{prob}{probability of success in each trial. \code{0 < prob <= 1}.}
+\item{prob}{The probability of success in each trial. Must be between 0 and 1.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -22,9 +21,8 @@ a specified number of successes (\code{size}) occur. The probability of success 
 each trial is given by \code{prob}.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_negative_binomial.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_negative_binomial.html}
 
 In the following, let \eqn{X} be a Negative Binomial random variable with
 success probability \code{prob} = \eqn{p} and the number of successes \code{size} =
@@ -32,28 +30,51 @@ success probability \code{prob} = \eqn{p} and the number of successes \code{size
 
 \strong{Support}: \eqn{\{0, 1, 2, 3, ...\}}
 
-\strong{Mean}: \eqn{\frac{p r}{1-p}}
+\strong{Mean}: \eqn{\frac{r(1-p)}{p}}
 
-\strong{Variance}: \eqn{\frac{pr}{(1-p)^2}}
+\strong{Variance}: \eqn{\frac{r(1-p)}{p^2}}
 
 \strong{Probability mass function (p.m.f)}:
 
 \deqn{
-     f(k) = {k + r - 1 \choose k} \cdot (1-p)^r p^k
+     P(X = k) = \binom{k + r - 1}{k} (1-p)^r p^k
   }{
-     f(k) = (k+r-1)!/(k!(r-1)!) (1-p)^r p^k
+     P(X = k) = choose(k+r-1, k) * (1-p)^r * p^k
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-Too nasty, omitted.
+\deqn{
+     F(k) = \sum_{i=0}^{\lfloor k \rfloor} \binom{i + r - 1}{i} (1-p)^r p^i
+  }{
+     F(k) = sum_{i=0}^floor(k) choose(i+r-1, i) * (1-p)^r * p^i
+  }
+
+This can also be expressed in terms of the regularized incomplete beta
+function, and is computed numerically.
 
 \strong{Moment generating function (m.g.f)}:
 
 \deqn{
-     \left(\frac{1-p}{1-pe^t}\right)^r, t < -\log p
+     E(e^{tX}) = \left(\frac{1-p}{1-pe^t}\right)^r, \quad t < -\log p
   }{
-     \frac{(1-p)^r}{(1-pe^t)^r}, t < -\log p
+     E(e^(tX)) = ((1-p)/(1-p*e^t))^r, t < -log p
+  }
+
+\strong{Skewness}:
+
+\deqn{
+     \gamma_1 = \frac{2-p}{\sqrt{r(1-p)}}
+  }{
+     \gamma_1 = (2-p) / sqrt(r(1-p))
+  }
+
+\strong{Excess Kurtosis}:
+
+\deqn{
+     \gamma_2 = \frac{6}{r} + \frac{p^2}{r(1-p)}
+  }{
+     \gamma_2 = 6/r + p^2/(r(1-p))
   }
 }
 \examples{

@@ -11,6 +11,46 @@ dist_exponential(rate)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Exponential distributions are frequently used to model waiting times and the
+time between events in a Poisson process.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_exponential.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_exponential.html}
+
+In the following, let \eqn{X} be an Exponential random variable with
+parameter \code{rate} = \eqn{\lambda}.
+
+\strong{Support}: \eqn{x \in [0, \infty)}{x >= 0}
+
+\strong{Mean}: \eqn{\frac{1}{\lambda}}{1 / \lambda}
+
+\strong{Variance}: \eqn{\frac{1}{\lambda^2}}{1 / \lambda^2}
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \lambda e^{-\lambda x}
+  }{
+    f(x) = \lambda e^(-\lambda x)
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = 1 - e^{-\lambda x}
+  }{
+    F(x) = 1 - e^(-\lambda x)
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \frac{\lambda}{\lambda - t}, \quad t < \lambda
+  }{
+    E(e^(tX)) = \lambda / (\lambda - t), for t < \lambda
+  }
 }
 \examples{
 dist <- dist_exponential(rate = c(2, 1, 2/3))

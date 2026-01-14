@@ -99,7 +99,7 @@ ggplot(df, aes(y = factor(name, levels = rev(name)))) +
 There are several packages which unify interfaces for distributions in R:
 
 * stats provides functions to work with possibly multiple distributions (comparisons made below).
-* [distributions3](https://cran.r-project.org/package=distributions3) represents singular distributions using S3, with particularly nice documentation. This package makes use of some code and documentation from this package.
+* [distributions3](https://cran.r-project.org/package=distributions3) represents singular distributions using S3, with particularly nice documentation.
 * [distr](https://cran.r-project.org/package=distr) represents singular distributions using S4.
 * [distr6](https://cran.r-project.org/package=distr6) represents singular distributions using R6.
 * Many more in the [CRAN task view](https://cran.r-project.org/view=Distributions)

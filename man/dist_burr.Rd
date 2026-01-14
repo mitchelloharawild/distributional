@@ -13,6 +13,51 @@ dist_burr(shape1, shape2, rate = 1, scale = 1/rate)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The Burr distribution (Type XII) is a flexible continuous probability
+distribution often used for modeling income distributions, reliability
+data, and failure times.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_burr.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_burr.html}
+
+In the following, let \eqn{X} be a Burr random variable with parameters
+\code{shape1} = \eqn{\alpha}, \code{shape2} = \eqn{\gamma}, and \code{rate} = \eqn{\lambda}.
+
+\strong{Support}: \eqn{x \in (0, \infty)}{x > 0}
+
+\strong{Mean}: \eqn{\frac{\lambda^{-1/\alpha} \gamma B(\gamma - 1/\alpha, 1 + 1/\alpha)}{\gamma}} (for \eqn{\alpha \gamma > 1})
+
+\strong{Variance}: \eqn{\frac{\lambda^{-2/\alpha} \gamma B(\gamma - 2/\alpha, 1 + 2/\alpha)}{\gamma} - \mu^2} (for \eqn{\alpha \gamma > 2})
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \alpha \gamma \lambda x^{\alpha - 1} (1 + \lambda x^\alpha)^{-\gamma - 1}
+  }{
+    f(x) = \alpha \gamma \lambda x^(\alpha - 1) (1 + \lambda x^\alpha)^(-\gamma - 1)
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = 1 - (1 + \lambda x^\alpha)^{-\gamma}
+  }{
+    F(x) = 1 - (1 + \lambda x^\alpha)^(-\gamma)
+  }
+
+\strong{Quantile function}:
+
+\deqn{
+    F^{-1}(p) = \lambda^{-1/\alpha} ((1 - p)^{-1/\gamma} - 1)^{1/\alpha}
+  }{
+    F^(-1)(p) = \lambda^(-1/\alpha) ((1 - p)^(-1/\gamma) - 1)^(1/\alpha)
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+Does not exist in closed form.
 }
 \examples{
 dist <- dist_burr(shape1 = c(1,1,1,2,3,0.5), shape2 = c(1,2,3,1,1,2))

@@ -19,9 +19,8 @@ is a continuous probability distribution that is symmetric around its location
 parameter.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_laplace.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_laplace.html}
 
 In the following, let \eqn{X} be a Laplace random variable with location
 parameter \code{mu} = \eqn{\mu} and scale parameter \code{sigma} = \eqn{\sigma}.

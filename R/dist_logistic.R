@@ -12,9 +12,7 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_logistic")`
 #'
 #'   In the following, let \eqn{X} be a Logistic random variable with
 #'   `location` = \eqn{\mu} and `scale` = \eqn{s}.
@@ -28,28 +26,28 @@
 #'   **Probability density function (p.d.f)**:
 #'
 #'   \deqn{
-#'     f(x) = \frac{e^{-(\frac{x - \mu}{s})}}{s [1 + \exp(-(\frac{x - \mu}{s})) ]^2}
+#'     f(x) = \frac{e^{-\frac{x - \mu}{s}}}{s \left[1 + e^{-\frac{x - \mu}{s}}\right]^2}
 #'   }{
-#'     f(x) = e^(-(t - \mu) / s) / (s (1 + e^(-(t - \mu) / s))^2)
+#'     f(x) = e^(-(x - mu) / s) / (s (1 + e^(-(x - \mu) / s))^2)
 #'   }
 #'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
 #'   \deqn{
-#'     F(t) = \frac{1}{1 + e^{-(\frac{t - \mu}{s})}}
+#'     F(x) = \frac{1}{1 + e^{-\frac{x - \mu}{s}}}
 #'   }{
-#'     F(t) = 1 / (1 +  e^(-(t - \mu) / s))
+#'     F(x) = 1 / (1 + e^(-(x - mu) / s))
 #'   }
 #'
 #'   **Moment generating function (m.g.f)**:
 #'
 #'   \deqn{
-#'     E(e^{tX}) = e^{\mu t} \beta(1 - st, 1 + st)
+#'     E(e^{tX}) = e^{\mu t} B(1 - st, 1 + st)
 #'   }{
-#'     E(e^(tX)) = = e^(\mu t) \beta(1 - st, 1 + st)
+#'     E(e^(tX)) = e^(mu t) B(1 - st, 1 + st)
 #'   }
 #'
-#'   where \eqn{\beta(x, y)} is the Beta function.
+#'   for \eqn{-1 < st < 1}, where \eqn{B(a, b)} is the Beta function.
 #'
 #' @seealso [stats::Logistic]
 #'

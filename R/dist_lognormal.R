@@ -5,48 +5,48 @@
 #'
 #' The log-normal distribution is a commonly used transformation of the Normal
 #' distribution. If \eqn{X} follows a log-normal distribution, then \eqn{\ln{X}}
-#' would be characteristed by a Normal distribution.
+#' would be characterised by a Normal distribution.
 #'
-#' @param mu The mean (location parameter) of the distribution, which is the
-#'   mean of the associated Normal distribution. Can be any real number.
-#' @param sigma The standard deviation (scale parameter) of the distribution.
-#'   Can be any positive number.
+#' @inheritParams stats::dlnorm
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_lognormal")`
 #'
-#'   In the following, let \eqn{Y} be a Normal random variable with mean
-#'   `mu` = \eqn{\mu} and standard deviation `sigma` = \eqn{\sigma}. The
-#'   log-normal distribution \eqn{X = exp(Y)} is characterised by:
+#'   In the following, let \eqn{X} be a log-normal random variable with
+#'   `mu` = \eqn{\mu} and `sigma` = \eqn{\sigma}.
 #'
-#'   **Support**: \eqn{R+}, the set of all real numbers greater than or equal to 0.
+#'   **Support**: \eqn{R^+}, the set of positive real numbers.
 #'
-#'   **Mean**: \eqn{e^(\mu + \sigma^2/2}
+#'   **Mean**: \eqn{e^{\mu + \sigma^2/2}}{exp(\mu + \sigma^2/2)}
 #'
-#'   **Variance**: \eqn{(e^(\sigma^2)-1) e^(2\mu + \sigma^2}
+#'   **Variance**: \eqn{(e^{\sigma^2} - 1) e^{2\mu + \sigma^2}}{(exp(\sigma^2) - 1) exp(2\mu + \sigma^2)}
+#'
+#'   **Skewness**: \eqn{(e^{\sigma^2} + 2) \sqrt{e^{\sigma^2} - 1}}{(exp(\sigma^2) + 2) sqrt(exp(\sigma^2) - 1)}
+#'
+#'   **Excess Kurtosis**: \eqn{e^{4\sigma^2} + 2 e^{3\sigma^2} + 3 e^{2\sigma^2} - 6}{exp(4\sigma^2) + 2 exp(3\sigma^2) + 3 exp(2\sigma^2) - 6}
 #'
 #'   **Probability density function (p.d.f)**:
 #'
 #'   \deqn{
-#'     f(x) = \frac{1}{x\sqrt{2 \pi \sigma^2}} e^{-(\ln{x} - \mu)^2 / 2 \sigma^2}
+#'     f(x) = \frac{1}{x\sqrt{2 \pi \sigma^2}} e^{-(\ln{x} - \mu)^2 / (2 \sigma^2)}
 #'   }{
-#'     f(x) = 1 / (x * sqrt(2 \pi \sigma^2)) exp(-(log(x) - \mu)^2 / (2 \sigma^2))
+#'     f(x) = 1 / (x sqrt(2 \pi \sigma^2)) exp(-(\log(x) - \mu)^2 / (2 \sigma^2))
 #'   }
 #'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
-#'   The cumulative distribution function has the form
-#'
 #'   \deqn{
-#'     F(x) = \Phi((\ln{x} - \mu)/\sigma)
+#'     F(x) = \Phi\left(\frac{\ln{x} - \mu}{\sigma}\right)
 #'   }{
-#'     F(x) = Phi((log(x) - \mu)/\sigma)
+#'     F(x) = \Phi((\log(x) - \mu) / \sigma)
 #'   }
 #'
-#'   Where \eqn{Phi}{Phi} is the CDF of a standard Normal distribution, N(0,1).
+#'   where \eqn{\Phi} is the c.d.f. of the standard Normal distribution.
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   Does not exist in closed form.
 #'
 #' @seealso [stats::Lognormal]
 #'
@@ -71,6 +71,7 @@
 #' # A log-normal distribution X is exp(Y), where Y is a Normal distribution of
 #' # the same parameters. So log(X) will produce the Normal distribution Y.
 #' log(dist)
+#' @name dist_lognormal
 #' @export
 dist_lognormal <- function(mu = 0, sigma = 1){
   mu <- vec_cast(mu, double())

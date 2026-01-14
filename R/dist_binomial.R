@@ -22,9 +22,7 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_binomial")`
 #'
 #'   The Binomial distribution comes up when you are interested in the portion
 #'   of people who do a thing. The Binomial distribution
@@ -65,6 +63,24 @@
 #'   }{
 #'     E(e^(tX)) = (1 - p + p e^t)^n
 #'   }
+#'
+#'   **Skewness**:
+#'
+#'   \deqn{
+#'     \frac{1 - 2p}{\sqrt{np(1-p)}}
+#'   }{
+#'     (1 - 2p) / sqrt(np(1-p))
+#'   }
+#'
+#'   **Excess kurtosis**:
+#'
+#'   \deqn{
+#'     \frac{1 - 6p(1-p)}{np(1-p)}
+#'   }{
+#'     (1 - 6p(1-p)) / (np(1-p))
+#'   }
+#'
+#' @seealso [stats::Binomial]
 #'
 #' @examples
 #' dist <- dist_binomial(size = 1:5, prob = c(0.05, 0.5, 0.3, 0.9, 0.1))

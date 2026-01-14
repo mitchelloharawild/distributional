@@ -15,6 +15,52 @@ dist_missing(length = 1)
 A placeholder distribution for handling missing values in a vector of
 distributions.
 }
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_missing.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_missing.html}
+
+The missing distribution represents the absence of distributional
+information. It is used as a placeholder when distribution values are
+not available or not applicable, similar to how \code{NA} is used for missing
+scalar values.
+
+\strong{Support}: Undefined
+
+\strong{Mean}: \eqn{\text{NA}}
+
+\strong{Variance}: \eqn{\text{NA}}
+
+\strong{Skewness}: \eqn{\text{NA}}
+
+\strong{Kurtosis}: \eqn{\text{NA}}
+
+\strong{Probability density function (p.d.f)}: Undefined
+
+\deqn{
+    f(x) = \text{NA}
+  }
+
+\strong{Cumulative distribution function (c.d.f)}: Undefined
+
+\deqn{
+    F(t) = \text{NA}
+  }
+
+\strong{Quantile function}: Undefined
+
+\deqn{
+    Q(p) = \text{NA}
+  }
+
+\strong{Moment generating function (m.g.f)}: Undefined
+
+\deqn{
+    E(e^{tX}) = \text{NA}
+  }
+
+All statistical operations on missing distributions return \code{NA} values
+of appropriate length, propagating the missingness through calculations.
+}
 \examples{
 dist <- dist_missing(3L)
 
@@ -31,4 +77,7 @@ cdf(dist, 4)
 
 quantile(dist, 0.7)
 
+}
+\seealso{
+\link[base:NA]{base::NA}
 }

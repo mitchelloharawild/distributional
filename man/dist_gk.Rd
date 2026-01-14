@@ -24,9 +24,8 @@ The g-and-k distribution is a flexible distribution often used to model univaria
 It is particularly known for its ability to handle skewness and heavy-tailed behavior.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_gk.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_gk.html}
 
 In the following, let \eqn{X} be a g-k random variable with parameters
 \code{A}, \code{B}, \code{g}, \code{k}, and \code{c}.

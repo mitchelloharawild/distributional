@@ -14,26 +14,124 @@ dist_gpd(location, scale, shape)
 \item{shape}{the shape parameter \eqn{s} of the GPD distribution.}
 }
 \description{
-The GPD distribution function with parameters \eqn{\code{location} = a},
-\eqn{\code{scale} = b} and \eqn{\code{shape} = s} is
-}
-\details{
-\deqn{F(x) = 1 - \left(1+s(x-a)/b\right)^{-1/s}}
-
-for \eqn{1+s(x-a)/b > 0}, where \eqn{b > 0}. If \eqn{s = 0} the distribution
-is defined by continuity, giving
-
-\deqn{F(x) = 1 - \exp\left(-\frac{x-a}{b}\right)}
-
-The support of the distribution is \eqn{x \geq a} if \eqn{s \geq 0}, and
-\eqn{a \leq x \leq a -b/s} if \eqn{s < 0}.
+The GPD distribution is commonly used to model the tails of distributions,
+particularly in extreme value theory.
 
 The Pickands–Balkema–De Haan theorem states that for a large class of
 distributions, the tail (above some threshold) can be approximated by a GPD.
 }
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_gpd.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_gpd.html}
+
+In the following, let \eqn{X} be a Generalized Pareto random variable with
+parameters \code{location} = \eqn{a}, \code{scale} = \eqn{b > 0}, and
+\code{shape} = \eqn{s}.
+
+\strong{Support}:
+\eqn{x \ge a} if \eqn{s \ge 0},
+\eqn{a \le x \le a - b/s} if \eqn{s < 0}
+
+\strong{Mean}:
+\deqn{
+  E(X) = a + \frac{b}{1 - s} \quad \textrm{for } s < 1
+}{
+  E(X) = a + b/(1 - s) for s < 1
+}
+\eqn{E(X) = \infty} for \eqn{s \ge 1}
+
+\strong{Variance}:
+\deqn{
+  \textrm{Var}(X) = \frac{b^2}{(1-s)^2(1-2s)} \quad \textrm{for } s < 0.5
+}{
+  Var(X) = b^2 / ((1-s)^2 (1-2s)) for s < 0.5
+}
+\eqn{\textrm{Var}(X) = \infty} for \eqn{s \ge 0.5}
+
+\strong{Probability density function (p.d.f)}:
+
+For \eqn{s = 0}:
+\deqn{
+  f(x) = \frac{1}{b}\exp\left(-\frac{x-a}{b}\right) \quad \textrm{for } x \ge a
+}{
+  f(x) = (1/b) exp(-(x-a)/b) for x >= a
+}
+
+For \eqn{s \ne 0}:
+\deqn{
+  f(x) = \frac{1}{b}\left(1 + s\frac{x-a}{b}\right)^{-1/s - 1}
+}{
+  f(x) = (1/b)(1 + s(x-a)/b)^(-1/s - 1)
+}
+where \eqn{1 + s(x-a)/b > 0}
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+For \eqn{s = 0}:
+\deqn{
+  F(x) = 1 - \exp\left(-\frac{x-a}{b}\right) \quad \textrm{for } x \ge a
+}{
+  F(x) = 1 - exp(-(x-a)/b) for x >= a
+}
+
+For \eqn{s \ne 0}:
+\deqn{
+  F(x) = 1 - \left(1 + s\frac{x-a}{b}\right)^{-1/s}
+}{
+  F(x) = 1 - (1 + s(x-a)/b)^(-1/s)
+}
+where \eqn{1 + s(x-a)/b > 0}
+
+\strong{Quantile function}:
+
+For \eqn{s = 0}:
+\deqn{
+  Q(p) = a - b\log(1-p)
+}{
+  Q(p) = a - b log(1-p)
+}
+
+For \eqn{s \ne 0}:
+\deqn{
+  Q(p) = a + \frac{b}{s}\left[(1-p)^{-s} - 1\right]
+}{
+  Q(p) = a + (b/s)[(1-p)^(-s) - 1]
+}
+
+\strong{Median}:
+
+For \eqn{s = 0}:
+\deqn{
+  \textrm{Median}(X) = a + b\log(2)
+}{
+  Median(X) = a + b log(2)
+}
+
+For \eqn{s \ne 0}:
+\deqn{
+  \textrm{Median}(X) = a + \frac{b}{s}\left(2^s - 1\right)
+}{
+  Median(X) = a + (b/s)(2^s - 1)
+}
+
+\strong{Skewness and Kurtosis}: No closed-form expressions; approximated numerically.
+}
 \examples{
 dist <- dist_gpd(location = 0, scale = 1, shape = 0)
+
+dist
+mean(dist)
+variance(dist)
+
+generate(dist, 10)
+
+density(dist, 2)
+density(dist, 2, log = TRUE)
+
+cdf(dist, 4)
+
+quantile(dist, 0.7)
 }
 \seealso{
-\code{\link[evd]{gpd}}
+\code{\link[evd:gpd]{evd::dgpd()}}
 }

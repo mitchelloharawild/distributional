@@ -139,6 +139,29 @@ require_package <- function(pkg){
   }
 }
 
+#' @keywords internal
+pkgdown_doc_link <- function(name) {
+  if (pkgdown::in_pkgdown()) {
+    # When pkgdown builds, return nothing
+    return("")
+  }
+
+  url <- sprintf(
+    "https://pkg.mitchelloharawild.com/distributional/reference/%s.html",
+    name
+  )
+
+  # Plain text + markdown-style link; roxygen will convert this to Rd.
+  # Example rendered text:
+  #   We recommend reading this documentation on [pkgdown](https://...)
+  #   https://...
+  paste0(
+    "We recommend reading this documentation on ",
+    "[pkgdown](", url, ") which renders math nicely.\n\\url{",
+    url, "}\n"
+  )
+}
+
 restore_rng <- function(expr, seed = NULL) {
   old_seed <- .GlobalEnv$.Random.seed
   # Set new temporary seed

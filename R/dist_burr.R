@@ -3,7 +3,52 @@
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
+#' The Burr distribution (Type XII) is a flexible continuous probability
+#' distribution often used for modeling income distributions, reliability
+#' data, and failure times.
+#'
 #' @inheritParams actuar::dburr
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_burr")`
+#'
+#'   In the following, let \eqn{X} be a Burr random variable with parameters
+#'   `shape1` = \eqn{\alpha}, `shape2` = \eqn{\gamma}, and `rate` = \eqn{\lambda}.
+#'
+#'   **Support**: \eqn{x \in (0, \infty)}{x > 0}
+#'
+#'   **Mean**: \eqn{\frac{\lambda^{-1/\alpha} \gamma B(\gamma - 1/\alpha, 1 + 1/\alpha)}{\gamma}} (for \eqn{\alpha \gamma > 1})
+#'
+#'   **Variance**: \eqn{\frac{\lambda^{-2/\alpha} \gamma B(\gamma - 2/\alpha, 1 + 2/\alpha)}{\gamma} - \mu^2} (for \eqn{\alpha \gamma > 2})
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \alpha \gamma \lambda x^{\alpha - 1} (1 + \lambda x^\alpha)^{-\gamma - 1}
+#'   }{
+#'     f(x) = \alpha \gamma \lambda x^(\alpha - 1) (1 + \lambda x^\alpha)^(-\gamma - 1)
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(x) = 1 - (1 + \lambda x^\alpha)^{-\gamma}
+#'   }{
+#'     F(x) = 1 - (1 + \lambda x^\alpha)^(-\gamma)
+#'   }
+#'
+#'   **Quantile function**:
+#'
+#'   \deqn{
+#'     F^{-1}(p) = \lambda^{-1/\alpha} ((1 - p)^{-1/\gamma} - 1)^{1/\alpha}
+#'   }{
+#'     F^(-1)(p) = \lambda^(-1/\alpha) ((1 - p)^(-1/\gamma) - 1)^(1/\alpha)
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**:
+#'
+#'   Does not exist in closed form.
 #'
 #' @seealso [actuar::Burr]
 #'

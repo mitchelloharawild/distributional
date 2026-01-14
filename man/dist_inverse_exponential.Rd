@@ -11,6 +11,50 @@ dist_inverse_exponential(rate)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+The Inverse Exponential distribution is used to model the reciprocal of
+exponentially distributed variables.
+}
+\details{
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_exponential.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_exponential.html}
+
+In the following, let \eqn{X} be an Inverse Exponential random variable
+with parameter \code{rate} = \eqn{\lambda}.
+
+\strong{Support}: \eqn{x > 0}
+
+\strong{Mean}: Does not exist, returns NA
+
+\strong{Variance}: Does not exist, returns NA
+
+\strong{Probability density function (p.d.f)}:
+
+\deqn{
+    f(x) = \frac{\lambda}{x^2} e^{-\lambda/x}
+  }{
+    f(x) = \lambda / x^2 * e^(-\lambda/x)
+  }
+
+\strong{Cumulative distribution function (c.d.f)}:
+
+\deqn{
+    F(x) = e^{-\lambda/x}
+  }{
+    F(x) = e^(-\lambda/x)
+  }
+
+\strong{Quantile function (inverse c.d.f)}:
+
+\deqn{
+    F^{-1}(p) = -\frac{\lambda}{\log(p)}
+  }{
+    F^(-1)(p) = -\lambda / log(p)
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+Does not exist (divergent integral).
 }
 \examples{
 dist <- dist_inverse_exponential(rate = 1:5)

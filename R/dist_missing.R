@@ -8,6 +8,54 @@
 #'
 #' @param length The number of missing distributions
 #'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_missing")`
+#'
+#'   The missing distribution represents the absence of distributional
+#'   information. It is used as a placeholder when distribution values are
+#'   not available or not applicable, similar to how `NA` is used for missing
+#'   scalar values.
+#'
+#'   **Support**: Undefined
+#'
+#'   **Mean**: \eqn{\text{NA}}
+#'
+#'   **Variance**: \eqn{\text{NA}}
+#'
+#'   **Skewness**: \eqn{\text{NA}}
+#'
+#'   **Kurtosis**: \eqn{\text{NA}}
+#'
+#'   **Probability density function (p.d.f)**: Undefined
+#'
+#'   \deqn{
+#'     f(x) = \text{NA}
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**: Undefined
+#'
+#'   \deqn{
+#'     F(t) = \text{NA}
+#'   }
+#'
+#'   **Quantile function**: Undefined
+#'
+#'   \deqn{
+#'     Q(p) = \text{NA}
+#'   }
+#'
+#'   **Moment generating function (m.g.f)**: Undefined
+#'
+#'   \deqn{
+#'     E(e^{tX}) = \text{NA}
+#'   }
+#'
+#'   All statistical operations on missing distributions return `NA` values
+#'   of appropriate length, propagating the missingness through calculations.
+#'
+#' @seealso [base::NA]
+#'
 #' @name dist_missing
 #'
 #' @examples

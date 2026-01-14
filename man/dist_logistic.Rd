@@ -17,9 +17,8 @@ the model given by \eqn{P(Y = 1 | X) = F(X \beta)} where
 \eqn{F} is the Logistic \code{\link[=cdf]{cdf()}} is called \emph{logistic regression}.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_logistic.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_logistic.html}
 
 In the following, let \eqn{X} be a Logistic random variable with
 \code{location} = \eqn{\mu} and \code{scale} = \eqn{s}.
@@ -33,28 +32,28 @@ In the following, let \eqn{X} be a Logistic random variable with
 \strong{Probability density function (p.d.f)}:
 
 \deqn{
-    f(x) = \frac{e^{-(\frac{x - \mu}{s})}}{s [1 + \exp(-(\frac{x - \mu}{s})) ]^2}
+    f(x) = \frac{e^{-\frac{x - \mu}{s}}}{s \left[1 + e^{-\frac{x - \mu}{s}}\right]^2}
   }{
-    f(x) = e^(-(t - \mu) / s) / (s (1 + e^(-(t - \mu) / s))^2)
+    f(x) = e^(-(x - mu) / s) / (s (1 + e^(-(x - \mu) / s))^2)
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
 
 \deqn{
-    F(t) = \frac{1}{1 + e^{-(\frac{t - \mu}{s})}}
+    F(x) = \frac{1}{1 + e^{-\frac{x - \mu}{s}}}
   }{
-    F(t) = 1 / (1 +  e^(-(t - \mu) / s))
+    F(x) = 1 / (1 + e^(-(x - mu) / s))
   }
 
 \strong{Moment generating function (m.g.f)}:
 
 \deqn{
-    E(e^{tX}) = e^{\mu t} \beta(1 - st, 1 + st)
+    E(e^{tX}) = e^{\mu t} B(1 - st, 1 + st)
   }{
-    E(e^(tX)) = = e^(\mu t) \beta(1 - st, 1 + st)
+    E(e^(tX)) = e^(mu t) B(1 - st, 1 + st)
   }
 
-where \eqn{\beta(x, y)} is the Beta function.
+for \eqn{-1 < st < 1}, where \eqn{B(a, b)} is the Beta function.
 }
 \examples{
 dist <- dist_logistic(location = c(5,9,9,6,2), scale = c(2,3,4,2,1))

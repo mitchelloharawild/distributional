@@ -18,9 +18,8 @@ variance. Cauchy distributions often appear as priors in Bayesian contexts
 due to their heavy tails.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_cauchy.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_cauchy.html}
 
 In the following, let \eqn{X} be a Cauchy variable with mean
 \verb{location =} \eqn{x_0} and \code{scale} = \eqn{\gamma}.

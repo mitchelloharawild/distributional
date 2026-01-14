@@ -13,15 +13,13 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_geometric")`
 #'
 #'   In the following, let \eqn{X} be a Geometric random variable with
-#'   success probability `p` = \eqn{p}. Note that there are multiple
+#'   success probability `prob` = \eqn{p}. Note that there are multiple
 #'   parameterizations of the Geometric distribution.
 #'
-#'   **Support**: 0 < p < 1, \eqn{x = 0, 1, \dots}
+#'   **Support**: \eqn{\{0, 1, 2, 3, ...\}}{{0, 1, 2, 3, ...}}
 #'
 #'   **Mean**: \eqn{\frac{1-p}{p}}
 #'
@@ -30,13 +28,17 @@
 #'   **Probability mass function (p.m.f)**:
 #'
 #'   \deqn{
-#'     P(X = x) = p(1-p)^x,
-#'    }
+#'     P(X = k) = p(1-p)^k
+#'   }{
+#'     P(X = k) = p(1-p)^k
+#'   }
 #'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
 #'   \deqn{
-#'     P(X \le x) = 1 - (1-p)^{x+1}
+#'     P(X \le k) = 1 - (1-p)^{k+1}
+#'   }{
+#'     P(X \le k) = 1 - (1-p)^(k+1)
 #'   }
 #'
 #'   **Moment generating function (m.g.f)**:
@@ -44,7 +46,23 @@
 #'   \deqn{
 #'     E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
 #'   }{
-#'     E(e^{tX}) = \frac{pe^t}{1 - (1-p)e^t}
+#'     E(e^(tX)) = pe^t / (1 - (1-p)e^t)
+#'   }
+#'
+#'   **Skewness**:
+#'
+#'   \deqn{
+#'     \frac{2 - p}{\sqrt{1 - p}}
+#'   }{
+#'     (2 - p) / sqrt(1 - p)
+#'   }
+#'
+#'   **Excess Kurtosis**:
+#'
+#'   \deqn{
+#'     6 + \frac{p^2}{1 - p}
+#'   }{
+#'     6 + p^2 / (1 - p)
 #'   }
 #'
 #' @seealso [stats::Geometric]

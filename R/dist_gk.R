@@ -10,9 +10,7 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_gk")`
 #'
 #'   In the following, let \eqn{X} be a g-k random variable with parameters
 #'   `A`, `B`, `g`, `k`, and `c`.

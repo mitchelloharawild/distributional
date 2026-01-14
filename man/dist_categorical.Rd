@@ -17,16 +17,15 @@ dist_categorical(prob, outcomes = NULL)
 Categorical distributions are used to represent events with multiple
 outcomes, such as what number appears on the roll of a dice. This is also
 referred to as the 'generalised Bernoulli' or 'multinoulli' distribution.
-The Cateogorical distribution is a special case of the \code{\link[=Multinomial]{Multinomial()}}
+The Categorical distribution is a special case of the \code{\link[=Multinomial]{Multinomial()}}
 distribution with \code{n = 1}.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_categorical.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_categorical.html}
 
 In the following, let \eqn{X} be a Categorical random variable with
-probability parameters \code{p} = \eqn{\{p_1, p_2, \ldots, p_k\}}.
+probability parameters \code{prob} = \eqn{\{p_1, p_2, \ldots, p_k\}}.
 
 The Categorical probability distribution is widely used to model the
 occurance of multiple events. A simple example is the roll of a dice, where
@@ -35,9 +34,23 @@ each number on a 6 sided dice.
 
 \strong{Support}: \eqn{\{1, \ldots, k\}}{{1, ..., k}}
 
-\strong{Mean}: \eqn{p}
+\strong{Mean}: Not defined for unordered categories. For ordered categories with
+integer outcomes \eqn{\{1, 2, \ldots, k\}}, the mean is:
 
-\strong{Variance}: \eqn{p \cdot (1 - p) = p \cdot q}{p (1 - p)}
+\deqn{
+    E(X) = \sum_{i=1}^{k} i \cdot p_i
+  }{
+    E(X) = sum(i * p_i) for i = 1 to k
+  }
+
+\strong{Variance}: Not defined for unordered categories. For ordered categories
+with integer outcomes \eqn{\{1, 2, \ldots, k\}}, the variance is:
+
+\deqn{
+    \text{Var}(X) = \sum_{i=1}^{k} i^2 \cdot p_i - \left(\sum_{i=1}^{k} i \cdot p_i\right)^2
+  }{
+    Var(X) = sum(i^2 * p_i) - [sum(i * p_i)]^2
+  }
 
 \strong{Probability mass function (p.m.f)}:
 
@@ -49,7 +62,26 @@ each number on a 6 sided dice.
 
 \strong{Cumulative distribution function (c.d.f)}:
 
-The cdf() of a categorical distribution is undefined as the outcome categories aren't ordered.
+The c.d.f is undefined for unordered categories. For ordered categories
+with outcomes \eqn{x_1 < x_2 < \ldots < x_k}, the c.d.f is:
+
+\deqn{
+    P(X \le x_j) = \sum_{i=1}^{j} p_i
+  }{
+    P(X <= x_j) = sum(p_i) for i = 1 to j
+  }
+
+\strong{Moment generating function (m.g.f)}:
+
+\deqn{
+    E(e^{tX}) = \sum_{i=1}^{k} e^{tx_i} \cdot p_i
+  }{
+    E(e^(tX)) = sum(e^(t * x_i) * p_i) for i = 1 to k
+  }
+
+\strong{Skewness}: Approximated numerically for ordered categories.
+
+\strong{Kurtosis}: Approximated numerically for ordered categories.
 }
 \examples{
 dist <- dist_categorical(prob = list(c(0.05, 0.5, 0.15, 0.2, 0.1), c(0.3, 0.1, 0.6)))
@@ -85,4 +117,7 @@ generate(dist, 10)
 density(dist, "a")
 density(dist, "z", log = TRUE)
 
+}
+\seealso{
+\link[stats:Multinom]{stats::Multinomial}
 }

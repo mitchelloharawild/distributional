@@ -9,62 +9,51 @@
 #'
 #' @details
 #'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' `r pkgdown_doc_link("dist_uniform")`
 #'
-#'   In the following, let \eqn{X} be a Poisson random variable with parameter
-#'   `lambda` = \eqn{\lambda}.
+#'   In the following, let \eqn{X} be a Uniform random variable with parameters
+#'   `min` = \eqn{a} and `max` = \eqn{b}.
 #'
-#'   **Support**: \eqn{[a,b]}{[a,b]}
+#'   **Support**: \eqn{[a, b]}
 #'
-#'   **Mean**: \eqn{\frac{1}{2}(a+b)}
+#'   **Mean**: \eqn{\frac{a + b}{2}}
 #'
-#'   **Variance**: \eqn{\frac{1}{12}(b-a)^2}
+#'   **Variance**: \eqn{\frac{(b - a)^2}{12}}
 #'
-#'   **Probability mass function (p.m.f)**:
+#'   **Probability density function (p.d.f)**:
 #'
 #'   \deqn{
-#'     f(x) = \frac{1}{b-a} for x \in [a,b]
+#'     f(x) = \frac{1}{b - a}
 #'   }{
-#'     f(x) = \frac{1}{b-a} for x in [a,b]
+#'     f(x) = 1 / (b - a)
 #'   }
-#'   \deqn{
-#'     f(x) = 0 otherwise
-#'   }{
-#'     f(x) = 0 otherwise
-#'   }
+#'
+#'   for \eqn{x \in [a, b]}{x in [a, b]}, and \eqn{f(x) = 0} otherwise.
 #'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
 #'   \deqn{
-#'     F(x) = 0 for x < a
+#'     F(x) = \frac{x - a}{b - a}
 #'   }{
-#'     F(x) = 0 for x < a
+#'     F(x) = (x - a) / (b - a)
 #'   }
-#'   \deqn{
-#'     F(x) = \frac{x - a}{b-a} for x \in [a,b]
-#'   }{
-#'     F(x) = \frac{x - a}{b-a} for x in [a,b]
-#'   }
-#'   \deqn{
-#'     F(x) = 1 for x > b
-#'   }{
-#'     F(x) = 1 for x > b
-#'   }
+#'
+#'   for \eqn{x \in [a, b]}{x in [a, b]}, with \eqn{F(x) = 0} for \eqn{x < a}
+#'   and \eqn{F(x) = 1} for \eqn{x > b}.
 #'
 #'   **Moment generating function (m.g.f)**:
 #'
 #'   \deqn{
-#'     E(e^{tX}) = \frac{e^{tb} - e^{ta}}{t(b-a)} for t \neq 0
+#'     E(e^{tX}) = \frac{e^{tb} - e^{ta}}{t(b - a)}
 #'   }{
-#'     E(e^(tX)) = \frac{e^{tb} - e^{ta}}{t(b-a)} for t \neq 0
+#'     E(e^(tX)) = (e^(tb) - e^(ta)) / (t(b - a))
 #'   }
-#'   \deqn{
-#'     E(e^{tX}) = 1 for t = 0
-#'   }{
-#'     E(e^(tX)) = 1 for t = 0
-#'   }
+#'
+#'   for \eqn{t \neq 0}{t != 0}, and \eqn{E(e^{tX}) = 1} for \eqn{t = 0}.
+#'
+#'   **Skewness**: \eqn{0}
+#'
+#'   **Excess Kurtosis**: \eqn{-\frac{6}{5}}{-6/5}
 #'
 #' @seealso [stats::Uniform]
 #'

@@ -29,9 +29,8 @@ The equation of the Binomial distribution is directly derived from
 the equation of the Bernoulli distribution.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_binomial.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_binomial.html}
 
 The Binomial distribution comes up when you are interested in the portion
 of people who do a thing. The Binomial distribution
@@ -72,6 +71,22 @@ or called \eqn{\pi} instead of \eqn{p}.
   }{
     E(e^(tX)) = (1 - p + p e^t)^n
   }
+
+\strong{Skewness}:
+
+\deqn{
+    \frac{1 - 2p}{\sqrt{np(1-p)}}
+  }{
+    (1 - 2p) / sqrt(np(1-p))
+  }
+
+\strong{Excess kurtosis}:
+
+\deqn{
+    \frac{1 - 6p(1-p)}{np(1-p)}
+  }{
+    (1 - 6p(1-p)) / (np(1-p))
+  }
 }
 \examples{
 dist <- dist_binomial(size = 1:5, prob = c(0.05, 0.5, 0.3, 0.9, 0.1))
@@ -91,4 +106,7 @@ cdf(dist, 4)
 
 quantile(dist, 0.7)
 
+}
+\seealso{
+\link[stats:Binomial]{stats::Binomial}
 }

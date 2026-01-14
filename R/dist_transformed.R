@@ -3,6 +3,11 @@
 #' @description
 #' `r lifecycle::badge('maturing')`
 #'
+#' A transformed distribution applies a monotonic transformation to an existing
+#' distribution. This is useful for creating derived distributions such as 
+#' log-normal (exponential transformation of normal), or other custom 
+#' transformations of base distributions.
+#'
 #' The [`density()`], [`mean()`], and [`variance()`] methods are approximate as
 #' they are based on numerical derivatives.
 #'
@@ -10,6 +15,91 @@
 #' @param transform A function used to transform the distribution. This
 #' transformation should be monotonic over appropriate domain.
 #' @param inverse The inverse of the `transform` function.
+#'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_transformed")`
+#'
+#'   Let \eqn{Y = g(X)} where \eqn{X} is the base distribution with 
+#'   transformation function `transform` = \eqn{g} and `inverse` = \eqn{g^{-1}}.
+#'   The transformation \eqn{g} must be monotonic over the support of \eqn{X}.
+#'
+#'   **Support**: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}
+#'
+#'   **Mean**: Approximated numerically using a second-order Taylor expansion:
+#'
+#'   \deqn{
+#'     E(Y) \approx g(\mu_X) + \frac{1}{2}g''(\mu_X)\sigma_X^2
+#'   }{
+#'     E(Y) ~= g(mu_X) + (1/2) g''(mu_X) sigma_X^2
+#'   }
+#'
+#'   where \eqn{\mu_X} and \eqn{\sigma_X^2} are the mean and variance of the 
+#'   base distribution \eqn{X}, and \eqn{g''} is the second derivative of the 
+#'   transformation. The derivative is computed numerically using 
+#'   [`numDeriv::hessian()`].
+#'
+#'   **Variance**: Approximated numerically using the delta method:
+#'
+#'   \deqn{
+#'     \mathrm{Var}(Y) \approx [g'(\mu_X)]^2\sigma_X^2 + \frac{1}{2}[g''(\mu_X)\sigma_X^2]^2
+#'   }{
+#'     Var(Y) ~= [g'(mu_X)]^2 sigma_X^2 + (1/2) [g''(mu_X) sigma_X^2]^2
+#'   }
+#'
+#'   where \eqn{g'} is the first derivative (Jacobian) computed numerically 
+#'   using [`numDeriv::jacobian()`].
+#'
+#'   **Probability density function (p.d.f)**: Using the change of variables 
+#'   formula:
+#'
+#'   \deqn{
+#'     f_Y(y) = f_X(g^{-1}(y)) \left|\frac{d}{dy}g^{-1}(y)\right|
+#'   }{
+#'     f_Y(y) = f_X(g^(-1)(y)) |d/dy g^(-1)(y)|
+#'   }
+#'
+#'   where \eqn{f_X} is the p.d.f. of the base distribution and the Jacobian
+#'   \eqn{|d/dy \, g^{-1}(y)|} is computed numerically using 
+#'   [`numDeriv::jacobian()`].
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   For monotonically increasing \eqn{g}:
+#'   \deqn{
+#'     F_Y(y) = F_X(g^{-1}(y))
+#'   }{
+#'     F_Y(y) = F_X(g^(-1)(y))
+#'   }
+#'
+#'   For monotonically decreasing \eqn{g}:
+#'   \deqn{
+#'     F_Y(y) = 1 - F_X(g^{-1}(y))
+#'   }{
+#'     F_Y(y) = 1 - F_X(g^(-1)(y))
+#'   }
+#'
+#'   where \eqn{F_X} is the c.d.f. of the base distribution.
+#'
+#'   **Quantile function**: The inverse of the c.d.f.
+#'
+#'   For monotonically increasing \eqn{g}:
+#'   \deqn{
+#'     Q_Y(p) = g(Q_X(p))
+#'   }{
+#'     Q_Y(p) = g(Q_X(p))
+#'   }
+#'
+#'   For monotonically decreasing \eqn{g}:
+#'   \deqn{
+#'     Q_Y(p) = g(Q_X(1-p))
+#'   }{
+#'     Q_Y(p) = g(Q_X(1-p))
+#'   }
+#'
+#'   where \eqn{Q_X} is the quantile function of the base distribution.
+#'
+#' @seealso [numDeriv::jacobian()], [numDeriv::hessian()]
 #'
 #' @examples
 #' # Create a log normal distribution

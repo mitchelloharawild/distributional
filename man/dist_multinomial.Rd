@@ -22,16 +22,15 @@ We then extend repeat the Categorical experiment several (\eqn{n})
 times.
 }
 \details{
-We recommend reading this documentation on
-\url{https://pkg.mitchelloharawild.com/distributional/}, where the math
-will render nicely.
+We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_multinomial.html}{pkgdown} which renders math nicely.
+\url{https://pkg.mitchelloharawild.com/distributional/reference/dist_multinomial.html}
 
 In the following, let \eqn{X = (X_1, ..., X_k)} be a Multinomial
-random variable with success probability \code{p} = \eqn{p}. Note that
+random variable with success probability \code{prob} = \eqn{p}. Note that
 \eqn{p} is vector with \eqn{k} elements that sum to one. Assume
 that we repeat the Categorical experiment \code{size} = \eqn{n} times.
 
-\strong{Support}: Each \eqn{X_i} is in \eqn{{0, 1, 2, ..., n}}.
+\strong{Support}: Each \eqn{X_i} is in \eqn{\{0, 1, 2, ..., n\}}{{0, 1, 2, ..., n}}.
 
 \strong{Mean}: The mean of \eqn{X_i} is \eqn{n p_i}.
 
@@ -42,21 +41,48 @@ is \eqn{-n p_i p_j}.
 \strong{Probability mass function (p.m.f)}:
 
 \deqn{
-    P(X_1 = x_1, ..., X_k = x_k) = \frac{n!}{x_1! x_2! ... x_k!} p_1^{x_1} \cdot p_2^{x_2} \cdot ... \cdot p_k^{x_k}
+    P(X_1 = x_1, ..., X_k = x_k) = \frac{n!}{x_1! x_2! \cdots x_k!} p_1^{x_1} \cdot p_2^{x_2} \cdot \ldots \cdot p_k^{x_k}
   }{
     P(X_1 = x_1, ..., X_k = x_k) = n! / (x_1! x_2! ... x_k!) p_1^x_1 p_2^x_2 ... p_k^x_k
   }
 
+where \eqn{\sum_{i=1}^k x_i = n} and \eqn{\sum_{i=1}^k p_i = 1}.
+
 \strong{Cumulative distribution function (c.d.f)}:
 
-Omitted for multivariate random variables for the time being.
+\deqn{
+    P(X_1 \le q_1, ..., X_k \le q_k) = \sum_{\substack{x_1, \ldots, x_k \ge 0 \\ x_i \le q_i \text{ for all } i \\ \sum_{i=1}^k x_i = n}} \frac{n!}{x_1! x_2! \cdots x_k!} p_1^{x_1} \cdot p_2^{x_2} \cdot \ldots \cdot p_k^{x_k}
+  }{
+    P(X_1 <= q_1, ..., X_k <= q_k) = sum over all (x_1, ..., x_k) with x_i <= q_i and sum x_i = n of n! / (x_1! ... x_k!) p_1^x_1 ... p_k^x_k
+  }
+
+The c.d.f. is computed as a finite sum of the p.m.f. over all integer vectors
+in the support that satisfy the componentwise inequalities.
 
 \strong{Moment generating function (m.g.f)}:
 
 \deqn{
-    E(e^{tX}) = \left(\sum_{i=1}^k p_i e^{t_i}\right)^n
+    E(e^{t'X}) = \left(\sum_{i=1}^k p_i e^{t_i}\right)^n
   }{
-    E(e^(tX)) = (p_1 e^t_1 + p_2 e^t_2 + ... + p_k e^t_k)^n
+    E(e^(t'X)) = (p_1 e^t_1 + p_2 e^t_2 + ... + p_k e^t_k)^n
+  }
+
+where \eqn{t = (t_1, ..., t_k)} is a vector of the same dimension as \eqn{X}.
+
+\strong{Skewness}: The skewness of \eqn{X_i} is
+
+\deqn{
+    \frac{1 - 2p_i}{\sqrt{n p_i (1 - p_i)}}
+  }{
+    (1 - 2p_i) / sqrt(n p_i (1 - p_i))
+  }
+
+\strong{Excess Kurtosis}: The excess kurtosis of \eqn{X_i} is
+
+\deqn{
+    \frac{1 - 6p_i(1 - p_i)}{n p_i (1 - p_i)}
+  }{
+    (1 - 6p_i(1 - p_i)) / (n p_i (1 - p_i))
   }
 }
 \examples{
@@ -68,11 +94,12 @@ variance(dist)
 
 generate(dist, 10)
 
-# TODO: Needs fixing to support multiple inputs
-# density(dist, 2)
-# density(dist, 2, log = TRUE)
+density(dist, cbind(1,2,1))
+density(dist, cbind(1,2,1), log = TRUE)
+
+cdf(dist, cbind(1,2,1))
 
 }
 \seealso{
-\link[stats:Multinom]{stats::Multinomial}
+\code{\link[stats:Multinom]{stats::dmultinom()}}, \code{\link[stats:Multinom]{stats::rmultinom()}}
 }

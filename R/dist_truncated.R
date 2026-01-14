@@ -9,6 +9,66 @@
 #' @param dist The distribution(s) to truncate.
 #' @param lower,upper The range of values to keep from a distribution.
 #'
+#' @details
+#'
+#' `r pkgdown_doc_link("dist_truncated")`
+#'
+#'   In the following, let \eqn{X} be a truncated random variable with 
+#'   underlying distribution \eqn{Y}, truncation bounds `lower` = \eqn{a} and 
+#'   `upper` = \eqn{b}, where \eqn{F_Y(x)} is the c.d.f. of \eqn{Y} and 
+#'   \eqn{f_Y(x)} is the p.d.f. of \eqn{Y}.
+#'
+#'   **Support**: \eqn{[a, b]}
+#'
+#'   **Mean**: For the general case, the mean is approximated numerically.
+#'   For a truncated Normal distribution with underlying mean \eqn{\mu} and 
+#'   standard deviation \eqn{\sigma}, the mean is:
+#'
+#'   \deqn{
+#'     E(X) = \mu + \frac{\phi(\alpha) - \phi(\beta)}{\Phi(\beta) - \Phi(\alpha)} \sigma
+#'   }{
+#'     E(X) = mu + (phi(alpha) - phi(beta)) / (Phi(beta) - Phi(alpha)) * sigma
+#'   }
+#'
+#'   where \eqn{\alpha = (a - \mu)/\sigma}, \eqn{\beta = (b - \mu)/\sigma},
+#'   \eqn{\phi} is the standard Normal p.d.f., and \eqn{\Phi} is the 
+#'   standard Normal c.d.f.
+#'
+#'   **Variance**: Approximated numerically for all distributions.
+#'
+#'   **Probability density function (p.d.f)**:
+#'
+#'   \deqn{
+#'     f(x) = \begin{cases}
+#'       \frac{f_Y(x)}{F_Y(b) - F_Y(a)} & \text{if } a \le x \le b \\
+#'       0 & \text{otherwise}
+#'     \end{cases}
+#'   }{
+#'     f(x) = f_Y(x) / (F_Y(b) - F_Y(a)) if a <= x <= b, 0 otherwise
+#'   }
+#'
+#'   **Cumulative distribution function (c.d.f)**:
+#'
+#'   \deqn{
+#'     F(x) = \begin{cases}
+#'       0 & \text{if } x < a \\
+#'       \frac{F_Y(x) - F_Y(a)}{F_Y(b) - F_Y(a)} & \text{if } a \le x \le b \\
+#'       1 & \text{if } x > b
+#'     \end{cases}
+#'   }{
+#'     F(x) = 0 if x < a, (F_Y(x) - F_Y(a)) / (F_Y(b) - F_Y(a)) if a <= x <= b, 1 if x > b
+#'   }
+#'
+#'   **Quantile function**:
+#'
+#'   \deqn{
+#'     Q(p) = F_Y^{-1}(F_Y(a) + p(F_Y(b) - F_Y(a)))
+#'   }{
+#'     Q(p) = F_Y^(-1)(F_Y(a) + p(F_Y(b) - F_Y(a)))
+#'   }
+#'
+#'   clamped to the interval \eqn{[a, b]}.
+#'
 #' @name dist_truncated
 #'
 #' @examples

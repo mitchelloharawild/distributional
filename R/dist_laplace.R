@@ -11,10 +11,8 @@
 #' @param sigma The positive scale parameter of the Laplace distribution.
 #'
 #' @details
-#'
-#'   We recommend reading this documentation on
-#'   <https://pkg.mitchelloharawild.com/distributional/>, where the math
-#'   will render nicely.
+#' 
+#' `r pkgdown_doc_link("dist_laplace")`
 #'
 #'   In the following, let \eqn{X} be a Laplace random variable with location
 #'   parameter `mu` = \eqn{\mu} and scale parameter `sigma` = \eqn{\sigma}.
