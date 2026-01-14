@@ -66,6 +66,8 @@
 #' # TODO: Needs fixing to support multiple inputs
 #' # density(dist, 2)
 #' # density(dist, 2, log = TRUE)
+#' 
+#' cdf(dist, matrix(c(1,2,1, 1,1,1), ncol=3, byrow=TRUE))
 #'
 #' @name dist_multinomial
 #' @export
@@ -122,4 +124,63 @@ covariance.dist_multinomial <- function(x, ...){
 #' @export
 dim.dist_multinomial <- function(x){
   length(x[["p"]])
+}
+
+#' @export
+cdf.dist_multinomial <- function(x, q, ...) {
+  # Extract parameters
+  size <- x$s
+  prob <- x$p
+  k <- length(prob)
+
+  # Validate dimensions
+  if (ncol(q) != k) {
+    stop("Number of columns in q must match the number of categories in the multinomial distribution")
+  }
+
+  n_queries <- nrow(q)
+  result <- numeric(n_queries)
+
+  for (i in seq_len(n_queries)) {
+    q_i <- q[i, ]
+
+    # Any negative quantile => CDF = 0
+    if (any(q_i < 0)) {
+      result[i] <- 0
+      next
+    }
+
+    # Discrete CDF: floor input values
+    q_i <- floor(q_i)
+
+    # Max counts for the first (k-1) categories
+    max_vec <- pmin(q_i[1:(k - 1)], size)
+
+    # Build ranges for first (k-1) categories
+    ranges <- lapply(max_vec, function(m) 0:m)
+
+    # Enumerate only the first (k-1) coordinates
+    partial <- expand.grid(ranges, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+
+    # Compute the last category as the remainder
+    sums <- rowSums(partial)
+    xk <- size - sums
+
+    # Valid if 0 <= xk <= q_k
+    valid_idx <- which(xk >= 0 & xk <= q_i[k])
+
+    if (!length(valid_idx)) {
+      result[i] <- 0
+      next
+    }
+
+    # Construct full count vectors
+    counts <- cbind(as.matrix(partial[valid_idx, , drop = FALSE]), xk[valid_idx])
+
+    # Sum multinomial pmf over valid outcomes
+    probs <- apply(counts, 1L, dmultinom, size = size, prob = prob)
+    result[i] <- sum(probs)
+  }
+
+  result
 }
