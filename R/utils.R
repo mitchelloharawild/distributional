@@ -141,6 +141,7 @@ require_package <- function(pkg){
 
 #' @keywords internal
 pkgdown_doc_link <- function(name) {
+  require_package("pkgdown")
   if (pkgdown::in_pkgdown()) {
     # When pkgdown builds, return nothing
     return("")

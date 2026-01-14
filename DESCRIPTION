@@ -54,7 +54,8 @@ Suggests:
     evd,
     ggdist,
     ggplot2,
-    gk
+    gk,
+    pkgdown
 RdMacros: 
     lifecycle
 URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional
