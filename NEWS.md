@@ -30,12 +30,6 @@ Extensively updated documentation for each distribution to include additional de
 * Fixed `dist_negative_binomial()` calculation of skewness and kurtosis for p!=0.5.
 * Fixed floating point issue that caused `dist_mixture()` to incorrectly throw an error when weights did sum to 1 (@statasaurus, #134)
 
-## Breaking changes
-
-* The `quantile()` method for `dist_multivariate_normal()` now defaults to 
-  equicoordinate quantiles. To obtain marginal quantiles, you should use 
-  `quantile(dist, p, type = "marginal")`.
-
 # distributional 0.5.0
 
 ## New features
