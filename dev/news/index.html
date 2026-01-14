@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -49,18 +49,21 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.6.0" id="distributional-060">distributional 0.6.0<small>2026-01-14</small><a class="anchor" aria-label="anchor" href="#distributional-060"></a></h2>
 <p>Extensively updated documentation for each distribution to include additional details about the statistics associated with each distribution.</p>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-6-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-6-0"></a></h3>
 <ul><li>Added <code><a href="../reference/has_symmetry.html">has_symmetry()</a></code> generic to identify if a distribution is symmetric.</li>
 </ul><div class="section level4">
-<h4 id="probability-distributions-development-version">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-development-version"></a></h4>
+<h4 id="probability-distributions-0-6-0">Probability distributions<a class="anchor" aria-label="anchor" href="#probability-distributions-0-6-0"></a></h4>
 <ul><li>Added <code><a href="../reference/dist_laplace.html">dist_laplace()</a></code> for the Laplace distribution.</li>
 <li>Added <code><a href="../reference/dist_multivariate_t.html">dist_multivariate_t()</a></code> for the multivariate t-distribution.</li>
 </ul></div>
 </div>
 <div class="section level3">
-<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<h3 id="improvements-0-6-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-6-0"></a></h3>
 <ul><li>Extended documentation for many distributions to include detailed mathematical formulas for the statistics of each distribution (<a href="https://github.com/mitchelloharawild/distributional/issues/141" class="external-link">#141</a>).</li>
 <li>
 <code><a href="../reference/hdr.html">hdr()</a></code> now produces exact results for symmetric distributions (<a href="https://github.com/mitchelloharawild/distributional/issues/123" class="external-link">#123</a>).</li>
@@ -72,14 +75,14 @@
 <li>Added <code><a href="../reference/cdf.html">cdf()</a></code> method for <code><a href="../reference/dist_multinomial.html">dist_multinomial()</a></code> distributions.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-6-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0"></a></h3>
 <ul><li>Fixed <code><a href="../reference/dist_gamma.html">dist_gamma()</a></code> not allowing the <code>scale</code> parameter to be used (<a href="https://github.com/mitchelloharawild/distributional/issues/132" class="external-link">#132</a>).</li>
 <li>Fixed <code><a href="../reference/dist_negative_binomial.html">dist_negative_binomial()</a></code> calculation of skewness and kurtosis for p!=0.5.</li>
 <li>Fixed floating point issue that caused <code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> to incorrectly throw an error when weights did sum to 1 (<a href="https://github.com/statasaurus" class="external-link">@statasaurus</a>, <a href="https://github.com/mitchelloharawild/distributional/issues/134" class="external-link">#134</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li>The <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code> now defaults to equicoordinate quantiles. To obtain marginal quantiles, you should use <code>quantile(dist, p, type = "marginal")</code>.</li>
+<h3 id="breaking-changes-0-6-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-6-0"></a></h3>
+<ul><li>The <code>type</code> argument for <code><a href="../reference/dist_multivariate_normal.html">dist_multivariate_normal()</a></code>’s <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> method has been renamed to <code>kind</code> to avoid name clashes with <code>quantile.default()</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
