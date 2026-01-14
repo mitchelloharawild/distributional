@@ -94,8 +94,8 @@ variance(dist)
 
 generate(dist, 10)
 
-density(dist, cbind(1,2,1))
-density(dist, cbind(1,2,1), log = TRUE)
+density(dist, list(d = rbind(cbind(1,2,1), cbind(0,2,1))))
+density(dist, list(d = rbind(cbind(1,2,1), cbind(0,2,1))), log = TRUE)
 
 cdf(dist, cbind(1,2,1))
 
