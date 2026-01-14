@@ -6,6 +6,13 @@
 \usage{
 dist_lognormal(mu = 0, sigma = 1)
 }
+\arguments{
+\item{mu}{The mean (location parameter) of the distribution, which is the
+mean of the associated Normal distribution. Can be any real number.}
+
+\item{sigma}{The standard deviation (scale parameter) of the distribution.
+Can be any positive number.}
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 

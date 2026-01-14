@@ -8,8 +8,6 @@
 #' a specified number of successes (`size`) occur. The probability of success in
 #' each trial is given by `prob`.
 #'
-#' @inheritParams stats::NegBinomial
-#'
 #' @param size The number of successful trials (target number of successes).
 #'   Must be a positive number. Also called the dispersion parameter.
 #' @param prob The probability of success in each trial. Must be between 0 and 1.

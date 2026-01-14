@@ -13,8 +13,6 @@
 #' asymptotically Normal. The Normal distribution is also called the
 #' gaussian distribution.
 #'
-#' @inheritParams stats::dnorm
-#'
 #' @param mu,mean The mean (location parameter) of the distribution, which is also
 #'   the mean of the distribution. Can be any real number.
 #' @param sigma,sd The standard deviation (scale parameter) of the distribution.

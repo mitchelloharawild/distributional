@@ -7,7 +7,10 @@
 #' distribution. If \eqn{X} follows a log-normal distribution, then \eqn{\ln{X}}
 #' would be characterised by a Normal distribution.
 #'
-#' @inheritParams stats::dlnorm
+#' @param mu The mean (location parameter) of the distribution, which is the
+#'   mean of the associated Normal distribution. Can be any real number.
+#' @param sigma The standard deviation (scale parameter) of the distribution.
+#'   Can be any positive number.
 #'
 #' @details
 #'

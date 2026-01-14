@@ -11,8 +11,6 @@
 #' decay events per second from a radioactive source, or the number of
 #' customers arriving at a store per day.
 #'
-#' @inheritParams stats::dpois
-#'
 #' @param lambda The rate parameter (mean and variance) of the distribution.
 #'   Can be any positive number. This represents the expected number of events
 #'   in the given interval.

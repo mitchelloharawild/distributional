@@ -7,8 +7,6 @@
 #' as the sampling distribution of test statistics, especially
 #' in maximum likelihood estimation settings.
 #'
-#' @inheritParams stats::dchisq
-#'
 #' @param df Degrees of freedom (non-centrality parameter). Can be any
 #'   positive real number.
 #' @param ncp Non-centrality parameter. Can be any non-negative real number.

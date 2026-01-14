@@ -8,8 +8,6 @@
 #' and in regression analysis. It arises as the ratio of two scaled
 #' chi-squared distributions divided by their respective degrees of freedom.
 #'
-#' @inheritParams stats::df
-#'
 #' @param df1 Degrees of freedom for the numerator. Can be any positive number.
 #' @param df2 Degrees of freedom for the denominator. Can be any positive number.
 #' @param ncp Non-centrality parameter. If `NULL` (default), the central F

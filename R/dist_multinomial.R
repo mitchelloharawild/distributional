@@ -203,7 +203,7 @@ cdf.dist_multinomial <- function(x, q, ...) {
     counts <- cbind(as.matrix(partial[valid_idx, , drop = FALSE]), xk[valid_idx])
 
     # Sum multinomial pmf over valid outcomes
-    probs <- apply(counts, 1L, dmultinom, size = size, prob = prob)
+    probs <- apply(counts, 1L, stats::dmultinom, size = size, prob = prob)
     result[i] <- sum(probs)
   }
 
