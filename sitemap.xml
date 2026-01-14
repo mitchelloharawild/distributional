@@ -34,6 +34,7 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_exponential.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gamma.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_gaussian.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_laplace.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_logarithmic.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_logistic.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_lognormal.html</loc></url>
@@ -41,6 +42,7 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_mixture.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_multinomial.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_multivariate_normal.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_multivariate_t.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_negative_binomial.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_normal.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_pareto.html</loc></url>
@@ -58,6 +60,7 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/distributional-package.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/family.distribution.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/generate.distribution.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/has_symmetry.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/hdr.distribution.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/hdr.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/hilo.distribution.html</loc></url>
