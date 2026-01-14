@@ -97,8 +97,11 @@ support.dist_default <- function(x, ...) {
 #' @export
 has_symmetry.dist_default <- function(x, ...){
   # Crude test that works in *most* cases.
-  # Should be replaced with a more robust check.
-  isTRUE(skewness(x) == 0)
+  # Should be replaced with a more robust check using moments.
+  tryCatch(
+    isTRUE(skewness(x) == 0),
+    error = function(e) FALSE
+  )
 }
 
 #' @export
