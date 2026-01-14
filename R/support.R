@@ -1,4 +1,4 @@
-#' Create a new support region vector
+#' Construct support regions
 #'
 #' @param x A list of prototype vectors defining the distribution type.
 #' @param limits A list of value limits for the distribution.

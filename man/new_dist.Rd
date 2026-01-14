@@ -2,7 +2,7 @@
 % Please edit documentation in R/distribution.R
 \name{new_dist}
 \alias{new_dist}
-\title{Create a new distribution}
+\title{Construct distributions}
 \usage{
 new_dist(..., class = NULL, dimnames = NULL)
 }

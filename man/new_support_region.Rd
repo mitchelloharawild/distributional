@@ -2,7 +2,7 @@
 % Please edit documentation in R/support.R
 \name{new_support_region}
 \alias{new_support_region}
-\title{Create a new support region vector}
+\title{Construct support regions}
 \usage{
 new_support_region(x = numeric(), limits = list(), closed = list())
 }
@@ -14,5 +14,5 @@ new_support_region(x = numeric(), limits = list(), closed = list())
 \item{closed}{A list of logical(2L) indicating whether the limits are closed.}
 }
 \description{
-Create a new support region vector
+Construct support regions
 }

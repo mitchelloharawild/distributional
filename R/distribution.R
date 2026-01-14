@@ -1,4 +1,4 @@
-#' Create a new distribution
+#' Construct distributions
 #'
 #' @description
 #' `r lifecycle::badge('maturing')`
