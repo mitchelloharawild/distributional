@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.6.0
 
 Extensively updated documentation for each distribution to include additional details about the statistics associated with each distribution.
 
