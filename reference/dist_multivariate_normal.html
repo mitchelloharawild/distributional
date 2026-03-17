@@ -6,7 +6,10 @@ statistics and describes the joint distribution of multiple correlated
 continuous random variables."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><script defer data-domain="pkg.mitchelloharawild.com/distributional" src="https://track.mitchelloharawild.com/js/plausible.js"></script></head><body data-spy="scroll" data-target="#toc">
+<![endif]--><!-- Privacy-friendly analytics by Plausible --><script async src="https://track.mitchelloharawild.com/js/pa-hMJNm4vrMJmtfgDWedFn0.js"></script><script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script></head><body data-spy="scroll" data-target="#toc">
 
 
     <div class="container template-reference-topic">
@@ -21,7 +24,7 @@ continuous random variables."><!-- mathjax --><script src="https://cdnjs.cloudfl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -61,7 +64,7 @@ continuous random variables.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_multivariate_normal</span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_multivariate_normal</span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -132,16 +135,16 @@ variance-covariance matrix <code>sigma</code> = \(\boldsymbol{\Sigma}\).</p>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                x          y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  2.5890439  3.5939243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  2.4802413  2.2973921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.6194837  1.9712223</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  4.5637796  4.3904932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.7759594 -0.7793593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -2.2377047  1.3302668</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  3.2063897  2.3456605</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -1.7804529  1.7332559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  1.3969992  0.8448695</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  1.9580538  1.4063092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  2.1274372  4.5484506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  1.3709813  2.7054163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  1.7008159  3.3783472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  2.0927497  3.3748075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.8216972  0.8778973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.1403092  0.9021328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  1.3033104  0.2652230</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.4606416  4.1785664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.5336266 -0.6788724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  4.3835697  4.2351775</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>

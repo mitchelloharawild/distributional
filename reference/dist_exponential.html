@@ -4,7 +4,10 @@ Exponential distributions are frequently used to model waiting times and the
 time between events in a Poisson process."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><script defer data-domain="pkg.mitchelloharawild.com/distributional" src="https://track.mitchelloharawild.com/js/plausible.js"></script></head><body data-spy="scroll" data-target="#toc">
+<![endif]--><!-- Privacy-friendly analytics by Plausible --><script async src="https://track.mitchelloharawild.com/js/pa-hMJNm4vrMJmtfgDWedFn0.js"></script><script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script></head><body data-spy="scroll" data-target="#toc">
 
 
     <div class="container template-reference-topic">
@@ -19,7 +22,7 @@ time between events in a Poisson process."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -113,16 +116,16 @@ parameter <code>rate</code> = \(\lambda\).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.30969620 0.05938324 0.23372969 0.54596454 0.12506929 0.76738408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.18079862 0.29064701 0.89368535 0.53543165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.19438496 0.58504573 0.69981352 0.23987251 0.16222741 0.03819245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.50848099 0.12868211 0.61835723 0.74538538</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.52171646 0.46220729 0.07835856 0.03886687 0.87164723 0.22059924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.50370500 2.87432418 0.33178157 0.30593455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.818399419 0.413892996 1.162892001 2.173944251 0.169463063 0.005494154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.242938755 0.899124132 0.855740414 0.133994130</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.5770527 0.4144533 1.1909038 0.2363445 3.3091732 0.7269785 0.1476621</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4036328 2.2189845 0.5497100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.73263985 1.05591869 0.13518904 1.67512983 0.12339740 0.07095131</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.01118518 4.26707688 4.73864817 0.87630883</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

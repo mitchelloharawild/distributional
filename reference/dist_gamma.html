@@ -13,7 +13,10 @@ has extensively been used in multivariate methods. More about the Gamma
 distribution will be added soon."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><script defer data-domain="pkg.mitchelloharawild.com/distributional" src="https://track.mitchelloharawild.com/js/plausible.js"></script></head><body data-spy="scroll" data-target="#toc">
+<![endif]--><!-- Privacy-friendly analytics by Plausible --><script async src="https://track.mitchelloharawild.com/js/pa-hMJNm4vrMJmtfgDWedFn0.js"></script><script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script></head><body data-spy="scroll" data-target="#toc">
 
 
     <div class="container template-reference-topic">
@@ -28,7 +31,7 @@ distribution will be added soon."><!-- mathjax --><script src="https://cdnjs.clo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -138,32 +141,32 @@ with parameters
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.94448290 1.16788851 0.19099072 3.27286527 0.01536563 3.00866218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.46505369 0.73911704 0.46497507 1.11581299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.11581299 0.01207246 1.58898108 3.90423017 0.14966641 1.92948102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 1.92844748 0.28476430 1.96941941 0.37799871</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7088386 3.9704497 7.3330652 1.2519780 4.4991009 4.4975226 1.6019558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 4.5599795 1.8140502 1.3896288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.3896288 4.0370983 5.6294157 6.6653570 6.5869498 0.9553802 4.6919852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.6774169 6.9300763 2.4075783</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 6.316528 8.275151 9.521868 9.428109 2.194702 7.129521 3.237007 9.837764</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 4.225715 4.738433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  4.738433  2.202673  4.338423  5.751059  7.159705  5.369828 10.874383</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  3.349401  2.440180  9.581556</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.526915 4.052192 4.999339 5.915749 4.746961 8.248155 3.364596 2.705230</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 7.447256 3.611930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 3.611930 2.952707 2.126494 8.656802 3.237723 8.747899 4.521361 8.021796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 5.086454 5.397582</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 3.156328 2.536666 6.980342 3.363181 7.038153 4.264674 6.575509 4.649641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 4.859170 3.107934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 3.107934 3.290115 3.578270 3.114171 3.035854 3.375519 5.765367 4.046219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 3.046654 3.874765</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 5.269189 5.786172 4.954809 4.815212 5.422151 9.771682 6.630607 4.834448</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 6.320563 5.675854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  5.675854 11.695185  6.013864  7.958027 11.307091  9.173052 10.429745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  6.642370 11.189164  8.225343</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.9382686504 0.1724916789 0.1175260944 1.6516119584 0.4508443426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 0.8087757069 0.7064180776 0.0006658913 0.0049007131 0.2980294873</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.508443e-01 8.087757e-01 7.064181e-01 6.658913e-04 4.900713e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] 2.980295e-01 1.286290e-06 2.498401e-02 4.117234e-02 6.374258e-02</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

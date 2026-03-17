@@ -5,7 +5,10 @@ the model given by \(P(Y = 1 | X) = F(X \beta)\) where
 \(F\) is the Logistic cdf() is called logistic regression."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><script defer data-domain="pkg.mitchelloharawild.com/distributional" src="https://track.mitchelloharawild.com/js/plausible.js"></script></head><body data-spy="scroll" data-target="#toc">
+<![endif]--><!-- Privacy-friendly analytics by Plausible --><script async src="https://track.mitchelloharawild.com/js/pa-hMJNm4vrMJmtfgDWedFn0.js"></script><script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script></head><body data-spy="scroll" data-target="#toc">
 
 
     <div class="container template-reference-topic">
@@ -20,7 +23,7 @@ the model given by \(P(Y = 1 | X) = F(X \beta)\) where
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -116,24 +119,24 @@ the model given by \(P(Y = 1 | X) = F(X \beta)\) where
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  8.2223978 -4.4679426  5.8098434  4.7912034  4.1133553  3.4858621</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.4602222  4.1015136  7.6100285  6.8622069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3.8658619 10.3305153  6.3075558  5.1084827  5.5845942  7.4232965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -1.9331378  0.6473872  3.3505919  4.4773425</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.690350  8.013465  1.288287 10.127270 11.033204  9.529907 12.832450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.317185  2.028726 17.382650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  8.242745  6.025529 15.206772 15.418833  9.202131 10.201776 10.916190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] -0.232640 15.644106  4.768615</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 18.084640 12.677283 11.311742  8.619429 -5.320800  8.044197  6.840444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.704457 15.753774 12.415708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 14.7209662  8.0741974 13.0009167  6.9191037 -1.4026373  7.8970113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  9.8700286  0.5636868 17.8939036 -5.1062678</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 7.201262 4.122606 8.157090 9.128393 7.735058 3.694441 5.768837 1.629513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 8.017381 8.397474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1.570022  5.698264  2.746287  6.103908 11.612174  7.486487  5.364641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.789394  6.569626  4.660303</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 5.0972523 1.3240557 1.0431446 1.5912701 0.8472879 1.4071233 1.2101524</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 4.0637497 0.6964656 1.2828856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3.5650681  3.1095549  0.8183330  1.3335869  1.3627772  1.1627231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  2.5062814  0.8852229 -0.2424980  0.5363091</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>

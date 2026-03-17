@@ -9,7 +9,10 @@ which isn't in the package yet, consider making a request at
 https://github.com/mitchelloharawild/distributional/issues."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><script defer data-domain="pkg.mitchelloharawild.com/distributional" src="https://track.mitchelloharawild.com/js/plausible.js"></script></head><body data-spy="scroll" data-target="#toc">
+<![endif]--><!-- Privacy-friendly analytics by Plausible --><script async src="https://track.mitchelloharawild.com/js/pa-hMJNm4vrMJmtfgDWedFn0.js"></script><script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script></head><body data-spy="scroll" data-target="#toc">
 
 
     <div class="container template-reference-topic">
@@ -24,7 +27,7 @@ https://github.com/mitchelloharawild/distributional/issues."><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -108,16 +111,16 @@ depend on the specific distribution being wrapped.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  6.879892 19.639676  6.919928</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># rnorm()</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.04031571  2.21273044  1.88709435  1.38154203  1.48255602  2.68471415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  1.22733842  4.67140595  2.73203794 -4.57542060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.11814316  0.86524416  5.20402908  0.09738366 -1.89726322  6.04965545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -1.32965173  1.74190410 -1.90144087 -2.11356325</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -4.5507240 -0.3860259  8.4099989  2.8877848  3.3906777 -5.7413831</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 15.5056304 -0.2615464  1.7102251  0.6360116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  -7.4823998   0.1504331  13.7743990   6.6234971 -10.4681971  -7.0111493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]   4.7119311   5.9391385  -3.8524763 -19.7771105</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6.0032349  4.2228545  3.3303173 -0.8040526 -0.5045239 -1.9516686</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  2.5836857  3.9533931  3.5787646  3.5629141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 3.551092 2.565307 3.841621 4.028985 1.047759 4.642646 5.974915 4.059044</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 6.770364 4.446840</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gitlab.com/vigou3/actuar" class="external-link">actuar</a></span><span class="op">)</span></span></span>
@@ -138,8 +141,8 @@ depend on the specific distribution being wrapped.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.429922</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># actuar::rinvparalogis()</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.2723132 0.9162852 0.9274380 0.1671189 2.2747885 0.8201524 0.7197810</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.5851103 0.9608384 0.6067325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.7187257  0.5692162  1.3850401  3.6521175  3.6918616  1.2477519</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.6012614  0.5224455 12.2782687  1.6311230</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

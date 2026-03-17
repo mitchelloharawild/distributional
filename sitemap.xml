@@ -20,6 +20,7 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_cauchy.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_chisq.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_degenerate.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_dirichlet.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_exponential.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_f.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_gamma.html</loc></url>
@@ -29,6 +30,7 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_gk.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_gpd.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_gumbel.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_horseshoe.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_hypergeometric.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_inflated.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_inverse_exponential.html</loc></url>
