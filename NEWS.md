@@ -1,5 +1,9 @@
 # distributional (development version)
 
+## Improvements
+
+* Non-finite boundaries for truncated distributions now use open brackets.
+
 # distributional 0.7.0
 
 ## Improvements
