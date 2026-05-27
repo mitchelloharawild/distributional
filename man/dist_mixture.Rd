@@ -126,5 +126,5 @@ generate(dist, 10)
 
 }
 \seealso{
-\code{\link[stats:uniroot]{stats::uniroot()}}, \code{\link[vctrs:vec_unique]{vctrs::vec_unique_count()}}
+\code{\link[stats:uniroot]{stats::uniroot()}}, \code{\link[vctrs:vec_unique_count]{vctrs::vec_unique_count()}}
 }

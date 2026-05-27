@@ -84,5 +84,5 @@ quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[gk:g-and-h]{gk::dgh()}}, \code{\link[gk:g-and-h]{gk::pgh()}}, \code{\link[gk:g-and-h]{gk::qgh()}}, \code{\link[gk:g-and-h]{gk::rgh()}}, \code{\link[=dist_gk]{dist_gk()}}
+\code{\link[gk:dgh]{gk::dgh()}}, \code{\link[gk:pgh]{gk::pgh()}}, \code{\link[gk:qgh]{gk::qgh()}}, \code{\link[gk:rgh]{gk::rgh()}}, \code{\link[=dist_gk]{dist_gk()}}
 }

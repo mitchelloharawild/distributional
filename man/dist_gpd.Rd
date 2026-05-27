@@ -133,5 +133,5 @@ cdf(dist, 4)
 quantile(dist, 0.7)
 }
 \seealso{
-\code{\link[evd:gpd]{evd::dgpd()}}
+\code{\link[evd:dgpd]{evd::dgpd()}}
 }

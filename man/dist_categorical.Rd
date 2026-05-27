@@ -119,5 +119,5 @@ density(dist, "z", log = TRUE)
 
 }
 \seealso{
-\link[stats:Multinom]{stats::Multinomial}
+\link[stats:Multinomial]{stats::Multinomial}
 }

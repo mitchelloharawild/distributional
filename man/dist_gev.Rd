@@ -168,5 +168,5 @@ maximum (or minimum) of meteorological elements. \emph{Quart. J. R. Met. Soc.},
 \bold{81}, 158–171.
 }
 \seealso{
-\code{\link[evd:gev]{evd::dgev()}}
+\code{\link[evd:dgev]{evd::dgev()}}
 }

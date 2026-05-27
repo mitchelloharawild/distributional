@@ -84,6 +84,6 @@ quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[actuar:PoissonInverseGaussian]{actuar::PoissonInverseGaussian}, \code{\link[actuar:PoissonInverseGaussian]{actuar::dpoisinvgauss()}},
-\code{\link[actuar:PoissonInverseGaussian]{actuar::ppoisinvgauss()}}, \code{\link[actuar:PoissonInverseGaussian]{actuar::qpoisinvgauss()}}, \code{\link[actuar:PoissonInverseGaussian]{actuar::rpoisinvgauss()}}
+\link[actuar:PoissonInverseGaussian]{actuar::PoissonInverseGaussian}, \code{\link[actuar:dpoisinvgauss]{actuar::dpoisinvgauss()}},
+\code{\link[actuar:ppoisinvgauss]{actuar::ppoisinvgauss()}}, \code{\link[actuar:qpoisinvgauss]{actuar::qpoisinvgauss()}}, \code{\link[actuar:rpoisinvgauss]{actuar::rpoisinvgauss()}}
 }

@@ -138,6 +138,6 @@ quantile(dist, 0.7)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[actuar:Gumbel]{actuar::Gumbel}, \code{\link[actuar:Gumbel]{actuar::dgumbel()}}, \code{\link[actuar:Gumbel]{actuar::pgumbel()}},
-\code{\link[actuar:Gumbel]{actuar::qgumbel()}}, \code{\link[actuar:Gumbel]{actuar::rgumbel()}}, \code{\link[actuar:Gumbel]{actuar::mgumbel()}}
+\link[actuar:Gumbel]{actuar::Gumbel}, \code{\link[actuar:dgumbel]{actuar::dgumbel()}}, \code{\link[actuar:pgumbel]{actuar::pgumbel()}},
+\code{\link[actuar:qgumbel]{actuar::qgumbel()}}, \code{\link[actuar:rgumbel]{actuar::rgumbel()}}, \code{\link[actuar:mgumbel]{actuar::mgumbel()}}
 }

@@ -72,5 +72,5 @@ Carvalho, C.M., Polson, N.G., and Scott, J.G. (2009).
 \emph{Journal of Machine Learning Research}, 5, p. 73–80.
 }
 \seealso{
-\code{\link[LaplacesDemon:dist.Horseshoe]{LaplacesDemon::dhs()}}, \code{\link[LaplacesDemon:dist.Horseshoe]{LaplacesDemon::rhs()}}
+\code{\link[LaplacesDemon:dhs]{LaplacesDemon::dhs()}}, \code{\link[LaplacesDemon:rhs]{LaplacesDemon::rhs()}}
 }

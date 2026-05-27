@@ -154,5 +154,5 @@ quantile(dist, 0.7)
 
 }
 \seealso{
-\link[stats:Fdist]{stats::FDist}
+\link[stats:FDist]{stats::FDist}
 }

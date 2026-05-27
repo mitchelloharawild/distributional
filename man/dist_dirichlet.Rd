@@ -76,5 +76,5 @@ density(dist, cbind(0.2, 0.5, 0.3), log = TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[LaplacesDemon:dist.Dirichlet]{LaplacesDemon::ddirichlet()}}, \code{\link[LaplacesDemon:dist.Dirichlet]{LaplacesDemon::rdirichlet()}}
+\code{\link[LaplacesDemon:ddirichlet]{LaplacesDemon::ddirichlet()}}, \code{\link[LaplacesDemon:rdirichlet]{LaplacesDemon::rdirichlet()}}
 }

@@ -101,5 +101,5 @@ cdf(dist, cbind(1,2,1))
 
 }
 \seealso{
-\code{\link[stats:Multinom]{stats::dmultinom()}}, \code{\link[stats:Multinom]{stats::rmultinom()}}
+\code{\link[stats:dmultinom]{stats::dmultinom()}}, \code{\link[stats:rmultinom]{stats::rmultinom()}}
 }

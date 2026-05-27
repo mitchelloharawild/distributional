@@ -78,6 +78,7 @@ dimnames.distribution <- function(x){
   attr(x, "vars")
 }
 
+#' @method [[ distribution
 #' @export
 `[[.distribution` <- `[`
 

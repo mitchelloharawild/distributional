@@ -106,12 +106,12 @@ has density:
   }
 
 For the non-central distribution (\code{ncp} \eqn{\neq} 0), the density is
-computed numerically via \code{\link[stats:TDist]{stats::dt()}}.
+computed numerically via \code{\link[stats:dt]{stats::dt()}}.
 
 \strong{Cumulative distribution function (c.d.f)}:
 
 For the central distribution (\code{ncp} = 0 or \code{NULL}), the cumulative
-distribution function is computed numerically via \code{\link[stats:TDist]{stats::pt()}}, which
+distribution function is computed numerically via \code{\link[stats:pt]{stats::pt()}}, which
 uses the relationship to the incomplete beta function:
 
 \deqn{
@@ -121,7 +121,7 @@ uses the relationship to the incomplete beta function:
   }
 
 for \eqn{t \le 0}, where \eqn{x = \nu/(\nu + t^2)} and \eqn{I_x(a,b)} is
-the incomplete beta function (\code{\link[stats:Beta]{stats::pbeta()}}). For \eqn{t \ge 0}:
+the incomplete beta function (\code{\link[stats:pbeta]{stats::pbeta()}}). For \eqn{t \ge 0}:
 
 \deqn{
     F_\nu(t) = 1 - \frac{1}{2} I_x\left(\frac{\nu}{2}, \frac{1}{2}\right)
@@ -132,7 +132,7 @@ the incomplete beta function (\code{\link[stats:Beta]{stats::pbeta()}}). For \eq
 The location-scale version is: \eqn{F(x) = F_\nu((x - \mu)/\sigma)}.
 
 For the non-central distribution (\code{ncp} \eqn{\neq} 0), the cumulative
-distribution function is computed numerically via \code{\link[stats:TDist]{stats::pt()}}.
+distribution function is computed numerically via \code{\link[stats:pt]{stats::pt()}}.
 
 \strong{Moment generating function (m.g.f)}:
 
