@@ -125,11 +125,23 @@ density.dist_inflated <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_inflated <- function(x, p, ...){
-  qt <- quantile(x[["dist"]], pmax(0, (p - x[["p"]]) / (1-x[["p"]])), ...)
-  if(qt >= x[["x"]]) return(qt)
-  qt <- quantile(x[["dist"]], p, ...)
-  if(qt < x[["x"]]) qt else x[["x"]]
+quantile.dist_inflated <- function(x, p, ...) {
+  p_inf  <- x[["p"]]
+  x_inf  <- x[["x"]]
+  cdf_at <- cdf(x[["dist"]], x_inf, ...)
+
+  p_jump_lo <- (1 - p_inf) * cdf_at
+  p_jump_hi <- p_inf + (1 - p_inf) * cdf_at
+
+  below <- p <= p_jump_lo
+  above <- p > p_jump_hi
+
+  qt <- rep(x_inf, length(p))
+  if (any(below))
+    qt[below] <- quantile(x[["dist"]], p[below] / (1 - p_inf), ...)
+  if (any(above))
+    qt[above] <- quantile(x[["dist"]], (p[above] - p_inf) / (1 - p_inf), ...)
+  qt
 }
 
 #' @export

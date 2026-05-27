@@ -3,6 +3,7 @@
 ## Improvements
 
 * Non-finite boundaries for truncated distributions now use open brackets.
+* Added vectorised `p` support in `quantile()` for inflated distributions (#151).
 
 # distributional 0.7.0
 
