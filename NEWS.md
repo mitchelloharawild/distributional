@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.7.1
 
 ## Improvements
 
