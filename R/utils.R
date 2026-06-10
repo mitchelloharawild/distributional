@@ -95,7 +95,7 @@ dist_apply <- function(x, .f, ...){
   # } else if(length(out[[1]]) > 1) {
   #   out <- suppressMessages(vctrs::vec_rbind(!!!out))
   } else if(multi_arg) {
-    if(length(dn) > 1) out <- lapply(out, `colnames<-`, dn)
+    if(length(dn) > 1) out <- lapply(out, function(x) set_matrix_dimnames(x, dn))
   } else {
     out <- vec_c(!!!out)
     out <- if(vec_is_list(out))

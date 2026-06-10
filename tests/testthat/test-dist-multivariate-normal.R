@@ -37,3 +37,15 @@ test_that("Multivariate normal distribution", {
   # F(Finv(a)) ~= a
   # expect_equal(cdf(dist, list(as.numeric(quantile(dist, 0.53)))), 0.53, tolerance = 1e-3)
 })
+
+test_that("density() works with named multivariate normal parameters (#150)", {
+  skip_if_not_installed("mvtnorm")
+  dist <- dist_multivariate_normal(
+    list(c(v1 = 0, v2 = 0)),
+    list(rbind(v1 = c(v1 = 1, v2 = 0), v2 = c(v1 = 0, v2 = 1)))
+  )
+  expect_equal(
+    density(dist, at = cbind(c(0, 1), c(1, 1))),
+    list(mvtnorm::dmvnorm(cbind(c(0, 1), c(1, 1)), mean = c(0, 0), sigma = diag(2)))
+  )
+})
