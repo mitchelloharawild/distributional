@@ -1,29 +1,29 @@
-#' Percentile distribution
+#' Quantile distribution
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
-#' The Percentile distribution is a non-parametric distribution defined by
-#' a set of quantiles at specified percentile values. This distribution is
+#' The Quantile distribution is a non-parametric distribution defined by
+#' a set of values at specified quantile probabilities. This distribution is
 #' useful for representing empirical distributions or elicited expert
-#' knowledge when only percentile information is available. The distribution
-#' uses linear interpolation between percentiles and can be used to
+#' knowledge when only quantile information is available. The distribution
+#' uses linear interpolation between quantiles and can be used to
 #' approximate complex distributions that may not have simple parametric forms.
 #'
 #' @param x A list of values
-#' @param percentile A list of percentiles
+#' @param quantile A list of quantile probabilities (between 0 and 1)
 #'
 #' @details
 #'
-#' `r pkgdown_doc_link("dist_percentile")`
+#' `r pkgdown_doc_link("dist_quantile")`
 #'
-#'   In the following, let \eqn{X} be a Percentile random variable defined by
-#'   values \eqn{x_1, x_2, \ldots, x_n} at percentiles
-#'   \eqn{p_1, p_2, \ldots, p_n} where \eqn{0 \le p_i \le 100}.
+#'   In the following, let \eqn{X} be a Quantile random variable defined by
+#'   values \eqn{x_1, x_2, \ldots, x_n} at quantile probabilities
+#'   \eqn{q_1, q_2, \ldots, q_n} where \eqn{0 \le q_i \le 1}.
 #'
-#'   **Support**: \eqn{[\min(x_i), \max(x_i)]} if \eqn{\min(p_i) > 0} or
-#'   \eqn{\max(p_i) < 100}, otherwise support is approximated from the
-#'   specified percentiles.
+#'   **Support**: \eqn{[\min(x_i), \max(x_i)]} if \eqn{\min(q_i) > 0} or
+#'   \eqn{\max(q_i) < 1}, otherwise support is approximated from the
+#'   specified quantiles.
 #'
 #'   **Mean**: Approximated numerically using spline interpolation and
 #'   numerical integration:
@@ -34,7 +34,7 @@
 #'     E(X) ≈ integral_0^1 Q(u) du
 #'   }
 #'
-#'   where \eqn{Q(u)} is a spline function interpolating the percentile values.
+#'   where \eqn{Q(u)} is a spline function interpolating the quantile values.
 #'
 #'   **Variance**: Approximated numerically.
 #'
@@ -46,91 +46,93 @@
 #'
 #'   \deqn{
 #'     F(t) = \begin{cases}
-#'       p_1/100 & \text{if } t < x_1 \\
-#'       p_i/100 + \frac{(t - x_i)(p_{i+1} - p_i)}{100(x_{i+1} - x_i)} & \text{if } x_i \le t < x_{i+1} \\
-#'       p_n/100 & \text{if } t \ge x_n
+#'       q_1 & \text{if } t < x_1 \\
+#'       q_i + \frac{(t - x_i)(q_{i+1} - q_i)}{x_{i+1} - x_i} & \text{if } x_i \le t < x_{i+1} \\
+#'       q_n & \text{if } t \ge x_n
 #'     \end{cases}
 #'   }{
-#'     F(t) = p_i/100 + (t - x_i)(p_{i+1} - p_i) / (100(x_{i+1} - x_i)) for x_i ≤ t < x_{i+1}
+#'     F(t) = q_i + (t - x_i)(q_{i+1} - q_i) / (x_{i+1} - x_i) for x_i ≤ t < x_{i+1}
 #'   }
 #'
 #'   **Quantile function**: Defined by linear interpolation:
 #'
 #'   \deqn{
-#'     Q(u) = x_i + \frac{(100u - p_i)(x_{i+1} - x_i)}{p_{i+1} - p_i}
+#'     Q(u) = x_i + \frac{(u - q_i)(x_{i+1} - x_i)}{q_{i+1} - q_i}
 #'   }{
-#'     Q(u) = x_i + (100u - p_i)(x_{i+1} - x_i) / (p_{i+1} - p_i)
+#'     Q(u) = x_i + (u - q_i)(x_{i+1} - x_i) / (q_{i+1} - q_i)
 #'   }
 #'
-#'   for \eqn{p_i/100 \le u \le p_{i+1}/100}.
+#'   for \eqn{q_i \le u \le q_{i+1}}.
 #'
 #' @examples
 #' dist <- dist_normal()
-#' percentiles <- seq(0.01, 0.99, by = 0.01)
-#' x <- vapply(percentiles, quantile, double(1L), x = dist)
-#' dist_percentile(list(x), list(percentiles*100))
+#' probs <- seq(0.01, 0.99, by = 0.01)
+#' x <- vapply(probs, quantile, double(1L), x = dist)
+#' dist_quantile(list(x), list(probs))
+#' dist_percentile(list(x), list(probs * 100))
 #'
+#' @export
+dist_quantile <- function(x, quantile){
+  x <- as_list_of(x, .ptype = double())
+  quantile <- as_list_of(quantile, .ptype = double())
+  new_dist(x = x, quantile = quantile, class = "dist_quantile")
+}
+
+#' @rdname dist_quantile
+#' @param percentile A list of percentiles (between 0 and 100)
 #' @export
 dist_percentile <- function(x, percentile){
   x <- as_list_of(x, .ptype = double())
   percentile <- as_list_of(percentile, .ptype = double())
-  new_dist(x = x, percentile = percentile, class = "dist_percentile")
+  quantile <- lapply(percentile, function(p) p / 100)
+  new_dist(x = x, quantile = quantile, class = "dist_quantile")
 }
 
 #' @export
-format.dist_percentile <- function(x, ...){
+format.dist_quantile <- function(x, ...){
   sprintf(
-    "percentile[%s]",
+    "quantile[%s]",
     length(x[["x"]])
   )
 }
 
 #' @export
-density.dist_percentile <- function(x, at, ...){
+density.dist_quantile <- function(x, at, ...){
   d <- density(generate(x, 1000), from = min(at), to = max(at), ..., na.rm=TRUE)
   stats::approx(d$x, d$y, xout = at)$y
 }
 
-
 #' @export
-quantile.dist_percentile <- function(x, p, ...){
-  out <- x[["x"]][match(p, x[["percentile"]])]
-  out[is.na(out)] <- stats::approx(x = x[["percentile"]]/100, y = x[["x"]], xout = p[is.na(out)])$y
+quantile.dist_quantile <- function(x, p, ...){
+  out <- x[["x"]][match(p, x[["quantile"]])]
+  out[is.na(out)] <- stats::approx(x = x[["quantile"]], y = x[["x"]], xout = p[is.na(out)])$y
   out
 }
 
 #' @export
-cdf.dist_percentile <- function(x, q, ...){
-  stats::approx(x = x[["x"]], y = x[["percentile"]]/100, xout = q)$y
+cdf.dist_quantile <- function(x, q, ...){
+  stats::approx(x = x[["x"]], y = x[["quantile"]], xout = q)$y
 }
 
 #' @export
-generate.dist_percentile <- function(x, times, ...){
-  stats::approx(x[["percentile"]], x[["x"]], xout=stats::runif(times,min(x[["percentile"]]),max(x[["percentile"]])))$y
+generate.dist_quantile <- function(x, times, ...){
+  stats::approx(x[["quantile"]], x[["x"]], xout = stats::runif(times, min(x[["quantile"]]), max(x[["quantile"]])))$y
 }
 
 #' @export
-mean.dist_percentile <- function(x, ...) {
-  # assumes percentile is sorted
-  # probs <- x[["percentile"]]/100
-  # i <- seq_along(probs)
-  #
-  # weights <- (probs[pmin(i+1, length(probs))] - probs[pmax(i-1, 1)]) / 2
-  # sum(x[["x"]] * weights)
-
-
-  # Fit a spline to the percentiles
-  spline_fit <- stats::splinefun(x[["percentile"]], x[["x"]])
+mean.dist_quantile <- function(x, ...) {
+  # Fit a spline to the quantile probabilities
+  spline_fit <- stats::splinefun(x[["quantile"]], x[["x"]])
 
   # Use numerical integration to estimate the mean
   stats::integrate(spline_fit, lower = 0, upper = 1)$value
 }
 
 #' @export
-support.dist_percentile <- function(x, ...) {
+support.dist_quantile <- function(x, ...) {
   new_support_region(
     list(vctrs::vec_init(x[["x"]], n = 0L)),
     list(range(x[["x"]])),
-    list(!near(range(x[["percentile"]]), 0))
+    list(!near(range(x[["quantile"]]), 0))
   )
 }

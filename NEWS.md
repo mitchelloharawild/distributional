@@ -1,5 +1,11 @@
 # distributional (development version)
 
+## New features
+
+* Added `dist_quantile()` as the primary interface for the quantile/percentile 
+  distribution, accepting probabilities on the \[0, 1\] scale. 
+  `dist_percentile()` is now an alias that accepts the \[0, 100\] scale (#116).
+
 # distributional 0.7.1
 
 ## Improvements

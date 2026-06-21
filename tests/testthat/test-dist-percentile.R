@@ -4,7 +4,7 @@ test_that("Negative Binomial distribution", {
   x <- vapply(percentiles, quantile, double(1L), x = dist)
   dist <- dist_percentile(list(x), list(percentiles*100))
 
-  expect_equal(format(dist), "percentile[99]")
+  expect_equal(format(dist), "quantile[99]")
 
   # quantiles
   expect_equal(quantile(dist, 0.6), stats::qnorm(0.6, 0, 1))
