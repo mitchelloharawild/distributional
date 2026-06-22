@@ -317,6 +317,16 @@ Ops.dist_default <- function(e1, e2) {
     stop("Transformations of multivariate distributions are not yet supported.")
   }
 
+  # For + and - between two independent distributions use numerical convolution
+  if (all(is_dist) && .Generic %in% c("+", "-")) {
+    d1 <- wrap_dist(list(e1))
+    d2 <- wrap_dist(list(e2))
+    if (.Generic == "-") {
+      d2 <- -d2
+    }
+    return(vec_data(dist_convolved(d1, d2))[[1]])
+  }
+
   trans <- if(all(is_dist)) {
     if(identical(e1$dist, e2$dist)){
       new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
@@ -339,3 +349,7 @@ Ops.dist_default <- function(e1, e2) {
 
   vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))[[1]]
 }
+
+# If there are mix of Ops with default, then use the default method
+#' @export
+chooseOpsMethod.dist_default <- function(x, y, mx, my, cl, reverse) TRUE

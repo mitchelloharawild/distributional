@@ -2,6 +2,13 @@
 
 ## New features
 
+* Added `dist_convolved()` for the distribution of the sum of two independent
+  random variables, computed via FFT-based numerical convolution (#106).
+  The `+` and `-` operators now automatically produce a `dist_convolved` object
+  for distribution families without a known closed-form sum. Distributions with 
+  known closed-form sums (e.g. `dist_normal(1, 2) + dist_normal(3, 1)`) continue
+  to produce exact results.
+
 * Added `dist_quantile()` as the primary interface for the quantile/percentile 
   distribution, accepting probabilities on the \[0, 1\] scale. 
   `dist_percentile()` is now an alias that accepts the \[0, 100\] scale (#116).

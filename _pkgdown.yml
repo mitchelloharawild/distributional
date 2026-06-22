@@ -121,6 +121,7 @@ reference:
   desc: >
     Modifiers which change the nature of a distribution.
   contents:
+    - dist_convolved
     - dist_inflated
     - dist_mixture
     - dist_transformed
