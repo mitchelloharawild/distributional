@@ -52,9 +52,14 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>Added <code><a href="../reference/dist_convolved.html">dist_convolved()</a></code> for the distribution of the sum of two independent random variables, computed via FFT-based numerical convolution (<a href="https://github.com/mitchelloharawild/distributional/issues/106" class="external-link">#106</a>). The <code>+</code> and <code>-</code> operators now automatically produce a <code>dist_convolved</code> object for distribution families without a known closed-form sum. Distributions with known closed-form sums (e.g. <code>dist_normal(1, 2) + dist_normal(3, 1)</code>) continue to produce exact results.</p></li>
+<li><p>Added <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> as the primary interface for the quantile/percentile distribution, accepting probabilities on the [0, 1] scale. <code><a href="../reference/dist_quantile.html">dist_percentile()</a></code> is now an alias that accepts the [0, 100] scale (<a href="https://github.com/mitchelloharawild/distributional/issues/116" class="external-link">#116</a>).</p></li>
+</ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.7.1" id="distributional-071">distributional 0.7.1<a class="anchor" aria-label="anchor" href="#distributional-071"></a></h2>
+<h2 class="page-header" data-toc-text="0.7.1" id="distributional-071">distributional 0.7.1<small>2026-06-11</small><a class="anchor" aria-label="anchor" href="#distributional-071"></a></h2>
 <div class="section level3">
 <h3 id="improvements-0-7-1">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-7-1"></a></h3>
 <ul><li>Non-finite boundaries for truncated distributions now use open brackets.</li>
@@ -358,7 +363,7 @@
 </li>
 <li>Added 8 discrete probability distributions: <code><a href="../reference/dist_bernoulli.html">dist_bernoulli()</a></code>, <code><a href="../reference/dist_binomial.html">dist_binomial()</a></code>, <code><a href="../reference/dist_geometric.html">dist_geometric()</a></code>, <code><a href="../reference/dist_logarithmic.html">dist_logarithmic()</a></code>, <code><a href="../reference/dist_multinomial.html">dist_multinomial()</a></code>, <code><a href="../reference/dist_negative_binomial.html">dist_negative_binomial()</a></code>, <code><a href="../reference/dist_poisson.html">dist_poisson()</a></code>, <code><a href="../reference/dist_poisson_inverse_gaussian.html">dist_poisson_inverse_gaussian()</a></code>
 </li>
-<li>Added 3 miscellaneous probability distributions: <code><a href="../reference/dist_degenerate.html">dist_degenerate()</a></code>, <code><a href="../reference/dist_percentile.html">dist_percentile()</a></code>, <code><a href="../reference/dist_sample.html">dist_sample()</a></code>
+<li>Added 3 miscellaneous probability distributions: <code><a href="../reference/dist_degenerate.html">dist_degenerate()</a></code>, <code><a href="../reference/dist_quantile.html">dist_percentile()</a></code>, <code><a href="../reference/dist_sample.html">dist_sample()</a></code>
 </li>
 </ul></div>
 <div class="section level4">
