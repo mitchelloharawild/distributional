@@ -227,12 +227,10 @@ Ops.dist_transformed <- function(e1, e2) {
     .Generic <- "*"
   }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
+
   trans <- if(all(is_dist)) {
-    if(identical(e1$dist, e2$dist)){
-      new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
-    } else {
-      stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
-    }
+    # Fall back to default distribution Ops
+    return(NextMethod())
   } else if(is_dist[1]){
     new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
   } else {

@@ -190,6 +190,12 @@ Ops.dist_normal <- function(e1, e2){
     return(e1)
   }
 
+  # Ops between a normal and other distribution
+  if(inherits(e1, "dist_normal") && inherits(e2, "dist_default") ||
+     inherits(e2, "dist_normal") && inherits(e1, "dist_default")){
+    return(NextMethod())
+  }
+
   # Ops between a normal and scalar
   if(inherits(e1, "dist_normal")){
     dist <- e1
