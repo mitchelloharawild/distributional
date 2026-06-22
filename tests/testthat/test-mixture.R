@@ -145,3 +145,78 @@ test_that("Mixture with bad weights",{
     "distribution")
 
 })
+
+test_that("Quantile mixture of two normals (equal weights)", {
+  # Q(p) = 0.5*qnorm(p) + 0.5*qnorm(p,10,4) = 2.5*qnorm(p) + 5 = N(5, 2.5^2)
+  dist <- dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.5, 0.5), type = "quantile")
+
+  # format
+  expect_equal(format(dist), "mixture<q>(0.5*N(0, 1), 0.5*N(10, 16))")
+
+  # quantile is the weighted average of component quantiles
+  expect_equal(quantile(dist, 0.5), 0.5 * qnorm(0.5) + 0.5 * qnorm(0.5, 10, 4))
+  expect_equal(quantile(dist, 0.1), 0.5 * qnorm(0.1) + 0.5 * qnorm(0.1, 10, 4), tolerance = 1e-6)
+  expect_equal(quantile(dist, c(0.1, 0.5, 0.9))[[1]], c(
+    0.5 * qnorm(0.1) + 0.5 * qnorm(0.1, 10, 4),
+    0.5 * qnorm(0.5) + 0.5 * qnorm(0.5, 10, 4),
+    0.5 * qnorm(0.9) + 0.5 * qnorm(0.9, 10, 4)
+  ), tolerance = 1e-6)
+
+  # cdf inverts quantile
+  expect_equal(cdf(dist, quantile(dist, 0.3)), 0.3, tolerance = 1e-5)
+  expect_equal(cdf(dist, quantile(dist, 0.7)), 0.7, tolerance = 1e-5)
+
+  # mean equals weighted sum of component means
+  expect_equal(mean(dist), 0.5 * 0 + 0.5 * 10)
+
+  # variance: for normals, Var = (sum(w_i * sigma_i))^2 = (0.5*1 + 0.5*4)^2 = 6.25
+  expect_equal(variance(dist), 6.25, tolerance = 0.01)
+
+  # density matches N(5, 2.5)
+  expect_equal(density(dist, 5), dnorm(5, 5, 2.5), tolerance = 0.001)
+})
+
+test_that("Quantile mixture of different distributions", {
+  dist <- dist_mixture(dist_normal(0, 1), dist_student_t(10), weights = c(0.3, 0.7), type = "quantile")
+
+  # format
+  expect_equal(format(dist), "mixture<q>(0.3*N(0, 1), 0.7*t(10, 0, 1))")
+
+  # quantile
+  p <- 0.25
+  expect_equal(quantile(dist, p), 0.3 * qnorm(p) + 0.7 * qt(p, 10), tolerance = 1e-6)
+
+  # cdf inverts quantile
+  expect_equal(cdf(dist, quantile(dist, 0.5)), 0.5, tolerance = 1e-5)
+
+  # density > 0 at the mean
+  expect_gt(density(dist, mean(dist)), 0)
+
+  # mean
+  expect_equal(mean(dist), 0.3 * 0 + 0.7 * 0)
+})
+
+test_that("Quantile mixture: density integrates to 1", {
+  dist <- dist_mixture(dist_normal(0, 1), dist_normal(5, 1), weights = c(0.4, 0.6), type = "quantile")
+
+  # Density integrates to 1 over a wide range
+  integral <- stats::integrate(
+    function(x) vapply(x, \(xi) density(dist, xi), numeric(1L)),
+    lower = -5, upper = 12
+  )$value
+  expect_equal(integral, 1, tolerance = 0.01)
+})
+
+test_that("Quantile mixture rejects multivariate distributions", {
+  mu <- c(0, 0)
+  sigma <- diag(2)
+  expect_error(
+    dist_mixture(
+      dist_multivariate_normal(mu = list(mu), sigma = list(sigma)),
+      dist_multivariate_normal(mu = list(mu), sigma = list(sigma)),
+      weights = c(0.5, 0.5),
+      type = "quantile"
+    ),
+    "univariate"
+  )
+})

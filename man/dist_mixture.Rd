@@ -4,7 +4,7 @@
 \alias{dist_mixture}
 \title{Create a mixture of distributions}
 \usage{
-dist_mixture(..., weights = numeric())
+dist_mixture(..., weights = numeric(), type = c("probability", "quantile"))
 }
 \arguments{
 \item{...}{Distributions to be used in the mixture. Can be any
@@ -14,20 +14,30 @@ distributional objects.}
 The length must match the number of distributions passed to \code{...}.
 Each weight \eqn{w_i} represents the probability that a random draw
 comes from the \eqn{i}-th component distribution.}
+
+\item{type}{\code{"probability"} (default) for a probability mixture or
+\code{"quantile"} for a quantile mixture (Vincentization). Quantile mixtures
+only support univariate component distributions.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 
 A mixture distribution combines multiple component distributions with
-specified weights. The resulting distribution can model complex,
-multimodal data by representing it as a weighted sum of simpler
-distributions.
+specified weights. Two types of mixture are supported:
+\itemize{
+\item \strong{Probability mixture} (\code{type = "probability"}, the default): the CDF is
+a weighted average of the component CDFs. Also known as \emph{linear pooling}.
+\item \strong{Quantile mixture} (\code{type = "quantile"}): the quantile function is a
+weighted average of the component quantile functions. Also known as
+\emph{Vincentization}.
+}
 }
 \details{
 In the following, let \eqn{X} be a mixture random variable composed
 of \eqn{K} component distributions \eqn{F_1, F_2, \ldots, F_K} with
 corresponding weights \eqn{w_1, w_2, \ldots, w_K} where
 \eqn{\sum_{i=1}^K w_i = 1} and \eqn{w_i \geq 0} for all \eqn{i}.
+\subsection{Probability mixture (\code{type = "probability"})}{
 
 \strong{Support}: The union of the supports of all component distributions
 
@@ -104,14 +114,48 @@ For multivariate mixtures, the c.d.f. is approximated numerically.
 
 \strong{Quantile function}:
 
-For univariate mixtures, the quantile function has no closed form
-and is computed numerically by inverting the c.d.f. using root-finding
+For univariate probability mixtures, the quantile function has no closed
+form and is computed numerically by inverting the c.d.f. using root-finding
 (\code{\link[stats:uniroot]{stats::uniroot()}}).
 
 For multivariate mixtures, quantiles are not yet implemented.
 }
+
+\subsection{Quantile mixture (\code{type = "quantile"})}{
+
+Also known as a \emph{Vincent average} or \emph{Vincentization}, only univariate
+component distributions are supported.
+
+\strong{Quantile function} (closed form):
+\deqn{
+    Q(p) = \sum_{i=1}^K w_i Q_i(p)
+  }{
+    Q(p) = sum_{i=1}^K w_i * Q_i(p)
+  }
+
+where \eqn{Q_i(p)} is the quantile function of the \eqn{i}-th component
+distribution.
+
+\strong{Cumulative distribution function}: computed numerically by inverting
+\eqn{Q(p)} via \code{\link[stats:uniroot]{stats::uniroot()}}.
+
+\strong{Probability density function}: derived analytically from the quantile
+function. For \eqn{p = F(x)}:
+\deqn{
+    f(x) = \frac{1}{Q'(p)} = \frac{1}{\sum_{i=1}^K w_i / f_i(Q_i(p))}
+  }{
+    f(x) = 1 / sum_{i=1}^K w_i / f_i(Q_i(p))
+  }
+
+\strong{Mean}: \eqn{E(X) = \sum_{i=1}^K w_i \mu_i} (identical to the
+probability mixture mean).
+
+\strong{Variance}: computed numerically as
+\eqn{\int_0^1 Q(p)^2 \, dp - \left(E(X)\right)^2}.
+}
+}
 \examples{
-# Univariate mixture of two normal distributions
+# Probability mixture of two normal distributions (default)
 dist <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))
 dist
 
@@ -123,6 +167,20 @@ cdf(dist, 2)
 quantile(dist, 0.5)
 
 generate(dist, 10)
+
+# Quantile mixture (Vincentization) of two normal distributions
+vdist <- dist_mixture(
+  dist_normal(0, 1), dist_normal(5, 2),
+  weights = c(0.3, 0.7), type = "quantile"
+)
+vdist
+
+mean(vdist)
+variance(vdist)
+
+density(vdist, 2)
+cdf(vdist, 2)
+quantile(vdist, 0.5)
 
 }
 \seealso{
