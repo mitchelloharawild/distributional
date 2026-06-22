@@ -177,7 +177,7 @@ quantile.dist_mixture <- function(x, p, ...){
 }
 
 #' @export
-cdf.dist_mixture <- function(x, q, times = 1e5, ...){
+cdf.dist_mixture <- function(x, q, ...){
   d <- dim(x)
   if(d == 1L) {
     if(length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
