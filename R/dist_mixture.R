@@ -345,15 +345,43 @@ cdf.dist_q_mixture <- function(x, q, ...) {
     sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ...)) - q
   }
 
-  lims <- field(support(x), "lim")[[1]]
+  # Compute support bounds directly from the quantile function to avoid
+  # calling support(x), which would trigger density() -> cdf() recursion.
+  lims <- c(
+    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 0, ...)),
+    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 1, ...))
+  )
 
   # q is at or below the lower bound of the mixture support
   if (q <= lims[1]) return(0)
   # q is at or above the upper bound of the mixture support
   if (q >= lims[2]) return(1)
 
-  eps <- sqrt(.Machine$double.eps)
+  # Use the smallest representable eps so the search interval covers
+  # far tails (e.g., normal distributions). For q beyond Q(eps) or Q(1-eps),
+  # return the boundary probability rather than erroring in uniroot.
+  eps <- .Machine$double.eps
+  lo_val <- fn(eps)
+  hi_val <- fn(1 - eps)
+
+  if (lo_val >= 0) return(eps)
+  if (hi_val <= 0) return(1 - eps)
+
   stats::uniroot(fn, interval = c(eps, 1 - eps), tol = 1e-8)$root
+}
+
+#' @export
+support.dist_q_mixture <- function(x, ...) {
+  lims <- c(
+    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 0, ...)),
+    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 1, ...))
+  )
+  closed <- is.finite(lims)
+  new_support_region(
+    list(numeric(0)),
+    list(lims),
+    list(closed)
+  )
 }
 
 #' @export
