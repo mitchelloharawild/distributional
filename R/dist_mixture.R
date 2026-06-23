@@ -207,14 +207,14 @@ dist_mixture <- function(..., weights = numeric(), type = c("probability", "quan
 
   new_dist(
     dist = transpose(dist), w = list(weights),
-    class = "dist_p_mixture", dimnames = dn
+    class = "dist_mixture", dimnames = dn
   )
 }
 
 # ---- Probability mixture -----------------------------------------------------
 
 #' @export
-format.dist_p_mixture <- function(x, width = getOption("width"), ...) {
+format.dist_mixture <- function(x, width = getOption("width"), ...) {
   dists <- unlist(lapply(x[["dist"]], format))
 
   dist_info <- paste0(x[["w"]], "*", dists, collapse = ", ")
@@ -225,13 +225,13 @@ format.dist_p_mixture <- function(x, width = getOption("width"), ...) {
 }
 
 #' @export
-density.dist_p_mixture <- function(x, at, ...) {
+density.dist_mixture <- function(x, at, ...) {
   if (NROW(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
   sum(x[["w"]] * vapply(x[["dist"]], density, numeric(1L), at = at, ...))
 }
 
 #' @export
-quantile.dist_p_mixture <- function(x, p, ...) {
+quantile.dist_mixture <- function(x, p, ...) {
   d <- dim(x)
   if (d > 1) {
     stop("quantile is not implemented for multivariate mixtures.")
@@ -253,7 +253,7 @@ quantile.dist_p_mixture <- function(x, p, ...) {
 }
 
 #' @export
-cdf.dist_p_mixture <- function(x, q, ...) {
+cdf.dist_mixture <- function(x, q, ...) {
   d <- dim(x)
   if (d == 1L) {
     if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
@@ -264,7 +264,7 @@ cdf.dist_p_mixture <- function(x, q, ...) {
 }
 
 #' @export
-generate.dist_p_mixture <- function(x, times, ...) {
+generate.dist_mixture <- function(x, times, ...) {
   dist_idx <- .bincode(stats::runif(times), breaks = c(0, cumsum(x[["w"]])))
   r <- matrix(nrow = times, ncol = dim(x))
   for (i in seq_along(x[["dist"]])) {
@@ -277,7 +277,7 @@ generate.dist_p_mixture <- function(x, times, ...) {
 }
 
 #' @export
-mean.dist_p_mixture <- function(x, ...) {
+mean.dist_mixture <- function(x, ...) {
   d <- dim(x)
   m <- vapply(x[["dist"]], mean, numeric(d), ...)
   if (d == 1L) {
@@ -288,7 +288,7 @@ mean.dist_p_mixture <- function(x, ...) {
 }
 
 #' @export
-covariance.dist_p_mixture <- function(x, ...) {
+covariance.dist_mixture <- function(x, ...) {
   d <- dim(x)
   if (d == 1L) {
     m <- vapply(x[["dist"]], mean, numeric(1L), ...)
@@ -315,7 +315,7 @@ covariance.dist_p_mixture <- function(x, ...) {
 }
 
 #' @export
-dim.dist_p_mixture <- function(x) {
+dim.dist_mixture <- function(x) {
   dim(x[["dist"]][[1]])
 }
 
