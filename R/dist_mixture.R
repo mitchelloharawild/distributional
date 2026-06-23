@@ -192,7 +192,7 @@ dist_mixture <- function(..., weights = numeric(), type = c("probability", "quan
 
   if (type == "quantile") {
     # Quantile mixtures require univariate components
-    dims <- vapply(dist, \(d) dim(vctrs::vec_data(d)[[1L]]), integer(1L))
+    dims <- vapply(dist, function(d) dim(vctrs::vec_data(d)[[1L]]), integer(1L))
     if (any(dims > 1L)) {
       abort("Quantile mixtures only support univariate distributions.")
     }
@@ -423,7 +423,7 @@ covariance.dist_q_mixture <- function(x, ...) {
     sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ...))
   }
   e2 <- stats::integrate(
-    function(p) vapply(p, \(pp) q_fn(pp)^2, numeric(1L)),
+    function(p) vapply(p, function(pp) q_fn(pp)^2, numeric(1L)),
     lower = 0, upper = 1,
     rel.tol = 1e-5
   )$value
