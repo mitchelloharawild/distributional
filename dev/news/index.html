@@ -20,7 +20,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.7.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.8.0.9000</span>
       </span>
     </div>
 
@@ -52,8 +52,11 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="distributional-development-version">distributional (development version)<a class="anchor" aria-label="anchor" href="#distributional-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.8.0" id="distributional-080">distributional 0.8.0<small>2026-06-23</small><a class="anchor" aria-label="anchor" href="#distributional-080"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-8-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h3>
 <ul><li><p><code><a href="../reference/dist_mixture.html">dist_mixture()</a></code> gains a <code>type</code> argument supporting both probability mixtures (<code>type = "probability"</code>, the default, existing behaviour) and quantile mixtures (<code>type = "quantile"</code>). A quantile mixture (Vincentization) defines the quantile function as a weighted average of the component quantile functions: Q(p) = sum(w_i * Q_i(p)). Its CDF and density are computed numerically from this quantile function.</p></li>
 <li><p>Added <code><a href="../reference/dist_convolved.html">dist_convolved()</a></code> for the distribution of the sum of two independent random variables, computed via FFT-based numerical convolution (<a href="https://github.com/mitchelloharawild/distributional/issues/106" class="external-link">#106</a>). The <code>+</code> and <code>-</code> operators now automatically produce a <code>dist_convolved</code> object for distribution families without a known closed-form sum. Distributions with known closed-form sums (e.g. <code>dist_normal(1, 2) + dist_normal(3, 1)</code>) continue to produce exact results.</p></li>
 <li><p>Added <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> as the primary interface for the quantile/percentile distribution, accepting probabilities on the [0, 1] scale. <code><a href="../reference/dist_quantile.html">dist_percentile()</a></code> is now an alias that accepts the [0, 100] scale (<a href="https://github.com/mitchelloharawild/distributional/issues/116" class="external-link">#116</a>).</p></li>
