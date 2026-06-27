@@ -351,5 +351,4 @@ Ops.dist_default <- function(e1, e2) {
 }
 
 # If there are mix of Ops with default, then use the default method
-#' @export
 chooseOpsMethod.dist_default <- function(x, y, mx, my, cl, reverse) TRUE

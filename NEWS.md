@@ -1,5 +1,10 @@
 # distributional (development version)
 
+## Bug fixes
+
+* Conditionalised `chooseOpsMethod()` S3 registration so the package can load
+  on R versions before 4.3.0 (#157).
+
 # distributional 0.8.0
 
 ## New features
