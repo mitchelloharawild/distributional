@@ -1,3 +1,5 @@
+Small patch release to fix v0.8.0 issue with running on R < v4.3.0.
+
 ## Test environments
 * local ubuntu 24.04 install, R 4.5.2
 * ubuntu-latest (on GitHub actions), R-devel, R-release, R-oldrel-1, R-oldrel-2, R-oldrel-3, R-oldrel-4
