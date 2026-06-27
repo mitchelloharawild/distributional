@@ -1,4 +1,4 @@
-# distributional (development version)
+# distributional 0.8.1
 
 ## Bug fixes
 
