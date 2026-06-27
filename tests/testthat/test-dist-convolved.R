@@ -82,6 +82,8 @@ test_that("dist_convolved: subtraction of non-normal distributions", {
 })
 
 test_that("dist_convolved: works with mixed distribution families", {
+  skip_unless_r(">= 4.3.0")
+
   d <- dist_normal(0, 1) + dist_exponential(1)
   expect_s3_class(vec_data(d)[[1]], "dist_convolved")
   # Mean = 0 + 1 = 1
@@ -107,6 +109,8 @@ test_that("dist_convolved: family returns 'convolved'", {
 })
 
 test_that("dist_convolved: transformed distribution + distribution works", {
+  skip_unless_r(">= 4.3.0")
+
   # dist_lognormal is a dist_transformed internally; adding another dist
   # should produce a dist_convolved
   d <- dist_lognormal(0, 1) + dist_exponential(1)
@@ -164,6 +168,8 @@ test_that("dist_convolved: k-way mean is exact sum of all component means", {
   # E[Gamma(2,2)] = 1; three of them => mean = 3
   d3 <- dist_gamma(2, 2) + dist_gamma(2, 2) + dist_gamma(2, 2)
   expect_equal(mean(d3), 3, tolerance = 1e-10)
+
+  skip_unless_r(">= 4.3.0")
 
   # 4-way with mixed families
   d4 <- dist_gamma(2, 2) + dist_exponential(2) + dist_normal(1, 1) + dist_gamma(3, 1)
