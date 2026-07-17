@@ -44,6 +44,46 @@ arg_listable <- function(x, .ptype) {
   x
 }
 
+# Values of a multivariate distribution's variates (`at`, `q`) should be given
+# as a matrix with one column for each variate. A bare vector is ambiguous about
+# whether it describes one point or several, so it is deprecated and for now
+# interpreted as a matrix with one column for each variate.
+validate_arg_dim <- function(x, value, arg) {
+  # Matrices already describe the points, lists are unpacked by dist_apply()
+  if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
+
+  # Number of variates. Distributions without a dim() method are univariate,
+  # which avoids dim.dist_default() identifying the dimension via a random draw.
+  proto <- vec_data(x)[[1L]]
+  cls <- setdiff(class(proto), "dist_default")
+  has_dim <- any(vapply(cls, function(cl) !is.null(getS3method("dim", cl, optional = TRUE)),
+                        logical(1L)))
+  d <- if(has_dim) dim(proto) else 1L
+  # Vectors are unambiguous for univariate distributions (they are many points)
+  if(d == 1L) return(value)
+
+  lifecycle::deprecate_soft(
+    when = "0.9.0",
+    what = I(sprintf(
+      "Using a vector for the `%s` argument of a multivariate distribution", arg
+    )),
+    with = I(sprintf(
+      "a matrix with one column for each of the %i variates (such as `%s = cbind(...)`)",
+      d, arg
+    )),
+    # The user's frame is 2 calls up: <generic>() then <generic>.distribution()
+    user_env = caller_env(2)
+  )
+
+  if(length(value) != 1L && length(value) %% d != 0L) {
+    abort(sprintf(
+      "Cannot use an input of length %i as points of a distribution with %i variates.",
+      length(value), d
+    ))
+  }
+  matrix(value, ncol = d)
+}
+
 validate_recycling <- function(x, arg) {
   if(is_list_of(arg)) return(lapply(arg, validate_recycling, x = x))
   if(!any(vec_size(arg) == c(1, vec_size(x)))) {

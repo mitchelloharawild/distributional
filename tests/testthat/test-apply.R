@@ -169,3 +169,33 @@ test_that("Recycling rules and output for applying multiple inputs over multiple
     )
   )
 })
+
+test_that("Vector inputs to multivariate distributions are deprecated (#159)", {
+  skip_if_not_installed("mvtnorm")
+
+  # <dist> is a trivariate distribution vector of length 2.
+  sigma <- matrix(c(4,1,0, 1,3,1, 0,1,2), nrow = 3)
+  dist <- dist_multivariate_normal(
+    mu = list(c(1,2,3), c(4,5,6)), sigma = list(sigma, sigma*2)
+  )
+
+  # A bare vector is a deprecated way to write points, and is interpreted as a
+  # matrix with one column for each variate - matching the equivalent matrix.
+  lifecycle::expect_deprecated(v1 <- density(dist, c(1, 2, 3)))
+  expect_equal(v1, density(dist, cbind(1, 2, 3)))
+  lifecycle::expect_deprecated(v2 <- density(dist, c(1, 2, 3, 4, 5, 6)))
+  expect_equal(v2, density(dist, matrix(c(1, 2, 3, 4, 5, 6), ncol = 3)))
+
+  # Lengths which don't fill whole points are an error.
+  expect_error(
+    suppressWarnings(density(dist, c(1, 2))),
+    "input of length 2 as points of a distribution with 3 variates"
+  )
+
+  # Probabilities are not variate values, and so are unaffected.
+  expect_no_condition(quantile(dist, 0.5, kind = "marginal"))
+
+  # Vectors for univariate distributions describe many points, not one, and so
+  # are unaffected.
+  expect_no_condition(density(dist_normal(1:2, 1), c(0, 1)))
+})

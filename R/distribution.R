@@ -98,6 +98,7 @@ dimnames.distribution <- function(x){
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
+  at <- validate_arg_dim(x, at, arg = "at")
   if(log) return(log_density(x, at, ...))
   at <- arg_listable(at, .ptype = NULL)
   dist_apply(x, density, at = at, ...)
@@ -108,6 +109,7 @@ log_density <- function(x, at, ...) {
 }
 #' @export
 log_density.distribution <- function(x, at, ...){
+  at <- validate_arg_dim(x, at, arg = "at")
   at <- arg_listable(at, .ptype = NULL)
   dist_apply(x, log_density, at = at, ...)
 }
@@ -157,6 +159,7 @@ cdf <- function (x, q, ..., log = FALSE){
 #' @rdname cdf
 #' @export
 cdf.distribution <- function(x, q, ...){
+  q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
   dist_apply(x, cdf, q = q, ...)
 }
@@ -165,6 +168,7 @@ log_cdf <- function(x, q, ...) {
 }
 #' @export
 log_cdf.distribution <- function(x, q, ...){
+  q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
   dist_apply(x, log_cdf, q = q, ...)
 }
