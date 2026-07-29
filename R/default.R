@@ -217,8 +217,9 @@ print.dist_default <- function(x, ...){
 
 #' @export
 dim.dist_default <- function(x){
-  # Quick and dirty dimension calculation
-  NCOL(generate(x, times = 1))
+  # Dimensions of random draws is the cheapest approach for the default dim().
+  # The RNG state is restored so it does not affect the global random state.
+  suppressWarnings(restore_rng(NCOL(generate(x, times = 1))))
 }
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")

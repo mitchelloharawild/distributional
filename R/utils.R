@@ -52,13 +52,8 @@ validate_arg_dim <- function(x, value, arg) {
   # Matrices already describe the points, lists are unpacked by dist_apply()
   if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
 
-  # Number of variates. Distributions without a dim() method are univariate,
-  # which avoids dim.dist_default() identifying the dimension via a random draw.
-  proto <- vec_data(x)[[1L]]
-  cls <- setdiff(class(proto), "dist_default")
-  has_dim <- any(vapply(cls, function(cl) !is.null(getS3method("dim", cl, optional = TRUE)),
-                        logical(1L)))
-  d <- if(has_dim) dim(proto) else 1L
+  # Number of variates (dim() methods for distributions return a single number)
+  d <- dim(vec_data(x)[[1L]]) %||% 1L
   # Vectors are unambiguous for univariate distributions (they are many points)
   if(d == 1L) return(value)
 
@@ -203,12 +198,20 @@ pkgdown_doc_link <- function(name) {
   )
 }
 
-restore_rng <- function(expr, seed = NULL) {
+restore_rng <- function(expr, seed) {
+  # The RNG may not have been used yet, in which case it should be left unused
+  had_seed <- env_has(.GlobalEnv, ".Random.seed")
   old_seed <- .GlobalEnv$.Random.seed
-  # Set new temporary seed
-  set.seed(seed)
   # Restore previous seed
-  on.exit(.GlobalEnv$.Random.seed <- old_seed)
+  on.exit(
+    if (had_seed) {
+      .GlobalEnv$.Random.seed <- old_seed
+    } else {
+      env_unbind(.GlobalEnv, ".Random.seed")
+    }
+  )
+  # Set new temporary seed
+  if (!missing(seed)) set.seed(seed)
 
   expr
 }
