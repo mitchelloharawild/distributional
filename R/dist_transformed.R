@@ -13,18 +13,31 @@
 #'
 #' @param dist A univariate distribution vector.
 #' @param transform A function used to transform the distribution. This
-#' transformation should be monotonic over appropriate domain.
+#' transformation should be monotonic over the region of the base distribution's
+#' mass (see Details).
 #' @param inverse The inverse of the `transform` function.
 #'
 #' @details
 #'
 #' `r pkgdown_doc_link("dist_transformed")`
 #'
-#'   Let \eqn{Y = g(X)} where \eqn{X} is the base distribution with 
+#'   Let \eqn{Y = g(X)} where \eqn{X} is the base distribution with
 #'   transformation function `transform` = \eqn{g} and `inverse` = \eqn{g^{-1}}.
-#'   The transformation \eqn{g} must be monotonic over the support of \eqn{X}.
+#'   The transformation \eqn{g} must be monotonic so that the mapping between
+#'   \eqn{X} and \eqn{Y} is invertible.
 #'
-#'   **Support**: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}
+#'   The direction of the transformation (increasing or decreasing) is detected
+#'   by probing \eqn{g} at quantiles spanning the region of mass of \eqn{X},
+#'   rather than at the (frequently infinite) support limits. A transformation
+#'   that is monotonic where \eqn{X} has mass but not in its far tails (for
+#'   example \eqn{g(x) = x^2} applied to a Normal whose mass is positive) is
+#'   therefore treated as monotonic. When \eqn{g} is *not* monotonic over the
+#'   region of mass, `cdf()` and `quantile()` are not well-defined from the
+#'   single stored `inverse` and return `NA` with a warning.
+#'
+#'   **Support**: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}. When
+#'   \eqn{g} cannot be verified to be monotonic over the whole support, the
+#'   support limits are reported as unknown (`NA`).
 #'
 #'   **Mean**: Approximated numerically using a second-order Taylor expansion:
 #'
@@ -132,8 +145,25 @@ support.dist_transformed <- function(x, ...) {
   support <- support(x[["dist"]])
   lim <- field(support, "lim")[[1]]
   lim <- suppressWarnings(x[['transform']](lim))
-  if (all(!is.na(lim))) {
-    lim <- sort(lim)
+
+  # Mapping the support limits through the transform and sorting them only
+  # gives the correct image when the transform is monotonic over the *whole*
+  # support. Probe monotonicity across the support (reaching toward the limits
+  # via extreme base quantiles); if it cannot be verified, or a limit maps to
+  # NA, return unknown (NA) limits rather than a wrong image. The clamping in
+  # `cdf()` and `density()` is guarded on `!is.na(lim)` and degrades to no
+  # clamping. Computing the exact image for non-monotonic transforms (via
+  # interior critical points) is left as a follow-up (see #9).
+  tail <- 10^(-8:-2)
+  p <- sort(unique(c(tail, seq(0, 1, length.out = 23L)[2:22], 1 - tail)))
+  if (all(!is.na(lim)) && monotonic_dir(x[["transform"]], x[["dist"]], p) != 0L) {
+    # A decreasing transform swaps the limits, and with them their closedness.
+    if (is.unsorted(lim)) {
+      lim <- rev(lim)
+      field(support, "closed")[[1]] <- rev(field(support, "closed")[[1]])
+    }
+  } else {
+    lim <- c(NA_real_, NA_real_)
   }
   field(support, "lim")[[1]] <- lim
   support
@@ -159,7 +189,14 @@ cdf.dist_transformed <- function(x, q, ...){
   inv <- function(v) suppressWarnings(x[["inverse"]](v))
   p <- cdf(x[["dist"]], inv(q), ...)
   # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
-  if(!is.null(x[["dist"]]) && !monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
+  if(!is.null(x[["dist"]])){
+    dir <- monotonic_dir(x[["transform"]], x[["dist"]])
+    if(dir == 0L){
+      warning("Cannot compute the cdf of a non-monotonic transformation over the distribution's region of mass, returning `NA`.")
+      return(rep(NA_real_, length(q)))
+    }
+    if(dir == -1L) p <- 1 - p
+  }
 
   # TODO: Rework for support of closed limits and prevent computation
   x_sup <- support(x)
@@ -175,7 +212,14 @@ cdf.dist_transformed <- function(x, q, ...){
 #' @export
 quantile.dist_transformed <- function(x, p, ...){
   # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
-  if(!is.null(x[["dist"]]) && !monotonic_increasing(x[["transform"]], support(x[["dist"]]))) p <- 1 - p
+  if(!is.null(x[["dist"]])){
+    dir <- monotonic_dir(x[["transform"]], x[["dist"]])
+    if(dir == 0L){
+      warning("Cannot compute quantiles of a non-monotonic transformation over the distribution's region of mass, returning `NA`.")
+      return(rep(NA_real_, length(p)))
+    }
+    if(dir == -1L) p <- 1 - p
+  }
   x[["transform"]](quantile(x[["dist"]], p, ...))
 }
 
@@ -250,13 +294,22 @@ Ops.dist_transformed <- function(e1, e2) {
   vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))[[1]]
 }
 
-monotonic_increasing <- function(f, support) {
+# Direction of a transformation `f`, judged by probing it at quantiles of the
+# base distribution `dist`:
+#    1L = increasing, -1L = decreasing, 0L = non-monotonic over the probed region.
+# Probing base quantiles judges monotonicity over the region of *mass*. The
+# default `p` covers the interior of the distribution; pass more extreme
+# probabilities to probe further toward the support limits (used by `support()`).
+monotonic_dir <- function(f, dist, p = seq(0, 1, length.out = 23L)[2:22]) {
   # Shortcut for identity function (used widely in ggdist)
   if(!is.primitive(f) && identical(body(f), as.name(names(formals(f))))) {
-    return(TRUE)
+    return(1L)
   }
 
-  # Currently assumes (without checking, #9) monotonicity of f over the domain
-  x <- f(field(support, "lim")[[1]])
-  isTRUE(x[[2L]] >= x[[1L]])
+  d <- diff(suppressWarnings(f(quantile(dist, p))))
+  d <- d[is.finite(d) & d != 0]
+  if (!length(d)) return(1L)
+  if (all(d > 0)) return(1L)
+  if (all(d < 0)) return(-1L)
+  0L
 }
