@@ -14,12 +14,16 @@ a common length.}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Creates the distribution of the sum of two or more independent random
-variables using numerical convolution of their densities. The density of
-the result is approximated on a grid using a Fast Fourier Transform (FFT),
-and then interpolated with \code{\link[stats:approxfun]{stats::approxfun()}}.
+variables using numerical convolution of their distributions with a Fast
+Fourier Transform (FFT).
 
-The cumulative distribution function and quantile function are derived from
-the approximated density via numerical integration and inversion respectively.
+The convolution used depends on the support of the distributions being
+summed. A sum of distributions with lattice (integer) support is convolved
+exactly on the integer lattice, giving the probability mass function of the
+result. Any other sum is convolved on a common grid of cell probabilities,
+from which the density is obtained and interpolated with
+\code{\link[stats:approxfun]{stats::approxfun()}}, and the cumulative distribution and quantile functions
+are derived by accumulation and inversion respectively.
 
 This is primarily intended to be used via arithmetic on distributions:
 \code{dist1 + dist2} or \code{dist1 + dist2 + dist3 + ...}. Distributions with known
@@ -41,15 +45,29 @@ independent random variables.
 \strong{Probability density function (p.d.f)}:
 \deqn{f_Z(z) = (f_{X_1} * f_{X_2} * \cdots * f_{X_k})(z)}
 
-The k-way convolution is computed in a single FFT pass: each component
-density is evaluated on a common grid, transformed via FFT, all transforms
-are multiplied element-wise, and a single inverse FFT yields the result.
-This avoids compounding approximation errors from nested binary convolutions.
+\strong{Support}: \eqn{\sum_i \inf S_{X_i}} to \eqn{\sum_i \sup S_{X_i}}, which
+is discrete if (and only if) all of the \eqn{X_i} are discrete.
+
+The k-way convolution is computed in a single FFT pass: each component is
+discretised onto a common grid, transformed via FFT, all transforms are
+multiplied element-wise, and a single inverse FFT yields the result. This
+avoids compounding approximation errors from nested binary convolutions.
+
+Components are discretised into probabilities rather than densities, which
+preserves their mass regardless of how the scales of the distributions
+being summed compare. When all of the distributions are supported on the
+integers this is done exactly on the integer lattice, and the result is a
+discrete distribution with an exact probability mass function. Otherwise
+the distributions are discretised into the probabilities of the cells of a
+common grid (which is aligned with the integers if any of the
+distributions are discrete, so that their atoms are also exact).
 
 The accuracy of the FFT approximation can be controlled by passing \code{n}
-(number of grid points, default \code{2^12}) and \code{tail_p} (tail probability used
+(number of grid cells, default \code{2^12}) and \code{tail_p} (tail probability used
 to find finite grid bounds for distributions with infinite support, default
-\code{1e-6}) to \code{density()}, \code{cdf()}, \code{quantile()}, or \code{generate()}.
+\code{1e-6}) to \code{density()}, \code{cdf()}, \code{quantile()}, or \code{generate()}. A warning
+is given if the grid is too coarse to resolve any of the distributions
+being summed.
 }
 \examples{
 # Sum of a lognormal and an exponential (no closed-form result)
@@ -68,6 +86,11 @@ d3
 # Via arithmetic
 d2 <- dist_lognormal(0, 1) + dist_exponential(1)
 density(d2, 2)
+
+# Sums of discrete distributions are computed exactly on the integer lattice
+d_pois <- dist_poisson(2) + dist_poisson(3)
+density(d_pois, 5) # dpois(5, 5)
+support(d_pois)
 
 # Mean and variance are computed exactly from components
 mean(d)
