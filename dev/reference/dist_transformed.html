@@ -81,7 +81,8 @@ they are based on numerical derivatives.</p>
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
 <dd><p>A function used to transform the distribution. This
-transformation should be monotonic over appropriate domain.</p></dd>
+transformation should be monotonic over the region of the base distribution's
+mass (see Details).</p></dd>
 
 
 <dt id="arg-inverse">inverse<a class="anchor" aria-label="anchor" href="#arg-inverse"></a></dt>
@@ -94,8 +95,19 @@ transformation should be monotonic over appropriate domain.</p></dd>
 <a href="https://pkg.mitchelloharawild.com/distributional/reference/dist_transformed.html">https://pkg.mitchelloharawild.com/distributional/reference/dist_transformed.html</a></p>
 <p>Let \(Y = g(X)\) where \(X\) is the base distribution with
 transformation function <code>transform</code> = \(g\) and <code>inverse</code> = \(g^{-1}\).
-The transformation \(g\) must be monotonic over the support of \(X\).</p>
-<p><strong>Support</strong>: \(g(S_X)\) where \(S_X\) is the support of \(X\)</p>
+The transformation \(g\) must be monotonic so that the mapping between
+\(X\) and \(Y\) is invertible.</p>
+<p>The direction of the transformation (increasing or decreasing) is detected
+by probing \(g\) at quantiles spanning the region of mass of \(X\),
+rather than at the (frequently infinite) support limits. A transformation
+that is monotonic where \(X\) has mass but not in its far tails (for
+example \(g(x) = x^2\) applied to a Normal whose mass is positive) is
+therefore treated as monotonic. When \(g\) is <em>not</em> monotonic over the
+region of mass, <code><a href="cdf.html">cdf()</a></code> and <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> are not well-defined from the
+single stored <code>inverse</code> and return <code>NA</code> with a warning.</p>
+<p><strong>Support</strong>: \(g(S_X)\) where \(S_X\) is the support of \(X\). When
+\(g\) cannot be verified to be monotonic over the whole support, the
+support limits are reported as unknown (<code>NA</code>).</p>
 <p><strong>Mean</strong>: Approximated numerically using a second-order Taylor expansion:</p>
 <p>$$
     E(Y) \approx g(\mu_X) + \frac{1}{2}g''(\mu_X)\sigma_X^2
@@ -156,8 +168,8 @@ $$
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5268835</span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># rlnorm(10, 0, 0.5)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.8587504 0.8521886 1.2239970 1.1593379 1.0656558 1.0837486 1.3241698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0386167 1.8439334 1.3346552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7023463 0.6220731 0.5867243 0.6419624 1.3969568 0.3556593 2.3328092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9094774 1.2350155 0.7178046</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
