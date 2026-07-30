@@ -55,12 +55,15 @@ Suggests:
     ggdist,
     ggplot2,
     gk,
+    knitr,
     LaplacesDemon,
-    pkgdown
+    pkgdown,
+    rmarkdown
 RdMacros: 
     lifecycle
 URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional
 BugReports: https://github.com/mitchelloharawild/distributional/issues
+VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)

@@ -21,3 +21,7 @@
 Computes the probability density function for a continuous distribution, or
 the probability mass function for a discrete distribution.
 }
+\seealso{
+\code{vignette("broadcasting", package = "distributional")} for how the
+\code{at} argument is combined with the distributions.
+}

@@ -95,6 +95,9 @@ dimnames.distribution <- function(x){
 #' @param ... Additional arguments passed to methods.
 #' @param log If `TRUE`, probabilities will be given as log probabilities.
 #'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `at` argument is combined with the distributions.
+#'
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
@@ -125,6 +128,9 @@ log_density.distribution <- function(x, at, ...){
 #' @param p The probability of the quantile.
 #' @param ... Additional arguments passed to methods.
 #'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `p` argument is combined with the distributions.
+#'
 #' @importFrom stats quantile
 #' @export
 quantile.distribution <- function(x, p, ..., log = FALSE){
@@ -149,6 +155,9 @@ log_quantile.distribution <- function(x, p, ...){
 #'
 #' @inheritParams density.distribution
 #' @param q The quantile at which the cdf is calculated.
+#'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `q` argument is combined with the distributions.
 #'
 #' @name cdf
 #' @export
@@ -188,6 +197,9 @@ log_cdf.distribution <- function(x, q, ...){
 #' deprecated for this, as it is ambiguous with mapping the same vector onto
 #' every distribution.
 #' @param ... Additional arguments used by methods.
+#'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `times` argument is combined with the distributions.
 #'
 #' @export
 generate.distribution <- function(x, times, ...){

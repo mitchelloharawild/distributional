@@ -1,0 +1,136 @@
+---
+title: "Broadcasting rules"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Broadcasting rules}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(width = 80)
+library(distributional)
+```
+
+Vectorised statistics on distributions commonly require two inputs: the distribution(s), and the point(s) at which the statistic is evaluated. The distributional package offers several broadcasting mechanisms for statistical operations on distributions, which are safer alternatives to the recycling rules of base R's `p`/`d`/`q`/`r` distribution functions.
+
+## At a glance
+
+```{r}
+dist <- dist_normal(mu = c(0, 3), sigma = c(1, 2))
+dist
+```
+
+The *form* of the argument given to the statistic (e.g. `density()`, `cdf()`, `quantile()`,
+or `hilo()`, or `generate()`) changes how the statistic is applied to the distributions.
+
+| Argument | Combined by | Result |
+|---|---|---|
+| Scalar | Broadcasting to every distribution | Unwrapped, one result per distribution |
+| Vector | Mapping every point onto every distribution | `list`, one element per distribution |
+| List | Recycling each element against the distributions | `data.frame`, one column per element |
+
+```{r}
+density(dist, at = 0)                 # broadcast
+density(dist, at = c(0, 1))           # mapped
+density(dist, at = list(d = c(0, 1))) # recycled
+```
+
+In most cases, a scalar or vector is the natural choice - the same statistic is computed for every distribution. List arguments are useful when you want to vary the statistic's arguments across distributions, allowing for similar behaviour to the `p`/`d`/`q`/`r` distribution functions of base R.
+
+## Broadcasting systems
+
+### Scalars are broadcast
+
+A single point is evaluated for every distribution, giving one value each. The
+result is an atomic vector with the same length as the distributions:
+
+```{r}
+density(dist, 0)
+```
+
+### Vectors are mapped
+
+A bare vector is a set of points, and every point is evaluated against every
+distribution. Two distributions and two points give all four values, as one
+element per distribution:
+
+```{r}
+density(dist, c(0, 1))
+```
+
+The first element holds the density of `N(0, 1)` at `0` and `1`, the second the
+density of `N(3, 4)` at the same two points.
+
+Because each distribution is handled separately, the number of points is
+unrelated to the number of distributions. This makes a dense grid against a
+single distribution natural, as when drawing a density curve or a quantile
+dotplot:
+
+```{r}
+quantile(dist_normal(0, 1), ppoints(5))
+```
+
+Broadcasting a scalar is the degenerate case of this: one point per
+distribution, with the list of length-1 vectors simplified to a bare vector.
+
+### Lists are recycled
+
+A list argument for statistics behaves differently, each list element describes statistics computed from each distribution. This is closer to the behaviour of base R's `p`/`d`/`q`/`r` functions, where different statistical arguments apply to different distributions.
+
+Consider `dnorm()` for the density of two normal distributions at two points:
+
+```{r}
+dnorm(x = c(0, 1), mean = c(0, 3), sd = c(1, 2))
+```
+
+This computes the density of `N(0, 1)` at `0` and of `N(3, 4)` at `1`. Almost always it is a mistake to compute densities at different points on each distribution (the mapping behaviour above is usually needed), but for full control over the arguments, a list can be used to specify the arguments for each distribution:
+
+```{r}
+density(dist, list(d = c(0, 1)))
+```
+
+These are the two values on the diagonal of the mapped result above: the first
+distribution is evaluated only at `0`, the second only at `1`.
+
+The result is a data frame with one row per distribution and one column per list element. The list elements are recycled against the distributions, so a single value is used for every distribution:
+
+```{r}
+cdf(dist, list(fixed = 0, varying = c(0, 1)))
+```
+
+The recycling behaviour follows the [vctrs recycling rules](https://vctrs.r-lib.org/articles/type-size.html#common-sizes-recycling-rules), where only size 1 arguments are recycled to match the number of distributions.
+
+```{r, error = TRUE}
+quantile(dist, list(p = c(0.1, 0.5, 0.9)))
+```
+
+This is safer than the partial recycling behaviour that the `p`/`d`/`q`/`r` functions in base R use, which is a common source of silent errors in analysis.
+
+```{r}
+dnorm(x = c(-1, 0, 2), mean = c(0, 3), sd = c(1, 2))
+```
+
+Three points against two distributions silently wraps around to give three
+values: `N(0, 1)` at `-1`, `N(3, 4)` at `0`, and then `N(0, 1)` again at `2`.
+
+## Multivariate distributions
+
+The same rules apply to multivariate distributions, but with matrices rather than vectors. Each column of the matrix relates to a variate of the distributions. This makes a 1-row matrix the "scalar" and a multi-row matrix the "vector" of the rules above.
+
+```{r}
+mvn <- dist_multivariate_normal(
+  mu = list(c(0, 0), c(3, 3)),
+  sigma = list(diag(2), 2 * diag(2))
+)
+
+density(mvn, cbind(0, 0))              # 1-row matrix: broadcast
+density(mvn, cbind(c(0, 1), c(0, 1)))  # 2-row matrix: mapped
+```
+
+Lists of matrices are recycled against the distributions.
+
+```{r}
+density(mvn, list(d = cbind(c(0, 1), c(0, 1))))
+```

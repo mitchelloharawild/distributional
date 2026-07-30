@@ -23,3 +23,7 @@ every distribution.}
 
 Generate random samples from probability distributions.
 }
+\seealso{
+\code{vignette("broadcasting", package = "distributional")} for how the
+\code{times} argument is combined with the distributions.
+}

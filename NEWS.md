@@ -2,6 +2,10 @@
 
 ## New features
 
+* Added a `vignette("broadcasting")` to describe how statistics apply to vectors
+  of distributions differently based on the form of the statistical operation's
+  argument (scalar, vector, or list).
+  
 * Added `dist_density()`, a distribution characterised by the values of its
   probability density function at a set of points. This is useful for
   representing a distribution known only through its density, such as a kernel
