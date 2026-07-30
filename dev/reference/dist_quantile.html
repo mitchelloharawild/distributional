@@ -5,7 +5,10 @@ a set of values at specified quantile probabilities. This distribution is
 useful for representing empirical distributions or elicited expert
 knowledge when only quantile information is available. The distribution
 uses linear interpolation between quantiles and can be used to
-approximate complex distributions that may not have simple parametric forms."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+approximate complex distributions that may not have simple parametric forms.
+The same distribution can also be described by the cumulative probabilities
+at a set of values rather than the values at a set of cumulative
+probabilities, which is provided by dist_cdf()."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--><!-- Privacy-friendly analytics by Plausible --><script async src="https://track.mitchelloharawild.com/js/pa-hMJNm4vrMJmtfgDWedFn0.js"></script><script>
@@ -65,6 +68,9 @@ useful for representing empirical distributions or elicited expert
 knowledge when only quantile information is available. The distribution
 uses linear interpolation between quantiles and can be used to
 approximate complex distributions that may not have simple parametric forms.</p>
+<p>The same distribution can also be described by the cumulative probabilities
+at a set of values rather than the values at a set of cumulative
+probabilities, which is provided by <code><a href="dist_cdf.html">dist_cdf()</a></code>.</p>
     </div>
 
     <div id="ref-usage">
@@ -122,6 +128,10 @@ interpolation:</p>
     Q(u) = x_i + \frac{(u - q_i)(x_{i+1} - x_i)}{q_{i+1} - q_i}
   $$</p>
 <p>for \(q_i \le u \le q_{i+1}\).</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="dist_cdf.html">dist_cdf()</a></code>, <code><a href="dist_density.html">dist_density()</a></code></p></div>
     </div>
 
     <div id="ref-examples">
