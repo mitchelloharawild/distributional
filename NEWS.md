@@ -2,6 +2,11 @@
 
 ## New features
 
+* Added `dist_density()`, a distribution characterised by the values of its
+  probability density function at a set of points. This is useful for
+  representing a distribution known only through its density, such as a kernel
+  density estimate or a posterior evaluated over a grid.
+
 * Added `dist_cdf()`, which describes a distribution by the cumulative
   probabilities at a set of values. Interpolation is done linearly, and the
   results are equivalent to `dist_quantile()` with swapped arguments.
