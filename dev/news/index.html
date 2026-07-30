@@ -55,10 +55,14 @@
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li><p>Added <code><a href="../reference/dist_density.html">dist_density()</a></code>, a distribution characterised by the values of its probability density function at a set of points. This is useful for representing a distribution known only through its density, such as a kernel density estimate or a posterior evaluated over a grid.</p></li>
-<li><p>Added <code><a href="../reference/dist_cdf.html">dist_cdf()</a></code>, which describes a distribution by the cumulative probabilities at a set of values. Interpolation is done linearly, and the results are equivalent to <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> with swapped arguments. # distributional 0.8.1</p></li>
+<li><p>Added <code><a href="../reference/dist_cdf.html">dist_cdf()</a></code>, which describes a distribution by the cumulative probabilities at a set of values. Interpolation is done linearly, and the results are equivalent to <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> with swapped arguments. ## Breaking changes</p></li>
+<li><p><code><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate()</a></code>’s <code>times</code> argument no longer accepts length-n vectors, and instead requires <code>times = list(c(...))</code> for consistency with other operations.</p></li>
 </ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.8.1" id="distributional-081">distributional 0.8.1<small>2026-06-27</small><a class="anchor" aria-label="anchor" href="#distributional-081"></a></h2>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-8-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-1"></a></h3>
 <ul><li>Conditionalised <code><a href="https://rdrr.io/r/base/chooseOpsMethod.html" class="external-link">chooseOpsMethod()</a></code> S3 registration so the package can load on R versions before 4.3.0 (<a href="https://github.com/mitchelloharawild/distributional/issues/157" class="external-link">#157</a>).</li>
 </ul></div>
 </div>
