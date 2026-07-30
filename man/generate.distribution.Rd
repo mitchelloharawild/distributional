@@ -9,7 +9,12 @@
 \arguments{
 \item{x}{The distribution(s).}
 
-\item{times}{The number of samples.}
+\item{times}{The number of samples. A scalar is broadcast to every
+distribution. Per-distribution sample sizes must be given as a list
+containing a single vector (\code{list(c(...))}) recycled against the
+distributions (length 1 or \code{length(x)}) - a bare vector of length > 1 is
+deprecated for this, as it is ambiguous with mapping the same vector onto
+every distribution.}
 
 \item{...}{Additional arguments used by methods.}
 }

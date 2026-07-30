@@ -181,13 +181,31 @@ log_cdf.distribution <- function(x, q, ...){
 #' Generate random samples from probability distributions.
 #'
 #' @param x The distribution(s).
-#' @param times The number of samples.
+#' @param times The number of samples. A scalar is broadcast to every
+#' distribution. Per-distribution sample sizes must be given as a list
+#' containing a single vector (`list(c(...))`) recycled against the
+#' distributions (length 1 or `length(x)`) - a bare vector of length > 1 is
+#' deprecated for this, as it is ambiguous with mapping the same vector onto
+#' every distribution.
 #' @param ... Additional arguments used by methods.
 #'
 #' @export
 generate.distribution <- function(x, times, ...){
+  if (is.list(times)) {
+    if (length(times) != 1L) {
+      abort("`times` must be a scalar, a vector, or a list containing a single vector of per-distribution values (such as `times = list(c(...))`).")
+    }
+    times <- times[[1L]]
+  } else if (length(times) > 1L) {
+    lifecycle::deprecate_warn(
+      when = "0.9.0",
+      what = I("Using a vector for the `times` argument of `generate()`"),
+      with = I("a list (such as `times = list(<numeric[n]>)`) for sample sizes per distribution")
+    )
+  }
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
+
   dn <- dimnames(x)
   x <- vec_data(x)
   dist_is_na <- vapply(x, is.null, logical(1L))
@@ -200,8 +218,6 @@ generate.distribution <- function(x, times, ...){
     }, x, times = times, ...,
     SIMPLIFY = FALSE
   )
-  # dist_apply(x, generate, times = times, ...)
-  # Needs work to structure MV appropriately.
 }
 
 #' The (log) likelihood of a sample matching a distribution

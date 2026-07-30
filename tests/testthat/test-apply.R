@@ -199,3 +199,35 @@ test_that("Vector inputs to multivariate distributions are deprecated (#159)", {
   # are unaffected.
   expect_no_condition(density(dist_normal(1:2, 1), c(0, 1)))
 })
+
+test_that("Vector inputs to generate()'s times are deprecated (#99)", {
+  # <dist> is a distribution vector of length 2.
+  dist <- dist_normal(c(0, 100), 1)
+
+  # A scalar broadcasts to every distribution (unaffected, no list wrapping).
+  expect_length(generate(dist, 5), 2)
+  expect_length(generate(dist, 5)[[1]], 5)
+
+  # The list() form pairwise-recycles a vector against the distributions,
+  # and is the only spelling for this that doesn't warn.
+  expect_no_condition(v <- generate(dist, list(c(5, 10))))
+  expect_equal(lengths(v), c(5, 10))
+
+  # A bare vector of length > 1 is ambiguous with mapping, so it is deprecated
+  # in favour of the list() form, but continues to pairwise-recycle for now.
+  lifecycle::expect_deprecated(v2 <- generate(dist, c(5, 10)))
+  expect_equal(lengths(v2), c(5, 10))
+
+  # A bare vector that can't pairwise-recycle against the distributions still
+  # errors (as it did before the deprecation), after the deprecation warning.
+  expect_error(
+    suppressWarnings(generate(dist_normal(0, 1), c(5, 10))),
+    "Can't recycle"
+  )
+
+  # A list with more than one element isn't a valid spelling of `times`.
+  expect_error(
+    generate(dist, list(5, 10)),
+    "single vector of per-distribution values"
+  )
+})
