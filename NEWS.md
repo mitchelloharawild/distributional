@@ -1,5 +1,10 @@
 # distributional (development version)
 
+## New features
+
+* Added `dist_cdf()`, which describes a distribution by the cumulative
+  probabilities at a set of values. Interpolation is done linearly, and the
+  results are equivalent to `dist_quantile()` with swapped arguments.
 # distributional 0.8.1
 
 ## Bug fixes

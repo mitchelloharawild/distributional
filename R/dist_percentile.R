@@ -10,6 +10,10 @@
 #' uses linear interpolation between quantiles and can be used to
 #' approximate complex distributions that may not have simple parametric forms.
 #'
+#' The same distribution can also be described by the cumulative probabilities
+#' at a set of values rather than the values at a set of cumulative
+#' probabilities, which is provided by [dist_cdf()].
+#'
 #' @param x A list of values
 #' @param quantile A list of quantile probabilities (between 0 and 1)
 #'
@@ -64,6 +68,8 @@
 #'
 #'   for \eqn{q_i \le u \le q_{i+1}}.
 #'
+#' @seealso [dist_cdf()], [dist_density()]
+#'
 #' @examples
 #' dist <- dist_normal()
 #' probs <- seq(0.01, 0.99, by = 0.01)
@@ -98,41 +104,72 @@ format.dist_quantile <- function(x, ...){
 
 #' @export
 density.dist_quantile <- function(x, at, ...){
-  d <- density(generate(x, 1000), from = min(at), to = max(at), ..., na.rm=TRUE)
-  stats::approx(d$x, d$y, xout = at)$y
+  interp_density(x[["x"]], x[["quantile"]], at, ...)
 }
 
 #' @export
 quantile.dist_quantile <- function(x, p, ...){
-  out <- x[["x"]][match(p, x[["quantile"]])]
-  out[is.na(out)] <- stats::approx(x = x[["quantile"]], y = x[["x"]], xout = p[is.na(out)])$y
-  out
+  interp_quantile(x[["x"]], x[["quantile"]], p)
 }
 
 #' @export
 cdf.dist_quantile <- function(x, q, ...){
-  stats::approx(x = x[["x"]], y = x[["quantile"]], xout = q)$y
+  interp_cdf(x[["x"]], x[["quantile"]], q)
 }
 
 #' @export
 generate.dist_quantile <- function(x, times, ...){
-  stats::approx(x[["quantile"]], x[["x"]], xout = stats::runif(times, min(x[["quantile"]]), max(x[["quantile"]])))$y
+  interp_generate(x[["x"]], x[["quantile"]], times)
 }
 
 #' @export
 mean.dist_quantile <- function(x, ...) {
+  interp_mean(x[["x"]], x[["quantile"]])
+}
+
+#' @export
+support.dist_quantile <- function(x, ...) {
+  interp_support(x[["x"]], x[["quantile"]])
+}
+
+# Core computations shared by dist_quantile() and dist_cdf(), which both
+# describe a distribution by the values `x` at the cumulative probabilities `p`.
+# Linear interpolation between the given points is its own inverse, so the same
+# computations describe both parameterisations.
+
+interp_density <- function(x, p, at, ...) {
+  d <- density(
+    interp_generate(x, p, 1000), from = min(at), to = max(at), ..., na.rm = TRUE
+  )
+  stats::approx(d$x, d$y, xout = at)$y
+}
+
+interp_quantile <- function(x, p, at) {
+  out <- x[match(at, p)]
+  out[is.na(out)] <- stats::approx(x = p, y = x, xout = at[is.na(out)])$y
+  out
+}
+
+interp_cdf <- function(x, p, q) {
+  stats::approx(x = x, y = p, xout = q)$y
+}
+
+interp_generate <- function(x, p, times) {
+  stats::approx(p, x, xout = stats::runif(times, min(p), max(p)))$y
+}
+
+interp_mean <- function(x, p) {
   # Fit a spline to the quantile probabilities
-  spline_fit <- stats::splinefun(x[["quantile"]], x[["x"]])
+  spline_fit <- stats::splinefun(p, x)
 
   # Use numerical integration to estimate the mean
   stats::integrate(spline_fit, lower = 0, upper = 1)$value
 }
 
-#' @export
-support.dist_quantile <- function(x, ...) {
+interp_support <- function(x, p) {
   new_support_region(
-    list(vctrs::vec_init(x[["x"]], n = 0L)),
-    list(range(x[["x"]])),
-    list(!near(range(x[["quantile"]]), 0))
+    list(vctrs::vec_init(x, n = 0L)),
+    list(range(x)),
+    list(!near(range(p), 0))
   )
 }

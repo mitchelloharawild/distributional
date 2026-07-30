@@ -25,6 +25,10 @@ useful for representing empirical distributions or elicited expert
 knowledge when only quantile information is available. The distribution
 uses linear interpolation between quantiles and can be used to
 approximate complex distributions that may not have simple parametric forms.
+
+The same distribution can also be described by the cumulative probabilities
+at a set of values rather than the values at a set of cumulative
+probabilities, which is provided by \code{\link[=dist_cdf]{dist_cdf()}}.
 }
 \details{
 We recommend reading this documentation on \href{https://pkg.mitchelloharawild.com/distributional/reference/dist_quantile.html}{pkgdown} which renders math nicely.
@@ -84,4 +88,7 @@ x <- vapply(probs, quantile, double(1L), x = dist)
 dist_quantile(list(x), list(probs))
 dist_percentile(list(x), list(probs * 100))
 
+}
+\seealso{
+\code{\link[=dist_cdf]{dist_cdf()}}, \code{\link[=dist_density]{dist_density()}}
 }
