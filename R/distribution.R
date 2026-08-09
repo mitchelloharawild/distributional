@@ -12,20 +12,148 @@
 #'
 #' @export
 new_dist <- function(..., class = NULL, dimnames = NULL){
-  args <- transpose(vctrs::vec_recycle_common(...))
-  wrap_dist(
-    lapply(args, enclass_dist, class = class),
-    dimnames = dimnames
-  )
+  # `...` is passed straight through (not materialised via `list(...)` first)
+  # so that `rlang`'s `!!!` splicing - used by e.g. `dist_wrap()` to forward
+  # its recycled parameter list - is resolved by `vec_recycle_common()`'s own
+  # dots capture, rather than being evaluated here as literal `!(!(!x))`.
+  args <- vctrs::vec_recycle_common(...)
+  if (!length(args)) {
+    # No fields given: this is a bare, zero-length prototype (used all over
+    # the family files for `vec_is(dist, new_dist())`-style type-checks)
+    # rather than the construction of an actual distribution.
+    return(class_distribution())
+  }
+  # `vctrs::new_rcrd()` fields must be proper vectors, so a literal `NULL`
+  # argument (a handful of families use it as an "unset" sentinel for an
+  # optional parameter, e.g. `dist_student_t(ncp = NULL)`) can't be stored
+  # directly; recycle it to a `NULL`-per-position list field instead, which
+  # `dist_field_get()` auto-unwraps back to bare `NULL` for a length-1 slice.
+  is_null_arg <- vapply(args, is.null, logical(1L))
+  if (any(is_null_arg)) {
+    n <- if (all(is_null_arg)) 1L else vctrs::vec_size(args[!is_null_arg][[1L]])
+    args[is_null_arg] <- lapply(args[is_null_arg], function(z) vector("list", n))
+  }
+  slot <- vctrs::new_rcrd(args, class = c(class, "dist_default"))
+  if (!is.null(dimnames)) attr(slot, "vars") <- dimnames
+  class_distribution(list(slot))
 }
 
-enclass_dist <- function(x, class) {
-  structure(x, class = c(class, "dist_default"))
+# ------------------------------------------------------------------------
+# Family record field-access shims
+# ------------------------------------------------------------------------
+# A distribution family is stored as one `vctrs_rcrd` "slot" holding every
+# distribution of that family in the vector (rather than one S3 object per
+# distribution, as before the vecvec migration - see `_dev/vecvec.md`).
+# `x[["par"]]`/`x$par` (used throughout the `dist_*` family files) therefore
+# now return a *vector* of `length(x)` parameter values rather than a scalar.
+#
+# List-valued fields (e.g. `dist_transformed()`'s `transform`/`inverse`
+# closures, or a nested `dist` field built for a single element) are
+# auto-unwrapped when `x` has length 1, so that `x$transform` continues to
+# give the raw closure rather than a length-1 list wrapping it - matching
+# the pre-migration per-element semantics that existing family methods (both
+# in this package and extension packages) still assume.
+
+#' @export
+#' @method [[ dist_default
+`[[.dist_default` <- function(x, i, ...) {
+  if (is.character(i)) {
+    dist_field_get(x, i)
+  } else {
+    NextMethod()
+  }
+}
+#' @export
+`$.dist_default` <- function(x, name) {
+  dist_field_get(x, name)
+}
+# `x$field`/`x[["field"]]` on a plain-list S3 object (the pre-migration
+# per-element representation) silently returned NULL for a name that wasn't
+# present (base list `$` semantics), which family Ops/Math methods rely on to
+# probe for fields that only exist on *some* families (e.g. `dist_default`
+# methods testing `e1$dist` to detect a nested-distribution operand).
+# `vctrs::field()` errors instead, so guard it here to keep that behaviour.
+dist_field_get <- function(x, name) {
+  if (!(name %in% vctrs::fields(x))) return(NULL)
+  val <- vctrs::field(x, name)
+  if (is.list(val) && length(val) == 1L) val[[1L]] else val
 }
 
+# Pre-migration `x[-(1:2)]`-style field dropping (e.g. `dist_wrap()` removing
+# its `dist`/`env` bookkeeping fields to get the wrapped distribution's own
+# parameters) relied on the raw record being a plain named list, where `[`
+# subsets *fields*. `vctrs_rcrd`'s `[` subsets *elements* instead, so this
+# helper gives the fields-as-named-list view directly.
+dist_fields_except <- function(x, exclude) {
+  flds <- setdiff(vctrs::fields(x), exclude)
+  stats::setNames(lapply(flds, function(f) dist_field_get(x, f)), flds)
+}
+#' @export
+#' @method [[<- dist_default
+`[[<-.dist_default` <- function(x, i, value) {
+  vctrs::field(x, i) <- value
+  x
+}
+#' @export
+`$<-.dist_default` <- function(x, name, value) {
+  vctrs::field(x, name) <- value
+  x
+}
 
+# ------------------------------------------------------------------------
+# Compatibility helpers used by family constructors/methods
+# ------------------------------------------------------------------------
+
+# Extract the raw (family-level) record for a single logical position of a
+# `distribution` vector - the closest equivalent to the pre-migration
+# `vec_data(x)[[i]]`. Used by nested-distribution constructors
+# (`dist_convolved()`, `dist_mixture()`) that need to build up per-element
+# component lists. Returns a `dist_na` placeholder for an NA (missing) index,
+# matching the pre-migration behaviour of patching NULL elements.
+dist_elem <- function(x, i) {
+  xi <- x[i]
+  if (length(xi@x) == 0L) {
+    structure(list(), class = c("dist_na", "dist_default"))
+  } else {
+    xi@x[[1L]]
+  }
+}
+dist_first_record <- function(x) dist_elem(x, 1L)
+
+# Convert a `distribution` vector into a plain list of its raw (family-level)
+# records, one per logical position - the closest equivalent to the
+# pre-migration `vec_data(x)`. `dist_transformed()` stores its `dist` field
+# this way (rather than as a nested `distribution` container) so that a
+# length-1 slice's `x[["dist"]]` dispatches *directly* to the inner family's
+# own methods (as it did pre-migration), bypassing the container-level
+# broadcasting reshaping in `dist_apply()` that a bare multi-value `p`/`q`/
+# `at` argument would otherwise trigger.
+dist_list <- function(x) {
+  lapply(seq_len(length(x)), function(i) dist_elem(x, i))
+}
+
+# `dist_mixture()`'s per-family record analogue of `transpose()`: given a
+# list of K `distribution` vectors (mixture components, each of common
+# length n), returns a list of n elements, each itself a list of the K raw
+# records at that position. The pre-migration `transpose()` did this via
+# `.subset2()`, which deliberately bypasses custom `[[` methods to reach the
+# raw per-element storage directly - a shortcut that assumed `distribution`
+# was still a plain list of per-element objects. It no longer is (the vecvec
+# migration's storage is an S7 object over an integer index), so this uses
+# `dist_elem()` instead, which is written against the current structure.
+dist_transpose_list <- function(dists) {
+  n <- if (length(dists)) length(dists[[1L]]) else 0L
+  lapply(seq_len(n), function(i) lapply(dists, dist_elem, i = i))
+}
+
+# Combine a list of raw (family-level) records into a `distribution` vector -
+# the inverse of `dist_elem()`. Used by `Ops.dist_default()`/
+# `Math.dist_default()` (default.R) which build a `dist_transformed()`/
+# `dist_convolved()` result from one or two single-element operands.
 wrap_dist <- function(x, dimnames = NULL){
-  vctrs::new_vctr(x, vars = dimnames, class = "distribution")
+  out <- do.call(c, lapply(x, function(z) class_distribution(list(z))))
+  if (!is.null(dimnames)) variates(out) <- dimnames
+  out
 }
 
 #' @export
@@ -33,12 +161,36 @@ vec_ptype_abbr.distribution <- function(x, ...){
   "dist"
 }
 
+# vecvec's own `format.vecvec::vecvec()` default calls `dim(x)`/`dimnames(x)`
+# to shape its result as an array - but `dimnames.distribution()` returns
+# *variate names* (a character vector), not array dimnames (a list), so
+# letting that default run corrupts `format()` for any distribution with
+# variate names set (`dimnames<-`/`variates<-`). Define our own instead,
+# which never touches array shape - matching the pre-migration behaviour,
+# where `format()` was always just per-element character formatting.
 #' @export
-format.distribution <- function(x, ...){
-  x <- vec_data(x)
-  out <- vapply(x, format, character(1L), ...)
-  out[vapply(x, is.null, logical(1L))] <- "NA"
+format.distribution <- function(x, ...) {
+  loc <- dist_locate(x)
+  out <- rep(NA_character_, loc$n)
+  for (k in seq_along(loc$slots)) {
+    pos <- loc$pos[[k]]
+    if (!length(pos)) next
+    vals <- loc$slots[[k]][loc$local[pos]]
+    if (is_ported_dist(vals)) {
+      out[pos] <- format(vals, ...)
+    } else {
+      # Not every not-yet-ported family's `format()` is naturally vectorised
+      # (e.g. one that does `length(x[["field"]])` expecting `x` to be a
+      # single distribution); loop per-element to match its pre-migration
+      # contract, as `dist_apply()` does for the other generics.
+      for (j in seq_along(pos)) out[pos[j]] <- format(vals[j], ...)
+    }
+  }
   out
+}
+#' @export
+vec_ptype_full.distribution <- function(x, ...){
+  "distribution"
 }
 
 #' @importFrom pillar pillar_shaft new_pillar_shaft get_max_extent
@@ -68,19 +220,96 @@ format.pillar_distribution <- function(x, width, ...) {
   pillar::new_ornament(ornament, align = "right")
 }
 
+# ------------------------------------------------------------------------
+# Variate names ("dimnames" pre-migration)
+# ------------------------------------------------------------------------
+# vecvec uses dim()/dimnames() for array shape, so the pre-migration meaning
+# (names of a multivariate distribution's variates) moves to variates().
+# `dimnames()`/`dimnames<-()` on a distribution become a deprecated shim,
+# supported only while the vector has a single family slot. See
+# `_dev/vecvec.md` #4.
+
+#' Names of a multivariate distribution's variates
+#'
+#' @description
+#' `r lifecycle::badge('experimental')`
+#'
+#' @param x The distribution(s).
+#' @param value A character vector of variate names.
+#'
+#' @export
+variates <- function(x) {
+  # Variate names live on the (sole) family slot; a mixed-family vector has
+  # no single place to store them, so it simply has none.
+  if (length(x@x) != 1L) return(NULL)
+  attr(x@x[[1L]], "vars")
+}
+#' @rdname variates
+#' @export
+`variates<-` <- function(x, value) {
+  if (length(x@x) > 1L) {
+    abort("`variates<-()` currently only supports distributions with a single family.")
+  }
+  if (length(x@x) == 1L) attr(x@x[[1L]], "vars") <- value
+  x
+}
+
 #' @export
 `dimnames<-.distribution` <- function(x, value){
-  attr(x, "vars") <- value
+  lifecycle::deprecate_soft("0.9.0", "`dimnames<-.distribution`()", "`variates<-`()")
+  variates(x) <- value
   x
 }
 #' @export
 dimnames.distribution <- function(x){
-  attr(x, "vars")
+  lifecycle::deprecate_soft("0.9.0", "dimnames.distribution()", "variates()")
+  variates(x)
 }
 
 #' @method [[ distribution
 #' @export
-`[[.distribution` <- `[`
+`[[.distribution` <- function(x, i, ...) x[i, ...]
+
+# vecvec stores the index as the S7 object's underlying data (`class_vecvec`
+# has `parent = S7::class_integer`), so `typeof(x) == "integer"` and base R's
+# `is.numeric()` (which falls back to the base type when no method matches)
+# would otherwise report a `distribution` as numeric - which, among other
+# things, makes `testthat`'s (2e) `all.equal()`-based `expect_equal()` try to
+# subtract/compare distributions as if they were plain numbers. Restore the
+# pre-migration `FALSE`.
+#' @export
+is.numeric.distribution <- function(x) FALSE
+
+# Before the vecvec migration, `distribution` was a plain list of per-element
+# S3 list-objects, so base R's `all.equal.list()` recursed through it (and
+# through each per-element object, itself a plain list) for free - which is
+# what `expect_equal()` (testthat 2e) relies on. The vecvec-backed container
+# no longer has that structure (its `typeof()` is "integer", not "list"), so
+# provide an explicit method that compares element-by-element via each raw
+# family record's fields (also plain lists once unclassed), matching the
+# pre-migration comparison.
+#' @export
+all.equal.distribution <- function(target, current, ...) {
+  if (!is_distribution(current)) {
+    return(paste0("Modes: ", mode(target), ", ", mode(current)))
+  }
+  if (length(target) != length(current)) {
+    return(sprintf("Lengths (%d, %d) differ", length(target), length(current)))
+  }
+  msgs <- character(0)
+  for (i in seq_len(length(target))) {
+    a <- dist_elem(target, i)
+    b <- dist_elem(current, i)
+    if (!identical(class(a), class(b))) {
+      msgs <- c(msgs, sprintf("Element %d: family classes differ: %s, %s",
+                               i, paste(class(a), collapse = "/"), paste(class(b), collapse = "/")))
+      next
+    }
+    cmp <- all.equal(unclass(a), unclass(b), ...)
+    if (!isTRUE(cmp)) msgs <- c(msgs, sprintf("Element %d: %s", i, paste(cmp, collapse = "; ")))
+  }
+  if (length(msgs) == 0L) TRUE else msgs
+}
 
 #' The probability density/mass function
 #'
@@ -243,18 +472,31 @@ generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
 
-  dn <- dimnames(x)
-  x <- vec_data(x)
-  dist_is_na <- vapply(x, is.null, logical(1L))
-  x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
-  mapply(
-    function(x, ...) {
-      y <- generate(x, ...)
+  dn <- variates(x)
+  loc <- dist_locate(x)
+  out <- vector("list", loc$n)
+
+  for (k in seq_along(loc$slots)) {
+    pos <- loc$pos[[k]]
+    if (!length(pos)) next
+    vals <- loc$slots[[k]][loc$local[pos]]
+
+    if (is_ported_dist(vals)) {
+      out[pos] <- generate(vals, times = times[pos], ...)
+    } else {
+      for (j in seq_along(pos)) {
+        out[[pos[j]]] <- generate(vals[j], times = times[pos[j]], ...)
+      }
+    }
+  }
+
+  if (!is.null(dn)) {
+    out <- lapply(out, function(y) {
       if (is.matrix(y)) colnames(y) <- dn
       y
-    }, x, times = times, ...,
-    SIMPLIFY = FALSE
-  )
+    })
+  }
+  out
 }
 
 #' The (log) likelihood of a sample matching a distribution
@@ -347,9 +589,18 @@ parameters <- function(x, ...) {
 #' @rdname parameters
 #' @export
 parameters.distribution <- function(x, recursive = FALSE, ...) {
-  x <- lapply(vec_data(x), parameters)
-  x <- lapply(x, function(z) data_frame(!!!z, .name_repair = "minimal"))
-  x <- vec_rbind(!!!x)
+  loc <- dist_locate(x)
+  if (!length(loc$slots)) return(vctrs::new_data_frame(list(), n = loc$n))
+
+  rows <- vector("list", loc$n)
+  for (k in seq_along(loc$slots)) {
+    pos <- loc$pos[[k]]
+    if (!length(pos)) next
+    vals <- loc$slots[[k]][loc$local[pos]]
+    rows[pos] <- vctrs::vec_chop(parameters(vals))
+  }
+  present <- !vapply(rows, is.null, logical(1L))
+  x <- vec_rbind(!!!rows[present])
   if (recursive) {
     # Identify distributions
     dist_col <- which(vapply(x, inherits, logical(1L), what = "distribution"))
@@ -412,10 +663,25 @@ parameters.distribution <- function(x, recursive = FALSE, ...) {
 #' @importFrom stats family
 #' @export
 family.distribution <- function(object, recursive = FALSE, ...) {
-  if (!recursive) {
-    return(vapply(vec_data(object), family, character(1L)))
+  loc <- dist_locate(object)
+  if (recursive) {
+    # Family trees are ragged, so describe each distribution individually.
+    out <- rep(list(NA_character_), loc$n)
+    for (k in seq_along(loc$slots)) {
+      pos <- loc$pos[[k]]
+      vals <- loc$slots[[k]][loc$local[pos]]
+      for (j in seq_along(pos)) {
+        out[[pos[j]]] <- family(vals[j], recursive = TRUE)
+      }
+    }
+    return(out)
   }
-  lapply(vec_data(object), family, recursive = TRUE)
+  out <- rep(NA_character_, loc$n)
+  for (k in seq_along(loc$slots)) {
+    pos <- loc$pos[[k]]
+    if (length(pos)) out[pos] <- family(loc$slots[[k]][loc$local[pos]])
+  }
+  out
 }
 
 #' Region of support of a distribution
@@ -656,85 +922,84 @@ hdr.distribution <- function(x, size = 95, n = 512, ...){
 
 #' @export
 sum.distribution <- function(x, ...){
-  vec_restore(list(Reduce("+", x)), x)
+  Reduce(`+`, x)
 }
 
-#' @method vec_arith distribution
+# ------------------------------------------------------------------------
+# Ops / Math (container level)
+# ------------------------------------------------------------------------
+# Arithmetic dispatches element-by-element to the family-level `Ops.dist_*`/
+# `Math.dist_*` methods (unchanged from before the migration), which is what
+# lets the ~50 existing family implementations keep working unmodified.
+# Vectorising this loop per storage slot (as `dist_apply()` does for the
+# stats generics) is a follow-up - see `_dev/vecvec.md` status notes.
+
 #' @export
-vec_arith.distribution <- function(op, x, y, ...){
-  UseMethod("vec_arith.distribution", y)
-}
-#' @method vec_arith.distribution default
-#' @export
-vec_arith.distribution.default <- function(op, x, y, ...){
-  dist_is_na <- vapply(x, is.null, logical(1L))
-  x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
-  if(is_empty(y)){
-    out <- lapply(vec_data(x), get(op))
+Ops.distribution <- function(e1, e2) {
+  if (missing(e2)) {
+    n <- length(e1)
+    out <- lapply(seq_len(n), function(i) get(.Generic)(dist_elem(e1, i)))
+    return(dist_combine_ops(out))
   }
-  else {
-    x <- vec_recycle_common(x = x, y = y)
-    y <- x[["y"]]
-    if(is_distribution(y)) y <- vec_data(y)
-    x <- x[["x"]]
-    out <- .mapply(get(op),
-                   dots = list(x = vec_data(x), y = y),
-                   MoreArgs = NULL)
+
+  dist_e1 <- is_distribution(e1)
+  dist_e2 <- is_distribution(e2)
+  n <- max(length(e1), length(e2))
+  if (dist_e1) e1 <- vctrs::vec_recycle(e1, n) else e1 <- vctrs::vec_recycle(e1, n)
+  if (dist_e2) e2 <- vctrs::vec_recycle(e2, n) else e2 <- vctrs::vec_recycle(e2, n)
+
+  is_bool <- switch(.Generic, `<` = , `>` = , `==` = , `!=` = , `<=` = , `>=` = TRUE, FALSE)
+
+  out <- vector("list", n)
+  for (i in seq_len(n)) {
+    a <- if (dist_e1) dist_elem(e1, i) else e1[i]
+    b <- if (dist_e2) dist_elem(e2, i) else e2[i]
+    out[[i]] <- get(.Generic)(a, b)
   }
-  vec_restore(out, x)
+  if (is_bool) return(unlist(out))
+  dist_combine_ops(out)
 }
 
-#' @method vec_arith.numeric distribution
-#' @export
-vec_arith.numeric.distribution <- function(op, x, y, ...){
-  x <- vec_recycle_common(x = x, y = y)
-  y <- x[["y"]]
-  x <- x[["x"]]
-  out <- .mapply(get(op), list(x = x, y = vec_data(y)), MoreArgs = NULL)
-  vec_restore(out, y)
-}
-
-#' @method vec_math distribution
-#' @export
-vec_math.distribution <- function(.fn, .x, ...) {
-  if(.fn %in% c("is.nan", "is.infinite")) return(rep_len(FALSE, length(.x)))
-  if(.fn == "is.finite") return(rep_len(TRUE, length(.x)))
-  out <- lapply(vec_data(.x), get(.fn), ...)
-  vec_restore(out, .x)
+dist_combine_ops <- function(out) {
+  if (!length(out)) return(logical())
+  do.call(c, lapply(out, function(z) class_distribution(list(z))))
 }
 
 #' @export
-vec_ptype2.distribution.distribution <- function(x, y, ...){
-  if(!identical(dimnames(x), dimnames(y))){
-    abort("Distributions must have the same `dimnames` to be combined.")
-  }
-  x
+Math.distribution <- function(x, ...) {
+  n <- length(x)
+  out <- lapply(seq_len(n), function(i) get(.Generic)(dist_elem(x, i), ...))
+  dist_combine_ops(out)
 }
-#' @export
-vec_ptype2.double.distribution <- function(x, y, ...) new_dist()
-#' @export
-vec_ptype2.distribution.double <- function(x, y, ...) new_dist()
-#' @export
-vec_ptype2.integer.distribution <- function(x, y, ...) new_dist()
-#' @export
-vec_ptype2.distribution.integer <- function(x, y, ...) new_dist()
 
+# `is.nan()`/`is.infinite()`/`is.finite()` are their own S3 generics, not
+# members of the base R "Math" group (unlike pre-migration, where the old
+# `vctrs_vctr`-based `distribution` routed them through vctrs' *own*
+# `vec_math()` protocol into `vec_math.distribution()`). Left unhandled here,
+# they fall through to `` `is.infinite.vecvec::vecvec` `` etc., which apply
+# per storage slot - and a raw family record (a `vctrs_rcrd`) has no
+# `vec_math()` support, so that errors. A distribution is never NaN/infinite
+# and always finite, matching the old special-casing.
 #' @export
-vec_cast.distribution.distribution <- function(x, to, ...){
-  dimnames(x) <- dimnames(to)
-  x
+is.nan.distribution <- function(x) rep_len(FALSE, length(x))
+#' @export
+is.infinite.distribution <- function(x) rep_len(FALSE, length(x))
+#' @export
+is.finite.distribution <- function(x) rep_len(TRUE, length(x))
+
+# ------------------------------------------------------------------------
+# vctrs integration
+# ------------------------------------------------------------------------
+
+vec_ptype2_distribution <- function(x, y, ...) new_dist()
+vec_cast_to_distribution <- function(x, to, ...) {
+  if (is_distribution(x)) return(x)
+  if (is.numeric(x)) return(dist_degenerate(x))
+  vctrs::stop_incompatible_cast(x, to, x_arg = "", to_arg = "")
 }
-#' @export
-vec_cast.distribution.double <- function(x, to, ...){
-  x <- dist_degenerate(x)
-  dimnames(x) <- dimnames(to)
-  x
-}
-#' @export
-vec_cast.distribution.integer <- vec_cast.distribution.double
-#' @export
-vec_cast.character.distribution <- function(x, to, ...){
-  format(x)
+vec_cast_from_distribution <- function(x, to, ...) {
+  if (is.character(to)) return(format(x))
+  vctrs::stop_incompatible_cast(x, to, x_arg = "", to_arg = "")
 }
 
 #' Test if the object is a distribution

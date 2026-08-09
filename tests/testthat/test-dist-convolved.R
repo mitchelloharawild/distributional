@@ -56,12 +56,12 @@ test_that("dist_convolved: variance is exact sum of component variances", {
 test_that("dist_convolved: normal sum via + uses closed-form, not convolution", {
   # dist_normal has Ops.dist_normal which returns an exact dist_normal
   d <- dist_normal(0, 1) + dist_normal(0, 1)
-  expect_s3_class(vec_data(d)[[1]], "dist_normal")
+  expect_s3_class(distributional:::dist_elem(d, 1), "dist_normal")
 })
 
 test_that("dist_convolved: + operator creates dist_convolved for other families", {
   d <- dist_gamma(2, 2) + dist_gamma(2, 2)
-  expect_s3_class(vec_data(d)[[1]], "dist_convolved")
+  expect_s3_class(distributional:::dist_elem(d, 1), "dist_convolved")
 })
 
 test_that("dist_convolved: subtraction via - works", {
@@ -69,13 +69,13 @@ test_that("dist_convolved: subtraction via - works", {
   d <- dist_normal(5, 1) - dist_normal(0, 1)
   # E[N(5,1) - N(0,1)] = 5; Var = 1 + 1 = 2
   # Using analytical result (normal - normal = normal)
-  expect_s3_class(vec_data(d)[[1]], "dist_normal")
+  expect_s3_class(distributional:::dist_elem(d, 1), "dist_normal")
 })
 
 test_that("dist_convolved: subtraction of non-normal distributions", {
   # Gamma - Gamma is not analytically simple; should give a dist_convolved
   d <- dist_gamma(4, 1) - dist_gamma(2, 1)
-  expect_s3_class(vec_data(d)[[1]], "dist_convolved")
+  expect_s3_class(distributional:::dist_elem(d, 1), "dist_convolved")
 
   # Mean: E[Gamma(4,1)] - E[Gamma(2,1)] = 4 - 2 = 2
   expect_equal(mean(d), 2, tolerance = 1e-10)
@@ -85,7 +85,7 @@ test_that("dist_convolved: works with mixed distribution families", {
   skip_unless_r(">= 4.3.0")
 
   d <- dist_normal(0, 1) + dist_exponential(1)
-  expect_s3_class(vec_data(d)[[1]], "dist_convolved")
+  expect_s3_class(distributional:::dist_elem(d, 1), "dist_convolved")
   # Mean = 0 + 1 = 1
   expect_equal(mean(d), 1, tolerance = 1e-10)
 })
@@ -118,7 +118,7 @@ test_that("dist_convolved: transformed distribution + distribution works", {
   # dist_lognormal is a dist_transformed internally; adding another dist
   # should produce a dist_convolved
   d <- dist_lognormal(0, 1) + dist_exponential(1)
-  expect_s3_class(vec_data(d)[[1]], "dist_convolved")
+  expect_s3_class(distributional:::dist_elem(d, 1), "dist_convolved")
   # Mean of lognormal(0,1) = exp(0.5); mean of Exp(1) = 1
   expect_equal(mean(d), exp(0.5) + 1, tolerance = 1e-10)
 })
@@ -129,7 +129,7 @@ test_that("dist_convolved: transformed distribution + distribution works", {
 
 test_that("dist_convolved: explicit 3-arg construction works", {
   d3 <- dist_convolved(dist_gamma(2, 2), dist_gamma(2, 2), dist_gamma(2, 2))
-  raw <- vec_data(d3)[[1L]]
+  raw <- distributional:::dist_elem(d3, 1L)
   expect_s3_class(raw, "dist_convolved")
   expect_length(raw[["dist"]], 3L)
 })
@@ -140,7 +140,7 @@ test_that("dist_convolved: requires at least two distributions", {
 
 test_that("dist_convolved: k-way chaining produces a flat dist_convolved", {
   d3 <- dist_gamma(2, 2) + dist_gamma(2, 2) + dist_gamma(2, 2)
-  raw <- vec_data(d3)[[1L]]
+  raw <- distributional:::dist_elem(d3, 1L)
   expect_s3_class(raw, "dist_convolved")
   # Flattening happens at construction: 3 components, not a nested 2+1
   expect_length(raw[["dist"]], 3L)

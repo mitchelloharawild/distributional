@@ -41,7 +41,7 @@ Description: Vectorised distribution objects with tools for manipulating,
 License: GPL-3
 Depends:
     R (>= 4.0.0)
-Imports: 
+Imports:
     vctrs (>= 0.3.0),
     rlang (>= 0.4.5),
     generics,
@@ -49,7 +49,9 @@ Imports:
     numDeriv,
     utils,
     lifecycle,
-    pillar
+    pillar,
+    S7,
+    vecvec
 Suggests: 
     testthat (>= 2.1.0),
     covr,

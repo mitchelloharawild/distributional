@@ -68,24 +68,45 @@ log_likelihood.dist_default <- function(x, sample, ...){
 
 #' @export
 parameters.dist_default <- function(x, ...) {
-  # Reduce parameter structures to length 1 list if needed.
-  lapply(unclass(x), function(z) {
-    if(inherits(z, "dist_default")) wrap_dist(list(z))
-    else if (tryCatch(vec_size(z), error = function(e) Inf) > 1) list(z)
-    else z
+  flds <- vctrs::fields(x)
+  cols <- lapply(flds, function(f) {
+    z <- vctrs::field(x, f)
+    # Embedded distributions stored as a list of raw records (`dist_list()`)
+    # are returned as a `distribution` vector.
+    if (is.list(z) && length(z) && all(vapply(z, inherits, logical(1L), "dist_default"))) {
+      wrap_dist(z)
+    } else {
+      z
+    }
   })
+  names(cols) <- flds
+  vctrs::new_data_frame(cols, n = vctrs::vec_size(x))
 }
 
 #' @export
 family.dist_default <- function(object, recursive = FALSE, ...) {
   fam <- substring(class(object)[1], first = 6)
-  if (!recursive) return(fam)
+  if (!recursive) return(rep_len(fam, vctrs::vec_size(object)))
+
+  # The recursive form describes one distribution at a time; loop when this
+  # default is used by a vectorised (ported) family with more than one
+  # element sharing the call. See `_dev/vecvec.md` section 3.4.
+  if (vctrs::vec_size(object) != 1L) {
+    return(lapply(vctrs::vec_seq_along(object), function(i) {
+      family(vctrs::vec_slice(object, i), recursive = TRUE)
+    }))
+  }
 
   # Identify fields which hold embedded distribution(s), and recurse into
-  # them: either a single distribution (e.g. dist_inflated()'s `dist`), or a
-  # list of distributions (e.g. dist_mixture()'s `dist`).
-  nested <- lapply(unclass(object), function(z) {
-    if (inherits(z, "dist_default")) {
+  # them: either a single distribution (e.g. dist_inflated()'s `dist`, stored
+  # as a raw record or a `distribution` vector), or a list of distributions
+  # (e.g. dist_mixture()'s `dist`).
+  flds <- vctrs::fields(object)
+  nested <- lapply(flds, function(f) {
+    z <- dist_field_get(object, f)
+    if (is_distribution(z)) {
+      family(z, recursive = TRUE)[[1L]]
+    } else if (inherits(z, "dist_default")) {
       family(z, recursive = TRUE)
     } else if (is.list(z) && length(z) && all(vapply(z, inherits, logical(1L), "dist_default"))) {
       unname(lapply(z, family, recursive = TRUE))
@@ -93,6 +114,7 @@ family.dist_default <- function(object, recursive = FALSE, ...) {
       NULL
     }
   })
+  names(nested) <- flds
   nested <- nested[!vapply(nested, is.null, logical(1L))]
 
   if (!length(nested)) fam else c(list(family = fam), nested)
@@ -100,6 +122,13 @@ family.dist_default <- function(object, recursive = FALSE, ...) {
 
 #' @export
 support.dist_default <- function(x, ...) {
+  # `quantile()`/`density()` below assume a single distribution (`c(0, 1)` is
+  # a *constant* pair of probabilities here, not one-per-element); loop when
+  # this default is used by a vectorised (ported) family with more than one
+  # element sharing the call. See `_dev/vecvec.md` section 3.4.
+  if (vctrs::vec_size(x) != 1L) {
+    return(vctrs::vec_c(!!!lapply(vctrs::vec_seq_along(x), function(i) support(vctrs::vec_slice(x, i), ...))))
+  }
   lims <- quantile(x, c(0, 1))
   closed <- if(any(is.na(lims))) {
     c(FALSE, FALSE)
@@ -112,7 +141,7 @@ support.dist_default <- function(x, ...) {
     !near(lim_dens, 0)
   }
   new_support_region(
-    list(vctrs::vec_init(generate(x, 1), n = 0L)),
+    list(vctrs::vec_init(generate(x, 1)[[1L]], n = 0L)),
     list(lims),
     list(closed)
   )
@@ -123,8 +152,8 @@ has_symmetry.dist_default <- function(x, ...){
   # Crude test that works in *most* cases.
   # Should be replaced with a more robust check using moments.
   tryCatch(
-    isTRUE(skewness(x) == 0),
-    error = function(e) FALSE
+    unname(skewness(x) == 0),
+    error = function(e) rep_len(FALSE, vctrs::vec_size(x))
   )
 }
 
@@ -188,6 +217,15 @@ hilo.dist_default <- function(x, size = 95, ...){
 
 #' @export
 hdr.dist_default <- function(x, size = 95, n = 4096, ...){
+  # This implementation is inherently scalar (it works on one distribution's
+  # density grid at a time); loop when this default is used by a vectorised
+  # (ported) family with more than one element sharing the call. See
+  # `_dev/vecvec.md` section 3.4.
+  if (vctrs::vec_size(x) != 1L) {
+    return(vctrs::vec_c(!!!lapply(vctrs::vec_seq_along(x), function(i) {
+      hdr(vctrs::vec_slice(x, i), size = size, n = n, ...)
+    })))
+  }
   # Use exact quantiles for symmetric distributions
   if (has_symmetry(x)) {
     return(
@@ -326,7 +364,7 @@ Math.dist_default <- function(x, ...) {
   inverse_fun <- get_unary_inverse(.Generic)
   inverse <- new_function(exprs(x = ), body = expr((!!inverse_fun)(x, !!!dots_list(...))))
 
-  vec_data(dist_transformed(wrap_dist(list(x)), trans, inverse))[[1]]
+  dist_first_record(dist_transformed(wrap_dist(list(x)), trans, inverse))
 }
 
 #' @method Ops dist_default
@@ -349,7 +387,7 @@ Ops.dist_default <- function(e1, e2) {
     if (.Generic == "-") {
       d2 <- -d2
     }
-    return(vec_data(dist_convolved(d1, d2))[[1]])
+    return(dist_first_record(dist_convolved(d1, d2)))
   }
 
   trans <- if(all(is_dist)) {
@@ -373,7 +411,7 @@ Ops.dist_default <- function(e1, e2) {
     get_binary_inverse_2(.Generic, e1)
   }
 
-  vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))[[1]]
+  dist_first_record(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))
 }
 
 # If there are mix of Ops with default, then use the default method

@@ -131,17 +131,17 @@ cdf.dist_poisson <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_poisson <- function(x, times, ...){
-  as.integer(stats::rpois(times, x[["l"]]))
+  Map(function(l, times) as.integer(stats::rpois(times, l)), x[["l"]], times)
 }
 
 #' @export
 support.dist_poisson <- function(x, ...) {
   # Degenerate at 0 when lambda = 0
-  degenerate <- isTRUE(x[["l"]] == 0)
+  degenerate <- x[["l"]] == 0
   new_support_region(
-    list(integer()),
-    list(c(0, if (degenerate) 0 else Inf)),
-    list(c(TRUE, degenerate))
+    rep_len(list(integer()), vctrs::vec_size(x)),
+    lapply(degenerate, function(d) c(0, if (isTRUE(d)) 0 else Inf)),
+    lapply(degenerate, function(d) c(TRUE, isTRUE(d)))
   )
 }
 

@@ -220,7 +220,7 @@ test_that("monotonically decreasing transformations (#100)", {
 })
 
 test_that("monotonic_dir classifies transformation direction (#129)", {
-  base <- function(m, s) vec_data(dist_normal(m, s))[[1]]
+  base <- function(m, s) distributional:::dist_elem(dist_normal(m, s), 1)
   expect_identical(monotonic_dir(exp, base(2, 1)), 1L)
   expect_identical(monotonic_dir(function(x) x^2, base(2.3, 0.45)), 1L)
   expect_identical(monotonic_dir(function(x) x^2, base(0.5, 1)), 0L)
@@ -240,7 +240,7 @@ test_that("support and cdf of x^2 over a Normal (#129)", {
   d <- dist_transformed(dist_normal(2.3, 0.45), function(x) x^2, function(x) sqrt(x))
   # Monotonicity over the full support cannot be verified, so limits are unknown
   # rather than the wrong (Inf, Inf) that mapping endpoints would give.
-  expect_equal(field(support(vec_data(d)[[1]]), "lim")[[1]], c(NA_real_, NA_real_))
+  expect_equal(field(support(distributional:::dist_elem(d, 1)), "lim")[[1]], c(NA_real_, NA_real_))
   # With clamping disabled, cdf is correct where the mass is.
   expect_equal(unlist(cdf(d, c(1, 5, 10))), pnorm(sqrt(c(1, 5, 10)), 2.3, 0.45))
 })
@@ -258,5 +258,5 @@ test_that("Ops between unrelated non-transformed distributions error", {
   expect_error(dist_poisson(2) / dist_gamma(2, 1), "not supported")
   # Transformations of the same underlying distribution are still combined
   x <- dist_gamma(2, 1)
-  expect_s3_class(vec_data(exp(x) * exp(x))[[1]], "dist_transformed")
+  expect_s3_class(dist_elem(exp(x) * exp(x), 1), "dist_transformed")
 })

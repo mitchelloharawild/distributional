@@ -207,7 +207,7 @@ new_lower_tail_test_dist <- function(cls, methods) {
   for (generic in names(methods)) {
     registerS3method(generic, cls, methods[[generic]], envir = ns)
   }
-  wrap_dist(list(structure(list(), class = c(cls, "dist_default"))))
+  new_dist(placeholder = NA_real_, class = cls)
 }
 
 test_that("dist_default falls back to 1 - cdf() and quantile(1 - p)", {

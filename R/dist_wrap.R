@@ -61,7 +61,7 @@ format.dist_wrap <- function(x, ...){
   sprintf(
     "%s(%s)",
     x[["dist"]],
-    paste0(x[-(1:2)], collapse = ", ")
+    paste0(dist_fields_except(x, c("dist", "env")), collapse = ", ")
   )
 }
 
@@ -70,7 +70,7 @@ density.dist_wrap <- function(x, at, ...){
   fn <- get(paste0("d", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
-  par <- x[-(1:2)]
+  par <- dist_fields_except(x, c("dist", "env"))
 
   do.call(fn, c(list(at), par))
 }
@@ -80,7 +80,7 @@ log_density.dist_wrap <- function(x, at, ...){
   fn <- get(paste0("d", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
-  par <- x[-(1:2)]
+  par <- dist_fields_except(x, c("dist", "env"))
 
   # Use density(log = TRUE) if supported
   if(is.null(formals(fn)$log)){
@@ -95,7 +95,7 @@ cdf.dist_wrap <- function(x, q, ..., tail = "lower"){
   fn <- get(paste0("p", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
-  par <- x[-(1:2)]
+  par <- dist_fields_except(x, c("dist", "env"))
 
   if(tail == "lower") return(do.call(fn, c(list(q), par)))
   if("lower.tail" %in% names(formals(fn))) {
@@ -110,7 +110,7 @@ quantile.dist_wrap <- function(x, p, ..., tail = "lower"){
   fn <- get(paste0("q", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
-  par <- x[-(1:2)]
+  par <- dist_fields_except(x, c("dist", "env"))
 
   if(tail == "lower") return(do.call(fn, c(list(p), par)))
   if("lower.tail" %in% names(formals(fn))) {
@@ -125,7 +125,7 @@ generate.dist_wrap <- function(x, times, ...){
   fn <- get(paste0("r", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
-  par <- x[-(1:2)]
+  par <- dist_fields_except(x, c("dist", "env"))
 
   do.call(fn, c(list(times), par))
 }
@@ -133,5 +133,5 @@ generate.dist_wrap <- function(x, times, ...){
 #' @export
 parameters.dist_wrap <- function(x, ...) {
   # All parameters except distribution environment
-  x[-2L]
+  dist_fields_except(x, "env")
 }

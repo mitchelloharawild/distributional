@@ -151,11 +151,11 @@ test_that("Multivariate t with different dimensions", {
   dist <- dist_multivariate_t(df = df, mu = list(mu), sigma = list(sigma))
   
   # Test the dim method on the unwrapped element
-  expect_equal(dim.dist_mvt(vctrs::vec_data(dist)[[1]]), 3)
+  expect_equal(dim.dist_mvt(distributional:::dist_elem(dist, 1)), 3)
   expect_equal(format(dist), "MVT[3](10)")
   
   # 1-dimensional (should still work)
   dist1d <- dist_multivariate_t(df = 5, mu = list(0), sigma = list(matrix(1)))
-  expect_equal(dim.dist_mvt(vctrs::vec_data(dist1d)[[1]]), 1)
+  expect_equal(dim.dist_mvt(distributional:::dist_elem(dist1d, 1)), 1)
   expect_equal(format(dist1d), "MVT[1](5)")
 })

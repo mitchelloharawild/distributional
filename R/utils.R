@@ -75,7 +75,7 @@ validate_arg_dim <- function(x, value, arg) {
   if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
 
   # Number of variates (dim() methods for distributions return a single number)
-  d <- dim(vec_data(x)[[1L]]) %||% 1L
+  d <- if (length(x@x)) (dim(x@x[[1L]][1]) %||% 1L) else 1L
   # Vectors are unambiguous for univariate distributions (they are many points)
   if(d == 1L) return(value)
 
@@ -112,30 +112,115 @@ validate_recycling <- function(x, arg) {
   }
 }
 
+# Locate every logical position of a `distribution` vector within its
+# storage slots: which slot it belongs to (`pos`, one integer vector of
+# positions per slot) and its position within that slot (`local`). NA
+# (missing) index positions are excluded from every `pos[[k]]`, so a family
+# method never sees them - see `_dev/vecvec.md` #3.3.
+dist_locate <- function(x) {
+  idx <- S7::S7_data(x)
+  slots <- x@x
+  n <- length(idx)
+  if (!length(slots) || !n) {
+    return(list(n = n, slots = slots, pos = vector("list", length(slots)), local = integer(n)))
+  }
+  starts <- c(0L, cumsum(lengths(slots)))
+  not_na <- !is.na(idx)
+  slot_id <- integer(n)
+  slot_id[not_na] <- findInterval(idx[not_na], starts, left.open = TRUE)
+  local <- integer(n)
+  local[not_na] <- idx[not_na] - starts[slot_id[not_na]]
+  pos <- lapply(seq_along(slots), function(k) which(not_na & slot_id == k))
+  list(n = n, slots = slots, pos = pos, local = local)
+}
+
+#' Apply a statistic/probability-function generic across a distribution vector
+#'
+#' @description
+#' For each storage slot (one per distribution family present in `x`),
+#' `dist_apply()` either makes a single vectorised call to `.f` (when the
+#' family is in the "ported" registry, see `R/00_classes.R`) or falls back to
+#' looping element-by-element and combining the results (matching the
+#' pre-migration behaviour, which every family's methods still support). This
+#' lets families be vectorised one at a time - see `_dev/vecvec.md` phase 1.
+#'
+#' @noRd
 dist_apply <- function(x, .f, ...){
-  dn <- dimnames(x)
-  x <- vec_data(x)
-  dist_is_na <- vapply(x, is.null, logical(1L))
-  x[dist_is_na] <- list(structure(list(), class = c("dist_na", "dist_default")))
+  dn <- variates(x)
+  loc <- dist_locate(x)
+  n <- loc$n
 
   args <- dots_list(...)
   is_arg_listable <- vapply(args, inherits, FUN.VALUE = logical(1L), "arg_listable")
-  unpack_listable <- multi_arg <- FALSE
-  if(any(is_arg_listable)) {
-    if(sum(is_arg_listable) > 1) abort("Only distribution argument can be unpacked at a time.\nThis shouldn't happen, please report a bug at https://github.com/mitchelloharawild/distributional/issues/")
-    arg_pos <- which(is_arg_listable)
+  if (sum(is_arg_listable) > 1) abort("Only one distribution argument can be unpacked at a time.\nThis shouldn't happen, please report a bug at https://github.com/mitchelloharawild/distributional/issues/")
+  arg_pos <- if (any(is_arg_listable)) which(is_arg_listable) else NA_integer_
 
-    if(unpack_listable <- is_list_of(args[[arg_pos]])) {
-      validate_recycling(x, args[[arg_pos]])
-      .unpack_names <- names(args[[arg_pos]])
-      args[[arg_pos]] <- transpose_c(args[[arg_pos]])
-    } else if (multi_arg <- (length(args[[arg_pos]]) > 1)){
-      args[[arg_pos]] <- list(unclass(args[[arg_pos]]))
+  unpack_listable <- multi_arg <- FALSE
+  .unpack_names <- NULL
+  if (!is.na(arg_pos)) {
+    arg <- args[[arg_pos]]
+    class(arg) <- setdiff(class(arg), "arg_listable")
+    if (unpack_listable <- is_list_of(arg)) {
+      validate_recycling(x, arg)
+      .unpack_names <- names(arg)
+      # `arg` is a named list of *argument* vectors (e.g. `list(a = <vec>, b =
+      # <vec>)`), not one entry per distribution; `transpose_c()` recycles
+      # those against each other to a common length and regroups into one
+      # small named-value vector per distribution position. That common
+      # length is 1 (every distribution gets the same values) or `n`
+      # (validated above); recycle up to `n` so per-position indexing below
+      # always has one entry per distribution.
+      arg <- vec_recycle(transpose_c(arg), size = n)
+    } else {
+      multi_arg <- length(arg) > 1
+    }
+    args[[arg_pos]] <- arg
+  }
+
+  out <- vector("list", n)
+  for (k in seq_along(loc$slots)) {
+    pos <- loc$pos[[k]]
+    if (!length(pos)) next
+    vals <- loc$slots[[k]][loc$local[pos]]
+
+    if (is_ported_dist(vals) && !unpack_listable && !multi_arg) {
+      # One vectorised call across the whole slot.
+      res <- rlang::inject(.f(vals, !!!args))
+      out[pos] <- vctrs::vec_chop(res)
+    } else {
+      # Not (yet) ported, or a broadcasting form that still needs a loop:
+      # fall back to the pre-migration per-element behaviour.
+      for (j in seq_along(pos)) {
+        p <- pos[j]
+        elem_args <- args
+        if (!is.na(arg_pos)) {
+          elem_args[[arg_pos]] <- if (unpack_listable) {
+            # True per-distribution pairing: already regrouped by position.
+            args[[arg_pos]][[p]]
+          } else {
+            # Constant, broadcast to every element - matching mapply()'s
+            # recycling in the pre-migration implementation: a length-1 list
+            # (e.g. a single-row matrix split by `split_matrix_rows()`)
+            # unwraps to its one element, everything else (an atomic vector,
+            # or a longer list meant to be seen whole by every call, e.g. a
+            # multi-row matrix) passes through unchanged.
+            a <- args[[arg_pos]]
+            if (is.list(a) && length(a) == 1L) a[[1L]] else a
+          }
+        }
+        out[[p]] <- rlang::inject(.f(vals[j], !!!elem_args))
+      }
     }
   }
 
-  out <- do.call(mapply, c(.f, list(x), args, SIMPLIFY = FALSE, USE.NAMES = FALSE))
-  # out <- mapply(.f, x, ..., SIMPLIFY = FALSE, USE.NAMES = FALSE)
+  # NA-index positions never reach a family method above; fill them in with
+  # an NA-flavoured placeholder of the same ptype as a computed sibling, so
+  # the reshape below doesn't silently shrink the output length.
+  is_null <- vapply(out, is.null, logical(1L))
+  if (any(is_null) && !all(is_null)) {
+    proto <- out[[which(!is_null)[1L]]]
+    out[is_null] <- list(vctrs::vec_init(proto, 1L))
+  }
 
   if(unpack_listable) {
     # TODO - update and repair multivariate distribution i/o with unpacking
@@ -145,14 +230,12 @@ dist_apply <- function(x, .f, ...){
     }
     out <- transpose_c(out)
     if(rbind_mat) {
-      out <- lapply(out, function(x) `colnames<-`(do.call(rbind, x), dn))
+      out <- lapply(out, function(z) `colnames<-`(do.call(rbind, z), dn))
     }
     names(out) <- .unpack_names
-    out <- new_data_frame(out, n = vec_size(x))
-  # } else if(length(out[[1]]) > 1) {
-  #   out <- suppressMessages(vctrs::vec_rbind(!!!out))
+    out <- new_data_frame(out, n = n)
   } else if(multi_arg) {
-    if(length(dn) > 1) out <- lapply(out, function(x) set_matrix_dimnames(x, dn))
+    if(length(dn) > 1) out <- lapply(out, function(z) set_matrix_dimnames(z, dn))
   } else {
     out <- vec_c(!!!out)
     out <- if(vec_is_list(out))

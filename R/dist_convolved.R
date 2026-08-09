@@ -111,7 +111,7 @@ dist_convolved <- function(...) {
   components_by_pos <- lapply(seq_len(n), function(i) {
     unlist(
       lapply(recycled, function(d) {
-        r <- vec_data(d)[[i]]
+        r <- dist_elem(d, i)
         if (inherits(r, "dist_convolved")) r[["dist"]] else list(r)
       }),
       recursive = FALSE

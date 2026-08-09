@@ -106,8 +106,8 @@ dist_inflated <- function(dist, prob, x = 0){
   if(prob < 0 || prob > 1){
     abort("The inflation probability must be between 0 and 1.")
   }
-  new_dist(dist = dist, x = x, p = prob,
-           dimnames = dimnames(dist), class = "dist_inflated")
+  new_dist(dist = dist_list(dist), x = x, p = prob,
+           dimnames = variates(dist), class = "dist_inflated")
 }
 
 #' @export
@@ -165,7 +165,12 @@ generate.dist_inflated <- function(x, times, ...){
   inf <- stats::runif(times) < p
   r <- vec_init(x[["x"]], times)
   r[inf] <- x[["x"]]
-  r[!inf] <- generate(x[["dist"]], sum(!inf))
+  r_dist <- generate(x[["dist"]], sum(!inf))
+  # Ported families' `generate()` always returns a list (see
+  # `_dev/vecvec.md` #6.10); not-yet-ported families still return a plain
+  # vector directly when called on a single raw record.
+  if (is.list(r_dist)) r_dist <- r_dist[[1L]]
+  r[!inf] <- r_dist
   r
 }
 

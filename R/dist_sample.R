@@ -121,9 +121,13 @@ dist_sample <- function(x){
 
 #' @export
 format.dist_sample <- function(x, ...){
+  # `vapply(x, ...)` over the record itself would iterate its *elements*
+  # (distributions), not its "x" field's per-distribution sample vectors;
+  # go via the field explicitly (bypassing the `$`/`[[` auto-unwrap shim,
+  # which would instead flatten a length-1 `x` down to a bare vector).
   sprintf(
     "sample[%s]",
-    vapply(x, vec_size, integer(1L))
+    vapply(vctrs::field(x, "x"), vctrs::vec_size, integer(1L))
   )
 }
 
@@ -206,10 +210,12 @@ covariance.dist_sample <- function(x, ...){
 #' @export
 skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
   if(is.matrix(x$x)) {abort("Multivariate sample skewness is not yet implemented.")}
-  n <- lengths(x, use.names = FALSE)
-  x <- lapply(x, function(.) . - mean(., na.rm = na.rm))
-  sum_x2 <- vapply(x, function(.) sum(.^2, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
-  sum_x3 <- vapply(x, function(.) sum(.^3, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
+  # `x[["x"]]` (rather than `x` itself, a `vctrs_rcrd`) is the raw sample
+  # vector for this one distribution.
+  n <- length(x[["x"]])
+  centered <- x[["x"]] - mean(x[["x"]], na.rm = na.rm)
+  sum_x2 <- sum(centered^2, na.rm = na.rm)
+  sum_x3 <- sum(centered^3, na.rm = na.rm)
   y <- sqrt(n) * sum_x3/(sum_x2^(3/2))
   y * ((1 - 1/n))^(3/2)
 }
@@ -228,7 +234,13 @@ support.dist_sample <- function(x, ...) {
 Math.dist_sample <- function(x, ...) {
   x <- .mapply(.Generic, list(parameters(x)$x, ...), MoreArgs = NULL)
   names(x) <- "x"
-  enclass_dist(x, "dist_sample")
+  # `x$x` is the raw (possibly long) sample vector for this one distribution;
+  # `new_rcrd()`'s "x" field must instead be a length-1 *list* wrapping it
+  # (one list-element per distribution), or it's read as one distribution
+  # per sample value. `as_list_of()` (matching `dist_sample()`'s own
+  # construction) rather than a bare `list()` keeps the field's ptype intact.
+  x$x <- vctrs::as_list_of(list(x$x), .ptype = vctrs::vec_ptype(x$x))
+  vctrs::new_rcrd(x, class = c("dist_sample", "dist_default"))
 }
 
 #' @method Ops dist_sample
@@ -244,5 +256,7 @@ Ops.dist_sample <- function(e1, e2) {
 
   x <- .mapply(.Generic, list(e1, e2), MoreArgs = NULL)
   names(x) <- "x"
-  enclass_dist(x, "dist_sample")
+  # See the matching comment in `Math.dist_sample()`.
+  x$x <- vctrs::as_list_of(list(x$x), .ptype = vctrs::vec_ptype(x$x))
+  vctrs::new_rcrd(x, class = c("dist_sample", "dist_default"))
 }

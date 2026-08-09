@@ -22,7 +22,7 @@ test_that("Density distribution", {
 })
 
 test_that("the density is exactly interpolated and standardised", {
-  dist <- vec_data(dist_density(list(c(0, 1, 2)), list(c(0, 1, 0))))[[1]]
+  dist <- distributional:::dist_elem(dist_density(list(c(0, 1, 2)), list(c(0, 1, 0))), 1)
 
   # Standardised to integrate to one (the input integrates to 1 already)
   expect_equal(density(dist, c(0, 0.5, 1, 1.5, 2)), c(0, 0.5, 1, 0.5, 0))
@@ -37,7 +37,7 @@ test_that("the density is exactly interpolated and standardised", {
 
   # An unstandardised density is rescaled, with a warning when far from one
   expect_warning(
-    scaled <- vec_data(dist_density(list(c(0, 1)), list(c(2, 2))))[[1]],
+    scaled <- distributional:::dist_elem(dist_density(list(c(0, 1)), list(c(2, 2))), 1),
     "integrates to 2"
   )
   expect_equal(density(scaled, 0.5), 1)
@@ -97,19 +97,19 @@ test_that("skewness and kurtosis of piecewise linear densities are exact", {
 
 test_that("the quantile function inverts the cdf", {
   at <- seq(-6, 6, by = 0.005)
-  dist <- vec_data(dist_density(list(at), list(dnorm(at))))[[1]]
+  dist <- distributional:::dist_elem(dist_density(list(at), list(dnorm(at))), 1)
 
   p <- seq(0.0005, 0.9995, length.out = 257)
   expect_equal(cdf(dist, quantile(dist, p)), p)
 
   # Also for a density with a non-constant slope within each interval
-  tri <- vec_data(dist_density(list(c(0, 1, 2)), list(c(0, 1, 0))))[[1]]
+  tri <- distributional:::dist_elem(dist_density(list(c(0, 1, 2)), list(c(0, 1, 0))), 1)
   expect_equal(cdf(tri, quantile(tri, p)), p)
   expect_equal(quantile(tri, 0.5), 1)
 })
 
 test_that("evaluation beyond the tabulated values", {
-  dist <- vec_data(dist_density(list(c(0, 1)), list(c(1, 1))))[[1]]
+  dist <- distributional:::dist_elem(dist_density(list(c(0, 1)), list(c(1, 1))), 1)
 
   expect_equal(cdf(dist, c(-1, 0, 1, 2)), c(0, 0, 1, 1))
   expect_equal(cdf(dist, NA_real_), NA_real_)

@@ -108,8 +108,8 @@ dist_truncated <- function(dist, lower = -Inf, upper = Inf){
   if(any(lower >= upper)){
     abort("The `lower` truncation bound must be lower than the `upper` bound.")
   }
-  new_dist(dist = dist, lower = lower, upper = upper,
-           dimnames = dimnames(dist), class = "dist_truncated")
+  new_dist(dist = dist_list(dist), lower = lower, upper = upper,
+           dimnames = variates(dist), class = "dist_truncated")
 }
 
 #' @export

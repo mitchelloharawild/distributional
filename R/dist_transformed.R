@@ -127,9 +127,9 @@ dist_transformed <- function(dist, transform, inverse){
   vec_is(dist, new_dist())
   if(is.function(transform)) transform <- list(transform)
   if(is.function(inverse)) inverse <- list(inverse)
-  new_dist(dist = vec_data(dist),
+  new_dist(dist = dist_list(dist),
            transform = transform, inverse = inverse,
-           dimnames = dimnames(dist), class = "dist_transformed")
+           dimnames = variates(dist), class = "dist_transformed")
 }
 
 #' @export
@@ -228,7 +228,12 @@ quantile.dist_transformed <- function(x, p, ..., tail = "lower"){
 
 #' @export
 generate.dist_transformed <- function(x, ...){
-  x[["transform"]](generate(x[["dist"]], ...))
+  r <- generate(x[["dist"]], ...)
+  # Ported families' `generate()` always returns a list (one vector per
+  # distribution, see `_dev/vecvec.md` #6.10); not-yet-ported families keep
+  # returning a plain vector directly when called on a single raw record.
+  if (is.list(r)) r <- r[[1L]]
+  x[["transform"]](r)
 }
 
 #' @export
@@ -262,7 +267,7 @@ Math.dist_transformed <- function(x, ...) {
   inverse_fun <- get_unary_inverse(.Generic)
   inverse <- new_function(exprs(x = ), body = expr((!!x$inverse)((!!inverse_fun)(x, !!!dots_list(...)))))
 
-  vec_data(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse))[[1]]
+  dist_first_record(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse))
 }
 
 #' @method Ops dist_transformed
@@ -294,7 +299,7 @@ Ops.dist_transformed <- function(e1, e2) {
     new_function(exprs(x = ), body = expr((!!e2$inverse)((!!inverse_fun)(x))))
   }
 
-  vec_data(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))[[1]]
+  dist_first_record(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))
 }
 
 # Direction of a transformation `f`, judged by probing it at quantiles of the

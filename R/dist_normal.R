@@ -134,23 +134,19 @@ log_cdf.dist_normal <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_normal <- function(x, times, ...){
-  stats::rnorm(times, x[["mu"]], x[["sigma"]])
+  Map(function(mu, sigma, times) stats::rnorm(times, mu, sigma), x[["mu"]], x[["sigma"]], times)
 }
 
 #' @export
 support.dist_normal <- function(x, ...) {
   # Degenerate at mu when sigma = 0
-  if (isTRUE(x[["sigma"]] == 0)) {
-    lims <- c(x[["mu"]], x[["mu"]])
-    closed <- c(TRUE, TRUE)
-  } else {
-    lims <- c(-Inf, Inf)
-    closed <- c(FALSE, FALSE)
-  }
+  degenerate <- x[["sigma"]] == 0
+  lims <- Map(function(mu, d) if (isTRUE(d)) c(mu, mu) else c(-Inf, Inf), x[["mu"]], degenerate)
+  closed <- lapply(degenerate, function(d) rep(isTRUE(d), 2L))
   new_support_region(
-    list(numeric()),
-    list(lims),
-    list(closed)
+    rep_len(list(numeric()), vctrs::vec_size(x)),
+    unname(lims),
+    closed
   )
 }
 
@@ -165,13 +161,13 @@ covariance.dist_normal <- function(x, ...){
 }
 
 #' @export
-skewness.dist_normal <- function(x, ...) 0
+skewness.dist_normal <- function(x, ...) rep_len(0, vctrs::vec_size(x))
 
 #' @export
-kurtosis.dist_normal <- function(x, ...) 0
+kurtosis.dist_normal <- function(x, ...) rep_len(0, vctrs::vec_size(x))
 
 #' @export
-has_symmetry.dist_normal <- function(x, ...) TRUE
+has_symmetry.dist_normal <- function(x, ...) rep_len(TRUE, vctrs::vec_size(x))
 
 #' @export
 Ops.dist_normal <- function(e1, e2){
@@ -241,6 +237,6 @@ Ops.dist_normal <- function(e1, e2){
 #' @export
 Math.dist_normal <- function(x, ...) {
   # Shortcut to get log-normal distribution from Normal.
-  if(.Generic == "exp") return(vec_data(dist_lognormal(x[["mu"]], x[["sigma"]]))[[1]])
+  if(.Generic == "exp") return(dist_first_record(dist_lognormal(x[["mu"]], x[["sigma"]])))
   NextMethod()
 }

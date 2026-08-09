@@ -76,19 +76,17 @@
 #'
 #' @export
 dist_missing <- function(length = 1) {
-  vctrs::vec_rep(NA_dist_, length)
+  new_dist(placeholder = rep(NA_real_, length), class = "dist_na")
 }
-
-NA_dist_ <- structure(list(NULL), class = c("distribution", "vctrs_vctr", "list"))
 
 #' @export
 format.dist_na <- function(x, ...) {
-  "NA"
+  rep_len("NA", vctrs::vec_size(x))
 }
 
 #' @export
 density.dist_na <- function(x, at, ...){
-  rep_len(NA_real_, length(at))
+  rep_len(NA_real_, max(vctrs::vec_size(x), length(at)))
 }
 
 #' @export
@@ -96,39 +94,44 @@ log_density.dist_na <- density.dist_na
 
 #' @export
 quantile.dist_na <- function(x, p, ...){
-  rep_len(NA_real_, length(p))
+  rep_len(NA_real_, max(vctrs::vec_size(x), length(p)))
 }
 #' @export
 log_quantile.dist_na <- quantile.dist_na
 
 #' @export
 cdf.dist_na <- function(x, q, ...){
-  rep_len(NA_real_, length(q))
+  rep_len(NA_real_, max(vctrs::vec_size(x), length(q)))
 }
 #' @export
 log_cdf.dist_na <- cdf.dist_na
 
 #' @export
 generate.dist_na <- function(x, times, ...){
-  rep(NA_real_, times)
+  lapply(times, function(n) rep(NA_real_, n))
 }
 
 #' @export
 support.dist_na <- function(x, ...) {
-  new_support_region(list(numeric()), list(c(NA_real_, NA_real_)), list(c(FALSE, FALSE)))
+  n <- vctrs::vec_size(x)
+  new_support_region(
+    rep_len(list(numeric()), n),
+    rep_len(list(c(NA_real_, NA_real_)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
+  )
 }
 
 #' @export
-mean.dist_na <- function(x, ...) NA_real_
+mean.dist_na <- function(x, ...) rep_len(NA_real_, vctrs::vec_size(x))
 
 #' @export
-covariance.dist_na <- function(x, ...) NA_real_
+covariance.dist_na <- function(x, ...) rep_len(NA_real_, vctrs::vec_size(x))
 
 #' @export
-skewness.dist_na <- function(x, ...) NA_real_
+skewness.dist_na <- function(x, ...) rep_len(NA_real_, vctrs::vec_size(x))
 
 #' @export
-kurtosis.dist_na <- function(x, ...) NA_real_
+kurtosis.dist_na <- function(x, ...) rep_len(NA_real_, vctrs::vec_size(x))
 
 #' @export
 Math.dist_na <- function(x, ...) {

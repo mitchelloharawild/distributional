@@ -10,5 +10,7 @@
 ^pkgdown$
 ^tic\.R$
 ^revdep$
+^dev$
+^_dev$
 ^CRAN-RELEASE$
 ^CRAN-SUBMISSION$

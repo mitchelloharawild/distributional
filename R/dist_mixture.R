@@ -192,21 +192,21 @@ dist_mixture <- function(..., weights = numeric(), type = c("probability", "quan
 
   if (type == "quantile") {
     # Quantile mixtures require univariate components
-    dims <- vapply(dist, function(d) dim(vctrs::vec_data(d)[[1L]]), integer(1L))
+    dims <- vapply(dist, function(d) dim(dist_elem(d, 1)), integer(1L))
     if (any(dims > 1L)) {
       abort("Quantile mixtures only support univariate distributions.")
     }
     return(new_dist(
-      dist = transpose(dist), w = list(weights),
+      dist = dist_transpose_list(dist), w = list(weights),
       class = "dist_q_mixture"
     ))
   }
 
-  dn <- unique(lapply(dist, dimnames))
+  dn <- unique(lapply(dist, variates))
   dn <- if (length(dn) == 1) dn[[1]] else NULL
 
   new_dist(
-    dist = transpose(dist), w = list(weights),
+    dist = dist_transpose_list(dist), w = list(weights),
     class = "dist_mixture", dimnames = dn
   )
 }
@@ -270,7 +270,12 @@ generate.dist_mixture <- function(x, times, ...) {
   for (i in seq_along(x[["dist"]])) {
     r_pos <- dist_idx == i
     if (any(r_pos)) {
-      r[r_pos, ] <- generate(x[["dist"]][[i]], sum(r_pos), ...)
+      r_i <- generate(x[["dist"]][[i]], sum(r_pos), ...)
+      # Ported families' `generate()` always returns a list (see
+      # `_dev/vecvec.md` #6.10); not-yet-ported families still return a
+      # plain vector/matrix directly when called on a single raw record.
+      if (is.list(r_i)) r_i <- r_i[[1L]]
+      r[r_pos, ] <- r_i
     }
   }
   r[, seq(NCOL(r)), drop = TRUE]
