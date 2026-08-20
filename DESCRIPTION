@@ -26,7 +26,11 @@ Authors@R:
       person(given = "Vencislav",
              family = "Popov",
              role = c("ctb"),
-             comment = c(ORCID = "0000-0002-8073-4199")))
+             comment = c(ORCID = "0000-0002-8073-4199")),
+      person(given = "Stefano",
+             family = "Damato",
+             role = c("ctb"),
+             comment = c(ORCID = "0009-0001-0225-3736")))
 Description: Vectorised distribution objects with tools for manipulating, 
     visualising, and using probability distributions. Designed to allow model
     prediction outputs to return distributions rather than their parameters, 
@@ -58,7 +62,8 @@ Suggests:
     knitr,
     LaplacesDemon,
     pkgdown,
-    rmarkdown
+    rmarkdown,
+    tweedieDistr
 RdMacros: 
     lifecycle
 URL: https://pkg.mitchelloharawild.com/distributional/, https://github.com/mitchelloharawild/distributional

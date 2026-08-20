@@ -14,6 +14,11 @@
 * Added `dist_cdf()`, which describes a distribution by the cumulative
   probabilities at a set of values. Interpolation is done linearly, and the
   results are equivalent to `dist_quantile()` with swapped arguments.
+
+* Added `dist_tweedie()`, for the Tweedie compound Poisson-Gamma
+  distribution with power parameter in `(1, 2)`, using the `tweedieDistr`
+  package (@StefanoDamato).
+  
 ## Breaking changes
 
 * `generate()`'s `times` argument no longer accepts length-n vectors, and 

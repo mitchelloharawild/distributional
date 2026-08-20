@@ -90,6 +90,7 @@ reference:
     - dist_pareto
     - dist_student_t
     - dist_studentized_range
+    - dist_tweedie
     - dist_uniform
     - dist_weibull
 
