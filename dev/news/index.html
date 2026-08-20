@@ -66,8 +66,13 @@
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li><p>Added a <code><a href="../articles/broadcasting.html">vignette("broadcasting")</a></code> to describe how statistics apply to vectors of distributions differently based on the form of the statistical operation’s argument (scalar, vector, or list).</p></li>
 <li><p>Added <code><a href="../reference/dist_density.html">dist_density()</a></code>, a distribution characterised by the values of its probability density function at a set of points. This is useful for representing a distribution known only through its density, such as a kernel density estimate or a posterior evaluated over a grid.</p></li>
-<li><p>Added <code><a href="../reference/dist_cdf.html">dist_cdf()</a></code>, which describes a distribution by the cumulative probabilities at a set of values. Interpolation is done linearly, and the results are equivalent to <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> with swapped arguments. ## Breaking changes</p></li>
-<li><p><code><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate()</a></code>’s <code>times</code> argument no longer accepts length-n vectors, and instead requires <code>times = list(c(...))</code> for consistency with other operations.</p></li>
+<li><p>Added <code><a href="../reference/dist_cdf.html">dist_cdf()</a></code>, which describes a distribution by the cumulative probabilities at a set of values. Interpolation is done linearly, and the results are equivalent to <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> with swapped arguments.</p></li>
+<li><p>Added <code><a href="../reference/dist_tweedie.html">dist_tweedie()</a></code>, for the Tweedie compound Poisson-Gamma distribution with power parameter in <code>(1, 2)</code>, using the <code>tweedieDistr</code> package (<a href="https://github.com/StefanoDamato" class="external-link">@StefanoDamato</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>
+<code><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate()</a></code>’s <code>times</code> argument no longer accepts length-n vectors, and instead requires <code>times = list(c(...))</code> for consistency with other operations.</li>
 </ul></div>
 </div>
     <div class="section level2">
