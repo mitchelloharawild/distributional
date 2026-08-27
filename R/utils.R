@@ -19,6 +19,28 @@ transpose_c <- function(.l) {
   set_names(result, inner_names)
 }
 
+unpack <- function(data, cols, sep = ".") {
+  cols <- if (is.numeric(cols)) names(data)[cols] else cols
+  rn <- attr(data, "row.names")
+  data <- unclass(data)
+  is_target <- logical(length(data))
+  is_target[match(cols, names(data))] <- TRUE   # one vectorized position lookup
+  data[cols] <- lapply(cols, function(col) {
+    inner <- data[[col]]
+    stopifnot(is.data.frame(inner))
+    inner <- unclass(inner)
+    names(inner) <- paste(col, names(inner), sep = sep)
+    inner
+  })
+  pieces <- vector("list", length(data))
+  pieces[!is_target] <- lapply(which(!is_target), function(j) data[j])
+  pieces[is_target]  <- data[is_target]
+  data <- do.call(c, pieces)                    # one concatenation, not one per column
+  attr(data, "row.names") <- rn
+  class(data) <- "data.frame"
+  data
+}
+
 split_matrix_rows <- function(x) {
   lapply(seq_len(nrow(x)), function(i) x[i,,drop=FALSE])
 }

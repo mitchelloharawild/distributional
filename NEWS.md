@@ -18,6 +18,9 @@
 * Added `dist_tweedie()`, for the Tweedie compound Poisson-Gamma
   distribution with power parameter in `(1, 2)`, using the `tweedieDistr`
   package (@StefanoDamato).
+
+* Added `recursive` option for `parameters()`, which recursively extracts the
+  parameters of inner distributions to return a flat data frame (#161).
   
 ## Breaking changes
 

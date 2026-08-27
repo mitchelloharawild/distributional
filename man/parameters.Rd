@@ -7,15 +7,32 @@
 \usage{
 parameters(x, ...)
 
-\method{parameters}{distribution}(x, ...)
+\method{parameters}{distribution}(x, recursive = FALSE, ...)
 }
 \arguments{
 \item{x}{The distribution(s).}
 
 \item{...}{Additional arguments used by methods.}
+
+\item{recursive}{If \code{TRUE}, parameters which are themselves
+distributions (such as the base distribution of a
+\code{\link[=dist_inflated]{dist_inflated()}} or \code{\link[=dist_transformed]{dist_transformed()}}) are recursively expanded
+into their own parameters instead of being returned as a distribution.}
+}
+\value{
+A data frame of parameters, with one row per distribution and
+one column per parameter. The result never contains data frame (or
+distribution) columns.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Some distributions (such as \code{\link[=dist_inflated]{dist_inflated()}} and \code{\link[=dist_transformed]{dist_transformed()}})
+are defined in terms of another distribution, which returns a distribution
+as one of their parameters. By default, this underlying distribution is
+returned as-is in a column of the \code{parameters()} result. Setting
+\code{recursive = TRUE} will recursively compute the parameters of these inner
+distributions, returning a flat data frame of all parameters.
 }
 \examples{
 dist <- c(
@@ -25,4 +42,13 @@ dist <- c(
   prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
   )
 parameters(dist)
+
+# Distribution-valued parameters (such as the inflated distribution
+# below) are returned as-is by default.
+infl_dist <- dist_inflated(dist_negative_binomial(10, 0.6), prob = 0.5)
+parameters(infl_dist)
+
+# With recursive = TRUE, the inflated distribution's parameters are
+# expanded into a flat data frame.
+parameters(infl_dist, recursive = TRUE)
 }

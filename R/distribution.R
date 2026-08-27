@@ -278,8 +278,23 @@ log_likelihood.distribution <- function(x, sample, ...){
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
+#' Some distributions (such as [dist_inflated()] and [dist_transformed()])
+#' are defined in terms of another distribution, which returns a distribution
+#' as one of their parameters. By default, this underlying distribution is 
+#' returned as-is in a column of the `parameters()` result. Setting 
+#' `recursive = TRUE` will recursively compute the parameters of these inner
+#' distributions, returning a flat data frame of all parameters.
+#'
 #' @param x The distribution(s).
+#' @param recursive If `TRUE`, parameters which are themselves
+#' distributions (such as the base distribution of a
+#' [dist_inflated()] or [dist_transformed()]) are recursively expanded
+#' into their own parameters instead of being returned as a distribution.
 #' @param ... Additional arguments used by methods.
+#'
+#' @return A data frame of parameters, with one row per distribution and
+#' one column per parameter. The result never contains data frame (or
+#' distribution) columns.
 #'
 #' @name parameters
 #' @examples
@@ -290,6 +305,15 @@ log_likelihood.distribution <- function(x, sample, ...){
 #'   prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
 #'   )
 #' parameters(dist)
+#'
+#' # Distribution-valued parameters (such as the inflated distribution
+#' # below) are returned as-is by default.
+#' infl_dist <- dist_inflated(dist_negative_binomial(10, 0.6), prob = 0.5)
+#' parameters(infl_dist)
+#'
+#' # With recursive = TRUE, the inflated distribution's parameters are
+#' # expanded into a flat data frame.
+#' parameters(infl_dist, recursive = TRUE)
 #' @export
 parameters <- function(x, ...) {
   UseMethod("parameters")
@@ -297,10 +321,19 @@ parameters <- function(x, ...) {
 
 #' @rdname parameters
 #' @export
-parameters.distribution <- function(x, ...) {
+parameters.distribution <- function(x, recursive = FALSE, ...) {
   x <- lapply(vec_data(x), parameters)
   x <- lapply(x, function(z) data_frame(!!!z, .name_repair = "minimal"))
-  vec_rbind(!!!x)
+  x <- vec_rbind(!!!x)
+  if (recursive) {
+    # Identify distributions
+    dist_col <- which(vapply(x, inherits, logical(1L), what = "distribution"))
+    # Recurse parameters()
+    x[dist_col] <- lapply(x[dist_col], parameters, recursive = TRUE)
+    # Flatten result
+    x <- unpack(x, dist_col)
+  }
+  new_data_frame(x)
 }
 
 #' Extract the name of the distribution family
