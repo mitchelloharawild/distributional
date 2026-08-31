@@ -148,20 +148,20 @@ covariance.dist_hypergeometric <- function(x, ...){
 
 #' @export
 skewness.dist_hypergeometric <- function(x, ...) {
-  N <- x[["n"]] + x[["m"]]
-  K <- x[["m"]]
-  n <- x[["k"]]
+  N <- as.double(x[["n"]] + x[["m"]])
+  K <- as.double(x[["m"]])
+  n <- as.double(x[["k"]])
 
   a <- (N - 2 * K) * (N - 1)^0.5 * (N - 2 * n)
-  b <- (1 * n * K * (N - K) * (N - n))^0.5 * (N - 2)
+  b <- (n * K * (N - K) * (N - n))^0.5 * (N - 2)
   a / b
 }
 
 #' @export
 kurtosis.dist_hypergeometric <- function(x, ...) {
-  N <- x[["n"]] + x[["m"]]
-  K <- x[["m"]]
-  n <- x[["k"]]
+  N <- as.double(x[["n"]] + x[["m"]])
+  K <- as.double(x[["m"]])
+  n <- as.double(x[["k"]])
 
-  1 / (1 * n * K * (N - K) * (N - n) * (N - 2) * (N - 3))
+  1 / (n * K * (N - K) * (N - n) * (N - 2) * (N - 3))
 }
