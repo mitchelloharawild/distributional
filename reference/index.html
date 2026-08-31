@@ -20,7 +20,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -28,6 +28,16 @@
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/broadcasting.html">Broadcasting rules</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -282,6 +292,10 @@
         </td>
         <td><p>The Studentized Range distribution</p></td>
       </tr><tr><td>
+          <p><code><a href="dist_tweedie.html">dist_tweedie()</a></code> </p>
+        </td>
+        <td><p>The Tweedie distribution</p></td>
+      </tr><tr><td>
           <p><code><a href="dist_uniform.html">dist_uniform()</a></code> </p>
         </td>
         <td><p>The Uniform distribution</p></td>
@@ -330,6 +344,26 @@
         </td>
         <td><p>The Poisson-Inverse Gaussian distribution</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="empirical-distributions">Empirical distributions <a href="#empirical-distributions" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Distributions characterised by observed or tabulated values.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dist_cdf.html">dist_cdf()</a></code> </p>
+        </td>
+        <td><p>Cumulative distribution function distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="dist_density.html">dist_density()</a></code> </p>
+        </td>
+        <td><p>Density distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="dist_quantile.html">dist_quantile()</a></code> <code><a href="dist_quantile.html">dist_percentile()</a></code> </p>
+        </td>
+        <td><p>Quantile distribution</p></td>
+      </tr><tr><td>
+          <p><code><a href="dist_sample.html">dist_sample()</a></code> </p>
+        </td>
+        <td><p>Sampling distribution</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="miscellaneous-distributions">Miscellaneous distributions <a href="#miscellaneous-distributions" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p><p>Degenerate and non-standard probability distributions.</p>
         </th>
@@ -341,14 +375,6 @@
           <p><code><a href="dist_missing.html">dist_missing()</a></code> </p>
         </td>
         <td><p>Missing distribution</p></td>
-      </tr><tr><td>
-          <p><code><a href="dist_quantile.html">dist_quantile()</a></code> <code><a href="dist_quantile.html">dist_percentile()</a></code> </p>
-        </td>
-        <td><p>Quantile distribution</p></td>
-      </tr><tr><td>
-          <p><code><a href="dist_sample.html">dist_sample()</a></code> </p>
-        </td>
-        <td><p>Sampling distribution</p></td>
       </tr><tr><td>
           <p><code><a href="dist_wrap.html">dist_wrap()</a></code> </p>
         </td>
@@ -410,7 +436,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>

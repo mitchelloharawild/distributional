@@ -5,6 +5,8 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/ISSUE_TEMPLATE.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/LICENSE.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/SUPPORT.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/articles/broadcasting.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/articles/index.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/authors.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/index.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/news/index.html</loc></url>
@@ -18,9 +20,11 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_burr.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_categorical.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_cauchy.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_cdf.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_chisq.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_convolved.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_degenerate.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_density.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_dirichlet.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_exponential.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_f.html</loc></url>
@@ -57,6 +61,7 @@
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_studentized_range.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_transformed.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_truncated.html</loc></url>
+<url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_tweedie.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_uniform.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_weibull.html</loc></url>
 <url><loc>https://pkg.mitchelloharawild.com/distributional/reference/dist_wrap.html</loc></url>

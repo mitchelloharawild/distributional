@@ -20,7 +20,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -28,6 +28,16 @@
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/broadcasting.html">Broadcasting rules</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -47,9 +57,25 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/mitchelloharawild/distributional/blob/v0.8.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/mitchelloharawild/distributional/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.9.0" id="distributional-090">distributional 0.9.0<a class="anchor" aria-label="anchor" href="#distributional-090"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-9-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-9-0"></a></h3>
+<ul><li><p>Added a <code><a href="../articles/broadcasting.html">vignette("broadcasting")</a></code> to describe how statistics apply to vectors of distributions differently based on the form of the statistical operation’s argument (scalar, vector, or list).</p></li>
+<li><p>Added <code><a href="../reference/dist_density.html">dist_density()</a></code>, a distribution characterised by the values of its probability density function at a set of points. This is useful for representing a distribution known only through its density, such as a kernel density estimate or a posterior evaluated over a grid.</p></li>
+<li><p>Added <code><a href="../reference/dist_cdf.html">dist_cdf()</a></code>, which describes a distribution by the cumulative probabilities at a set of values. Interpolation is done linearly, and the results are equivalent to <code><a href="../reference/dist_quantile.html">dist_quantile()</a></code> with swapped arguments.</p></li>
+<li><p>Added <code><a href="../reference/dist_tweedie.html">dist_tweedie()</a></code>, for the Tweedie compound Poisson-Gamma distribution with power parameter in <code>(1, 2)</code>, using the <code>tweedieDistr</code> package (<a href="https://github.com/StefanoDamato" class="external-link">@StefanoDamato</a>).</p></li>
+<li><p>Added <code>recursive</code> option for <code><a href="../reference/parameters.html">parameters()</a></code>, which recursively extracts the parameters of inner distributions to return a flat data frame (<a href="https://github.com/mitchelloharawild/distributional/issues/161" class="external-link">#161</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-0-9-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
+<ul><li>
+<code><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate()</a></code>’s <code>times</code> argument no longer accepts length-n vectors, and instead requires <code>times = list(c(...))</code> for consistency with other operations.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.1" id="distributional-081">distributional 0.8.1<small>2026-06-27</small><a class="anchor" aria-label="anchor" href="#distributional-081"></a></h2>
 <div class="section level3">
@@ -398,7 +424,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>

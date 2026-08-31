@@ -21,7 +21,7 @@ Generate random samples from probability distributions."><!-- mathjax --><script
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -29,6 +29,16 @@ Generate random samples from probability distributions."><!-- mathjax --><script
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/broadcasting.html">Broadcasting rules</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -48,7 +58,7 @@ Generate random samples from probability distributions."><!-- mathjax --><script
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Randomly sample values from a distribution</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/v0.8.1/R/distribution.R" class="external-link"><code>R/distribution.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/main/R/distribution.R" class="external-link"><code>R/distribution.R</code></a></small>
     <div class="hidden name"><code>generate.distribution.Rd</code></div>
     </div>
 
@@ -71,13 +81,23 @@ Generate random samples from probability distributions."><!-- mathjax --><script
 
 
 <dt id="arg-times">times<a class="anchor" aria-label="anchor" href="#arg-times"></a></dt>
-<dd><p>The number of samples.</p></dd>
+<dd><p>The number of samples. A scalar is broadcast to every
+distribution. Per-distribution sample sizes must be given as a list
+containing a single vector (<code>list(c(...))</code>) recycled against the
+distributions (length 1 or <code>length(x)</code>) - a bare vector of length &gt; 1 is
+deprecated for this, as it is ambiguous with mapping the same vector onto
+every distribution.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments used by methods.</p></dd>
 
 </dl></div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="../articles/broadcasting.html">vignette("broadcasting", package = "distributional")</a></code> for how the
+<code>times</code> argument is combined with the distributions.</p></div>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -91,7 +111,7 @@ Generate random samples from probability distributions."><!-- mathjax --><script
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>

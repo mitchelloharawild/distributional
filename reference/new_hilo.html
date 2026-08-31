@@ -22,7 +22,7 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -30,6 +30,16 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/broadcasting.html">Broadcasting rules</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -49,7 +59,7 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Construct hilo intervals</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/v0.8.1/R/hilo.R" class="external-link"><code>R/hilo.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/main/R/hilo.R" class="external-link"><code>R/hilo.R</code></a></small>
     <div class="hidden name"><code>new_hilo.Rd</code></div>
     </div>
 
@@ -88,10 +98,10 @@ objects.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">new_hilo</span><span class="op">(</span>lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fl">5</span>, size <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilo[10]&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] [-0.7206361, 5.013426]95 [ 0.2500805, 4.932671]95 [-1.5182012, 6.678755]95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] [ 0.4470079, 4.748543]95 [ 0.9003209, 4.144751]95 [ 0.2598215, 5.029318]95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] [ 1.0179657, 4.647911]95 [ 0.6142713, 3.631955]95 [-0.2394080, 5.484613]95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10] [-1.8031493, 4.299623]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] [ 0.3621271, 3.954434]95 [ 0.1056898, 3.631367]95 [-0.1319562, 4.492635]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] [ 1.0678502, 5.142760]95 [ 0.9252625, 4.477425]95 [ 1.3238511, 4.781721]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] [ 1.0342216, 3.801170]95 [ 0.1478876, 5.287386]95 [ 0.3357230, 6.096737]95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] [-0.6446110, 4.305535]95</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -107,7 +117,7 @@ objects.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>

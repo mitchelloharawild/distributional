@@ -31,7 +31,7 @@ distribution will be added soon."><!-- mathjax --><script src="https://cdnjs.clo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">distributional</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -39,6 +39,16 @@ distribution will be added soon."><!-- mathjax --><script src="https://cdnjs.clo
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/broadcasting.html">Broadcasting rules</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -58,7 +68,7 @@ distribution will be added soon."><!-- mathjax --><script src="https://cdnjs.clo
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>The Gamma distribution</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/v0.8.1/R/dist_gamma.R" class="external-link"><code>R/dist_gamma.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/mitchelloharawild/distributional/blob/main/R/dist_gamma.R" class="external-link"><code>R/dist_gamma.R</code></a></small>
     <div class="hidden name"><code>dist_gamma.Rd</code></div>
     </div>
 
@@ -141,32 +151,32 @@ with parameters
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/generate.html" class="external-link">generate</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.92844748 0.28476430 1.96941941 0.37799871 0.19960735 1.63124589</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 2.69152950 3.42133263 3.36522354 0.06021366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2.5425472 2.4326614 0.7754665 3.5466399 0.3745336 1.0187754 1.3440671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2341321 2.5564569 1.6291680</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.6919852 1.6774169 6.9300763 2.4075783 2.7981832 0.9606417 2.4928332</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 3.5876883 4.7164778 3.2879543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  6.136013  1.793628  2.333732  2.907564  1.689938  7.467933  6.328497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 10.656851 11.386213  1.021115</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 10.874383  3.349401  2.440180  9.581556  3.700975  2.776136  1.685701</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 11.539812  3.171098 11.688644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.6538120 2.8251657 0.7241433 4.2995857 2.2476634 0.6490697 7.8635906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 7.1416508 4.2418193 1.3142215</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.521361 8.021796 5.086454 5.397582 2.886631 3.136584 3.538219 2.895133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 2.788660 3.254850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.986279 3.379855 6.585655 1.904162 6.649301 5.613127 5.335366 2.393918</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 5.167640 4.119382</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 5.765367 4.046219 3.046654 3.874765 3.516896 6.806378 3.704758 4.776282</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 6.596898 5.439818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4.208062 2.194900 3.232550 5.157432 5.861315 4.429140 2.823739 5.793119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 3.821173 3.960008</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 10.429745  6.642370 11.189164  8.225343  7.454479  7.458766  8.989552</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  6.518382  5.594818 10.792694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 6.801574 6.593407 5.387267 8.144641 7.304945 7.170135 4.778968 4.907044</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 8.879577 7.416681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.614291086 0.750182563 0.013971211 0.876081103 0.515207496 1.966032130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.026281564 0.336123303 0.005911172 0.001257043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.425867092 0.471833324 0.576314651 1.652474344 0.004832496 0.322129095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.913436191 0.001937892 0.031468788 0.743272721</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">2</span><span class="op">)</span></span></span>
@@ -195,7 +205,7 @@ with parameters
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>
