@@ -101,7 +101,7 @@ dist_density <- function(x, density){
   new_dist(
     x = as_list_of(lapply(tab, `[[`, "x"), .ptype = double()),
     density = as_list_of(lapply(tab, `[[`, "density"), .ptype = double()),
-    class = "dist_density"
+    class = "dist_pdf"
   )
 }
 
@@ -158,7 +158,7 @@ density_intervals <- function(x) {
 }
 
 #' @export
-format.dist_density <- function(x, ...){
+format.dist_pdf <- function(x, ...){
   sprintf(
     "density[%s]",
     length(x[["x"]])
@@ -166,7 +166,7 @@ format.dist_density <- function(x, ...){
 }
 
 #' @export
-density.dist_density <- function(x, at, ...){
+density.dist_pdf <- function(x, at, ...){
   out <- stats::approx(x[["x"]], x[["density"]], xout = at)$y
   # The density is zero beyond the tabulated values
   out[is.na(out) & !is.na(at)] <- 0
@@ -174,7 +174,7 @@ density.dist_density <- function(x, at, ...){
 }
 
 #' @export
-cdf.dist_density <- function(x, q, ...){
+cdf.dist_pdf <- function(x, q, ...){
   d <- density_intervals(x)
   n <- length(d$x)
 
@@ -199,7 +199,7 @@ cdf.dist_density <- function(x, q, ...){
 }
 
 #' @export
-quantile.dist_density <- function(x, p, ...){
+quantile.dist_pdf <- function(x, p, ...){
   d <- density_intervals(x)
   n <- length(d$x)
 
@@ -228,12 +228,12 @@ quantile.dist_density <- function(x, p, ...){
 }
 
 #' @export
-generate.dist_density <- function(x, times, ...){
+generate.dist_pdf <- function(x, times, ...){
   quantile(x, stats::runif(times), ...)
 }
 
 #' @export
-mean.dist_density <- function(x, ...){
+mean.dist_pdf <- function(x, ...){
   d <- density_intervals(x)
   n <- length(d$x)
   f1 <- d$f[-n]
@@ -242,7 +242,7 @@ mean.dist_density <- function(x, ...){
 }
 
 #' @export
-covariance.dist_density <- function(x, ...){
+covariance.dist_pdf <- function(x, ...){
   d <- density_intervals(x)
   n <- length(d$x)
   x1 <- d$x[-n]
@@ -257,7 +257,7 @@ covariance.dist_density <- function(x, ...){
 }
 
 #' @export
-support.dist_density <- function(x, ...) {
+support.dist_pdf <- function(x, ...) {
   f <- x[["density"]]
   new_support_region(
     list(double()),
