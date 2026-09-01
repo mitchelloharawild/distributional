@@ -65,6 +65,36 @@ test_that("moments of piecewise linear densities are exact", {
   expect_equal(variance(sym), 1/6)
 })
 
+test_that("skewness and kurtosis of piecewise linear densities are exact", {
+  # Uniform on [0,1]
+  unif <- dist_density(list(c(0, 1)), list(c(1, 1)))
+  expect_equal(skewness(unif), 0)
+  expect_equal(kurtosis(unif), -6/5)
+
+  # Triangular on [0,2] with the peak at 0, compared against its closed form
+  tri <- dist_density(list(c(0, 2)), list(c(1, 0)))
+  expect_equal(skewness(tri), 2 * sqrt(2) / 5)
+  # Excess kurtosis of any (non-degenerate) triangular distribution is -3/5
+  expect_equal(kurtosis(tri), -3/5)
+
+  # Symmetric triangular on [0,2] has no skew, but the same kurtosis
+  sym <- dist_density(list(c(0, 1, 2)), list(c(0, 1, 0)))
+  expect_equal(skewness(sym), 0)
+  expect_equal(kurtosis(sym), -3/5)
+
+  # Cross-check against a fine grid approximation of a normal and an
+  # exponential, whose skewness and kurtosis are known exactly
+  at <- seq(-6, 6, by = 0.005)
+  norm <- dist_density(list(at), list(dnorm(at)))
+  expect_equal(skewness(norm), 0, tolerance = 1e-5)
+  expect_equal(kurtosis(norm), 0, tolerance = 1e-5)
+
+  at <- seq(0, 30, by = 0.005)
+  exp <- dist_density(list(at), list(dexp(at)))
+  expect_equal(skewness(exp), 2, tolerance = 1e-4)
+  expect_equal(kurtosis(exp), 6, tolerance = 1e-4)
+})
+
 test_that("the quantile function inverts the cdf", {
   at <- seq(-6, 6, by = 0.005)
   dist <- vec_data(dist_density(list(at), list(dnorm(at))))[[1]]
