@@ -71,13 +71,46 @@ quadratic within the interval containing the requested probability.
 where \eqn{m_i = w_i (f_i + f_{i+1}) / 2} is the probability of the
 \eqn{i}th interval.
 
-\strong{Variance}: Computed exactly as \eqn{E(X^2) - E(X)^2}, where
+\strong{Variance}, \strong{skewness}, and \strong{excess kurtosis}: Computed
+from the central moments \eqn{\mu_k = E[(X - E(X))^k]}.
+Writing \eqn{c_i = x_i - E(X)},
 
 \deqn{
-    E(X^2) = \sum_{i=1}^{n-1} \left[ x_i^2 m_i + \frac{x_i w_i^2 (f_i + 2 f_{i+1})}{3} + \frac{w_i^3 (f_i + 3 f_{i+1})}{12} \right]
+    \mu_2 = \sum_{i=1}^{n-1} \left[
+      c_i^2 m_i + \frac{c_i w_i^2 (f_i + 2 f_{i+1})}{3} +
+      \frac{w_i^3 (f_i + 3 f_{i+1})}{12}
+    \right]
   }{
-    E(X^2) = sum(x_i^2 m_i + x_i w_i^2 (f_i + 2 f_{i+1})/3 + w_i^3 (f_i + 3 f_{i+1})/12)
+    \mu_2 = sum(c_i^2 m_i + c_i w_i^2 (f_i + 2 f_{i+1})/3 +
+      w_i^3 (f_i + 3 f_{i+1})/12)
   }
+
+\deqn{
+    \mu_3 = \sum_{i=1}^{n-1} \left[
+      c_i^3 m_i + \frac{c_i^2 w_i^2 (f_i + 2 f_{i+1})}{2} +
+      \frac{c_i w_i^3 (f_i + 3 f_{i+1})}{4} +
+      \frac{w_i^4 (f_i + 4 f_{i+1})}{20}
+    \right]
+  }{
+    \mu_3 = sum(c_i^3 m_i + c_i^2 w_i^2 (f_i + 2 f_{i+1})/2 +
+      c_i w_i^3 (f_i + 3 f_{i+1})/4 + w_i^4 (f_i + 4 f_{i+1})/20)
+  }
+
+\deqn{
+    \mu_4 = \sum_{i=1}^{n-1} \left[
+      c_i^4 m_i + \frac{2 c_i^3 w_i^2 (f_i + 2 f_{i+1})}{3} +
+      \frac{c_i^2 w_i^3 (f_i + 3 f_{i+1})}{2} +
+      \frac{c_i w_i^4 (f_i + 4 f_{i+1})}{5} +
+      \frac{w_i^5 (f_i + 5 f_{i+1})}{30}
+    \right]
+  }{
+    \mu_4 = sum(c_i^4 m_i + 2 c_i^3 w_i^2 (f_i + 2 f_{i+1})/3 +
+      c_i^2 w_i^3 (f_i + 3 f_{i+1})/2 + c_i w_i^4 (f_i + 4 f_{i+1})/5 +
+      w_i^5 (f_i + 5 f_{i+1})/30)
+  }
+
+Variance is \eqn{\mu_2}, skewness is \eqn{\mu_3 / \mu_2^{3/2}}, and
+excess kurtosis is \eqn{\mu_4 / \mu_2^2 - 3}.
 }
 \examples{
 # A distribution given by its density over a grid
@@ -87,6 +120,8 @@ dist <- dist_density(list(at), list(dnorm(at)))
 dist
 mean(dist)
 variance(dist)
+skewness(dist)
+kurtosis(dist)
 density(dist, 0)
 cdf(dist, 1.96)
 quantile(dist, 0.975)

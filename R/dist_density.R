@@ -63,13 +63,46 @@
 #'   where \eqn{m_i = w_i (f_i + f_{i+1}) / 2} is the probability of the
 #'   \eqn{i}th interval.
 #'
-#'   **Variance**: Computed exactly as \eqn{E(X^2) - E(X)^2}, where
+#'   **Variance**, **skewness**, and **excess kurtosis**: Computed 
+#'   from the central moments \eqn{\mu_k = E[(X - E(X))^k]}.
+#'   Writing \eqn{c_i = x_i - E(X)},
 #'
 #'   \deqn{
-#'     E(X^2) = \sum_{i=1}^{n-1} \left[ x_i^2 m_i + \frac{x_i w_i^2 (f_i + 2 f_{i+1})}{3} + \frac{w_i^3 (f_i + 3 f_{i+1})}{12} \right]
+#'     \mu_2 = \sum_{i=1}^{n-1} \left[
+#'       c_i^2 m_i + \frac{c_i w_i^2 (f_i + 2 f_{i+1})}{3} +
+#'       \frac{w_i^3 (f_i + 3 f_{i+1})}{12}
+#'     \right]
 #'   }{
-#'     E(X^2) = sum(x_i^2 m_i + x_i w_i^2 (f_i + 2 f_{i+1})/3 + w_i^3 (f_i + 3 f_{i+1})/12)
+#'     \mu_2 = sum(c_i^2 m_i + c_i w_i^2 (f_i + 2 f_{i+1})/3 +
+#'       w_i^3 (f_i + 3 f_{i+1})/12)
 #'   }
+#'
+#'   \deqn{
+#'     \mu_3 = \sum_{i=1}^{n-1} \left[
+#'       c_i^3 m_i + \frac{c_i^2 w_i^2 (f_i + 2 f_{i+1})}{2} +
+#'       \frac{c_i w_i^3 (f_i + 3 f_{i+1})}{4} +
+#'       \frac{w_i^4 (f_i + 4 f_{i+1})}{20}
+#'     \right]
+#'   }{
+#'     \mu_3 = sum(c_i^3 m_i + c_i^2 w_i^2 (f_i + 2 f_{i+1})/2 +
+#'       c_i w_i^3 (f_i + 3 f_{i+1})/4 + w_i^4 (f_i + 4 f_{i+1})/20)
+#'   }
+#'
+#'   \deqn{
+#'     \mu_4 = \sum_{i=1}^{n-1} \left[
+#'       c_i^4 m_i + \frac{2 c_i^3 w_i^2 (f_i + 2 f_{i+1})}{3} +
+#'       \frac{c_i^2 w_i^3 (f_i + 3 f_{i+1})}{2} +
+#'       \frac{c_i w_i^4 (f_i + 4 f_{i+1})}{5} +
+#'       \frac{w_i^5 (f_i + 5 f_{i+1})}{30}
+#'     \right]
+#'   }{
+#'     \mu_4 = sum(c_i^4 m_i + 2 c_i^3 w_i^2 (f_i + 2 f_{i+1})/3 +
+#'       c_i^2 w_i^3 (f_i + 3 f_{i+1})/2 + c_i w_i^4 (f_i + 4 f_{i+1})/5 +
+#'       w_i^5 (f_i + 5 f_{i+1})/30)
+#'   }
+#'
+#'   Variance is \eqn{\mu_2}, skewness is \eqn{\mu_3 / \mu_2^{3/2}}, and
+#'   excess kurtosis is \eqn{\mu_4 / \mu_2^2 - 3}.
 #'
 #' @seealso [dist_quantile()], [stats::density()]
 #'
@@ -81,6 +114,8 @@
 #' dist
 #' mean(dist)
 #' variance(dist)
+#' skewness(dist)
+#' kurtosis(dist)
 #' density(dist, 0)
 #' cdf(dist, 1.96)
 #' quantile(dist, 0.975)
@@ -232,28 +267,64 @@ generate.dist_pdf <- function(x, times, ...){
   quantile(x, stats::runif(times), ...)
 }
 
-#' @export
-mean.dist_pdf <- function(x, ...){
-  d <- density_intervals(x)
-  n <- length(d$x)
-  f1 <- d$f[-n]
-  f2 <- d$f[-1L]
-  sum(d$x[-n] * diff(d$cdf) + d$w^2 * (f1 / 6 + f2 / 3))
-}
-
-#' @export
-covariance.dist_pdf <- function(x, ...){
+# The mean and central moments E((X-mean)^2), ..., E((X-mean)^order) of a
+# piecewise linear density, computed together in one pass up to the
+# requested `order`. Using central moments for numerical stability.
+density_moments <- function(x, order = 4L) {
   d <- density_intervals(x)
   n <- length(d$x)
   x1 <- d$x[-n]
+  w <- d$w
   f1 <- d$f[-n]
   f2 <- d$f[-1L]
-  ex2 <- sum(
-    x1^2 * diff(d$cdf) +
-      x1 * d$w^2 * (f1 + 2 * f2) / 3 +
-      d$w^3 * (f1 + 3 * f2) / 12
+  m0 <- diff(d$cdf)
+
+  a1 <- w^2 * (f1 + 2 * f2)
+  mean <- sum(x1 * m0 + a1 / 6)
+  if (order < 2L) {
+    return(list(mean = mean))
+  }
+
+  xc <- x1 - mean
+  a2 <- w^3 * (f1 + 3 * f2)
+  m2 <- sum(xc^2 * m0 + xc * a1 / 3 + a2 / 12)
+  if (order < 3L) {
+    return(list(mean = mean, m2 = m2))
+  }
+
+  a3 <- w^4 * (f1 + 4 * f2)
+  m3 <- sum(xc^3 * m0 + xc^2 * a1 / 2 + xc * a2 / 4 + a3 / 20)
+  if (order < 4L) {
+    return(list(mean = mean, m2 = m2, m3 = m3))
+  }
+
+  a4 <- w^5 * (f1 + 5 * f2)
+  m4 <- sum(
+    xc^4 * m0 + 2 * xc^3 * a1 / 3 + xc^2 * a2 / 2 + xc * a3 / 5 + a4 / 30
   )
-  ex2 - mean(x)^2
+  list(mean = mean, m2 = m2, m3 = m3, m4 = m4)
+}
+
+#' @export
+mean.dist_pdf <- function(x, ...) {
+  density_moments(x, order = 1L)$mean
+}
+
+#' @export
+covariance.dist_pdf <- function(x, ...) {
+  density_moments(x, order = 2L)$m2
+}
+
+#' @export
+skewness.dist_pdf <- function(x, ...) {
+  m <- density_moments(x, order = 3L)
+  m$m3 / m$m2^1.5
+}
+
+#' @export
+kurtosis.dist_pdf <- function(x, ...) {
+  m <- density_moments(x, order = 4L)
+  m$m4 / m$m2^2 - 3
 }
 
 #' @export
