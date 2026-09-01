@@ -21,6 +21,10 @@
 
 * Added `recursive` option for `parameters()`, which recursively extracts the
   parameters of inner distributions to return a flat data frame (#161).
+
+* Added `recursive` option for `family()`, which identifies the families of
+  distributions embedded within another (e.g. `dist_mixture()`) returning a
+  nested list describing the full family tree (#110).
   
 ## Breaking changes
 

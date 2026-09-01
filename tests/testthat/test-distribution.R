@@ -93,3 +93,72 @@ test_that("parameters(recursive = TRUE) handles multiple distribution-valued par
   expect_equal(p$mid, 99)
   expect_equal(p$b.l, 3)
 })
+
+test_that("family() returns the outer family name by default", {
+  dist <- c(dist_normal(1:2), dist_poisson(3))
+  expect_identical(family(dist), c("normal", "normal", "poisson"))
+
+  mix <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))
+  expect_identical(family(mix), "mixture")
+})
+
+test_that("family(recursive = TRUE) leaves simple distributions as scalars", {
+  dist <- c(dist_normal(1:2), dist_poisson(3))
+  expect_identical(family(dist, recursive = TRUE), list("normal", "normal", "poisson"))
+})
+
+test_that("family(recursive = TRUE) expands a single embedded distribution", {
+  dist <- dist_inflated(dist_negative_binomial(10, 0.6), prob = 0.5)
+  fam <- family(dist, recursive = TRUE)
+
+  expect_identical(fam, list(list(family = "inflated", dist = "negbin")))
+})
+
+test_that("family(recursive = TRUE) expands a list of embedded distributions", {
+  mix <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))
+  fam <- family(mix, recursive = TRUE)
+
+  expect_identical(
+    fam,
+    list(list(family = "mixture", dist = list("normal", "normal")))
+  )
+})
+
+test_that("family(recursive = TRUE) fully expands multiple levels of nesting", {
+  base <- dist_negative_binomial(10, 0.6)
+  shifted <- dist_transformed(base, function(x) x + 1, function(x) x - 1)
+  dist <- dist_inflated(shifted, prob = 0.5, x = 0)
+
+  fam <- family(dist, recursive = TRUE)
+
+  expect_identical(
+    fam,
+    list(list(
+      family = "inflated",
+      dist = list(family = "transformed", dist = "negbin")
+    ))
+  )
+})
+
+test_that("family(recursive = TRUE) works with vectorised and mixed distributions", {
+  mix <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2), weights = c(0.3, 0.7))
+  dist <- c(mix, dist_poisson(3))
+
+  fam <- family(dist, recursive = TRUE)
+
+  expect_length(fam, 2L)
+  expect_identical(fam[[1]], list(family = "mixture", dist = list("normal", "normal")))
+  expect_identical(fam[[2]], "poisson")
+})
+
+test_that("family(recursive = TRUE) handles multiple distribution-valued fields", {
+  dist <- new_dist(
+    a = dist_negative_binomial(10, 0.6),
+    mid = 99,
+    b = dist_poisson(3),
+    class = "dist_test_two_nested"
+  )
+  fam <- family(dist, recursive = TRUE)
+
+  expect_identical(fam, list(list(family = "test_two_nested", a = "negbin", b = "poisson")))
+})
