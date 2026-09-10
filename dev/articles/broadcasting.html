@@ -171,6 +171,10 @@ functions of base R.</p>
 <p>A single point is evaluated for every distribution, giving one value
 each. The result is an atomic vector with the same length as the
 distributions:</p>
+<div class="float">
+<img src="diagrams/broadcast-scalar.svg" style="width:100.0%" alt="A scalar argument is broadcast to every distribution."><div class="figcaption">A scalar argument is broadcast to every
+distribution.</div>
+</div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.3989423 0.0647588</span></span></code></pre></div>
@@ -181,6 +185,10 @@ distributions:</p>
 <p>A bare vector is a set of points, and every point is evaluated
 against every distribution. Two distributions and two points give all
 four values, as one element per distribution:</p>
+<div class="float">
+<img src="diagrams/broadcast-vector.svg" style="width:100.0%" alt="Each element of a vector argument is mapped onto every distribution."><div class="figcaption">Each element of a vector argument is mapped onto
+every distribution.</div>
+</div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
@@ -234,6 +242,11 @@ only at <code>1</code>.</p>
 <p>The result is a data frame with one row per distribution and one
 column per list element. The list elements are recycled against the
 distributions, so a single value is used for every distribution:</p>
+<div class="float">
+<img src="diagrams/broadcast-list.svg" style="width:100.0%" alt="Each element of a list argument is recycled and applied to its corresponding distribution by index position rather than mapped onto every distribution."><div class="figcaption">Each element of a list argument is recycled and
+applied to its corresponding distribution by index position rather than
+mapped onto every distribution.</div>
+</div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cdf.html">cdf</a></span><span class="op">(</span><span class="va">dist</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="fl">0</span>, varying <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       fixed   varying</span></span>
