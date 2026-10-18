@@ -167,8 +167,8 @@ median.dist_default <- function(x, na.rm = FALSE, ...){
 
 #' @export
 hilo.dist_default <- function(x, size = 95, ...){
-  lower <- quantile(x, 0.5-size/200, ...)
-  upper <- quantile(x, 0.5+size/200, ...)
+  lower <- quantile(x, (100-size)/200, ...)
+  upper <- quantile(x, (100+size)/200, ...)
   if(is.matrix(lower) && is.matrix(upper)) {
     return(
       vctrs::new_data_frame(split(
@@ -185,8 +185,8 @@ hdr.dist_default <- function(x, size = 95, n = 4096, ...){
   if (has_symmetry(x)) {
     return(
       new_hdr(
-        lower = list(quantile(x, 0.5 - size/200)),
-        upper = list(quantile(x, 0.5 + size/200)),
+        lower = list(quantile(x, (100 - size)/200)),
+        upper = list(quantile(x, (100 + size)/200)),
         size = size
       )
     )

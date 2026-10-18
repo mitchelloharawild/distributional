@@ -26,3 +26,9 @@ test_that("hilo", {
   expect_equal(-hl, hl)
   expect_equal(-3*hl, hl/(1/3))
 })
+
+test_that("hilo() tail probabilities are exact at quantile boundaries", {
+  p <- dist_percentile(list(c(1, 2, 4)), percentile = list(c(10, 50, 90)))
+  expect_equal(hilo(p, 80), new_hilo(1, 4, 80))
+  expect_false(anyNA(unlist(vec_data(hilo(p, 80)))))
+})
