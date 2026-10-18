@@ -162,3 +162,15 @@ test_that("family(recursive = TRUE) handles multiple distribution-valued fields"
 
   expect_identical(fam, list(list(family = "test_two_nested", a = "negbin", b = "poisson")))
 })
+
+test_that("pillar_shaft() min_width is not inflated by padded parameters", {
+  dist <- c(dist_normal(200.123456, 12.3456), dist_gamma(1.2345, 3.21))
+  shaft <- pillar::pillar_shaft(dist)
+
+  expect_lte(attr(shaft, "min_width"), attr(shaft, "width"))
+  expect_false(any(grepl("  ", shaft$dist_min)))
+
+  out <- format(pillar::pillar(dist, "d"), width = 15)
+  expect_true(any(grepl("<dist>", out, fixed = TRUE)))
+  expect_true(any(grepl("N(200, 152)", out, fixed = TRUE)))
+})

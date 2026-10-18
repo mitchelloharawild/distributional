@@ -45,7 +45,7 @@ format.distribution <- function(x, ...){
 #' @export
 pillar_shaft.distribution <- function(x, ...) {
   dist = format(x)
-  dist_min = format(x, width = 30)
+  dist_min = format(x, digits = 1)
 
   pillar::new_pillar_shaft(
     list(dist = dist,
