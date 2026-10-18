@@ -252,3 +252,11 @@ test_that("non-monotonic transformations warn and return NA (#129)", {
   expect_warning(p <- cdf(d, c(1, 2)))
   expect_true(all(is.na(unlist(p))))
 })
+
+test_that("Ops between unrelated non-transformed distributions error", {
+  expect_error(dist_poisson(2) * dist_gamma(2, 1), "not supported")
+  expect_error(dist_poisson(2) / dist_gamma(2, 1), "not supported")
+  # Transformations of the same underlying distribution are still combined
+  x <- dist_gamma(2, 1)
+  expect_s3_class(vec_data(exp(x) * exp(x))[[1]], "dist_transformed")
+})
