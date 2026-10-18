@@ -17,9 +17,11 @@ quantile.dist_default <- function(x, p, ...){
   #   sprintf("The distribution class `%s` does not support `quantile()`",
   #           class(x)[1])
   # )
-  stats::optim(0, function(pos){
-    (p - cdf(x, pos, ...))^2
-  })$par
+  vapply(p, function(p) {
+    stats::optim(0, function(pos){
+      (p - cdf(x, pos, ...))^2
+    })$par
+  }, numeric(1L))
 }
 #' @export
 log_quantile.dist_default <- function(x, p, ...){
