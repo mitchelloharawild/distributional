@@ -35,6 +35,9 @@ cdf.dist_default <- function(x, q, times = 1e5,...){
     # Turn into matrix
     q <- do.call(rbind, q)
   }
+  if(!is.matrix(r)) {
+    return(vapply(q, function(q) mean(r <= q), numeric(1L)))
+  }
   out <- numeric(NROW(q))
   for(i in seq_along(out)) {
     out[i] <- mean(apply(sweep(r, 2, q[i,]) < 0, 1, all))

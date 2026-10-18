@@ -14,3 +14,11 @@ test_that("quantile.dist_default() is vectorised over p", {
   expect_length(q, 2)
   expect_equal(q, stats::qexp(c(0.1, 0.9)), tolerance = 1e-3)
 })
+
+test_that("cdf.dist_default() works for univariate generate()", {
+  x <- new_test_dist("dist_test_generate_only", list(
+    generate = function(x, times, ...) stats::rexp(times)
+  ))
+  set.seed(1)
+  expect_equal(cdf(x, c(1, 2))[[1]], stats::pexp(c(1, 2)), tolerance = 1e-2)
+})
