@@ -98,3 +98,36 @@ test_that("support of degenerate parameterisations", {
       "{0,1,...,0}", "[2,2]", "[2,2]", "(-Inf,3]", "[0,Inf)")
   )
 })
+
+test_that("support of truncated, inflated and missing distributions", {
+  s <- support(c(
+    dist_truncated(dist_poisson(3), 1, 5),
+    dist_truncated(dist_poisson(3), 0.5, 5.5),
+    dist_truncated(dist_normal(), 0),
+    dist_truncated(dist_gamma(2, 1), -1, 3),
+    dist_truncated(dist_beta(2, 2), upper = 2),
+    dist_truncated(dist_truncated(dist_poisson(3), lower = 1), upper = 4)
+  ))
+  expect_equal(
+    unname(format(s)),
+    c("{1,2,...,5}", "{1,2,...,5}", "[0,Inf)", "(0,3]", "(0,1)", "{1,2,...,4}")
+  )
+
+  s <- support(c(
+    dist_inflated(dist_poisson(3), 0.2),
+    dist_inflated(dist_poisson(3), 0.2, x = 0.5),
+    dist_inflated(dist_normal(), 0.2),
+    dist_inflated(dist_gamma(2, 1), 0.2, x = -1),
+    dist_inflated(dist_poisson(3), 0, x = -2)
+  ))
+  expect_equal(
+    unname(format(s)),
+    c("N0", "[0,Inf)", "R", "[-1,Inf)", "N0")
+  )
+  expect_true(is.integer(field(s, "x")[[1]]))
+  expect_true(is.double(field(s, "x")[[2]]))
+
+  s <- support(dist_missing())
+  expect_equal(field(s, "lim"), list(c(NA_real_, NA_real_)))
+  expect_true(is.double(field(s, "x")[[1]]))
+})

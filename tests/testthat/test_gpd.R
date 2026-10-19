@@ -55,3 +55,26 @@ test_that("GPD", {
     tolerance = 0.01
   )
 })
+
+test_that("GPD support and density agree at the upper bound", {
+  dist <- dist_gpd(0.1, 0.3, c(-0.5, -1, -2, 0.3))
+  expect_equal(
+    format(support(dist)),
+    c("[0.1,0.7)", "[0.1,0.4]", "[0.1,0.25]", "[0.1,Inf)")
+  )
+  upper <- quantile(dist, 1)
+  expect_equal(upper[1:3], vapply(field(support(dist), "lim")[1:3], `[`, numeric(1L), 2L))
+  # Density at the upper bound is 0, 1/scale and Inf for shape -0.5, -1, -2
+  expect_equal(density(dist[1], upper[1]), 0)
+  expect_equal(density(dist[2], upper[2]), 1 / 0.3)
+  expect_equal(density(dist[3], upper[3]), Inf)
+  # Shape = -1 is uniform on [location, location + scale]
+  expect_equal(
+    density(dist_gpd(0, 1, -1), c(-0.1, 0, 0.5, 1, 1.1)),
+    list(c(0, 1, 1, 1, 0))
+  )
+  # Interior values match the closed form
+  at <- c(0.15, 0.2, 0.24)
+  z <- (at - 0.1) / 0.3
+  expect_equal(density(dist[3], at), list((1 - 2 * z)^(1 / 2 - 1) / 0.3))
+})

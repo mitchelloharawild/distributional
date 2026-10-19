@@ -140,3 +140,10 @@ test_that("Truncated continuous distributions are unaffected by the lower bound 
   expect_equal(cdf(dist, 0), 1)
   expect_equal(density(dist, -1), 2 * dnorm(-1))
 })
+
+test_that("Truncated zero-inflated discrete distributions keep the lower bound mass", {
+  dist <- dist_truncated(dist_inflated(dist_poisson(3), 0.2), lower = 1)
+  expect_equal(sum(density(dist, 0:100)[[1]]), 1)
+  expect_equal(density(dist, 1:3), list(dpois(1:3, 3) / (1 - dpois(0, 3))))
+  expect_equal(quantile(dist, 0), 1)
+})

@@ -150,15 +150,29 @@ log_density.dist_gpd <- function(x, at, ...) {
   if (x[["shape"]] == 0) {
     pdf <- -z
   } else {
-    xx <- 1 + x[["shape"]] * z
-    xx[xx <= 0] <- NA_real_
-    pdf <- -(1 / x[["shape"]] + 1) * log(xx)
+    xx <- if (x[["shape"]] < 0) {
+      # Equivalent to 1 + shape * z, but exactly 0 at the upper bound (as
+      # computed by support() and quantile(x, 1)) and without cancellation
+      # near it. Values beyond the bound are set to -Inf below.
+      upper <- x[["location"]] - x[["scale"]] / x[["shape"]]
+      pmax(-x[["shape"]] * (upper - at) / x[["scale"]], 0)
+    } else {
+      1 + x[["shape"]] * z
+    }
+    pdf <- if (x[["shape"]] == -1) {
+      # Uniform, avoiding 0 * log(0) at the upper bound
+      rep_len(0, length(xx))
+    } else {
+      -(1 / x[["shape"]] + 1) * log(xx)
+    }
     pdf[is.na(pdf)] <- -Inf
   }
   if (x[["shape"]] >= 0) {
     pdf[z < 0] <- -Inf
   } else {
-    pdf[z < 0 | z > -1 / x[["shape"]]] <- -Inf
+    # Compare on the data scale, as support() and quantile(x, 1) compute the
+    # upper bound, so the bound itself is in the support
+    pdf[z < 0 | at > upper] <- -Inf
   }
   pdf - log(x[["scale"]])
 }
@@ -230,15 +244,17 @@ support.dist_gpd <- function(x, ...) {
   scale <- x[["scale"]]
   
   # Determine limits based on shape parameter
-  if (shape >= 0) {
+  if (!isTRUE(shape < 0)) {
     # Support: [location, Inf)
     lims <- list(c(location, Inf))
     closed <- list(c(TRUE, FALSE))
   } else {
     # Support: [location, location - scale/shape]
+    # The density at the upper bound is 0 for -1 < shape < 0, 1/scale for
+    # shape = -1, and infinite for shape < -1
     upper <- location - scale / shape
     lims <- list(c(location, upper))
-    closed <- list(c(TRUE, TRUE))
+    closed <- list(c(TRUE, shape <= -1))
   }
   
   x_proto <- list(vctrs::vec_init(numeric(), n = 0L))

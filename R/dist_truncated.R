@@ -152,6 +152,32 @@ cdf_truncated_lower <- function(dist, lower) {
 }
 
 #' @export
+support.dist_truncated <- function(x, ...){
+  sup <- support(x[["dist"]])
+  proto <- field(sup, "x")[[1L]]
+  lim <- field(sup, "lim")[[1L]]
+  closed <- field(sup, "closed")[[1L]]
+  lower <- x[["lower"]]
+  upper <- x[["upper"]]
+  # The smallest and largest attainable values of an integer supported distribution
+  if (is.integer(proto) || is.logical(proto)) {
+    lower <- ceiling(lower)
+    upper <- floor(upper)
+  }
+  # Truncation bounds inside the base support are attained, as the support of
+  # the truncated distribution is the closed interval [lower, upper]
+  if (is.finite(lower) && (is.na(lim[1]) || lower > lim[1])) {
+    lim[1] <- lower
+    closed[1] <- TRUE
+  }
+  if (is.finite(upper) && (is.na(lim[2]) || upper < lim[2])) {
+    lim[2] <- upper
+    closed[2] <- TRUE
+  }
+  new_support_region(list(proto), list(lim), list(closed))
+}
+
+#' @export
 density.dist_truncated <- function(x, at, ...){
   in_lim <- at >= x[["lower"]] & at <= x[["upper"]]
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])

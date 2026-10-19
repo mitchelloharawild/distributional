@@ -8,12 +8,22 @@
   `dist_binomial(n, 0)`, `dist_normal(mu, 0)` and `dist_uniform(a, a)`) now
   report a single point of support, and the closed upper bound of
   `dist_gev()` with `shape <= -1` is now identified.
+* Added `support()` methods for `dist_truncated()` (the base support
+  intersected with `[lower, upper]`), `dist_inflated()` (the base support
+  widened to include the inflation point, keeping integer support when
+  inflating at an integer) and `dist_missing()`.
 
 ## Bug fixes
 
 * `dist_truncated()` now keeps the probability mass at the `lower` bound of
   discrete distributions, so that the truncated `density()`, `cdf()` and
   `quantile()` respect the documented closed support `[lower, upper]`.
+  This now includes truncated zero-inflated count distributions.
+* `dist_gpd()` with `shape < 0` now has a consistent upper bound: `support()`
+  only includes it when the density there is positive (`shape <= -1`), and
+  `density()` now returns `1/scale` (`shape = -1`) or `Inf` (`shape < -1`)
+  there instead of 0. The density near the upper bound is also computed
+  without floating point cancellation.
 
 # distributional 0.9.0
 

@@ -114,6 +114,11 @@ generate.dist_na <- function(x, times, ...){
 }
 
 #' @export
+support.dist_na <- function(x, ...) {
+  new_support_region(list(numeric()), list(c(NA_real_, NA_real_)), list(c(FALSE, FALSE)))
+}
+
+#' @export
 mean.dist_na <- function(x, ...) NA_real_
 
 #' @export

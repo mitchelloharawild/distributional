@@ -160,6 +160,39 @@ generate.dist_inflated <- function(x, times, ...){
 }
 
 #' @export
+support.dist_inflated <- function(x, ...){
+  sup <- support(x[["dist"]])
+  proto <- field(sup, "x")[[1L]]
+  x_inf <- x[["x"]]
+  # The support is only extended for univariate numeric inflation
+  if (!is.numeric(x_inf) || is.matrix(proto) || !(is.numeric(proto) || is.logical(proto))) {
+    return(NextMethod())
+  }
+  # Integer support is kept when inflating at an integer
+  if (is.integer(proto) || is.logical(proto)) {
+    proto <- if (isTRUE(x_inf == round(x_inf))) integer() else numeric()
+  }
+  lim <- field(sup, "lim")[[1L]]
+  closed <- field(sup, "closed")[[1L]]
+  p <- x[["p"]]
+  if (p == 1) {
+    lim <- c(x_inf, x_inf)
+    closed <- c(TRUE, TRUE)
+  } else if (p > 0) {
+    # The inflation point is attained, widening the base support if needed
+    if (isTRUE(x_inf <= lim[1])) {
+      lim[1] <- x_inf
+      closed[1] <- TRUE
+    }
+    if (isTRUE(x_inf >= lim[2])) {
+      lim[2] <- x_inf
+      closed[2] <- TRUE
+    }
+  }
+  new_support_region(list(proto), list(lim), list(closed))
+}
+
+#' @export
 mean.dist_inflated <- function(x, ...){
   # Can't compute if inflation value is not numeric
   if(!vec_is(x[["x"]], numeric())) return(NA_real_)
