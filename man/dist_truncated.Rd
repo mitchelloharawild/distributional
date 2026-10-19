@@ -24,7 +24,11 @@ We recommend reading this documentation on \href{https://pkg.mitchelloharawild.c
 In the following, let \eqn{X} be a truncated random variable with
 underlying distribution \eqn{Y}, truncation bounds \code{lower} = \eqn{a} and
 \code{upper} = \eqn{b}, where \eqn{F_Y(x)} is the c.d.f. of \eqn{Y} and
-\eqn{f_Y(x)} is the p.d.f. of \eqn{Y}.
+\eqn{f_Y(x)} is the p.d.f. of \eqn{Y}. Let \eqn{F_Y(a^-) = P(Y < a)} be
+the left limit of the c.d.f. at \eqn{a}, so that the mass at the lower
+bound is retained. For continuous \eqn{Y} this equals \eqn{F_Y(a)}, and
+for \eqn{Y} supported on the integers it is
+\eqn{F_Y(\lceil a \rceil - 1)}.
 
 \strong{Support}: \eqn{[a, b]}
 
@@ -48,11 +52,11 @@ standard Normal c.d.f.
 
 \deqn{
     f(x) = \begin{cases}
-      \frac{f_Y(x)}{F_Y(b) - F_Y(a)} & \text{if } a \le x \le b \\
+      \frac{f_Y(x)}{F_Y(b) - F_Y(a^-)} & \text{if } a \le x \le b \\
       0 & \text{otherwise}
     \end{cases}
   }{
-    f(x) = f_Y(x) / (F_Y(b) - F_Y(a)) if a <= x <= b, 0 otherwise
+    f(x) = f_Y(x) / (F_Y(b) - F_Y(a-)) if a <= x <= b, 0 otherwise
   }
 
 \strong{Cumulative distribution function (c.d.f)}:
@@ -60,19 +64,19 @@ standard Normal c.d.f.
 \deqn{
     F(x) = \begin{cases}
       0 & \text{if } x < a \\
-      \frac{F_Y(x) - F_Y(a)}{F_Y(b) - F_Y(a)} & \text{if } a \le x \le b \\
+      \frac{F_Y(x) - F_Y(a^-)}{F_Y(b) - F_Y(a^-)} & \text{if } a \le x \le b \\
       1 & \text{if } x > b
     \end{cases}
   }{
-    F(x) = 0 if x < a, (F_Y(x) - F_Y(a)) / (F_Y(b) - F_Y(a)) if a <= x <= b, 1 if x > b
+    F(x) = 0 if x < a, (F_Y(x) - F_Y(a-)) / (F_Y(b) - F_Y(a-)) if a <= x <= b, 1 if x > b
   }
 
 \strong{Quantile function}:
 
 \deqn{
-    Q(p) = F_Y^{-1}(F_Y(a) + p(F_Y(b) - F_Y(a)))
+    Q(p) = F_Y^{-1}(F_Y(a^-) + p(F_Y(b) - F_Y(a^-)))
   }{
-    Q(p) = F_Y^(-1)(F_Y(a) + p(F_Y(b) - F_Y(a)))
+    Q(p) = F_Y^(-1)(F_Y(a-) + p(F_Y(b) - F_Y(a-)))
   }
 
 clamped to the interval \eqn{[a, b]}.

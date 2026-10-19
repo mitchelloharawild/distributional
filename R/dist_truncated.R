@@ -16,7 +16,11 @@
 #'   In the following, let \eqn{X} be a truncated random variable with 
 #'   underlying distribution \eqn{Y}, truncation bounds `lower` = \eqn{a} and 
 #'   `upper` = \eqn{b}, where \eqn{F_Y(x)} is the c.d.f. of \eqn{Y} and 
-#'   \eqn{f_Y(x)} is the p.d.f. of \eqn{Y}.
+#'   \eqn{f_Y(x)} is the p.d.f. of \eqn{Y}. Let \eqn{F_Y(a^-) = P(Y < a)} be
+#'   the left limit of the c.d.f. at \eqn{a}, so that the mass at the lower
+#'   bound is retained. For continuous \eqn{Y} this equals \eqn{F_Y(a)}, and
+#'   for \eqn{Y} supported on the integers it is
+#'   \eqn{F_Y(\lceil a \rceil - 1)}.
 #'
 #'   **Support**: \eqn{[a, b]}
 #'
@@ -40,11 +44,11 @@
 #'
 #'   \deqn{
 #'     f(x) = \begin{cases}
-#'       \frac{f_Y(x)}{F_Y(b) - F_Y(a)} & \text{if } a \le x \le b \\
+#'       \frac{f_Y(x)}{F_Y(b) - F_Y(a^-)} & \text{if } a \le x \le b \\
 #'       0 & \text{otherwise}
 #'     \end{cases}
 #'   }{
-#'     f(x) = f_Y(x) / (F_Y(b) - F_Y(a)) if a <= x <= b, 0 otherwise
+#'     f(x) = f_Y(x) / (F_Y(b) - F_Y(a-)) if a <= x <= b, 0 otherwise
 #'   }
 #'
 #'   **Cumulative distribution function (c.d.f)**:
@@ -52,19 +56,19 @@
 #'   \deqn{
 #'     F(x) = \begin{cases}
 #'       0 & \text{if } x < a \\
-#'       \frac{F_Y(x) - F_Y(a)}{F_Y(b) - F_Y(a)} & \text{if } a \le x \le b \\
+#'       \frac{F_Y(x) - F_Y(a^-)}{F_Y(b) - F_Y(a^-)} & \text{if } a \le x \le b \\
 #'       1 & \text{if } x > b
 #'     \end{cases}
 #'   }{
-#'     F(x) = 0 if x < a, (F_Y(x) - F_Y(a)) / (F_Y(b) - F_Y(a)) if a <= x <= b, 1 if x > b
+#'     F(x) = 0 if x < a, (F_Y(x) - F_Y(a-)) / (F_Y(b) - F_Y(a-)) if a <= x <= b, 1 if x > b
 #'   }
 #'
 #'   **Quantile function**:
 #'
 #'   \deqn{
-#'     Q(p) = F_Y^{-1}(F_Y(a) + p(F_Y(b) - F_Y(a)))
+#'     Q(p) = F_Y^{-1}(F_Y(a^-) + p(F_Y(b) - F_Y(a^-)))
 #'   }{
-#'     Q(p) = F_Y^(-1)(F_Y(a) + p(F_Y(b) - F_Y(a)))
+#'     Q(p) = F_Y^(-1)(F_Y(a-) + p(F_Y(b) - F_Y(a-)))
 #'   }
 #'
 #'   clamped to the interval \eqn{[a, b]}.
@@ -123,11 +127,35 @@ format.dist_truncated <- function(x, ...){
 }
 
 
+# Is the distribution supported on (a subset of) the integers? As in
+# `convolve_support()`, the prototype stored by `support()` is integer (or
+# logical) for lattice families.
+truncated_is_lattice <- function(dist) {
+  sup <- tryCatch(support(dist), error = function(e) NULL)
+  if (is.null(sup)) return(FALSE)
+  proto <- field(sup, "x")[[1L]]
+  is.integer(proto) || is.logical(proto)
+}
+
+# The left limit of the c.d.f. at the lower truncation bound, P(Y < lower).
+#
+# The support of a truncated distribution is the closed interval [lower, upper],
+# so the mass at `lower` must be kept when normalising. For continuous
+# distributions P(Y < lower) = P(Y <= lower), but for distributions on the
+# integers it is the c.d.f. at the largest integer below `lower`.
+cdf_truncated_lower <- function(dist, lower) {
+  if (is.finite(lower) && truncated_is_lattice(dist)) {
+    cdf(dist, ceiling(lower) - 1)
+  } else {
+    cdf(dist, lower)
+  }
+}
+
 #' @export
 density.dist_truncated <- function(x, at, ...){
   in_lim <- at >= x[["lower"]] & at <= x[["upper"]]
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
-  cdf_lwr <- cdf(x[["dist"]], x[["lower"]])
+  cdf_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
   out <- numeric(length(at))
   out[in_lim] <- density(x[["dist"]], at = at[in_lim], ...)/(cdf_upr - cdf_lwr)
   out
@@ -135,16 +163,19 @@ density.dist_truncated <- function(x, at, ...){
 
 #' @export
 quantile.dist_truncated <- function(x, p, ...){
-  F_lwr <- cdf(x[["dist"]], x[["lower"]])
+  F_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
   F_upr <- cdf(x[["dist"]], x[["upper"]])
   qt <- quantile(x[["dist"]], F_lwr + p * (F_upr - F_lwr), ...)
-  pmin(pmax(x[["lower"]], qt), x[["upper"]])
+  lwr <- x[["lower"]]
+  # The smallest attainable value of an integer supported distribution
+  if (is.finite(lwr) && truncated_is_lattice(x[["dist"]])) lwr <- ceiling(lwr)
+  pmin(pmax(lwr, qt), x[["upper"]])
 }
 
 #' @export
 cdf.dist_truncated <- function(x, q, ...){
   cdf_upr <- cdf(x[["dist"]], x[["upper"]])
-  cdf_lwr <- cdf(x[["dist"]], x[["lower"]])
+  cdf_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
   out <- numeric(length(q))
   q_lwr <- q < x[["lower"]] # out[q_lwr <- q < x[["lower"]]] <- 0
   out[q_upr <- q > x[["upper"]]] <- 1

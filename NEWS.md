@@ -1,5 +1,11 @@
 # distributional (development version)
 
+## Bug fixes
+
+* `dist_truncated()` now keeps the probability mass at the `lower` bound of
+  discrete distributions, so that the truncated `density()`, `cdf()` and
+  `quantile()` respect the documented closed support `[lower, upper]`.
+
 # distributional 0.9.0
 
 ## New features
