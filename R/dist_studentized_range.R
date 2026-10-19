@@ -71,3 +71,12 @@ quantile.dist_studentized_range <- function(x, p, ...){
 cdf.dist_studentized_range <- function(x, q, ...){
   stats::ptukey(q, x[["nm"]], x[["df"]], x[["nr"]])
 }
+
+#' @export
+support.dist_studentized_range <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}

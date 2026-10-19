@@ -129,6 +129,18 @@ generate.dist_multinomial <- function(x, times, ...){
 }
 
 #' @export
+support.dist_multinomial <- function(x, ...) {
+  p <- x[["p"]]
+  proto <- matrix(integer(), nrow = 0L, ncol = length(p),
+                  dimnames = if (!is.null(names(p))) list(NULL, names(p)))
+  new_support_region(
+    list(proto),
+    list(c(0, x[["s"]])),
+    list(c(TRUE, TRUE))
+  )
+}
+
+#' @export
 mean.dist_multinomial <- function(x, ...){
   matrix(x[["s"]]*x[["p"]], nrow = 1)
 }

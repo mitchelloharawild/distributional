@@ -117,6 +117,17 @@ generate.dist_logarithmic <- function(x, times, ...){
 }
 
 #' @export
+support.dist_logarithmic <- function(x, ...) {
+  # Degenerate at 1 when p = 0
+  degenerate <- isTRUE(x[["p"]] == 0)
+  new_support_region(
+    list(integer()),
+    list(c(1, if (degenerate) 1 else Inf)),
+    list(c(TRUE, degenerate))
+  )
+}
+
+#' @export
 mean.dist_logarithmic <- function(x, ...){
   p <- x[["p"]]
   (-1/(log(1-p)))*(p/(1-p))

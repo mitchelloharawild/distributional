@@ -113,3 +113,12 @@ generate.dist_gk <- function(x, times, ...){
   require_package("gk")
   gk::rgk(times, x[["A"]], x[["B"]], x[["g"]], x[["k"]], x[["c"]])
 }
+
+#' @export
+support.dist_gk <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(-Inf, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}

@@ -131,6 +131,15 @@ generate.dist_laplace <- function(x, times, ...) {
 }
 
 #' @export
+support.dist_laplace <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(-Inf, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_laplace <- function(x, ...) {
   x[["mu"]]
 }

@@ -149,6 +149,19 @@ generate.dist_binomial <- function(x, times, ...){
 }
 
 #' @export
+support.dist_binomial <- function(x, ...) {
+  n <- x[["n"]]
+  p <- x[["p"]]
+  # Degenerate at 0 (p = 0) or n (p = 1)
+  lims <- if (isTRUE(p == 0)) c(0L, 0L) else if (isTRUE(p == 1)) c(n, n) else c(0L, n)
+  new_support_region(
+    list(integer()),
+    list(lims),
+    list(c(TRUE, TRUE))
+  )
+}
+
+#' @export
 mean.dist_binomial <- function(x, ...){
   x[["n"]]*x[["p"]]
 }

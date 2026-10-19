@@ -124,3 +124,12 @@ generate.dist_gh <- function(x, times, ...){
   require_package("gk")
   gk::rgh(times, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
 }
+
+#' @export
+support.dist_gh <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(-Inf, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}

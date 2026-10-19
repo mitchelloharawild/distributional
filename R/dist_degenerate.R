@@ -112,6 +112,15 @@ generate.dist_degenerate <- function(x, times, ...){
 }
 
 #' @export
+support.dist_degenerate <- function(x, ...) {
+  new_support_region(
+    list(vctrs::vec_init(x[["x"]], n = 0L)),
+    list(c(x[["x"]], x[["x"]])),
+    list(c(TRUE, TRUE))
+  )
+}
+
+#' @export
 mean.dist_degenerate <- function(x, ...){
   x[["x"]]
 }

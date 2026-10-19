@@ -132,6 +132,18 @@ generate.dist_hypergeometric <- function(x, times, ...){
 }
 
 #' @export
+support.dist_hypergeometric <- function(x, ...) {
+  m <- x[["m"]]
+  n <- x[["n"]]
+  k <- x[["k"]]
+  new_support_region(
+    list(integer()),
+    list(c(max(0, k - n), min(k, m))),
+    list(c(TRUE, TRUE))
+  )
+}
+
+#' @export
 mean.dist_hypergeometric <- function(x, ...){
   p <- x[["m"]]/(x[["m"]] + x[["n"]])
   x[["k"]] * p

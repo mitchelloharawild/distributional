@@ -110,6 +110,15 @@ generate.dist_cauchy <- function(x, times, ...){
 }
 
 #' @export
+support.dist_cauchy <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(-Inf, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_cauchy <- function(x, ...){
   NA_real_
 }

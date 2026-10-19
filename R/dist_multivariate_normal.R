@@ -149,6 +149,19 @@ generate.dist_mvnorm <- function(x, times, ..., na.rm = FALSE){
 }
 
 #' @export
+support.dist_mvnorm <- function(x, ...) {
+  mu <- x[["mu"]]
+  k <- length(mu)
+  proto <- matrix(numeric(), nrow = 0L, ncol = k,
+                  dimnames = if (!is.null(names(mu))) list(NULL, names(mu)))
+  new_support_region(
+    list(proto),
+    list(matrix(c(-Inf, Inf), nrow = 2L, ncol = k)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_mvnorm <- function(x, ...){
   matrix(x[["mu"]], nrow = 1)
 }

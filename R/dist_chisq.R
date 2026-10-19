@@ -175,6 +175,16 @@ generate.dist_chisq <- function(x, times, ...){
 }
 
 #' @export
+support.dist_chisq <- function(x, ...) {
+  # The density at 0 is positive (or infinite) when df <= 2
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(isTRUE(x[["df"]] <= 2), FALSE))
+  )
+}
+
+#' @export
 mean.dist_chisq <- function(x, ...){
   x[["df"]] + x[["ncp"]]
 }

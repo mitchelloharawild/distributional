@@ -128,6 +128,17 @@ generate.dist_geometric <- function(x, times, ...){
 }
 
 #' @export
+support.dist_geometric <- function(x, ...) {
+  # Degenerate at 0 when p = 1
+  degenerate <- isTRUE(x[["p"]] == 1)
+  new_support_region(
+    list(integer()),
+    list(c(0, if (degenerate) 0 else Inf)),
+    list(c(TRUE, degenerate))
+  )
+}
+
+#' @export
 mean.dist_geometric <- function(x, ...){
   1/x[["p"]] - 1
 }

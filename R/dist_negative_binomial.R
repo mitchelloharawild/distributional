@@ -136,6 +136,17 @@ generate.dist_negbin <- function(x, times, ...){
 }
 
 #' @export
+support.dist_negbin <- function(x, ...) {
+  # Degenerate at 0 when p = 1 or size = 0
+  degenerate <- isTRUE(x[["p"]] == 1) || isTRUE(x[["n"]] == 0)
+  new_support_region(
+    list(integer()),
+    list(c(0, if (degenerate) 0 else Inf)),
+    list(c(TRUE, degenerate))
+  )
+}
+
+#' @export
 mean.dist_negbin <- function(x, ...){
   x[["n"]] * (1 - x[["p"]]) / x[["p"]]
 }

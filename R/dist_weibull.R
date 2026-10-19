@@ -161,6 +161,16 @@ generate.dist_weibull <- function(x, times, ...){
 }
 
 #' @export
+support.dist_weibull <- function(x, ...) {
+  # The density at 0 is positive (or infinite) when shape <= 1
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(isTRUE(x[["shape"]] <= 1), FALSE))
+  )
+}
+
+#' @export
 mean.dist_weibull <- function(x, ...){
   x[["scale"]] * gamma(1 + 1/x[["shape"]])
 }

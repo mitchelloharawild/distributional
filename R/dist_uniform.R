@@ -121,6 +121,15 @@ generate.dist_uniform <- function(x, times, ...){
 }
 
 #' @export
+support.dist_uniform <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(x[["l"]], x[["u"]])),
+    list(c(TRUE, TRUE))
+  )
+}
+
+#' @export
 mean.dist_uniform <- function(x, ...){
   (x[["u"]]+x[["l"]])/2
 }

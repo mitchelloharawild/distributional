@@ -128,6 +128,15 @@ generate.dist_lognormal <- function(x, times, ...){
 }
 
 #' @export
+support.dist_lognormal <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_lognormal <- function(x, ...){
   exp(x[["mu"]] + x[["sigma"]]^2/2)
 }

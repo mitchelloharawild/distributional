@@ -216,6 +216,16 @@ generate.dist_f <- function(x, times, ...){
 }
 
 #' @export
+support.dist_f <- function(x, ...) {
+  # The density at 0 is positive (or infinite) when df1 <= 2
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(isTRUE(x[["df1"]] <= 2), FALSE))
+  )
+}
+
+#' @export
 mean.dist_f <- function(x, ...){
   df1 <- x[["df1"]]
   df2 <- x[["df2"]]

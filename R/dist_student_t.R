@@ -209,6 +209,15 @@ generate.dist_student_t <- function(x, times, ...){
 }
 
 #' @export
+support.dist_student_t <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(-Inf, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_student_t <- function(x, ...){
   df <- x[["df"]]
   if(df <= 1) return(NA_real_)

@@ -137,6 +137,15 @@ generate.dist_inverse_gaussian <- function(x, times, ...){
 }
 
 #' @export
+support.dist_inverse_gaussian <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_inverse_gaussian <- function(x, ...){
   x[["m"]]
 }

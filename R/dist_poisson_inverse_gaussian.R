@@ -132,6 +132,15 @@ generate.dist_poisson_inverse_gaussian <- function(x, times, ...){
 }
 
 #' @export
+support.dist_poisson_inverse_gaussian <- function(x, ...) {
+  new_support_region(
+    list(integer()),
+    list(c(0, Inf)),
+    list(c(TRUE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_poisson_inverse_gaussian <- function(x, ...){
   x[["m"]]
 }

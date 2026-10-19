@@ -149,6 +149,16 @@ generate.dist_tweedie <- function(x, times, ...){
 }
 
 #' @export
+support.dist_tweedie <- function(x, ...) {
+  # Positive probability mass at 0 for power in (1, 2)
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(TRUE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_tweedie <- function(x, ...){
   x[["mu"]]
 }

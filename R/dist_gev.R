@@ -226,6 +226,31 @@ generate.dist_gev <- function(x, times, ...) {
 }
 
 #' @export
+support.dist_gev <- function(x, ...) {
+  location <- x[["location"]]
+  scale <- x[["scale"]]
+  shape <- x[["shape"]]
+  if (isTRUE(shape > 0)) {
+    # Support: (location - scale/shape, Inf), the density vanishes at the bound
+    lims <- c(location - scale / shape, Inf)
+    closed <- c(FALSE, FALSE)
+  } else if (isTRUE(shape < 0)) {
+    # Support: (-Inf, location - scale/shape], the density at the bound is
+    # positive (shape = -1) or infinite (shape < -1) when shape <= -1
+    lims <- c(-Inf, location - scale / shape)
+    closed <- c(FALSE, shape <= -1)
+  } else {
+    lims <- c(-Inf, Inf)
+    closed <- c(FALSE, FALSE)
+  }
+  new_support_region(
+    list(numeric()),
+    list(lims),
+    list(closed)
+  )
+}
+
+#' @export
 mean.dist_gev <- function(x, ...) {
   if (x[["shape"]] == 0) {
     x[["location"]] + x[["scale"]] * 0.57721566490153286

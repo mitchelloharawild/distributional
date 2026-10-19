@@ -128,6 +128,16 @@ generate.dist_gamma <- function(x, times, ...){
 }
 
 #' @export
+support.dist_gamma <- function(x, ...) {
+  # The density at 0 is positive (or infinite) when shape <= 1
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(isTRUE(x[["shape"]] <= 1), FALSE))
+  )
+}
+
+#' @export
 mean.dist_gamma <- function(x, ...){
   x[["shape"]] / x[["rate"]]
 }

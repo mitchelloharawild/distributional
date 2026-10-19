@@ -141,6 +141,18 @@ generate.dist_bernoulli <- function(x, times, ...){
 }
 
 #' @export
+support.dist_bernoulli <- function(x, ...) {
+  p <- x[["p"]]
+  # Degenerate at FALSE (p = 0) or TRUE (p = 1)
+  lims <- if (isTRUE(p == 0)) c(FALSE, FALSE) else if (isTRUE(p == 1)) c(TRUE, TRUE) else c(FALSE, TRUE)
+  new_support_region(
+    list(logical()),
+    list(lims),
+    list(c(TRUE, TRUE))
+  )
+}
+
+#' @export
 mean.dist_bernoulli <- function(x, ...){
   x[["p"]]
 }

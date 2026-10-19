@@ -121,6 +121,16 @@ generate.dist_beta <- function(x, times, ...){
 }
 
 #' @export
+support.dist_beta <- function(x, ...) {
+  # The density at 0 (1) is positive (or infinite) when shape1 (shape2) <= 1
+  new_support_region(
+    list(numeric()),
+    list(c(0, 1)),
+    list(c(isTRUE(x[["shape1"]] <= 1), isTRUE(x[["shape2"]] <= 1)))
+  )
+}
+
+#' @export
 mean.dist_beta <- function(x, ...){
   x[["shape1"]]/(x[["shape1"]] + x[["shape2"]])
 }

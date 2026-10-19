@@ -130,6 +130,15 @@ generate.dist_inverse_gamma <- function(x, times, ...){
 }
 
 #' @export
+support.dist_inverse_gamma <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_inverse_gamma <- function(x, ...){
   if(x[["s"]] <= 1) return(NA_real_)
   1/(x[["r"]]*(x[["s"]]-1))

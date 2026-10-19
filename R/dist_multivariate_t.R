@@ -184,6 +184,16 @@ generate.dist_mvt <- function(x, times, ..., na.rm = FALSE) {
 }
 
 #' @export
+support.dist_mvt <- function(x, ...) {
+  k <- length(x[["mu"]])
+  new_support_region(
+    list(matrix(numeric(), nrow = 0L, ncol = k)),
+    list(matrix(c(-Inf, Inf), nrow = 2L, ncol = k)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_mvt <- function(x, ...) {
   if (x[["df"]] <= 1) {
     warning("Mean is undefined for df <= 1")

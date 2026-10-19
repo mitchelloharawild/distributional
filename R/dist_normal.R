@@ -138,6 +138,23 @@ generate.dist_normal <- function(x, times, ...){
 }
 
 #' @export
+support.dist_normal <- function(x, ...) {
+  # Degenerate at mu when sigma = 0
+  if (isTRUE(x[["sigma"]] == 0)) {
+    lims <- c(x[["mu"]], x[["mu"]])
+    closed <- c(TRUE, TRUE)
+  } else {
+    lims <- c(-Inf, Inf)
+    closed <- c(FALSE, FALSE)
+  }
+  new_support_region(
+    list(numeric()),
+    list(lims),
+    list(closed)
+  )
+}
+
+#' @export
 mean.dist_normal <- function(x, ...){
   x[["mu"]]
 }

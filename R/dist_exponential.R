@@ -111,6 +111,15 @@ generate.dist_exponential <- function(x, times, ...){
 }
 
 #' @export
+support.dist_exponential <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(TRUE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_exponential <- function(x, ...){
   1/x[["rate"]]
 }

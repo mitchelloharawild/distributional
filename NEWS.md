@@ -1,5 +1,14 @@
 # distributional (development version)
 
+## Improvements
+
+* Added closed-form `support()` methods for all parametric distributions,
+  avoiding the slower numerical default that evaluates `quantile()`,
+  `density()` and `generate()`. Degenerate parameterisations (such as
+  `dist_binomial(n, 0)`, `dist_normal(mu, 0)` and `dist_uniform(a, a)`) now
+  report a single point of support, and the closed upper bound of
+  `dist_gev()` with `shape <= -1` is now identified.
+
 ## Bug fixes
 
 * `dist_truncated()` now keeps the probability mass at the `lower` bound of

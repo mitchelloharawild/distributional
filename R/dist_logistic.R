@@ -112,6 +112,15 @@ generate.dist_logistic <- function(x, times, ...){
 }
 
 #' @export
+support.dist_logistic <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(-Inf, Inf)),
+    list(c(FALSE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_logistic <- function(x, ...){
   x[["l"]]
 }

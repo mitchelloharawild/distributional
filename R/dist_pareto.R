@@ -134,6 +134,15 @@ generate.dist_pareto <- function(x, times, ...){
 }
 
 #' @export
+support.dist_pareto <- function(x, ...) {
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(TRUE, FALSE))
+  )
+}
+
+#' @export
 mean.dist_pareto <- function(x, ...){
   actuar::mpareto(1, x[["shape"]], x[["scale"]])
 }

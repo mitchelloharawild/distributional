@@ -127,6 +127,16 @@ generate.dist_burr <- function(x, times, ...){
 }
 
 #' @export
+support.dist_burr <- function(x, ...) {
+  # The density at 0 is positive (or infinite) when shape2 <= 1
+  new_support_region(
+    list(numeric()),
+    list(c(0, Inf)),
+    list(c(isTRUE(x[["s2"]] <= 1), FALSE))
+  )
+}
+
+#' @export
 mean.dist_burr <- function(x, ...){
   require_package("actuar")
   actuar::mburr(1, x[["s1"]], x[["s2"]], x[["r"]])
