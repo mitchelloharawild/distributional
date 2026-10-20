@@ -15,6 +15,9 @@
 
 ## Bug fixes
 
+* `quantile(x, p, log = TRUE)` no longer errors with "`q` must be a vector,
+  not a function". A leftover argument check validated `q` (resolving to
+  `base::q()`) instead of `p`.
 * `dist_truncated()` now keeps the probability mass at the `lower` bound of
   discrete distributions, so that the truncated `density()`, `cdf()` and
   `quantile()` respect the documented closed support `[lower, upper]`.

@@ -143,7 +143,6 @@ log_quantile <- function(x, p, ...) {
 }
 #' @export
 log_quantile.distribution <- function(x, p, ...){
-  vec_assert(q, double(), 1L)
   p <- arg_listable(p, .ptype = double())
   dist_apply(x, log_quantile, p = p, ...)
 }
