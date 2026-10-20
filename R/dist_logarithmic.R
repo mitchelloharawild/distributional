@@ -99,15 +99,15 @@ log_density.dist_logarithmic <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_logarithmic <- function(x, p, ...){
+quantile.dist_logarithmic <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qlogarithmic(p, x[["p"]])
+  actuar::qlogarithmic(p, x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_logarithmic <- function(x, q, ...){
+cdf.dist_logarithmic <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::plogarithmic(q, x[["p"]])
+  actuar::plogarithmic(q, x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export

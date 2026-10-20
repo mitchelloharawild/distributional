@@ -111,7 +111,8 @@ log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
 
 #' @export
 quantile.dist_mvnorm <- function(x, p, kind = c("marginal", "equicoordinate"),
-                                 ..., type = lifecycle::deprecated(), na.rm = FALSE){
+                                 ..., type = lifecycle::deprecated(), na.rm = FALSE,
+                                 tail = "lower"){
   if (lifecycle::is_present(type)) {
     lifecycle::deprecate_warn(
       "0.6.0", "quantile.dist_mvnorm(type)", "quantile.dist_mvnorm(kind)",
@@ -123,9 +124,11 @@ quantile.dist_mvnorm <- function(x, p, kind = c("marginal", "equicoordinate"),
   kind <- match.arg(kind)
   q <- if (kind == "marginal") {
     stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
-                 sd = rep(sqrt(diag(x[["sigma"]])), each = length(p)), ...)
+                 sd = rep(sqrt(diag(x[["sigma"]])), each = length(p)), ...,
+                 lower.tail = tail == "lower")
   } else {
     require_package("mvtnorm")
+    if (tail == "upper") p <- 1 - p
     vapply(p, function(p, ...) {
       if (p == 0) return(-Inf) else if (p == 1) return(Inf)
       mvtnorm::qmvnorm(p, ...)$quantile
@@ -136,10 +139,12 @@ quantile.dist_mvnorm <- function(x, p, kind = c("marginal", "equicoordinate"),
 }
 
 #' @export
-cdf.dist_mvnorm <- function(x, q, ..., na.rm = FALSE){
-  if(is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ...))
+cdf.dist_mvnorm <- function(x, q, ..., na.rm = FALSE, tail = "lower"){
+  if(is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
   require_package("mvtnorm")
-  mvtnorm::pmvnorm(upper = as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
+  p <- mvtnorm::pmvnorm(upper = as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
+  # The upper tail of a multivariate distribution is the complement 1 - F(q)
+  if (tail == "lower") p else 1 - p
 }
 
 #' @export

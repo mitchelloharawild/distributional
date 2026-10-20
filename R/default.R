@@ -12,7 +12,8 @@ log_density.dist_default <- function(x, ...){
 }
 
 #' @export
-quantile.dist_default <- function(x, p, ...){
+quantile.dist_default <- function(x, p, ..., tail = "lower"){
+  if(tail == "upper") return(quantile(x, 1 - p, ...))
   # abort(
   #   sprintf("The distribution class `%s` does not support `quantile()`",
   #           class(x)[1])
@@ -28,7 +29,8 @@ log_quantile.dist_default <- function(x, p, ...){
   quantile(x, exp(p), ...)
 }
 #' @export
-cdf.dist_default <- function(x, q, times = 1e5,...){
+cdf.dist_default <- function(x, q, times = 1e5, ..., tail = "lower"){
+  if(tail == "upper") return(1 - cdf(x, q, times = times, ...))
   # Use Monte Carlo integration
   r <- generate(x, times = times)
   if(is.list(q)) {

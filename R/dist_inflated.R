@@ -125,28 +125,38 @@ density.dist_inflated <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_inflated <- function(x, p, ...) {
+quantile.dist_inflated <- function(x, p, ..., tail = "lower") {
   p_inf  <- x[["p"]]
   x_inf  <- x[["x"]]
-  cdf_at <- cdf(x[["dist"]], x_inf, ...)
+  # Probability in the requested tail of the base distribution at x_inf
+  cdf_at <- cdf(x[["dist"]], x_inf, ..., tail = tail)
 
+  # Range of tail probabilities covered by the point mass at x_inf
   p_jump_lo <- (1 - p_inf) * cdf_at
   p_jump_hi <- p_inf + (1 - p_inf) * cdf_at
 
-  below <- p <= p_jump_lo
-  above <- p > p_jump_hi
+  # In order of increasing `p`, quantiles reached before (`pre`) and after
+  # (`post`) the point mass
+  if (tail == "lower") {
+    pre <- p <= p_jump_lo
+    post <- p > p_jump_hi
+  } else {
+    pre <- p < p_jump_lo
+    post <- p >= p_jump_hi
+  }
 
   qt <- rep(x_inf, length(p))
-  if (any(below))
-    qt[below] <- quantile(x[["dist"]], p[below] / (1 - p_inf), ...)
-  if (any(above))
-    qt[above] <- quantile(x[["dist"]], (p[above] - p_inf) / (1 - p_inf), ...)
+  if (any(pre))
+    qt[pre] <- quantile(x[["dist"]], p[pre] / (1 - p_inf), ..., tail = tail)
+  if (any(post))
+    qt[post] <- quantile(x[["dist"]], (p[post] - p_inf) / (1 - p_inf), ..., tail = tail)
   qt
 }
 
 #' @export
-cdf.dist_inflated <- function(x, q, ...){
-  x[["p"]]*(q>=x[["x"]]) + (1-x[["p"]])*cdf(x[["dist"]], q, ...)
+cdf.dist_inflated <- function(x, q, ..., tail = "lower"){
+  in_tail <- if (tail == "lower") q >= x[["x"]] else q < x[["x"]]
+  x[["p"]]*in_tail + (1-x[["p"]])*cdf(x[["dist"]], q, ..., tail = tail)
 }
 
 #' @export

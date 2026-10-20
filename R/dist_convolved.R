@@ -134,12 +134,14 @@ density.dist_convolved <- function(x, at, ..., n = 2^12, tail_p = 1e-6) {
 }
 
 #' @export
-cdf.dist_convolved <- function(x, q, ..., n = 2^12, tail_p = 1e-6) {
-  convolve_approx(x, n = n, tail_p = tail_p)$cdf_fn(q)
+cdf.dist_convolved <- function(x, q, ..., n = 2^12, tail_p = 1e-6, tail = "lower") {
+  p <- convolve_approx(x, n = n, tail_p = tail_p)$cdf_fn(q)
+  if (tail == "lower") p else 1 - p
 }
 
 #' @export
-quantile.dist_convolved <- function(x, p, ..., n = 2^12, tail_p = 1e-6) {
+quantile.dist_convolved <- function(x, p, ..., n = 2^12, tail_p = 1e-6, tail = "lower") {
+  if(tail == "upper") p <- 1 - p
   convolve_approx(x, n = n, tail_p = tail_p)$qtl_fn(p)
 }
 

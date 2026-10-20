@@ -97,12 +97,14 @@ density.dist_degenerate <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_degenerate <- function(x, p, ...){
+quantile.dist_degenerate <- function(x, p, ..., tail = "lower"){
+  # Every quantile is the point mass, in either tail
   ifelse(p < 0 | p > 1, NaN, x[["x"]])
 }
 
 #' @export
-cdf.dist_degenerate <- function(x, q, ...){
+cdf.dist_degenerate <- function(x, q, ..., tail = "lower"){
+  if(tail == "upper") return(ifelse(q >= x[["x"]], 0, 1))
   ifelse(q >= x[["x"]], 1, 0)
 }
 

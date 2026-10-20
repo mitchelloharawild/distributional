@@ -117,13 +117,13 @@ log_density.dist_hypergeometric <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_hypergeometric <- function(x, p, ...){
-  stats::qhyper(p, x[["m"]], x[["n"]], x[["k"]])
+quantile.dist_hypergeometric <- function(x, p, ..., tail = "lower"){
+  stats::qhyper(p, x[["m"]], x[["n"]], x[["k"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_hypergeometric <- function(x, q, ...){
-  stats::phyper(q, x[["m"]], x[["n"]], x[["k"]])
+cdf.dist_hypergeometric <- function(x, q, ..., tail = "lower"){
+  stats::phyper(q, x[["m"]], x[["n"]], x[["k"]], lower.tail = tail == "lower")
 }
 
 #' @export

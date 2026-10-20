@@ -91,23 +91,33 @@ log_density.dist_wrap <- function(x, at, ...){
 }
 
 #' @export
-cdf.dist_wrap <- function(x, q, ...){
+cdf.dist_wrap <- function(x, q, ..., tail = "lower"){
   fn <- get(paste0("p", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
 
-  do.call(fn, c(list(q), par))
+  if(tail == "lower") return(do.call(fn, c(list(q), par)))
+  if("lower.tail" %in% names(formals(fn))) {
+    do.call(fn, c(list(q), par, lower.tail = FALSE))
+  } else {
+    1 - do.call(fn, c(list(q), par))
+  }
 }
 
 #' @export
-quantile.dist_wrap <- function(x, p, ...){
+quantile.dist_wrap <- function(x, p, ..., tail = "lower"){
   fn <- get(paste0("q", x[["dist"]][[1]]), envir = x$env, mode = "function")
 
   # Remove distribution name and environment from parameters
   par <- x[-(1:2)]
 
-  do.call(fn, c(list(p), par))
+  if(tail == "lower") return(do.call(fn, c(list(p), par)))
+  if("lower.tail" %in% names(formals(fn))) {
+    do.call(fn, c(list(p), par, lower.tail = FALSE))
+  } else {
+    do.call(fn, c(list(1 - p), par))
+  }
 }
 
 #' @export

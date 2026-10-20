@@ -96,13 +96,13 @@ log_density.dist_exponential <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_exponential <- function(x, p, ...){
-  stats::qexp(p, x[["rate"]])
+quantile.dist_exponential <- function(x, p, ..., tail = "lower"){
+  stats::qexp(p, x[["rate"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_exponential <- function(x, q, ...){
-  stats::pexp(q, x[["rate"]])
+cdf.dist_exponential <- function(x, q, ..., tail = "lower"){
+  stats::pexp(q, x[["rate"]], lower.tail = tail == "lower")
 }
 
 #' @export

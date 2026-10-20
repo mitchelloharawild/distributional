@@ -113,13 +113,13 @@ log_density.dist_gamma <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_gamma <- function(x, p, ...){
-  stats::qgamma(p, x[["shape"]], x[["rate"]])
+quantile.dist_gamma <- function(x, p, ..., tail = "lower"){
+  stats::qgamma(p, x[["shape"]], x[["rate"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_gamma <- function(x, q, ...){
-  stats::pgamma(q, x[["shape"]], x[["rate"]])
+cdf.dist_gamma <- function(x, q, ..., tail = "lower"){
+  stats::pgamma(q, x[["shape"]], x[["rate"]], lower.tail = tail == "lower")
 }
 
 #' @export

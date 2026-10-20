@@ -121,13 +121,13 @@ log_density.dist_negbin <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_negbin <- function(x, p, ...){
-  stats::qnbinom(p, x[["n"]], x[["p"]])
+quantile.dist_negbin <- function(x, p, ..., tail = "lower"){
+  stats::qnbinom(p, x[["n"]], x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_negbin <- function(x, q, ...){
-  stats::pnbinom(q, x[["n"]], x[["p"]])
+cdf.dist_negbin <- function(x, q, ..., tail = "lower"){
+  stats::pnbinom(q, x[["n"]], x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export

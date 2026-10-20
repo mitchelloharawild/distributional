@@ -108,15 +108,17 @@ log_density.dist_gh <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_gh <- function(x, p, ...){
+quantile.dist_gh <- function(x, p, ..., tail = "lower"){
   require_package("gk")
+  if(tail == "upper") p <- 1 - p
   gk::qgh(p, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
 }
 
 #' @export
-cdf.dist_gh <- function(x, q, ...){
+cdf.dist_gh <- function(x, q, ..., tail = "lower"){
   require_package("gk")
-  gk::pgh(q, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
+  p <- gk::pgh(q, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
+  if (tail == "lower") p else 1 - p
 }
 
 #' @export

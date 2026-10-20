@@ -164,7 +164,7 @@ dim.dist_multinomial <- function(x){
 }
 
 #' @export
-cdf.dist_multinomial <- function(x, q, ...) {
+cdf.dist_multinomial <- function(x, q, ..., tail = "lower") {
   # Extract parameters
   size <- x$s
   prob <- x$p
@@ -219,5 +219,6 @@ cdf.dist_multinomial <- function(x, q, ...) {
     result[i] <- sum(probs)
   }
 
-  result
+  # The upper tail of a multivariate distribution is the complement 1 - F(q)
+  if (tail == "lower") result else 1 - result
 }

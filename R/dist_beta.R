@@ -106,13 +106,13 @@ log_density.dist_beta <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_beta <- function(x, p, ...){
-  stats::qbeta(p, x[["shape1"]], x[["shape2"]])
+quantile.dist_beta <- function(x, p, ..., tail = "lower"){
+  stats::qbeta(p, x[["shape1"]], x[["shape2"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_beta <- function(x, q, ...){
-  stats::pbeta(q, x[["shape1"]], x[["shape2"]])
+cdf.dist_beta <- function(x, q, ..., tail = "lower"){
+  stats::pbeta(q, x[["shape1"]], x[["shape2"]], lower.tail = tail == "lower")
 }
 
 #' @export

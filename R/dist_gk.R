@@ -97,15 +97,17 @@ log_density.dist_gk <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_gk <- function(x, p, ...){
+quantile.dist_gk <- function(x, p, ..., tail = "lower"){
   require_package("gk")
+  if(tail == "upper") p <- 1 - p
   gk::qgk(p, x[["A"]], x[["B"]], x[["g"]], x[["k"]], x[["c"]])
 }
 
 #' @export
-cdf.dist_gk <- function(x, q, ...){
+cdf.dist_gk <- function(x, q, ..., tail = "lower"){
   require_package("gk")
-  gk::pgk(q, x[["A"]], x[["B"]], x[["g"]], x[["k"]], x[["c"]])
+  p <- gk::pgk(q, x[["A"]], x[["B"]], x[["g"]], x[["k"]], x[["c"]])
+  if (tail == "lower") p else 1 - p
 }
 
 #' @export

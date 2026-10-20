@@ -5,9 +5,9 @@
 \alias{cdf.distribution}
 \title{The cumulative distribution function}
 \usage{
-cdf(x, q, ..., log = FALSE)
+cdf(x, q, ..., tail = c("lower", "upper"), log = FALSE)
 
-\method{cdf}{distribution}(x, q, ...)
+\method{cdf}{distribution}(x, q, ..., tail = c("lower", "upper"))
 }
 \arguments{
 \item{x}{The distribution(s).}
@@ -16,10 +16,27 @@ cdf(x, q, ..., log = FALSE)
 
 \item{...}{Additional arguments passed to methods.}
 
+\item{tail}{Which tail the probabilities are of: \code{"lower"} (the default),
+\eqn{P(X \le q)}, or \code{"upper"}, \eqn{P(X > q)}, which is the survival
+function. Where possible the upper
+tail is computed directly, so it keeps its precision where
+\code{1 - cdf(x, q)} would round to zero. For multivariate distributions the
+upper tail is the complement \eqn{1 - P(X \le q)}, not the joint survival
+function.}
+
 \item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+}
+\examples{
+# The survival function keeps its precision far into the upper tail
+cdf(dist_normal(), 10, tail = "upper")
+1 - cdf(dist_normal(), 10)
+
+# The cumulative hazard function, -log(S(q))
+-cdf(dist_weibull(2, 1), 3, tail = "upper", log = TRUE)
+
 }
 \seealso{
 \code{vignette("broadcasting", package = "distributional")} for how the

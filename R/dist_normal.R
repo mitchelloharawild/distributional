@@ -115,21 +115,21 @@ log_density.dist_normal <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_normal <- function(x, p, ...){
-  stats::qnorm(p, x[["mu"]], x[["sigma"]])
+quantile.dist_normal <- function(x, p, ..., tail = "lower"){
+  stats::qnorm(p, x[["mu"]], x[["sigma"]], lower.tail = tail == "lower")
 }
 #' @export
-log_quantile.dist_normal <- function(x, p, ...){
-  stats::qnorm(p, x[["mu"]], x[["sigma"]], log.p = TRUE)
+log_quantile.dist_normal <- function(x, p, ..., tail = "lower"){
+  stats::qnorm(p, x[["mu"]], x[["sigma"]], log.p = TRUE, lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_normal <- function(x, q, ...){
-  stats::pnorm(q, x[["mu"]], x[["sigma"]])
+cdf.dist_normal <- function(x, q, ..., tail = "lower"){
+  stats::pnorm(q, x[["mu"]], x[["sigma"]], lower.tail = tail == "lower")
 }
 #' @export
-log_cdf.dist_normal <- function(x, q, ...){
-  stats::pnorm(q, x[["mu"]], x[["sigma"]], log.p = TRUE)
+log_cdf.dist_normal <- function(x, q, ..., tail = "lower"){
+  stats::pnorm(q, x[["mu"]], x[["sigma"]], log.p = TRUE, lower.tail = tail == "lower")
 }
 
 #' @export

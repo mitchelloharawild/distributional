@@ -97,13 +97,13 @@ log_density.dist_logistic <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_logistic <- function(x, p, ...){
-  stats::qlogis(p, x[["l"]], x[["s"]])
+quantile.dist_logistic <- function(x, p, ..., tail = "lower"){
+  stats::qlogis(p, x[["l"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_logistic <- function(x, q, ...){
-  stats::plogis(q, x[["l"]], x[["s"]])
+cdf.dist_logistic <- function(x, q, ..., tail = "lower"){
+  stats::plogis(q, x[["l"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export

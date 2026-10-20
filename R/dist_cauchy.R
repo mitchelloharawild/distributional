@@ -95,13 +95,13 @@ log_density.dist_cauchy <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_cauchy <- function(x, p, ...){
-  stats::qcauchy(p, x[["location"]], x[["scale"]])
+quantile.dist_cauchy <- function(x, p, ..., tail = "lower"){
+  stats::qcauchy(p, x[["location"]], x[["scale"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_cauchy <- function(x, q, ...){
-  stats::pcauchy(q, x[["location"]], x[["scale"]])
+cdf.dist_cauchy <- function(x, q, ..., tail = "lower"){
+  stats::pcauchy(q, x[["location"]], x[["scale"]], lower.tail = tail == "lower")
 }
 
 #' @export

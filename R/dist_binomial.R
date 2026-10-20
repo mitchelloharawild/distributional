@@ -134,13 +134,13 @@ log_density.dist_binomial <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_binomial <- function(x, p, ...){
-  as.integer(stats::qbinom(p, x[["n"]], x[["p"]]))
+quantile.dist_binomial <- function(x, p, ..., tail = "lower"){
+  as.integer(stats::qbinom(p, x[["n"]], x[["p"]], lower.tail = tail == "lower"))
 }
 
 #' @export
-cdf.dist_binomial <- function(x, q, ...){
-  stats::pbinom(q, x[["n"]], x[["p"]])
+cdf.dist_binomial <- function(x, q, ..., tail = "lower"){
+  stats::pbinom(q, x[["n"]], x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export

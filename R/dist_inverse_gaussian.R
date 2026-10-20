@@ -119,15 +119,15 @@ log_density.dist_inverse_gaussian <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_inverse_gaussian <- function(x, p, ...){
+quantile.dist_inverse_gaussian <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qinvgauss(p, x[["m"]], x[["s"]])
+  actuar::qinvgauss(p, x[["m"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_inverse_gaussian <- function(x, q, ...){
+cdf.dist_inverse_gaussian <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::pinvgauss(q, x[["m"]], x[["s"]])
+  actuar::pinvgauss(q, x[["m"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export

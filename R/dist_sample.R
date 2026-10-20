@@ -150,8 +150,9 @@ density.dist_sample <- function(x, at, ..., na.rm = TRUE){
 
 
 #' @export
-quantile.dist_sample <- function(x, p, type = "marginal", ..., na.rm = TRUE){
+quantile.dist_sample <- function(x, p, type = "marginal", ..., na.rm = TRUE, tail = "lower"){
   type <- match.arg(type)
+  if(tail == "upper") p <- 1 - p
   # Apply independently over sample variates
   if(is.matrix(x$x)) {
     # Marginal quantiles
@@ -163,11 +164,13 @@ quantile.dist_sample <- function(x, p, type = "marginal", ..., na.rm = TRUE){
 }
 
 #' @export
-cdf.dist_sample <- function(x, q, ..., na.rm = TRUE){
-  if(vec_size(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
+cdf.dist_sample <- function(x, q, ..., na.rm = TRUE, tail = "lower"){
+  if(vec_size(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
   if(is.matrix(x$x)) {
-    return(mean(x$x <= vec_recycle(q, vec_size(x$x))))
+    p <- mean(x$x <= vec_recycle(q, vec_size(x$x)))
+    return(if (tail == "lower") p else 1 - p)
   }
+  if(tail == "upper") return(mean(x > q, ..., na.rm = na.rm))
   mean(x <= q, ..., na.rm = na.rm)
   # vapply(x, function(x, q) mean(x <= q, ..., na.rm = na.rm), numeric(1L), q = q)
 }

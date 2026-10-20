@@ -126,13 +126,13 @@ log_density.dist_bernoulli <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_bernoulli <- function(x, p, ...){
-  as.logical(stats::qbinom(p, 1, x[["p"]]))
+quantile.dist_bernoulli <- function(x, p, ..., tail = "lower"){
+  as.logical(stats::qbinom(p, 1, x[["p"]], lower.tail = tail == "lower"))
 }
 
 #' @export
-cdf.dist_bernoulli <- function(x, q, ...){
-  stats::pbinom(q, 1, x[["p"]])
+cdf.dist_bernoulli <- function(x, q, ..., tail = "lower"){
+  stats::pbinom(q, 1, x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export

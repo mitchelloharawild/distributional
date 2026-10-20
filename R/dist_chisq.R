@@ -160,13 +160,13 @@ log_density.dist_chisq <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_chisq <- function(x, p, ...){
-  stats::qchisq(p, x[["df"]], x[["ncp"]])
+quantile.dist_chisq <- function(x, p, ..., tail = "lower"){
+  stats::qchisq(p, x[["df"]], x[["ncp"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_chisq <- function(x, q, ...){
-  stats::pchisq(q, x[["df"]], x[["ncp"]])
+cdf.dist_chisq <- function(x, q, ..., tail = "lower"){
+  stats::pchisq(q, x[["df"]], x[["ncp"]], lower.tail = tail == "lower")
 }
 
 #' @export

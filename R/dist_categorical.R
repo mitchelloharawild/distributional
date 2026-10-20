@@ -139,7 +139,8 @@ density.dist_categorical <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_categorical <- function(x, p, ...){
+quantile.dist_categorical <- function(x, p, ..., tail = "lower"){
+  if(tail == "upper") p <- 1 - p
   if(is.ordered(x[["x"]])) {
     return(x[["x"]][findInterval(p, cumsum(x[["p"]]))])
   }
@@ -147,9 +148,15 @@ quantile.dist_categorical <- function(x, p, ...){
 }
 
 #' @export
-cdf.dist_categorical <- function(x, q, ...){
+cdf.dist_categorical <- function(x, q, ..., tail = "lower"){
   if(is.ordered(x[["x"]])) {
-    return(cumsum(x[["p"]])[match(q, x[["x"]])])
+    p <- if (tail == "lower") {
+      cumsum(x[["p"]])
+    } else {
+      # P(X > x_i) as the sum of the probabilities above x_i
+      c(rev(cumsum(rev(x[["p"]])))[-1L], 0)
+    }
+    return(p[match(q, x[["x"]])])
   }
   rep_len(NA_real_, length(q))
 }

@@ -127,16 +127,25 @@ log_density.distribution <- function(x, at, ...){
 #' @inheritParams density.distribution
 #' @param p The probability of the quantile.
 #' @param ... Additional arguments passed to methods.
+#' @param tail Which tail `p` is the probability of: `"lower"` (the default),
+#' \eqn{P(X \le x)}, or `"upper"`, \eqn{P(X > x)}. So `quantile(x, p, tail = "upper")` equals
+#' `quantile(x, 1 - p)` without the loss of precision from computing `1 - p`.
 #'
 #' @seealso `vignette("broadcasting", package = "distributional")` for how the
 #' `p` argument is combined with the distributions.
 #'
+#' @examples
+#' # Upper tail quantiles
+#' quantile(dist_normal(), 0.025, tail = "upper")
+#' quantile(dist_normal(), 1e-20, tail = "upper")
+#'
 #' @importFrom stats quantile
 #' @export
-quantile.distribution <- function(x, p, ..., log = FALSE){
-  if(log) return(log_quantile(x, p, ...))
+quantile.distribution <- function(x, p, ..., tail = c("lower", "upper"), log = FALSE){
+  tail <- match.arg(tail)
+  if(log) return(log_quantile(x, p, ..., tail = tail))
   p <- arg_listable(p, .ptype = double())
-  dist_apply(x, quantile, p = p, ...)
+  dist_apply(x, quantile, p = p, ..., tail = tail)
 }
 log_quantile <- function(x, p, ...) {
   UseMethod("log_quantile")
@@ -154,22 +163,39 @@ log_quantile.distribution <- function(x, p, ...){
 #'
 #' @inheritParams density.distribution
 #' @param q The quantile at which the cdf is calculated.
+#' @param tail Which tail the probabilities are of: `"lower"` (the default),
+#' \eqn{P(X \le q)}, or `"upper"`, \eqn{P(X > q)}, which is the survival
+#' function. Where possible the upper
+#' tail is computed directly, so it keeps its precision where
+#' `1 - cdf(x, q)` would round to zero. For multivariate distributions the
+#' upper tail is the complement \eqn{1 - P(X \le q)}, not the joint survival
+#' function.
 #'
 #' @seealso `vignette("broadcasting", package = "distributional")` for how the
 #' `q` argument is combined with the distributions.
 #'
+#' @examples
+#' # The survival function keeps its precision far into the upper tail
+#' cdf(dist_normal(), 10, tail = "upper")
+#' 1 - cdf(dist_normal(), 10)
+#'
+#' # The cumulative hazard function, -log(S(q))
+#' -cdf(dist_weibull(2, 1), 3, tail = "upper", log = TRUE)
+#'
 #' @name cdf
 #' @export
-cdf <- function (x, q, ..., log = FALSE){
-  if(log) return(log_cdf(x, q, ...))
+cdf <- function (x, q, ..., tail = c("lower", "upper"), log = FALSE){
+  tail <- match.arg(tail)
+  if(log) return(log_cdf(x, q, ..., tail = tail))
   UseMethod("cdf")
 }
 #' @rdname cdf
 #' @export
-cdf.distribution <- function(x, q, ...){
+cdf.distribution <- function(x, q, ..., tail = c("lower", "upper")){
+  tail <- match.arg(tail)
   q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
-  dist_apply(x, cdf, q = q, ...)
+  dist_apply(x, cdf, q = q, ..., tail = tail)
 }
 log_cdf <- function(x, q, ...) {
   UseMethod("log_cdf")

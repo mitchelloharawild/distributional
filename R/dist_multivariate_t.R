@@ -152,15 +152,16 @@ log_density.dist_mvt <- function(x, at, ..., na.rm = FALSE) {
 
 #' @export
 quantile.dist_mvt <- function(x, p, kind = c("equicoordinate", "marginal"),
-                               ..., na.rm = FALSE) {
+                               ..., na.rm = FALSE, tail = "lower") {
   kind <- match.arg(kind)
   q <- if (kind == "marginal") {
     scale <- sqrt(diag(x[["sigma"]]))
-    stats::qt(p, df = rep(x[["df"]], each = length(p))) * 
+    stats::qt(p, df = rep(x[["df"]], each = length(p)), lower.tail = tail == "lower") * 
       rep(scale, each = length(p)) + 
       rep(x[["mu"]], each = length(p))
   } else {
     require_package("mvtnorm")
+    if (tail == "upper") p <- 1 - p
     vapply(p, function(p, ...) {
       if (p == 0) return(-Inf) else if (p == 1) return(Inf)
       mvtnorm::qmvt(p, ...)$quantile
@@ -171,10 +172,12 @@ quantile.dist_mvt <- function(x, p, kind = c("equicoordinate", "marginal"),
 }
 
 #' @export
-cdf.dist_mvt <- function(x, q, ..., na.rm = FALSE) {
-  if (is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ...))
+cdf.dist_mvt <- function(x, q, ..., na.rm = FALSE, tail = "lower") {
+  if (is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
   require_package("mvtnorm")
-  mvtnorm::pmvt(upper = as.numeric(q), delta = x[["mu"]], sigma = x[["sigma"]], df = x[["df"]], ...)[1]
+  p <- mvtnorm::pmvt(upper = as.numeric(q), delta = x[["mu"]], sigma = x[["sigma"]], df = x[["df"]], ...)[1]
+  # The upper tail of a multivariate distribution is the complement 1 - F(q)
+  if (tail == "lower") p else 1 - p
 }
 
 #' @export

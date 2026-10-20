@@ -106,16 +106,20 @@ log_density.dist_laplace <- function(x, at, ...) {
 }
 
 #' @export
-quantile.dist_laplace <- function(x, p, ...) {
+quantile.dist_laplace <- function(x, p, ..., tail = "lower") {
   mu <- x[["mu"]]
   sigma <- x[["sigma"]]
-  mu - sigma * sign(p - 0.5) * log(1 - 2 * abs(p - 0.5))
+  # The upper tail quantile is the lower tail quantile reflected about mu
+  s <- if (tail == "lower") 1 else -1
+  mu - s * sigma * sign(p - 0.5) * log(2 * pmin(p, 1 - p))
 }
 
 #' @export
-cdf.dist_laplace <- function(x, q, ...) {
+cdf.dist_laplace <- function(x, q, ..., tail = "lower") {
   mu <- x[["mu"]]
   sigma <- x[["sigma"]]
+  # The upper tail is the lower tail reflected about mu
+  if (tail == "upper") q <- 2 * mu - q
   ifelse(q < mu,
     0.5 * exp((q - mu) / sigma),
     1 - 0.5 * exp(-(q - mu) / sigma)

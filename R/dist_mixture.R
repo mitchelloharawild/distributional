@@ -231,33 +231,33 @@ density.dist_mixture <- function(x, at, ...) {
 }
 
 #' @export
-quantile.dist_mixture <- function(x, p, ...) {
+quantile.dist_mixture <- function(x, p, ..., tail = "lower") {
   d <- dim(x)
   if (d > 1) {
     stop("quantile is not implemented for multivariate mixtures.")
   }
-  if (length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
+  if (length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ..., tail = tail))
 
   # Find bounds for optimisation based on range of each quantile
-  dist_q <- vapply(x[["dist"]], quantile, numeric(1L), p, ..., USE.NAMES = FALSE)
+  dist_q <- vapply(x[["dist"]], quantile, numeric(1L), p, ..., tail = tail, USE.NAMES = FALSE)
   if (vctrs::vec_unique_count(dist_q) == 1) return(dist_q[1])
-  if (p == 0) return(min(dist_q))
-  if (p == 1) return(max(dist_q))
+  if (p == 0) return(if (tail == "lower") min(dist_q) else max(dist_q))
+  if (p == 1) return(if (tail == "lower") max(dist_q) else min(dist_q))
 
   # Search the cdf() for appropriate quantile
   stats::uniroot(
-    function(pos) p - cdf(x, pos, ...),
+    function(pos) p - cdf(x, pos, ..., tail = tail),
     interval = c(min(dist_q), max(dist_q)),
     extendInt = "yes"
   )$root
 }
 
 #' @export
-cdf.dist_mixture <- function(x, q, ...) {
+cdf.dist_mixture <- function(x, q, ..., tail = "lower") {
   d <- dim(x)
   if (d == 1L) {
-    if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
-    sum(x[["w"]] * vapply(x[["dist"]], cdf, numeric(1L), q = q, ...))
+    if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
+    sum(x[["w"]] * vapply(x[["dist"]], cdf, numeric(1L), q = q, ..., tail = tail))
   } else {
     NextMethod()
   }
@@ -331,18 +331,20 @@ format.dist_q_mixture <- function(x, width = getOption("width"), ...) {
 }
 
 #' @export
-quantile.dist_q_mixture <- function(x, p, ...) {
-  if (length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ...))
-  sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ...))
+quantile.dist_q_mixture <- function(x, p, ..., tail = "lower") {
+  if (length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ..., tail = tail))
+  sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ..., tail = tail))
 }
 
 #' @export
-cdf.dist_q_mixture <- function(x, q, ...) {
-  if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ...))
+cdf.dist_q_mixture <- function(x, q, ..., tail = "lower") {
+  if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
 
   # Find p in (0, 1) such that Q(p) = q by inverting the quantile function.
+  # For the upper tail this inverts the upper tail quantile function, which
+  # keeps precision for small upper tail probabilities.
   fn <- function(p) {
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ...)) - q
+    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ..., tail = tail)) - q
   }
 
   # Compute support bounds directly from the quantile function to avoid
@@ -353,16 +355,18 @@ cdf.dist_q_mixture <- function(x, q, ...) {
   )
 
   # q is at or below the lower bound of the mixture support
-  if (q <= lims[1]) return(0)
+  if (q <= lims[1]) return(if (tail == "lower") 0 else 1)
   # q is at or above the upper bound of the mixture support
-  if (q >= lims[2]) return(1)
+  if (q >= lims[2]) return(if (tail == "lower") 1 else 0)
 
   # Use the smallest representable eps so the search interval covers
   # far tails (e.g., normal distributions). For q beyond Q(eps) or Q(1-eps),
   # return the boundary probability rather than erroring in uniroot.
+  # The upper tail quantile function is decreasing, so its sign is flipped.
   eps <- .Machine$double.eps
-  lo_val <- fn(eps)
-  hi_val <- fn(1 - eps)
+  s <- if (tail == "lower") 1 else -1
+  lo_val <- s * fn(eps)
+  hi_val <- s * fn(1 - eps)
 
   if (lo_val >= 0) return(eps)
   if (hi_val <= 0) return(1 - eps)

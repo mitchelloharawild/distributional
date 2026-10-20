@@ -99,15 +99,15 @@ log_density.dist_inverse_exponential <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_inverse_exponential <- function(x, p, ...){
+quantile.dist_inverse_exponential <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qinvexp(p, x[["r"]])
+  actuar::qinvexp(p, x[["r"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_inverse_exponential <- function(x, q, ...){
+cdf.dist_inverse_exponential <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::pinvexp(q, x[["r"]])
+  actuar::pinvexp(q, x[["r"]], lower.tail = tail == "lower")
 }
 
 #' @export

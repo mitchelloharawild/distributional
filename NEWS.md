@@ -2,6 +2,11 @@
 
 ## Improvements
 
+* `cdf()` and `quantile()` gain a `tail` argument (`"lower"` or `"upper"`).
+  `cdf(x, q, tail = "upper")` gives the survival function P(X > q), and can be
+  combined with `log = TRUE` (for example `-cdf(x, q, tail = "upper", log = TRUE)`
+  is the cumulative hazard). Upper tail probabilities keep their precision
+  where `1 - cdf()` would round to 0.
 * Added closed-form `support()` methods for all parametric distributions,
   avoiding the slower numerical default that evaluates `quantile()`,
   `density()` and `generate()`. Degenerate parameterisations (such as

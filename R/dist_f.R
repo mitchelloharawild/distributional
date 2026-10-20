@@ -189,20 +189,20 @@ log_density.dist_f <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_f <- function(x, p, ...){
+quantile.dist_f <- function(x, p, ..., tail = "lower"){
   if(is.null(x[["ncp"]])) {
-    stats::qf(p, x[["df1"]], x[["df2"]])
+    stats::qf(p, x[["df1"]], x[["df2"]], lower.tail = tail == "lower")
   } else {
-    stats::qf(p, x[["df1"]], x[["df2"]], x[["ncp"]])
+    stats::qf(p, x[["df1"]], x[["df2"]], x[["ncp"]], lower.tail = tail == "lower")
   }
 }
 
 #' @export
-cdf.dist_f <- function(x, q, ...){
+cdf.dist_f <- function(x, q, ..., tail = "lower"){
   if(is.null(x[["ncp"]])) {
-    stats::pf(q, x[["df1"]], x[["df2"]])
+    stats::pf(q, x[["df1"]], x[["df2"]], lower.tail = tail == "lower")
   } else {
-    stats::pf(q, x[["df1"]], x[["df2"]], x[["ncp"]])
+    stats::pf(q, x[["df1"]], x[["df2"]], x[["ncp"]], lower.tail = tail == "lower")
   }
 }
 

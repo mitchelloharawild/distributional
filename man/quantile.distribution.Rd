@@ -4,7 +4,7 @@
 \alias{quantile.distribution}
 \title{Distribution Quantiles}
 \usage{
-\method{quantile}{distribution}(x, p, ..., log = FALSE)
+\method{quantile}{distribution}(x, p, ..., tail = c("lower", "upper"), log = FALSE)
 }
 \arguments{
 \item{x}{The distribution(s).}
@@ -13,12 +13,22 @@
 
 \item{...}{Additional arguments passed to methods.}
 
+\item{tail}{Which tail \code{p} is the probability of: \code{"lower"} (the default),
+\eqn{P(X \le x)}, or \code{"upper"}, \eqn{P(X > x)}. So \code{quantile(x, p, tail = "upper")} equals
+\code{quantile(x, 1 - p)} without the loss of precision from computing \code{1 - p}.}
+
 \item{log}{If \code{TRUE}, probabilities will be given as log probabilities.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 Computes the quantiles of a distribution.
+}
+\examples{
+# Upper tail quantiles
+quantile(dist_normal(), 0.025, tail = "upper")
+quantile(dist_normal(), 1e-20, tail = "upper")
+
 }
 \seealso{
 \code{vignette("broadcasting", package = "distributional")} for how the

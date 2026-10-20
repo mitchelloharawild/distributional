@@ -183,21 +183,25 @@ density.dist_gpd <- function(x, at, ...) {
 }
 
 #' @exportS3Method distributional::cdf
-cdf.dist_gpd <- function(x, q, ...) {
+cdf.dist_gpd <- function(x, q, ..., tail = "lower") {
   z <- pmax(q - x[["location"]], 0) / x[["scale"]]
-  if (x[["shape"]] == 0) {
-    1 - exp(-z)
+  # Upper tail probability
+  s <- if (x[["shape"]] == 0) {
+    exp(-z)
   } else {
-    1 - pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]])
+    pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]])
   }
+  if (tail == "lower") 1 - s else s
 }
 
 #' @exportS3Method stats::quantile
-quantile.dist_gpd <- function(x, p, ...) {
+quantile.dist_gpd <- function(x, p, ..., tail = "lower") {
+  # Upper tail probability
+  s <- if (tail == "lower") 1 - p else p
   if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(1 - p)
+    x[["location"]] - x[["scale"]] * log(s)
   } else {
-    x[["location"]] + x[["scale"]] * ((1 - p)^(-x[["shape"]]) - 1) / x[["shape"]]
+    x[["location"]] + x[["scale"]] * (s^(-x[["shape"]]) - 1) / x[["shape"]]
   }
 }
 

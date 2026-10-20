@@ -185,9 +185,9 @@ density.dist_transformed <- function(x, at, ...){
 }
 
 #' @export
-cdf.dist_transformed <- function(x, q, ...){
+cdf.dist_transformed <- function(x, q, ..., tail = "lower"){
   inv <- function(v) suppressWarnings(x[["inverse"]](v))
-  p <- cdf(x[["dist"]], inv(q), ...)
+  dist_tail <- tail
   # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
   if(!is.null(x[["dist"]])){
     dir <- monotonic_dir(x[["transform"]], x[["dist"]])
@@ -195,22 +195,24 @@ cdf.dist_transformed <- function(x, q, ...){
       warning("Cannot compute the cdf of a non-monotonic transformation over the distribution's region of mass, returning `NA`.")
       return(rep(NA_real_, length(q)))
     }
-    if(dir == -1L) p <- 1 - p
+    # A decreasing transformation swaps the tails
+    if(dir == -1L) dist_tail <- if(tail == "lower") "upper" else "lower"
   }
+  p <- cdf(x[["dist"]], inv(q), ..., tail = dist_tail)
 
   # TODO: Rework for support of closed limits and prevent computation
   x_sup <- support(x)
   x_lim <- field(x_sup, "lim")[[1]]
   x_cls <- field(x_sup, "closed")[[1]]
   if (!any(is.na(x_lim))) {
-    p[q <= x_lim[1] & !x_cls[1]] <- 0
-    p[q >= x_lim[2] & !x_cls[2]] <- 1
+    p[q <= x_lim[1] & !x_cls[1]] <- if (tail == "lower") 0 else 1
+    p[q >= x_lim[2] & !x_cls[2]] <- if (tail == "lower") 1 else 0
   }
   p
 }
 
 #' @export
-quantile.dist_transformed <- function(x, p, ...){
+quantile.dist_transformed <- function(x, p, ..., tail = "lower"){
   # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
   if(!is.null(x[["dist"]])){
     dir <- monotonic_dir(x[["transform"]], x[["dist"]])
@@ -218,9 +220,10 @@ quantile.dist_transformed <- function(x, p, ...){
       warning("Cannot compute quantiles of a non-monotonic transformation over the distribution's region of mass, returning `NA`.")
       return(rep(NA_real_, length(p)))
     }
-    if(dir == -1L) p <- 1 - p
+    # A decreasing transformation swaps the tails
+    if(dir == -1L) tail <- if(tail == "lower") "upper" else "lower"
   }
-  x[["transform"]](quantile(x[["dist"]], p, ...))
+  x[["transform"]](quantile(x[["dist"]], p, ..., tail = tail))
 }
 
 #' @export

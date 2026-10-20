@@ -197,21 +197,24 @@ density.dist_gev <- function(x, at, ...) {
 }
 
 #' @exportS3Method distributional::cdf
-cdf.dist_gev <- function(x, q, ...) {
+cdf.dist_gev <- function(x, q, ..., tail = "lower") {
   z <- (q - x[["location"]]) / x[["scale"]]
-  if (x[["shape"]] == 0) {
-    exp(-exp(-z))
+  t <- if (x[["shape"]] == 0) {
+    exp(-z)
   } else {
-    exp(-pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]]))
+    pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]])
   }
+  if (tail == "lower") exp(-t) else -expm1(-t)
 }
 
 #' @exportS3Method stats::quantile
-quantile.dist_gev <- function(x, p, ...) {
+quantile.dist_gev <- function(x, p, ..., tail = "lower") {
+  # -log(F), where F is the lower tail probability
+  t <- if (tail == "lower") -log(p) else -log1p(-p)
   if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(-log(p))
+    x[["location"]] - x[["scale"]] * log(t)
   } else {
-    x[["location"]] + x[["scale"]] * ((-log(p))^(-x[["shape"]]) - 1) / x[["shape"]]
+    x[["location"]] + x[["scale"]] * (t^(-x[["shape"]]) - 1) / x[["shape"]]
   }
 }
 

@@ -146,13 +146,13 @@ log_density.dist_weibull <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_weibull <- function(x, p, ...){
-  stats::qweibull(p, x[["shape"]], x[["scale"]])
+quantile.dist_weibull <- function(x, p, ..., tail = "lower"){
+  stats::qweibull(p, x[["shape"]], x[["scale"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_weibull <- function(x, q, ...){
-  stats::pweibull(q, x[["shape"]], x[["scale"]])
+cdf.dist_weibull <- function(x, q, ..., tail = "lower"){
+  stats::pweibull(q, x[["shape"]], x[["scale"]], lower.tail = tail == "lower")
 }
 
 #' @export

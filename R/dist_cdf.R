@@ -106,13 +106,15 @@ density.dist_cdf <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_cdf <- function(x, p, ...){
+quantile.dist_cdf <- function(x, p, ..., tail = "lower"){
+  if(tail == "upper") p <- 1 - p
   interp_quantile(x[["x"]], x[["cdf"]], p)
 }
 
 #' @export
-cdf.dist_cdf <- function(x, q, ...){
-  interp_cdf(x[["x"]], x[["cdf"]], q)
+cdf.dist_cdf <- function(x, q, ..., tail = "lower"){
+  p <- interp_cdf(x[["x"]], x[["cdf"]], q)
+  if (tail == "lower") p else 1 - p
 }
 
 #' @export

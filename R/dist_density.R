@@ -209,7 +209,7 @@ density.dist_pdf <- function(x, at, ...){
 }
 
 #' @export
-cdf.dist_pdf <- function(x, q, ...){
+cdf.dist_pdf <- function(x, q, ..., tail = "lower"){
   d <- density_intervals(x)
   n <- length(d$x)
 
@@ -230,11 +230,12 @@ cdf.dist_pdf <- function(x, q, ...){
   }
 
   out[ok] <- pmin(pmax(z, 0), 1)
-  out
+  if (tail == "lower") out else 1 - out
 }
 
 #' @export
-quantile.dist_pdf <- function(x, p, ...){
+quantile.dist_pdf <- function(x, p, ..., tail = "lower"){
+  if(tail == "upper") p <- 1 - p
   d <- density_intervals(x)
   n <- length(d$x)
 

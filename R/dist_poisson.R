@@ -120,13 +120,13 @@ log_density.dist_poisson <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_poisson <- function(x, p, ...){
-  stats::qpois(p, x[["l"]])
+quantile.dist_poisson <- function(x, p, ..., tail = "lower"){
+  stats::qpois(p, x[["l"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_poisson <- function(x, q, ...){
-  stats::ppois(q, x[["l"]])
+cdf.dist_poisson <- function(x, q, ..., tail = "lower"){
+  stats::ppois(q, x[["l"]], lower.tail = tail == "lower")
 }
 
 #' @export

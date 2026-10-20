@@ -112,15 +112,15 @@ log_density.dist_inverse_gamma <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_inverse_gamma <- function(x, p, ...){
+quantile.dist_inverse_gamma <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qinvgamma(p, x[["s"]], x[["r"]])
+  actuar::qinvgamma(p, x[["s"]], x[["r"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_inverse_gamma <- function(x, q, ...){
+cdf.dist_inverse_gamma <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::pinvgamma(q, x[["s"]], x[["r"]])
+  actuar::pinvgamma(q, x[["s"]], x[["r"]], lower.tail = tail == "lower")
 }
 
 #' @export

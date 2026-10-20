@@ -106,13 +106,13 @@ log_density.dist_uniform <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_uniform <- function(x, p, ...){
-  stats::qunif(p, x[["l"]], x[["u"]])
+quantile.dist_uniform <- function(x, p, ..., tail = "lower"){
+  stats::qunif(p, x[["l"]], x[["u"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_uniform <- function(x, q, ...){
-  stats::punif(q, x[["l"]], x[["u"]])
+cdf.dist_uniform <- function(x, q, ..., tail = "lower"){
+  stats::punif(q, x[["l"]], x[["u"]], lower.tail = tail == "lower")
 }
 
 #' @export

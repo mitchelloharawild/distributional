@@ -114,15 +114,15 @@ log_density.dist_poisson_inverse_gaussian <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_poisson_inverse_gaussian <- function(x, p, ...){
+quantile.dist_poisson_inverse_gaussian <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qpoisinvgauss(p, x[["m"]], x[["s"]])
+  actuar::qpoisinvgauss(p, x[["m"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_poisson_inverse_gaussian <- function(x, q, ...){
+cdf.dist_poisson_inverse_gaussian <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::ppoisinvgauss(q, x[["m"]], x[["s"]])
+  actuar::ppoisinvgauss(q, x[["m"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export

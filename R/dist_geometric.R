@@ -113,13 +113,13 @@ log_density.dist_geometric <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_geometric <- function(x, p, ...){
-  stats::qgeom(p, x[["p"]])
+quantile.dist_geometric <- function(x, p, ..., tail = "lower"){
+  stats::qgeom(p, x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_geometric <- function(x, q, ...){
-  stats::pgeom(q, x[["p"]])
+cdf.dist_geometric <- function(x, q, ..., tail = "lower"){
+  stats::pgeom(q, x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export

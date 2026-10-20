@@ -163,15 +163,15 @@ log_density.dist_gumbel <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_gumbel <- function(x, p, ...){
+quantile.dist_gumbel <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qgumbel(p, x[["a"]], x[["s"]])
+  actuar::qgumbel(p, x[["a"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_gumbel <- function(x, q, ...){
+cdf.dist_gumbel <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::pgumbel(q, x[["a"]], x[["s"]])
+  actuar::pgumbel(q, x[["a"]], x[["s"]], lower.tail = tail == "lower")
 }
 
 #' @export

@@ -119,27 +119,27 @@ log_density.dist_tweedie <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_tweedie <- function(x, p, ...){
+quantile.dist_tweedie <- function(x, p, ..., tail = "lower"){
   require_package("tweedieDistr")
-  tweedieDistr::qtweedie(p, x[["mu"]], x[["phi"]], x[["p"]])
+  tweedieDistr::qtweedie(p, x[["mu"]], x[["phi"]], x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export
-log_quantile.dist_tweedie <- function(x, p, ...){
+log_quantile.dist_tweedie <- function(x, p, ..., tail = "lower"){
   require_package("tweedieDistr")
-  tweedieDistr::qtweedie(p, x[["mu"]], x[["phi"]], x[["p"]], log.p = TRUE)
+  tweedieDistr::qtweedie(p, x[["mu"]], x[["phi"]], x[["p"]], log.p = TRUE, lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_tweedie <- function(x, q, ...){
+cdf.dist_tweedie <- function(x, q, ..., tail = "lower"){
   require_package("tweedieDistr")
-  tweedieDistr::ptweedie(q, x[["mu"]], x[["phi"]], x[["p"]])
+  tweedieDistr::ptweedie(q, x[["mu"]], x[["phi"]], x[["p"]], lower.tail = tail == "lower")
 }
 
 #' @export
-log_cdf.dist_tweedie <- function(x, q, ...){
+log_cdf.dist_tweedie <- function(x, q, ..., tail = "lower"){
   require_package("tweedieDistr")
-  tweedieDistr::ptweedie(q, x[["mu"]], x[["phi"]], x[["p"]], log.p = TRUE)
+  tweedieDistr::ptweedie(q, x[["mu"]], x[["phi"]], x[["p"]], log.p = TRUE, lower.tail = tail == "lower")
 }
 
 #' @export

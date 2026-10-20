@@ -116,15 +116,15 @@ log_density.dist_pareto <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_pareto <- function(x, p, ...){
+quantile.dist_pareto <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qpareto(p, x[["shape"]], x[["scale"]])
+  actuar::qpareto(p, x[["shape"]], x[["scale"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_pareto <- function(x, q, ...){
+cdf.dist_pareto <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::ppareto(q, x[["shape"]], x[["scale"]])
+  actuar::ppareto(q, x[["shape"]], x[["scale"]], lower.tail = tail == "lower")
 }
 
 #' @export

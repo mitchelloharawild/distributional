@@ -109,15 +109,15 @@ log_density.dist_burr <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_burr <- function(x, p, ...){
+quantile.dist_burr <- function(x, p, ..., tail = "lower"){
   require_package("actuar")
-  actuar::qburr(p, x[["s1"]], x[["s2"]], x[["r"]])
+  actuar::qburr(p, x[["s1"]], x[["s2"]], x[["r"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_burr <- function(x, q, ...){
+cdf.dist_burr <- function(x, q, ..., tail = "lower"){
   require_package("actuar")
-  actuar::pburr(q, x[["s1"]], x[["s2"]], x[["r"]])
+  actuar::pburr(q, x[["s1"]], x[["s2"]], x[["r"]], lower.tail = tail == "lower")
 }
 
 #' @export

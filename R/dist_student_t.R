@@ -188,17 +188,17 @@ log_density.dist_student_t <- function(x, at, ...){
 
 
 #' @export
-quantile.dist_student_t <- function(x, p, ...){
+quantile.dist_student_t <- function(x, p, ..., tail = "lower"){
   ncp <- x[["ncp"]] %||% missing_arg()
 
-  stats::qt(p, x[["df"]], ncp) * x[["sigma"]] + x[["mu"]]
+  stats::qt(p, x[["df"]], ncp, lower.tail = tail == "lower") * x[["sigma"]] + x[["mu"]]
 }
 
 #' @export
-cdf.dist_student_t <- function(x, q, ...){
+cdf.dist_student_t <- function(x, q, ..., tail = "lower"){
   ncp <- x[["ncp"]] %||% missing_arg()
 
-  stats::pt((q - x[["mu"]])/x[["sigma"]], x[["df"]], ncp)
+  stats::pt((q - x[["mu"]])/x[["sigma"]], x[["df"]], ncp, lower.tail = tail == "lower")
 }
 
 #' @export

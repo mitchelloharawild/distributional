@@ -143,11 +143,13 @@ truncated_is_lattice <- function(dist) {
 # so the mass at `lower` must be kept when normalising. For continuous
 # distributions P(Y < lower) = P(Y <= lower), but for distributions on the
 # integers it is the c.d.f. at the largest integer below `lower`.
-cdf_truncated_lower <- function(dist, lower) {
+#
+# With `tail = "upper"` this is the complement, P(Y >= lower).
+cdf_truncated_lower <- function(dist, lower, tail = "lower") {
   if (is.finite(lower) && truncated_is_lattice(dist)) {
-    cdf(dist, ceiling(lower) - 1)
+    cdf(dist, ceiling(lower) - 1, tail = tail)
   } else {
-    cdf(dist, lower)
+    cdf(dist, lower, tail = tail)
   }
 }
 
@@ -188,10 +190,17 @@ density.dist_truncated <- function(x, at, ...){
 }
 
 #' @export
-quantile.dist_truncated <- function(x, p, ...){
-  F_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
-  F_upr <- cdf(x[["dist"]], x[["upper"]])
-  qt <- quantile(x[["dist"]], F_lwr + p * (F_upr - F_lwr), ...)
+quantile.dist_truncated <- function(x, p, ..., tail = "lower"){
+  if (tail == "lower") {
+    F_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
+    F_upr <- cdf(x[["dist"]], x[["upper"]])
+    qt <- quantile(x[["dist"]], F_lwr + p * (F_upr - F_lwr), ...)
+  } else {
+    # Ratio of upper tails, to keep precision in the upper tail
+    S_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]], tail = "upper")
+    S_upr <- cdf(x[["dist"]], x[["upper"]], tail = "upper")
+    qt <- quantile(x[["dist"]], S_upr + p * (S_lwr - S_upr), ..., tail = "upper")
+  }
   lwr <- x[["lower"]]
   # The smallest attainable value of an integer supported distribution
   if (is.finite(lwr) && truncated_is_lattice(x[["dist"]])) lwr <- ceiling(lwr)
@@ -199,14 +208,23 @@ quantile.dist_truncated <- function(x, p, ...){
 }
 
 #' @export
-cdf.dist_truncated <- function(x, q, ...){
-  cdf_upr <- cdf(x[["dist"]], x[["upper"]])
-  cdf_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
+cdf.dist_truncated <- function(x, q, ..., tail = "lower"){
   out <- numeric(length(q))
-  q_lwr <- q < x[["lower"]] # out[q_lwr <- q < x[["lower"]]] <- 0
-  out[q_upr <- q > x[["upper"]]] <- 1
+  q_lwr <- q < x[["lower"]]
+  q_upr <- q > x[["upper"]]
   q_mid <- !(q_lwr|q_upr)
-  out[q_mid] <- (cdf(x[["dist"]], q = q[q_mid], ...) - cdf_lwr)/(cdf_upr - cdf_lwr)
+  if (tail == "lower") {
+    cdf_upr <- cdf(x[["dist"]], x[["upper"]])
+    cdf_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]])
+    out[q_upr] <- 1
+    out[q_mid] <- (cdf(x[["dist"]], q = q[q_mid], ...) - cdf_lwr)/(cdf_upr - cdf_lwr)
+  } else {
+    # Ratio of upper tails, to keep precision in the upper tail
+    S_upr <- cdf(x[["dist"]], x[["upper"]], tail = "upper")
+    S_lwr <- cdf_truncated_lower(x[["dist"]], x[["lower"]], tail = "upper")
+    out[q_lwr] <- 1
+    out[q_mid] <- (cdf(x[["dist"]], q = q[q_mid], ..., tail = "upper") - S_upr)/(S_lwr - S_upr)
+  }
   out
 }
 

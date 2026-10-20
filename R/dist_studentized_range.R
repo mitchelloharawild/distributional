@@ -63,13 +63,13 @@ format.dist_studentized_range <- function(x, digits = 2, ...){
 }
 
 #' @export
-quantile.dist_studentized_range <- function(x, p, ...){
-  stats::qtukey(p, x[["nm"]], x[["df"]], x[["nr"]])
+quantile.dist_studentized_range <- function(x, p, ..., tail = "lower"){
+  stats::qtukey(p, x[["nm"]], x[["df"]], x[["nr"]], lower.tail = tail == "lower")
 }
 
 #' @export
-cdf.dist_studentized_range <- function(x, q, ...){
-  stats::ptukey(q, x[["nm"]], x[["df"]], x[["nr"]])
+cdf.dist_studentized_range <- function(x, q, ..., tail = "lower"){
+  stats::ptukey(q, x[["nm"]], x[["df"]], x[["nr"]], lower.tail = tail == "lower")
 }
 
 #' @export
