@@ -2,6 +2,12 @@
 
 ## Improvements
 
+* Distributions are now stored and computed on in a vectorised way using the
+  vecvec package. A vector of distributions is held as one record vector per
+  family, and every method (`density()`, `cdf()`, `quantile()`, `generate()`,
+  `format()`, moments, `support()`, and so on) handles all distributions of a
+  family in one call rather than looping over them one at a time. This makes
+  working with long vectors of distributions much faster.
 * `cdf()` and `quantile()` gain a `tail` argument (`"lower"` or `"upper"`).
   `cdf(x, q, tail = "upper")` gives the survival function P(X > q), and can be
   combined with `log = TRUE` (for example `-cdf(x, q, tail = "upper", log = TRUE)`
@@ -20,6 +26,11 @@
 
 ## Bug fixes
 
+* The `skewness()` of `dist_beta()` now uses the correct formula.
+* `dist_multinomial()` and `dist_dirichlet()` `quantile()` now return the
+  marginal quantiles of each variate.
+* `density()` of `dist_multinomial()` now returns 0 when the counts do not sum
+  to `size`.
 * `quantile(x, p, log = TRUE)` no longer errors with "`q` must be a vector,
   not a function". A leftover argument check validated `q` (resolving to
   `base::q()`) instead of `p`.
@@ -32,6 +43,17 @@
   `density()` now returns `1/scale` (`shape = -1`) or `Inf` (`shape < -1`)
   there instead of 0. The density near the upper bound is also computed
   without floating point cancellation.
+
+## Other changes
+
+* The `type` argument of the `quantile()` method for `dist_sample()` is now
+  numeric (one of the `stats::quantile()` types, default `7`).
+* Seeded random draws from `generate()` may differ from previous versions for
+  `dist_gpd()`, `dist_mixture()`, `dist_truncated()` and `dist_inflated()`,
+  because they now generate all of their draws in a single vectorised call.
+* `generate()` methods for custom distribution classes must return a list with
+  one set of draws per distribution (a single distribution used to return the
+  draws directly).
 
 # distributional 0.9.0
 
