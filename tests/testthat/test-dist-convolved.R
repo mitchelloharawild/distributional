@@ -131,7 +131,7 @@ test_that("dist_convolved: explicit 3-arg construction works", {
   d3 <- dist_convolved(dist_gamma(2, 2), dist_gamma(2, 2), dist_gamma(2, 2))
   raw <- distributional:::dist_elem(d3, 1L)
   expect_s3_class(raw, "dist_convolved")
-  expect_length(raw[["dist"]], 3L)
+  expect_length(raw[["dist"]][[1L]], 3L)
 })
 
 test_that("dist_convolved: requires at least two distributions", {
@@ -143,7 +143,7 @@ test_that("dist_convolved: k-way chaining produces a flat dist_convolved", {
   raw <- distributional:::dist_elem(d3, 1L)
   expect_s3_class(raw, "dist_convolved")
   # Flattening happens at construction: 3 components, not a nested 2+1
-  expect_length(raw[["dist"]], 3L)
+  expect_length(raw[["dist"]][[1L]], 3L)
 })
 
 test_that("dist_convolved: k-way format lists all components", {
@@ -351,4 +351,55 @@ test_that("dist_convolved: exponential sums are accurate in the tails", {
   expect_equal(density(d, c(0.05, 1, 5)), list(dgamma(c(0.05, 1, 5), 2, 1)),
                tolerance = 1e-3)
   expect_equal(quantile(d, 1e-4), qgamma(1e-4, 2, 1), tolerance = 1e-2)
+})
+
+# ---------------------------------------------------------------------------
+# Vectors of several convolutions
+# ---------------------------------------------------------------------------
+
+test_that("dist_convolved: vectors of convolutions pair components by position", {
+  d <- dist_convolved(dist_gamma(c(2, 3, 4), 2), dist_gamma(2, c(2, 2, 2)))
+  exact <- dist_gamma(c(4, 5, 6), 2)
+  expect_length(d, 3L)
+  expect_equal(format(d)[2], "Gamma(3, 2) + Gamma(2, 2)")
+
+  expect_equal(density(d, 2), density(exact, 2), tolerance = 1e-3)
+  expect_equal(cdf(d, c(1, 2, 3)), cdf(exact, c(1, 2, 3)), tolerance = 1e-3)
+  expect_equal(cdf(d, 2, tail = "upper"), cdf(exact, 2, tail = "upper"), tolerance = 1e-3)
+  expect_equal(quantile(d, 0.3), quantile(exact, 0.3), tolerance = 1e-2)
+  expect_equal(mean(d), mean(exact))
+  expect_equal(variance(d), variance(exact))
+
+  # Mapped arguments
+  expect_equal(density(d, c(1, 2)), density(exact, c(1, 2)), tolerance = 1e-3)
+  expect_equal(quantile(d, c(0.2, 0.8)), quantile(exact, c(0.2, 0.8)), tolerance = 1e-2)
+})
+
+test_that("dist_convolved: vectors mixing components and lattice sums", {
+  d <- c(
+    dist_convolved(dist_poisson(2), dist_poisson(3)),
+    dist_convolved(dist_gamma(2, 2), dist_exponential(1)),
+    dist_convolved(dist_binomial(5, 0.5), dist_poisson(1), dist_binomial(3, 0.2))
+  )
+  expect_equal(density(d[1], 5), dpois(5, 5))
+  expect_equal(density(d, 5)[1], dpois(5, 5))
+  expect_equal(
+    density(d, 3),
+    c(density(d[1], 3), density(d[2], 3), density(d[3], 3))
+  )
+  expect_equal(
+    cdf(d, list(c(4, 1, 6)))[[1]],
+    c(cdf(d[1], 4), cdf(d[2], 1), cdf(d[3], 6))
+  )
+  expect_equal(
+    quantile(d, 0.5),
+    c(quantile(d[1], 0.5), quantile(d[2], 0.5), quantile(d[3], 0.5))
+  )
+  expect_equal(mean(d), c(5, 2, 4.1))
+  expect_equal(vec_size(support(d)), 3L)
+  expect_true(is.integer(vctrs::field(support(d), "x")[[1]]))
+  expect_false(is.integer(vctrs::field(support(d), "x")[[2]]))
+
+  samp <- generate(d, list(c(2, 3, 4)))
+  expect_equal(lengths(samp), c(2L, 3L, 4L))
 })

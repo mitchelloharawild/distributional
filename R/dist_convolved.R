@@ -103,84 +103,119 @@ dist_convolved <- function(...) {
   }
   lapply(dists, vec_assert, ptype = new_dist())
 
-  # Recycle inputs to a common length, then build a flat component list for
-  # each output position, unpacking any nested dist_convolved inputs.
+  # Recycle inputs to a common length, then build a flat `distribution` vector
+  # of components for each output position, unpacking any nested
+  # dist_convolved inputs.
   recycled <- do.call(vctrs::vec_recycle_common, dists)
   n <- vctrs::vec_size(recycled[[1L]])
 
   components_by_pos <- lapply(seq_len(n), function(i) {
-    unlist(
-      lapply(recycled, function(d) {
-        r <- dist_elem(d, i)
-        if (inherits(r, "dist_convolved")) r[["dist"]] else list(r)
-      }),
-      recursive = FALSE
-    )
+    parts <- lapply(recycled, function(d) {
+      di <- vec_slice(d, i)
+      r <- dist_elem(di, 1L)
+      if (inherits(r, "dist_convolved")) r[["dist"]][[1L]] else di
+    })
+    vec_c(!!!parts)
   })
 
   new_dist(dist = components_by_pos, class = "dist_convolved")
 }
 
+# Evaluate `.f(components, arg)` for each convolution in `x`, where
+# `components` is the `distribution` vector of components of one convolution
+# and `arg` is the matching element of the (size `n` or 1) broadcast argument
+# `at`. The FFT and lattice algorithms work on a single convolution's grid, so
+# this loops over the convolutions. The results are combined into a vector
+# (`simplify`) or returned as a list of `n`.
+convolved_map <- function(x, at, .f, simplify = TRUE) {
+  comps <- x[["dist"]]
+  n <- vec_size(x)
+  at <- vec_recycle(at, n)
+  out <- lapply(seq_len(n), function(i) .f(comps[[i]], vec_slice(at, i)))
+  if (simplify) vec_c(!!!out, .ptype = double()) else out
+}
 
 #' @export
 format.dist_convolved <- function(x, ...) {
-  parts <- vapply(x[["dist"]], format, character(1L))
-  paste(parts, collapse = " + ")
+  vapply(x[["dist"]], function(d) paste(format(d, ...), collapse = " + "), character(1L))
+}
+
+#' @export
+family.dist_convolved <- function(object, recursive = FALSE, ...) {
+  if (!recursive) return(rep_len("convolved", vec_size(object)))
+  if (vec_size(object) != 1L) {
+    return(lapply(vec_seq_along(object), function(i) {
+      family(vec_slice(object, i), recursive = TRUE)
+    }))
+  }
+  list(family = "convolved", dist = unname(family(object[["dist"]][[1L]], recursive = TRUE)))
 }
 
 #' @export
 density.dist_convolved <- function(x, at, ..., n = 2^12, tail_p = 1e-6) {
-  convolve_approx(x, n = n, tail_p = tail_p)$dens_fn(at)
+  convolved_map(x, at, function(d, a) convolve_approx(d, n = n, tail_p = tail_p)$dens_fn(a))
 }
 
 #' @export
 cdf.dist_convolved <- function(x, q, ..., n = 2^12, tail_p = 1e-6, tail = "lower") {
-  p <- convolve_approx(x, n = n, tail_p = tail_p)$cdf_fn(q)
+  p <- convolved_map(x, q, function(d, a) convolve_approx(d, n = n, tail_p = tail_p)$cdf_fn(a))
   if (tail == "lower") p else 1 - p
 }
 
 #' @export
 quantile.dist_convolved <- function(x, p, ..., n = 2^12, tail_p = 1e-6, tail = "lower") {
   if(tail == "upper") p <- 1 - p
-  convolve_approx(x, n = n, tail_p = tail_p)$qtl_fn(p)
+  convolved_map(x, p, function(d, a) convolve_approx(d, n = n, tail_p = tail_p)$qtl_fn(a))
 }
 
 #' @export
 generate.dist_convolved <- function(x, times, ..., n = 2^12, tail_p = 1e-6) {
-  convolve_approx(x, n = n, tail_p = tail_p)$qtl_fn(stats::runif(times))
+  convolved_map(x, times, function(d, t) {
+    convolve_approx(d, n = n, tail_p = tail_p)$qtl_fn(stats::runif(t))
+  }, simplify = FALSE)
 }
 
 #' @export
 mean.dist_convolved <- function(x, ...) {
-  Reduce(`+`, lapply(x[["dist"]], mean))
+  vapply(x[["dist"]], function(d) sum(mean(d)), numeric(1L))
 }
 
 #' @export
 covariance.dist_convolved <- function(x, ...) {
-  Reduce(`+`, lapply(x[["dist"]], covariance))
+  vapply(x[["dist"]], function(d) sum(unlist(covariance(d))), numeric(1L))
 }
 
 #' @export
 support.dist_convolved <- function(x, ...) {
-  info <- convolve_support(x[["dist"]])
+  out <- lapply(x[["dist"]], function(d) {
+    info <- convolve_support(d)
 
-  # The support of a sum spans the sum of the component limits.
-  lims <- c(sum(info$lims[1L, ]), sum(info$lims[2L, ]))
+    # The support of a sum spans the sum of the component limits.
+    lims <- c(sum(info$lims[1L, ]), sum(info$lims[2L, ]))
 
-  # The sum is discrete only if all of the components are discrete.
-  proto <- if (all(info$lattice)) integer() else numeric()
+    # The sum is discrete only if all of the components are discrete.
+    proto <- if (all(info$lattice)) integer() else numeric()
 
-  closed <- if (any(is.na(lims))) {
-    c(FALSE, FALSE)
-  } else {
-    lim_dens <- tryCatch(
-      suppressWarnings(density(x, lims)),
-      error = function(e) c(0, 0)
-    )
-    !near(lim_dens, 0)
-  }
+    closed <- if (any(is.na(lims))) {
+      c(FALSE, FALSE)
+    } else {
+      lim_dens <- tryCatch(
+        suppressWarnings(unlist(density(convolved_record(d), lims))),
+        error = function(e) c(0, 0)
+      )
+      !near(lim_dens, 0)
+    }
+    list(proto = proto, lims = lims, closed = closed)
+  })
 
-  new_support_region(list(proto), list(lims), list(closed))
+  new_support_region(
+    lapply(out, `[[`, "proto"), lapply(out, `[[`, "lims"), lapply(out, `[[`, "closed")
+  )
+}
+
+# A single-element `dist_convolved` vector of the components `dists`.
+convolved_record <- function(dists) {
+  new_dist(dist = list(dists), class = "dist_convolved")
 }
 
 # Describe the support of each component of a convolution:
@@ -192,47 +227,48 @@ support.dist_convolved <- function(x, ...) {
 # * `bounds`: `lims`, with infinite tails truncated at `tail_p`. Only computed
 #   when `tail_p` is given.
 convolve_support <- function(dists, tail_p = NULL) {
-  sup <- lapply(dists, function(d) tryCatch(support(d), error = function(e) NULL))
+  k <- vec_size(dists)
+  sup <- tryCatch(support(dists), error = function(e) NULL)
 
-  lims <- vapply(seq_along(dists), function(i) {
-    lim <- if (is.null(sup[[i]])) {
-      as.numeric(quantile(dists[[i]], c(0, 1)))
-    } else {
-      as.numeric(field(sup[[i]], "lim")[[1L]])
-    }
-    if (length(lim) == 2L) lim else c(NA_real_, NA_real_)
-  }, numeric(2L))
+  lims <- if (is.null(sup)) {
+    vapply(quantile(dists, c(0, 1)), as.numeric, numeric(2L))
+  } else {
+    vapply(field(sup, "lim"), function(lim) {
+      if (length(lim) == 2L) as.numeric(lim) else c(NA_real_, NA_real_)
+    }, numeric(2L))
+  }
+  lims <- matrix(lims, nrow = 2L, ncol = k)
 
-  lattice <- vapply(seq_along(dists), function(i) {
-    d <- dists[[i]]
-    if (inherits(d, "dist_degenerate")) {
-      # A point mass is on the lattice if it sits on an integer.
-      return(is.finite(d[["x"]]) && d[["x"]] == trunc(d[["x"]]))
-    }
-    if (is.null(sup[[i]])) return(FALSE)
-    proto <- field(sup[[i]], "x")[[1L]]
-    is.integer(proto) || is.logical(proto)
-  }, logical(1L))
+  lattice <- if (is.null(sup)) {
+    rep(FALSE, k)
+  } else {
+    vapply(field(sup, "x"), function(proto) is.integer(proto) || is.logical(proto), logical(1L))
+  }
+  # A point mass is on the lattice if it sits on an integer.
+  degenerate <- family(dists) %in% "degenerate"
+  if (any(degenerate)) {
+    pt <- parameters(dists[degenerate])$x
+    lattice[degenerate] <- is.finite(pt) & pt == trunc(pt)
+  }
 
-  bounds <- if (is.null(tail_p)) NULL else vapply(seq_along(dists), function(i) {
-    c(
-      if (is.finite(lims[1L, i])) lims[1L, i] else as.numeric(quantile(dists[[i]], tail_p)),
-      if (is.finite(lims[2L, i])) lims[2L, i] else as.numeric(quantile(dists[[i]], 1 - tail_p))
-    )
-  }, numeric(2L))
+  bounds <- if (is.null(tail_p)) NULL else {
+    lwr <- ifelse(is.finite(lims[1L, ]), lims[1L, ], as.numeric(quantile(dists, tail_p)))
+    upr <- ifelse(is.finite(lims[2L, ]), lims[2L, ], as.numeric(quantile(dists, 1 - tail_p)))
+    rbind(lwr, upr)
+  }
 
   list(lattice = lattice, lims = lims, bounds = bounds)
 }
 
-# Compute the k-way convolution approximation for a single dist_convolved
-# object. Components are already flat (no nested dist_convolved).
+# Compute the k-way convolution approximation for the `distribution` vector of
+# components of a single convolution. Components are already flat (no nested
+# dist_convolved).
 #
 # The method used depends on the support of the components: a sum of lattice
 # (integer supported) distributions is convolved exactly on the integer
 # lattice, while any sum involving a continuous component is convolved on a
 # common continuous grid.
-convolve_approx <- function(x, n, tail_p) {
-  dists <- x[["dist"]]
+convolve_approx <- function(dists, n, tail_p) {
   info <- convolve_support(dists, tail_p = tail_p)
 
   if (all(info$lattice)) {
@@ -249,7 +285,7 @@ convolve_approx <- function(x, n, tail_p) {
 # spanned by the components. Returns `NULL` if the components cannot be
 # represented on that lattice.
 convolve_lattice <- function(dists, info, tail_p) {
-  k <- length(dists)
+  k <- vec_size(dists)
 
   lo <- floor(info$bounds[1L, ])
   hi <- ceiling(info$bounds[2L, ])
@@ -266,7 +302,7 @@ convolve_lattice <- function(dists, info, tail_p) {
 
   atoms <- Map(seq.int, lo, hi)
   pmf <- lapply(seq_len(k), function(i) {
-    pmax(suppressWarnings(density(dists[[i]], atoms[[i]])), 0)
+    pmax(suppressWarnings(unlist(density(dists[i], atoms[[i]]))), 0)
   })
 
   # A component supported on a coarser or shifted lattice (for example a
@@ -324,7 +360,7 @@ convolve_lattice <- function(dists, info, tail_p) {
 # discretised into cell probabilities (rather than sampled densities), which
 # preserves mass and captures the jumps of any discrete component.
 convolve_grid <- function(dists, info, n) {
-  k <- length(dists)
+  k <- vec_size(dists)
   lattice <- info$lattice
 
   # ---- build evaluation grid ------------------------------------------------
@@ -374,8 +410,8 @@ convolve_grid <- function(dists, info, n) {
   # midpoint. Using probabilities rather than densities is mass preserving,
   # and picks up the atoms of discrete components via the jumps in the cdf.
   x_edges <- x_lo + seq.int(0, n) * dx
-  mass_vecs <- lapply(dists, function(d) {
-    pmax(diff(suppressWarnings(cdf(d, x_edges))), 0)
+  mass_vecs <- lapply(suppressWarnings(cdf(dists, x_edges)), function(p) {
+    pmax(diff(p), 0)
   })
 
   # ---- k-way FFT convolution ------------------------------------------------
