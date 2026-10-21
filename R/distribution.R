@@ -155,23 +155,7 @@ vec_ptype_abbr.distribution <- function(x, ...){
 # where `format()` was always just per-element character formatting.
 #' @export
 format.distribution <- function(x, ...) {
-  loc <- locate_slots(x)
-  out <- rep(NA_character_, loc$n)
-  for (k in seq_along(loc$slots)) {
-    pos <- loc$pos[[k]]
-    if (!length(pos)) next
-    vals <- loc$slots[[k]][loc$local[pos]]
-    if (is_ported_dist(vals)) {
-      out[pos] <- format(vals, ...)
-    } else {
-      # Not every not-yet-ported family's `format()` is naturally vectorised
-      # (e.g. one that does `length(x[["field"]])` expecting `x` to be a
-      # single distribution); loop per-element to match its pre-migration
-      # contract.
-      for (j in seq_along(pos)) out[pos[j]] <- format(vals[j], ...)
-    }
-  }
-  out
+  apply_dist(x, format, ...) %||% character()
 }
 #' @export
 vec_ptype_full.distribution <- function(x, ...){
@@ -458,22 +442,8 @@ generate.distribution <- function(x, times, ...){
   times <- vec_recycle(times, size = length(x))
 
   dn <- variates(x)
-  loc <- locate_slots(x)
-  out <- vector("list", loc$n)
-
-  for (k in seq_along(loc$slots)) {
-    pos <- loc$pos[[k]]
-    if (!length(pos)) next
-    vals <- loc$slots[[k]][loc$local[pos]]
-
-    if (is_ported_dist(vals)) {
-      out[pos] <- generate(vals, times = times[pos], ...)
-    } else {
-      for (j in seq_along(pos)) {
-        out[[pos[j]]] <- generate(vals[j], times = times[pos[j]], ...)
-      }
-    }
-  }
+  out <- dist_paired(generate, x, times = times, ...)
+  if (!length(out)) out <- list()
 
   if (!is.null(dn)) {
     out <- lapply(out, function(y) {

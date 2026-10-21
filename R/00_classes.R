@@ -36,37 +36,3 @@ class_distribution <- S7::new_class(
 # etc. are combined into one). Not exported by vecvec, so re-exposed here
 # under our own name rather than reaching into vecvec:::.
 vecvec_flatten_adj <- utils::getFromNamespace("vecvec_flatten_adj", "vecvec")
-
-#' Distribution families with vectorised (ported) methods
-#'
-#' @description
-#' A distribution family is "ported" once its `<generic>.dist_<family>`
-#' methods accept a *vector* of `n` distributions and vectorised (length `n`
-#' or recyclable) arguments, returning a length-`n` result in one call -
-#' rather than assuming `x` is always a single distribution.
-#'
-#' `apply_dist()` assumes every family is ported. This registry is only
-#' consulted by `format()` and `generate()`, which still loop
-#' element-by-element over families that are not listed here. See
-#' `_dev/dist-port.md` for the families still to be ported.
-#'
-#' @noRd
-dist_ported_families <- c(
-  "dist_normal", "dist_poisson", "dist_na", "dist_bernoulli", "dist_beta",
-  "dist_binomial", "dist_burr", "dist_chisq", "dist_exponential",
-  "dist_gamma", "dist_geometric", "dist_gumbel", "dist_hypergeometric",
-  "dist_inverse_gaussian", "dist_laplace", "dist_logarithmic",
-  "dist_logistic", "dist_lognormal", "dist_negbin", "dist_pareto",
-  "dist_poisson_inverse_gaussian", "dist_tweedie", "dist_uniform",
-  "dist_weibull", "dist_cauchy", "dist_f", "dist_inverse_exponential",
-  "dist_inverse_gamma", "dist_student_t", "dist_degenerate", "dist_gev",
-  "dist_gpd", "dist_gh", "dist_gk", "dist_studentized_range",
-  "dist_horseshoe", "dist_categorical", "dist_multinomial", "dist_dirichlet",
-  "dist_mvnorm", "dist_mvt", "dist_cdf", "dist_pdf", "dist_quantile",
-  "dist_sample", "dist_truncated", "dist_inflated", "dist_wrap",
-  "dist_transformed", "dist_convolved", "dist_mixture", "dist_q_mixture"
-)
-
-is_ported_dist <- function(x) {
-  class(x)[1L] %in% dist_ported_families
-}

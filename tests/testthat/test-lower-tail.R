@@ -212,7 +212,7 @@ new_lower_tail_test_dist <- function(cls, methods) {
 
 test_that("dist_default falls back to 1 - cdf() and quantile(1 - p)", {
   x <- new_lower_tail_test_dist("dist_test_lower_tail_generate", list(
-    generate = function(x, times, ...) stats::rexp(times)
+    generate = function(x, times, ...) lapply(times, stats::rexp)
   ))
   set.seed(1)
   expect_equal(

@@ -59,9 +59,7 @@ cdf.dist_default <- function(x, q, times = 1e5, ..., tail = "lower"){
     })))
   }
   # Use Monte Carlo integration
-  r <- generate(x, times = times)
-  # Ported families return a list holding the draws of each distribution
-  if(is.list(r)) r <- r[[1L]]
+  r <- generate(x, times = times)[[1L]]
   if(is.list(q)) {
     # Turn into matrix
     q <- do.call(rbind, q)
@@ -82,13 +80,10 @@ log_cdf.dist_default <- function(x, q, ...){
 
 #' @export
 generate.dist_default <- function(x, times, ...){
-  if (vctrs::vec_size(x) != 1L) {
-    times <- vctrs::vec_recycle(times, vctrs::vec_size(x))
-    return(lapply(vctrs::vec_seq_along(x), function(i) {
-      generate(vctrs::vec_slice(x, i), times = times[[i]], ...)
-    }))
-  }
-  vapply(stats::runif(times,0,1), quantile, numeric(1L), x = x, ...)
+  times <- vctrs::vec_recycle(times, vctrs::vec_size(x))
+  lapply(vctrs::vec_seq_along(x), function(i) {
+    vapply(stats::runif(times[[i]], 0, 1), quantile, numeric(1L), x = vctrs::vec_slice(x, i), ...)
+  })
 }
 
 #' @export
@@ -242,7 +237,7 @@ covariance.dist_default <- function(x, ...){
   x_sup <- support(x)
   dist_type <- field(x_sup, "x")[[1]]
   if (!is.numeric(dist_type)) return(NA_real_)
-  else if (is.matrix(dist_type)) stats::cov(generate(x, times = 1000))
+  else if (is.matrix(dist_type)) stats::cov(generate(x, times = 1000)[[1L]])
   else if (is.double(dist_type)) {
     limits <- field(x_sup, "lim")[[1]]
     tryCatch(
@@ -340,7 +335,7 @@ print.dist_default <- function(x, ...){
 dim.dist_default <- function(x){
   # Dimensions of random draws is the cheapest approach for the default dim().
   # The RNG state is restored so it does not affect the global random state.
-  suppressWarnings(restore_rng(NCOL(generate(x, times = 1))))
+  suppressWarnings(restore_rng(NCOL(generate(x, times = 1)[[1L]])))
 }
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")
