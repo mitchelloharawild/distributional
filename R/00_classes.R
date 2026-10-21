@@ -26,7 +26,7 @@ class_distribution <- S7::new_class(
   "distribution",
   parent = vecvec::class_vecvec,
   constructor = function(x = list(), i = seq_len(sum(lengths(x)))) {
-    obj <- S7::new_object(i, x = vecvec_flatten_adj(x))
+    obj <- S7::new_object(vecvec::class_vecvec(vecvec_flatten_adj(x), i))
     class(obj) <- c("distribution", class(obj))
     obj
   }
