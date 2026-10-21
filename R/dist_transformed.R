@@ -140,11 +140,70 @@ format.dist_transformed <- function(x, ...){
   )
 }
 
-#' @export
-support.dist_transformed <- function(x, ...) {
-  support <- support(x[["dist"]])
-  lim <- field(support, "lim")[[1]]
-  lim <- suppressWarnings(x[['transform']](lim))
+# The transformations are functions, so distributions can only be handled
+# together when they share the same `transform` and `inverse`. This splits the
+# positions of `x` into such groups (usually a single group, as in
+# `exp(dist_normal(1:3))`), calls `.f(dist, transform, inverse, idx)` once for
+# each group with its inner distributions, `idx` being their positions in `x`,
+# and returns the results (each of size `length(idx)`) in the order of `x`.
+transformed_by_group <- function(x, .f) {
+  tf <- x[["transform"]]
+  inv <- x[["inverse"]]
+  dist <- x[["dist"]]
+  n <- vec_size(x)
+
+  # Group positions by identical functions
+  group <- integer(n)
+  reps <- list()
+  for (i in seq_len(n)) {
+    k <- 0L
+    for (j in seq_along(reps)) {
+      if (identical(tf[[i]], tf[[reps[[j]]]]) && identical(inv[[i]], inv[[reps[[j]]]])) {
+        k <- j
+        break
+      }
+    }
+    if (k == 0L) {
+      reps[[length(reps) + 1L]] <- i
+      k <- length(reps)
+    }
+    group[i] <- k
+  }
+
+  if (length(reps) == 1L) {
+    return(.f(dist, tf[[1L]], inv[[1L]], seq_len(n)))
+  }
+  idx <- unname(split(seq_len(n), group))
+  res <- lapply(idx, function(i) {
+    .f(dist[i], tf[[i[1L]]], inv[[i[1L]]], i)
+  })
+  vec_slice(vec_c(!!!res), order(unlist(idx)))
+}
+
+# Positions `idx` of an argument paired with the distributions (size `n`), or
+# the argument itself when it is recycled (size 1)
+transformed_arg <- function(a, idx, n) {
+  if (vec_size(a) == n) vec_slice(a, idx) else vec_recycle(a, length(idx))
+}
+
+# Direction of the transformation `f` for each of the distributions in `dist`
+# (see `monotonic_dir()`)
+transformed_dir <- function(f, dist, p = seq(0, 1, length.out = 23L)[2:22]) {
+  n <- vec_size(dist)
+  # Shortcut for identity function (used widely in ggdist)
+  if(!is.primitive(f) && identical(body(f), as.name(names(formals(f))))) {
+    return(rep(1L, n))
+  }
+  q <- quantile(dist, p)
+  if (!is.list(q)) q <- list(q)
+  vapply(q, function(qi) monotonic_dir_q(f, qi), integer(1L))
+}
+
+# The support of the distributions `dist` transformed by `tf`
+transformed_support <- function(dist, tf, inv) {
+  support <- support(dist)
+  lim <- field(support, "lim")
+  closed <- field(support, "closed")
 
   # Mapping the support limits through the transform and sorting them only
   # gives the correct image when the transform is monotonic over the *whole*
@@ -156,116 +215,160 @@ support.dist_transformed <- function(x, ...) {
   # interior critical points) is left as a follow-up (see #9).
   tail <- 10^(-8:-2)
   p <- sort(unique(c(tail, seq(0, 1, length.out = 23L)[2:22], 1 - tail)))
-  if (all(!is.na(lim)) && monotonic_dir(x[["transform"]], x[["dist"]], p) != 0L) {
-    # A decreasing transform swaps the limits, and with them their closedness.
-    if (is.unsorted(lim)) {
-      lim <- rev(lim)
-      field(support, "closed")[[1]] <- rev(field(support, "closed")[[1]])
+  dir <- transformed_dir(tf, dist, p)
+  for (i in vec_seq_along(dist)) {
+    lim_i <- suppressWarnings(tf(lim[[i]]))
+    if (all(!is.na(lim_i)) && dir[i] != 0L) {
+      # A decreasing transform swaps the limits, and with them their closedness.
+      if (is.unsorted(lim_i)) {
+        lim_i <- rev(lim_i)
+        closed[[i]] <- rev(closed[[i]])
+      }
+    } else {
+      lim_i <- c(NA_real_, NA_real_)
     }
-  } else {
-    lim <- c(NA_real_, NA_real_)
+    lim[[i]] <- lim_i
   }
-  field(support, "lim")[[1]] <- lim
-  support
+  new_support_region(field(support, "x"), lim, closed)
+}
+
+#' @export
+support.dist_transformed <- function(x, ...) {
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    transformed_support(dist, tf, inv)
+  })
 }
 
 #' @export
 density.dist_transformed <- function(x, at, ...){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
-  jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv)
-  d <- density(x[["dist"]], inv(at)) * abs(jacobian)
-  limits <- field(support(x), "lim")[[1]]
-  closed <- field(support(x), "closed")[[1]]
-  if (!any(is.na(limits))) {
-    `%less_than%` <- if (closed[1]) `<` else `<=`
-    `%greater_than%` <- if (closed[2]) `>` else `>=`
-    d[which(at %less_than% limits[1] | at %greater_than% limits[2])] <- 0
+  n <- vec_size(x)
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    at <- transformed_arg(at, idx, n)
+    inv_f <- function(v) suppressWarnings(inv(v))
+    jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv_f)
+    d <- dist_paired(density, dist, at = inv_f(at), ...) * abs(jacobian)
+    sup <- transformed_support(dist, tf, inv)
+    lim <- vec_c(!!!field(sup, "lim"))
+    lo <- lim[c(TRUE, FALSE)]
+    hi <- lim[c(FALSE, TRUE)]
+    closed <- vec_c(!!!field(sup, "closed"))
+    below <- ifelse(closed[c(TRUE, FALSE)], at < lo, at <= lo)
+    above <- ifelse(closed[c(FALSE, TRUE)], at > hi, at >= hi)
+    valid <- !is.na(lo) & !is.na(hi)
+    d[which(valid & (below | above))] <- 0
+    d
+  })
+}
+
+# Call the inner generic `.f` (`cdf` or `quantile`) with the argument `a`
+# (paired with the distributions), accounting for the direction of the
+# transformation. A decreasing transformation swaps the tails, and a
+# non-monotonic transformation gives `NA`.
+transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower") {
+  dir <- transformed_dir(tf, dist)
+  if (any(dir == 0L)) {
+    warning(sprintf(
+      "Cannot compute %s of a non-monotonic transformation over the distribution's region of mass, returning `NA`.",
+      name
+    ))
   }
-  d
+  swap <- c("lower" = "upper", "upper" = "lower")[[tail]]
+  out <- rep(NA_real_, vec_size(dist))
+  for (d in c(1L, -1L)) {
+    i <- which(dir == d)
+    if (!length(i)) next
+    out[i] <- dist_paired(.f, dist[i], a[i], ..., tail = if (d == 1L) tail else swap)
+  }
+  out
 }
 
 #' @export
 cdf.dist_transformed <- function(x, q, ..., tail = "lower"){
-  inv <- function(v) suppressWarnings(x[["inverse"]](v))
-  dist_tail <- tail
-  # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
-  if(!is.null(x[["dist"]])){
-    dir <- monotonic_dir(x[["transform"]], x[["dist"]])
-    if(dir == 0L){
-      warning("Cannot compute the cdf of a non-monotonic transformation over the distribution's region of mass, returning `NA`.")
-      return(rep(NA_real_, length(q)))
-    }
-    # A decreasing transformation swaps the tails
-    if(dir == -1L) dist_tail <- if(tail == "lower") "upper" else "lower"
-  }
-  p <- cdf(x[["dist"]], inv(q), ..., tail = dist_tail)
+  n <- vec_size(x)
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    q <- transformed_arg(q, idx, n)
+    p <- transformed_inner(
+      cdf, dist, tf, suppressWarnings(inv(q)), "the cdf", ..., tail = tail
+    )
 
-  # TODO: Rework for support of closed limits and prevent computation
-  x_sup <- support(x)
-  x_lim <- field(x_sup, "lim")[[1]]
-  x_cls <- field(x_sup, "closed")[[1]]
-  if (!any(is.na(x_lim))) {
-    p[q <= x_lim[1] & !x_cls[1]] <- if (tail == "lower") 0 else 1
-    p[q >= x_lim[2] & !x_cls[2]] <- if (tail == "lower") 1 else 0
-  }
-  p
+    # TODO: Rework for support of closed limits and prevent computation
+    sup <- transformed_support(dist, tf, inv)
+    lim <- vec_c(!!!field(sup, "lim"))
+    lo <- lim[c(TRUE, FALSE)]
+    hi <- lim[c(FALSE, TRUE)]
+    closed <- vec_c(!!!field(sup, "closed"))
+    valid <- !is.na(lo) & !is.na(hi)
+    p[which(valid & q <= lo & !closed[c(TRUE, FALSE)])] <- if (tail == "lower") 0 else 1
+    p[which(valid & q >= hi & !closed[c(FALSE, TRUE)])] <- if (tail == "lower") 1 else 0
+    p
+  })
 }
 
 #' @export
 quantile.dist_transformed <- function(x, p, ..., tail = "lower"){
-  # TODO - remove null dist check when dist_na is structured correctly (revdep temp fix)
-  if(!is.null(x[["dist"]])){
-    dir <- monotonic_dir(x[["transform"]], x[["dist"]])
-    if(dir == 0L){
-      warning("Cannot compute quantiles of a non-monotonic transformation over the distribution's region of mass, returning `NA`.")
-      return(rep(NA_real_, length(p)))
-    }
-    # A decreasing transformation swaps the tails
-    if(dir == -1L) tail <- if(tail == "lower") "upper" else "lower"
-  }
-  x[["transform"]](quantile(x[["dist"]], p, ..., tail = tail))
+  n <- vec_size(x)
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    p <- transformed_arg(p, idx, n)
+    # Quantiles of the base distribution (`NA` for non-monotonic transformations)
+    tf(transformed_inner(quantile, dist, tf, p, "quantiles", ..., tail = tail))
+  })
 }
 
 #' @export
-generate.dist_transformed <- function(x, ...){
-  r <- generate(x[["dist"]], ...)
-  # Ported families' `generate()` always returns a list (one vector per
-  # distribution, see `_dev/vecvec.md` #6.10); not-yet-ported families keep
-  # returning a plain vector directly when called on a single raw record.
-  if (is.list(r)) r <- r[[1L]]
-  x[["transform"]](r)
+generate.dist_transformed <- function(x, times, ...){
+  n <- vec_size(x)
+  times <- vec_recycle(times, n)
+  res <- transformed_by_group(x, function(dist, tf, inv, idx) {
+    r <- generate(dist, times = list(times[idx]), ...)
+    # Transform all draws at once, keeping those of each distribution together
+    vec_chop(tf(vec_c(!!!r)), sizes = times[idx])
+  })
+  res
 }
 
 #' @export
 mean.dist_transformed <- function(x, ...){
-  mu <- mean(x[["dist"]])
-  sigma2 <- variance(x[["dist"]])
-  if(is.na(sigma2)){
-    # warning("Could not compute the transformed distribution's mean as the base distribution's variance is unknown. The transformed distribution's median has been returned instead.")
-    return(x[["transform"]](mu))
-  }
-  drop(
-    x[["transform"]](mu) + numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))/2*sigma2
-  )
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    mu <- mean(dist)
+    sigma2 <- variance(dist)
+    vapply(seq_along(mu), function(i) {
+      if (is.na(sigma2[i])) {
+        # warning("Could not compute the transformed distribution's mean as the base distribution's variance is unknown. The transformed distribution's median has been returned instead.")
+        return(tf(mu[i]))
+      }
+      drop(
+        tf(mu[i]) + numDeriv::hessian(tf, mu[i], method.args=list(d = 0.01))/2*sigma2[i]
+      )
+    }, numeric(1L))
+  })
 }
 
 #' @export
 covariance.dist_transformed <- function(x, ...){
-  mu <- mean(x[["dist"]])
-  sigma2 <- variance(x[["dist"]])
-  if(is.na(sigma2)) return(NA_real_)
-  drop(
-    numDeriv::jacobian(x[["transform"]], mu)^2*sigma2 + (numDeriv::hessian(x[["transform"]], mu, method.args=list(d = 0.01))*sigma2)^2/2
-  )
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    mu <- mean(dist)
+    sigma2 <- variance(dist)
+    vapply(seq_along(mu), function(i) {
+      if (is.na(sigma2[i])) return(NA_real_)
+      drop(
+        numDeriv::jacobian(tf, mu[i])^2*sigma2[i] + (numDeriv::hessian(tf, mu[i], method.args=list(d = 0.01))*sigma2[i])^2/2
+      )
+    }, numeric(1L))
+  })
+}
+
+#' @export
+variance.dist_transformed <- function(x, ...){
+  covariance.dist_transformed(x, ...)
 }
 
 #' @method Math dist_transformed
 #' @export
 Math.dist_transformed <- function(x, ...) {
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform)(x), !!!dots_list(...))))
+  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform[[1L]])(x), !!!dots_list(...))))
 
   inverse_fun <- get_unary_inverse(.Generic)
-  inverse <- new_function(exprs(x = ), body = expr((!!x$inverse)((!!inverse_fun)(x, !!!dots_list(...)))))
+  inverse <- new_function(exprs(x = ), body = expr((!!x$inverse[[1L]])((!!inverse_fun)(x, !!!dots_list(...)))))
 
   dist_first_record(dist_transformed(x[["dist"]], trans, inverse))
 }
@@ -284,19 +387,19 @@ Ops.dist_transformed <- function(e1, e2) {
     # Fall back to default distribution Ops
     return(NextMethod())
   } else if(is_dist[1]){
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform)(x), !!e2)))
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform[[1L]])(x), !!e2)))
   } else {
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform)(x))))
+    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform[[1L]])(x))))
   }
 
   inverse <- if(all(is_dist)) {
     invert_fail
   } else if(is_dist[1]){
     inverse_fun <- get_binary_inverse_1(.Generic, e2)
-    new_function(exprs(x = ), body = expr((!!e1$inverse)((!!inverse_fun)(x))))
+    new_function(exprs(x = ), body = expr((!!e1$inverse[[1L]])((!!inverse_fun)(x))))
   } else {
     inverse_fun <- get_binary_inverse_2(.Generic, e1)
-    new_function(exprs(x = ), body = expr((!!e2$inverse)((!!inverse_fun)(x))))
+    new_function(exprs(x = ), body = expr((!!e2$inverse[[1L]])((!!inverse_fun)(x))))
   }
 
   dist_first_record(dist_transformed(list(e1,e2)[[which(is_dist)[1]]][["dist"]], trans, inverse))
@@ -313,8 +416,12 @@ monotonic_dir <- function(f, dist, p = seq(0, 1, length.out = 23L)[2:22]) {
   if(!is.primitive(f) && identical(body(f), as.name(names(formals(f))))) {
     return(1L)
   }
+  monotonic_dir_q(f, quantile(dist, p))
+}
 
-  d <- diff(suppressWarnings(f(quantile(dist, p))))
+# The direction of `f` over the (ordered) base quantiles `q`
+monotonic_dir_q <- function(f, q) {
+  d <- diff(suppressWarnings(f(q)))
   d <- d[is.finite(d) & d != 0]
   if (!length(d)) return(1L)
   if (all(d > 0)) return(1L)

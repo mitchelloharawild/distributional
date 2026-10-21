@@ -260,3 +260,62 @@ test_that("Ops between unrelated non-transformed distributions error", {
   x <- dist_gamma(2, 1)
   expect_s3_class(dist_elem(exp(x) * exp(x), 1), "dist_transformed")
 })
+
+test_that("transformed distributions are vectorised over n > 1 with one transform", {
+  d <- dist_transformed(dist_normal(1:3, c(1, 2, 0.5)), exp, log)
+  ref <- dist_lognormal(1:3, c(1, 2, 0.5))
+  expect_equal(format(d), paste0("t(", format(dist_normal(1:3, c(1, 2, 0.5))), ")"))
+  expect_equal(density(d, 2), density(ref, 2))
+  expect_equal(cdf(d, 2), cdf(ref, 2))
+  expect_equal(cdf(d, 2, tail = "upper"), cdf(ref, 2, tail = "upper"))
+  expect_equal(quantile(d, 0.3), quantile(ref, 0.3))
+  expect_equal(quantile(d, 0.3, tail = "upper"), quantile(ref, 0.3, tail = "upper"))
+  # Paired and mapped arguments
+  expect_equal(density(d, list(c(1, 2, 3)))[[1]], density(ref, list(c(1, 2, 3)))[[1]])
+  expect_equal(density(d, c(1, 2)), density(ref, c(1, 2)))
+  expect_equal(unlist(field(support(d), "lim")), rep(c(0, Inf), 3))
+  # The transformation is shared, so there is a single group
+  expect_equal(length(d@x), 1L)
+  expect_equal(vapply(generate(d, times = 4), length, 1L), rep(4L, 3))
+  expect_true(all(unlist(generate(d, 10)) > 0))
+  expect_equal(mean(d), unlist(lapply(1:3, function(i) mean(d[i]))))
+  expect_equal(variance(d), unlist(lapply(1:3, function(i) variance(d[i]))))
+})
+
+test_that("transformed distributions in one vector with different transforms", {
+  d <- c(
+    dist_transformed(dist_normal(0, 1), exp, log),
+    dist_transformed(dist_normal(1, 2), function(x) -x, function(x) -x),
+    dist_transformed(dist_normal(2, 1), exp, log),
+    dist_transformed(dist_normal(3, 1), function(x) x + 1, function(x) x - 1)
+  )
+  one <- function(f, ...) unlist(lapply(seq_along(d), function(i) f(d[i], ...)))
+  expect_equal(density(d, 1.5), one(density, 1.5))
+  expect_equal(cdf(d, 1.5), one(cdf, 1.5))
+  expect_equal(cdf(d, 1.5, tail = "upper"), one(cdf, 1.5, tail = "upper"))
+  expect_equal(quantile(d, 0.2), one(quantile, 0.2))
+  expect_equal(quantile(d, 0.2, tail = "upper"), one(quantile, 0.2, tail = "upper"))
+  expect_equal(
+    density(d, 1:4 / 2),
+    lapply(1:4, function(i) density(d[i], 1:4 / 2)[[1]])
+  )
+  expect_equal(density(d, list(1:4 / 2))[[1]], vapply(1:4, function(i) density(d[i], i / 2), 0))
+  expect_equal(median(d), one(median))
+  expect_equal(mean(d), one(mean))
+  expect_equal(variance(d), one(variance))
+  expect_equal(vapply(generate(d, times = 3), length, 1L), rep(3L, 4))
+  expect_equal(format(d), c("t(N(0, 1))", "t(N(1, 4))", "t(N(2, 1))", "t(N(3, 1))"))
+  # Decreasing transform swaps tails alongside increasing ones
+  expect_equal(cdf(d[2], 0), pnorm(0, 1, 2, lower.tail = FALSE))
+  expect_equal(unlist(field(support(d), "lim")), c(0, Inf, -Inf, Inf, 0, Inf, -Inf, Inf))
+})
+
+test_that("transformed distributions of mixed inner families", {
+  d <- dist_transformed(c(dist_normal(0, 1), dist_gamma(2, 1), dist_poisson(3)), sqrt, function(x) x^2)
+  one <- function(f, ...) unlist(lapply(seq_along(d), function(i) f(d[i], ...)))
+  expect_equal(cdf(d, 1.2), one(cdf, 1.2))
+  expect_equal(quantile(d, 0.4), one(quantile, 0.4))
+  expect_equal(density(d, 1.2), one(density, 1.2))
+  expect_equal(format(d), c("t(N(0, 1))", "t(Gamma(2, 1))", "t(Pois(3))"))
+  expect_equal(vapply(generate(d, times = 5), length, 1L), rep(5L, 3))
+})
