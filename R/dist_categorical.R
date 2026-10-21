@@ -127,75 +127,131 @@ dist_categorical <- function(prob, outcomes = NULL){
 format.dist_categorical <- function(x, digits = 2, ...){
   sprintf(
     "Categorical[%s]",
-    format(length(x[["p"]]), digits = digits, ...)
+    vapply(
+      categorical_p(x), function(p) format(length(p), digits = digits, ...),
+      character(1L)
+    )
+  )
+}
+
+# The list fields, by position. `x[["p"]]` would drop the list for a single
+# distribution, so these read the fields directly.
+categorical_p <- function(x) as.list(vctrs::field(x, "p"))
+categorical_x <- function(x) {
+  if ("x" %in% vctrs::fields(x)) as.list(vctrs::field(x, "x"))
+}
+
+# The outcomes of each distribution (the positions when none are given)
+categorical_outcomes <- function(x) {
+  outcomes <- categorical_x(x)
+  if (is.null(outcomes)) {
+    return(lapply(categorical_p(x), seq_along))
+  }
+  outcomes
+}
+
+# Combine one result per distribution, which may be factors with different
+# levels, into a single vector
+categorical_combine <- function(res, ordered) {
+  if (!any(ordered)) return(rep_len(NA_real_, length(res)))
+  res[!ordered] <- list(NA)
+  tryCatch(
+    vctrs::vec_c(!!!res, .name_spec = zap()),
+    error = function(e) {
+      vctrs::vec_c(!!!lapply(res, as.character), .name_spec = zap())
+    }
   )
 }
 
 #' @export
 density.dist_categorical <- function(x, at, ...){
-  if(!is.null(x[["x"]])) at <- match(at, x[["x"]])
-  at[at <= 0] <- NA_real_
-  x[["p"]][at]
+  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
+  outcomes <- categorical_x(x)
+  prob <- categorical_p(x)
+  vapply(seq_along(prob), function(i) {
+    a <- at[[i]]
+    if(!is.null(outcomes)) a <- match(a, outcomes[[i]])
+    if(is.na(a) || a <= 0) return(NA_real_)
+    prob[[i]][a]
+  }, numeric(1L))
 }
 
 #' @export
 quantile.dist_categorical <- function(x, p, ..., tail = "lower"){
+  p <- vctrs::vec_recycle(p, vctrs::vec_size(x))
   if(tail == "upper") p <- 1 - p
-  if(is.ordered(x[["x"]])) {
-    return(x[["x"]][findInterval(p, cumsum(x[["p"]]))])
-  }
-  rep_len(NA_real_, length(p))
+  outcomes <- categorical_outcomes(x)
+  ordered <- vapply(outcomes, is.ordered, logical(1L))
+  res <- .mapply(
+    function(prob, o, p, ord) {
+      if(!ord) return(NA_real_)
+      k <- length(prob)
+      o[pmin(1L + findInterval(p, cumsum(prob), left.open = TRUE), k)]
+    },
+    list(categorical_p(x), outcomes, p, ordered), NULL
+  )
+  if(!any(ordered)) return(rep_len(NA_real_, length(res)))
+  categorical_combine(res, ordered)
 }
 
 #' @export
 cdf.dist_categorical <- function(x, q, ..., tail = "lower"){
-  if(is.ordered(x[["x"]])) {
-    p <- if (tail == "lower") {
-      cumsum(x[["p"]])
+  q <- vctrs::vec_recycle(q, vctrs::vec_size(x))
+  outcomes <- categorical_x(x)
+  probs <- categorical_p(x)
+  vapply(seq_along(probs), function(i) {
+    o <- outcomes[[i]]
+    if(!is.ordered(o)) return(NA_real_)
+    prob <- probs[[i]]
+    cum <- if (tail == "lower") {
+      cumsum(prob)
     } else {
       # P(X > x_i) as the sum of the probabilities above x_i
-      c(rev(cumsum(rev(x[["p"]])))[-1L], 0)
+      c(rev(cumsum(rev(prob)))[-1L], 0)
     }
-    return(p[match(q, x[["x"]])])
-  }
-  rep_len(NA_real_, length(q))
+    cum[match(q[[i]], o)]
+  }, numeric(1L))
 }
 
 #' @export
 generate.dist_categorical <- function(x, times, ...){
-  z <- sample(
-    x = seq_along(x[["p"]]), size = times, prob = x[["p"]], replace = TRUE
+  .mapply(
+    function(p, o, times) {
+      z <- sample.int(length(p), size = times, prob = p, replace = TRUE)
+      if(is.null(o)) z else o[z]
+    },
+    list(categorical_p(x), categorical_x(x) %||% vector("list", vctrs::vec_size(x)), times),
+    NULL
   )
-  if(is.null(x[["x"]])) return(z)
-  x[["x"]][z]
 }
 
 #' @export
 support.dist_categorical <- function(x, ...) {
-  region <- if(is.null(x[["p"]])) seq_along(x[["p"]]) else x[["x"]]
+  region <- categorical_outcomes(x)
+  n <- length(region)
   new_support_region(
-    list(vctrs::vec_init(region, n = 0L)),
-    list(region),
-    list(c(TRUE, TRUE))
+    lapply(region, function(r) vctrs::vec_init(r, n = 0L)),
+    lapply(region, list),
+    rep_len(list(c(TRUE, TRUE)), n)
   )
 }
 
 #' @export
 mean.dist_categorical <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 covariance.dist_categorical <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 skewness.dist_categorical <- function(x, ...) {
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 kurtosis.dist_categorical <- function(x, ...) {
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
