@@ -117,15 +117,16 @@ cdf.dist_uniform <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_uniform <- function(x, times, ...){
-  stats::runif(times, x[["l"]], x[["u"]])
+  vec_chop(stats::runif(sum(times), rep(x[["l"]], times), rep(x[["u"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_uniform <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(x[["l"]], x[["u"]])),
-    list(c(TRUE, TRUE))
+    rep_len(list(numeric()), n),
+    unname(Map(c, x[["l"]], x[["u"]])),
+    rep_len(list(c(TRUE, TRUE)), n)
   )
 }
 
@@ -140,10 +141,10 @@ covariance.dist_uniform <- function(x, ...){
 }
 
 #' @export
-skewness.dist_uniform <- function(x, ...) 0
+skewness.dist_uniform <- function(x, ...) rep_len(0, vec_size(x))
 
 #' @export
-kurtosis.dist_uniform <- function(x, ...) -6/5
+kurtosis.dist_uniform <- function(x, ...) rep_len(-6/5, vec_size(x))
 
 #' @export
 has_symmetry.dist_uniform <- function(x, ...) TRUE

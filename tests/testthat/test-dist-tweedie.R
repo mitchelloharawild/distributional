@@ -45,3 +45,25 @@ test_that("Tweedie distribution parameter validation", {
   expect_error(dist_tweedie(power = 1), "power parameter")
   expect_error(dist_tweedie(power = 2), "power parameter")
 })
+
+test_that("Tweedie distribution is vectorised over several distributions", {
+  dist <- dist_tweedie(1:3, c(1, 2, 3), c(1.3, 1.5, 1.7))
+  n <- 3
+  at <- c(1, 2, 3)
+
+  expect_equal(density(dist, list(at))[[1]], tweedieDistr::dtweedie(at, 1:3, c(1, 2, 3), c(1.3, 1.5, 1.7)))
+  expect_equal(cdf(dist, list(at))[[1]], tweedieDistr::ptweedie(at, 1:3, c(1, 2, 3), c(1.3, 1.5, 1.7)))
+  expect_equal(quantile(dist, 0.3), tweedieDistr::qtweedie(0.3, 1:3, c(1, 2, 3), c(1.3, 1.5, 1.7)))
+  expect_equal(log_density(dist, list(at))[[1]], tweedieDistr::dtweedie(at, 1:3, c(1, 2, 3), c(1.3, 1.5, 1.7), log = TRUE))
+
+  # support has one region per distribution
+  expect_equal(vec_size(support(dist)), n)
+  expect_equal(mean(dist), as.numeric(1:3))
+  expect_equal(skewness(dist), vapply(vec_chop(dist), skewness, 1))
+
+  # generate() returns one draw vector per distribution
+  set.seed(1)
+  draws <- generate(dist, list(c(2L, 0L, 5L)))
+  expect_equal(lengths(draws), c(2L, 0L, 5L))
+  expect_true(all(unlist(draws) >= 0))
+})

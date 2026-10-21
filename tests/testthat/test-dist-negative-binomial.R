@@ -22,3 +22,25 @@ test_that("Negative Binomial distribution", {
   expect_equal(mean(dist), 0.6*10/(1-0.6))
   expect_equal(variance(dist), 0.6*10/(1-0.6)^2)
 })
+
+test_that("Negative binomial distribution is vectorised over several distributions", {
+  dist <- dist_negative_binomial(5:7, c(0.3, 0.4, 0.5))
+  n <- 3
+  at <- c(1, 3, 6)
+
+  expect_equal(density(dist, list(at))[[1]], stats::dnbinom(at, 5:7, c(0.3, 0.4, 0.5)))
+  expect_equal(cdf(dist, list(at))[[1]], stats::pnbinom(at, 5:7, c(0.3, 0.4, 0.5)))
+  expect_equal(quantile(dist, 0.3), stats::qnbinom(0.3, 5:7, c(0.3, 0.4, 0.5)))
+  expect_equal(log_density(dist, list(at))[[1]], stats::dnbinom(at, 5:7, c(0.3, 0.4, 0.5), log = TRUE))
+
+  # support has one region per distribution
+  expect_equal(vec_size(support(dist)), n)
+  expect_equal(mean(dist), 5:7 * (1 - c(0.3, 0.4, 0.5)) / c(0.3, 0.4, 0.5))
+  expect_equal(skewness(dist), vapply(vec_chop(dist), skewness, 1))
+
+  # generate() returns one draw vector per distribution
+  set.seed(1)
+  draws <- generate(dist, list(c(2L, 0L, 5L)))
+  expect_equal(lengths(draws), c(2L, 0L, 5L))
+  expect_true(all(unlist(draws) >= 0))
+})

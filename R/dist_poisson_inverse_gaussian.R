@@ -128,15 +128,16 @@ cdf.dist_poisson_inverse_gaussian <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_poisson_inverse_gaussian <- function(x, times, ...){
   require_package("actuar")
-  actuar::rpoisinvgauss(times, x[["m"]], x[["s"]])
+  vec_chop(actuar::rpoisinvgauss(sum(times), rep(x[["m"]], times), rep(x[["s"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_poisson_inverse_gaussian <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(integer()),
-    list(c(0, Inf)),
-    list(c(TRUE, FALSE))
+    rep_len(list(integer()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(TRUE, FALSE)), n)
   )
 }
 

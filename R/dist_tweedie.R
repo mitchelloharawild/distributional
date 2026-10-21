@@ -145,16 +145,17 @@ log_cdf.dist_tweedie <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_tweedie <- function(x, times, ...){
   require_package("tweedieDistr")
-  tweedieDistr::rtweedie(times, x[["mu"]], x[["phi"]], x[["p"]])
+  vec_chop(tweedieDistr::rtweedie(sum(times), rep(x[["mu"]], times), rep(x[["phi"]], times), rep(x[["p"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_tweedie <- function(x, ...) {
   # Positive probability mass at 0 for power in (1, 2)
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(TRUE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(TRUE, FALSE)), n)
   )
 }
 

@@ -25,3 +25,24 @@ test_that("Pareto distribution", {
   expect_equal(mean(dist), actuar::mpareto(1, 10, 1))
   expect_equal(variance(dist), actuar::mpareto(2, 10, 1) - actuar::mpareto(1, 10, 1)^2)
 })
+
+test_that("Pareto distribution is vectorised over several distributions", {
+  dist <- dist_pareto(c(3, 4, 5), c(1, 2, 3))
+  n <- 3
+  at <- c(3, 4, 5)
+
+  expect_equal(density(dist, list(at))[[1]], actuar::dpareto(at, c(3, 4, 5), c(1, 2, 3)))
+  expect_equal(cdf(dist, list(at))[[1]], actuar::ppareto(at, c(3, 4, 5), c(1, 2, 3)))
+  expect_equal(quantile(dist, 0.3), actuar::qpareto(0.3, c(3, 4, 5), c(1, 2, 3)))
+  expect_equal(log_density(dist, list(at))[[1]], actuar::dpareto(at, c(3, 4, 5), c(1, 2, 3), log = TRUE))
+
+  # support has one region per distribution
+  expect_equal(vec_size(support(dist)), n)
+  expect_equal(mean(dist), vapply(vec_chop(dist), mean, 1))
+
+  # generate() returns one draw vector per distribution
+  set.seed(1)
+  draws <- generate(dist, list(c(2L, 0L, 5L)))
+  expect_equal(lengths(draws), c(2L, 0L, 5L))
+  expect_true(all(unlist(draws) >= 0))
+})

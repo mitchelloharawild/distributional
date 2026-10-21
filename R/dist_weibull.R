@@ -157,16 +157,18 @@ cdf.dist_weibull <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_weibull <- function(x, times, ...){
-  stats::rweibull(times, x[["shape"]], x[["scale"]])
+  vec_chop(stats::rweibull(sum(times), rep(x[["shape"]], times), rep(x[["scale"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_weibull <- function(x, ...) {
   # The density at 0 is positive (or infinite) when shape <= 1
+  n <- vec_size(x)
+  closed <- !is.na(x[["shape"]] <= 1) & x[["shape"]] <= 1
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(isTRUE(x[["shape"]] <= 1), FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    lapply(closed, function(cl) c(cl, FALSE))
   )
 }
 

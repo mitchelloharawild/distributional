@@ -132,17 +132,17 @@ cdf.dist_negbin <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_negbin <- function(x, times, ...){
-  stats::rnbinom(times, x[["n"]], x[["p"]])
+  vec_chop(stats::rnbinom(sum(times), rep(x[["n"]], times), rep(x[["p"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_negbin <- function(x, ...) {
   # Degenerate at 0 when p = 1 or size = 0
-  degenerate <- isTRUE(x[["p"]] == 1) || isTRUE(x[["n"]] == 0)
+  degenerate <- (!is.na(x[["p"]] == 1) & x[["p"]] == 1) | (!is.na(x[["n"]] == 0) & x[["n"]] == 0)
   new_support_region(
-    list(integer()),
-    list(c(0, if (degenerate) 0 else Inf)),
-    list(c(TRUE, degenerate))
+    rep_len(list(integer()), vec_size(x)),
+    lapply(degenerate, function(d) c(0, if (d) 0 else Inf)),
+    lapply(degenerate, function(d) c(TRUE, d))
   )
 }
 

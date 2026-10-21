@@ -130,15 +130,16 @@ cdf.dist_pareto <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_pareto <- function(x, times, ...){
   require_package("actuar")
-  actuar::rpareto(times, x[["shape"]], x[["scale"]])
+  vec_chop(actuar::rpareto(sum(times), rep(x[["shape"]], times), rep(x[["scale"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_pareto <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(TRUE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(TRUE, FALSE)), n)
   )
 }
 

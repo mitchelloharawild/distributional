@@ -124,15 +124,16 @@ log_cdf.dist_lognormal <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_lognormal <- function(x, times, ...){
-  stats::rlnorm(times, x[["mu"]], x[["sigma"]])
+  vec_chop(stats::rlnorm(sum(times), rep(x[["mu"]], times), rep(x[["sigma"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_lognormal <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
