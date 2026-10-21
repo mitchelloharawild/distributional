@@ -114,16 +114,7 @@ log_likelihood.dist_default <- function(x, sample, ...){
 #' @export
 parameters.dist_default <- function(x, ...) {
   flds <- vctrs::fields(x)
-  cols <- lapply(flds, function(f) {
-    z <- vctrs::field(x, f)
-    # Embedded distributions stored as a list of raw records (`dist_list()`)
-    # are returned as a `distribution` vector.
-    if (is.list(z) && length(z) && all(vapply(z, inherits, logical(1L), "dist_default"))) {
-      wrap_dist(z)
-    } else {
-      z
-    }
-  })
+  cols <- lapply(flds, function(f) vctrs::field(x, f))
   names(cols) <- flds
   vctrs::new_data_frame(cols, n = vctrs::vec_size(x))
 }

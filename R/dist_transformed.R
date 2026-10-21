@@ -127,7 +127,7 @@ dist_transformed <- function(dist, transform, inverse){
   vec_is(dist, new_dist())
   if(is.function(transform)) transform <- list(transform)
   if(is.function(inverse)) inverse <- list(inverse)
-  new_dist(dist = dist_list(dist),
+  new_dist(dist = dist,
            transform = transform, inverse = inverse,
            dimnames = variates(dist), class = "dist_transformed")
 }
@@ -267,7 +267,7 @@ Math.dist_transformed <- function(x, ...) {
   inverse_fun <- get_unary_inverse(.Generic)
   inverse <- new_function(exprs(x = ), body = expr((!!x$inverse)((!!inverse_fun)(x, !!!dots_list(...)))))
 
-  dist_first_record(dist_transformed(wrap_dist(list(x[["dist"]])), trans, inverse))
+  dist_first_record(dist_transformed(x[["dist"]], trans, inverse))
 }
 
 #' @method Ops dist_transformed
@@ -299,7 +299,7 @@ Ops.dist_transformed <- function(e1, e2) {
     new_function(exprs(x = ), body = expr((!!e2$inverse)((!!inverse_fun)(x))))
   }
 
-  dist_first_record(dist_transformed(wrap_dist(list(list(e1,e2)[[which(is_dist)[1]]][["dist"]])), trans, inverse))
+  dist_first_record(dist_transformed(list(e1,e2)[[which(is_dist)[1]]][["dist"]], trans, inverse))
 }
 
 # Direction of a transformation `f`, judged by probing it at quantiles of the

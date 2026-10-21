@@ -116,16 +116,19 @@ dist_elem <- function(x, i) {
 }
 dist_first_record <- function(x) dist_elem(x, 1L)
 
-# Convert a `distribution` vector into a plain list of its raw (family-level)
-# records, one per logical position - the closest equivalent to the
-# pre-migration `vec_data(x)`. `dist_transformed()` stores its `dist` field
-# this way (rather than as a nested `distribution` container) so that a
-# length-1 slice's `x[["dist"]]` dispatches *directly* to the inner family's
-# own methods (as it did pre-migration), bypassing the container-level
-# broadcasting reshaping in `apply_dist()` that a bare multi-value `p`/`q`/
-# `at` argument would otherwise trigger.
-dist_list <- function(x) {
-  lapply(seq_len(length(x)), function(i) dist_elem(x, i))
+# Call the generic `.f` on the `distribution` vector `x` with its first
+# argument in `...` (for example `q = q`) paired with the distributions by
+# position, as the family methods receive their own broadcast argument. Other
+# arguments in `...` are passed unchanged. The argument has size `vec_size(x)`
+# or 1. Unlike `cdf(x, q)`, which would map a size-`n` `q` over all `n`
+# distributions, this gives one result for each distribution.
+#
+# Nested families (truncated, inflated, ...) store their inner distributions as
+# a `distribution` vector field, so `dist_paired(cdf, x[["dist"]], q = q)` calls
+# the inner family methods once per family with all of their distributions.
+dist_paired <- function(.f, x, ...) {
+  args <- list2(...)
+  apply_slots(x, .f, args, 1L, args[[1L]])
 }
 
 # `dist_mixture()`'s per-family record analogue of `transpose()`: given a

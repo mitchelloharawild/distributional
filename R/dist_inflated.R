@@ -106,7 +106,7 @@ dist_inflated <- function(dist, prob, x = 0){
   if(prob < 0 || prob > 1){
     abort("The inflation probability must be between 0 and 1.")
   }
-  new_dist(dist = dist_list(dist), x = x, p = prob,
+  new_dist(dist = dist, x = x, p = prob,
            dimnames = variates(dist), class = "dist_inflated")
 }
 
