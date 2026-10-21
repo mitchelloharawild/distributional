@@ -131,20 +131,6 @@ dist_paired <- function(.f, x, ...) {
   apply_slots(x, .f, args, 1L, args[[1L]])
 }
 
-# `dist_mixture()`'s per-family record analogue of `transpose()`: given a
-# list of K `distribution` vectors (mixture components, each of common
-# length n), returns a list of n elements, each itself a list of the K raw
-# records at that position. The pre-migration `transpose()` did this via
-# `.subset2()`, which deliberately bypasses custom `[[` methods to reach the
-# raw per-element storage directly - a shortcut that assumed `distribution`
-# was still a plain list of per-element objects. It no longer is (the vecvec
-# migration's storage is an S7 object over an integer index), so this uses
-# `dist_elem()` instead, which is written against the current structure.
-dist_transpose_list <- function(dists) {
-  n <- if (length(dists)) length(dists[[1L]]) else 0L
-  lapply(seq_len(n), function(i) lapply(dists, dist_elem, i = i))
-}
-
 # Combine a list of raw (family-level) records into a `distribution` vector -
 # the inverse of `dist_elem()`. Used by `Ops.dist_default()`/
 # `Math.dist_default()` (default.R) which build a `dist_transformed()`/
