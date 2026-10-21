@@ -165,19 +165,22 @@ support.dist_default <- function(x, ...) {
   if (vctrs::vec_size(x) != 1L) {
     return(vctrs::vec_c(!!!lapply(vctrs::vec_seq_along(x), function(i) support(vctrs::vec_slice(x, i), ...))))
   }
-  lims <- quantile(x, c(0, 1))
+  # `x` is a single raw distribution here, so its methods can't be mapped over
+  # several points. Go through `distribution` which maps (one list element).
+  dx <- wrap_dist(list(x))
+  lims <- quantile(dx, c(0, 1))[[1L]]
   closed <- if(any(is.na(lims))) {
     c(FALSE, FALSE)
   } else {
     # Default to open limits on error
     lim_dens <- tryCatch(
-      suppressWarnings(density(x, lims)),
+      suppressWarnings(density(dx, lims)[[1L]]),
       error = function(e) c(0,0)
     )
     !near(lim_dens, 0)
   }
   new_support_region(
-    list(vctrs::vec_init(generate(x, 1)[[1L]], n = 0L)),
+    list(vctrs::vec_init(generate(dx, 1)[[1L]], n = 0L)),
     list(lims),
     list(closed)
   )
@@ -200,17 +203,18 @@ mean.dist_default <- function(x, ...){
       mean(vctrs::vec_slice(x, i), ...)
     })))
   }
+  dx <- wrap_dist(list(x))
   x_sup <- support(x)
   dist_type <- field(x_sup, "x")[[1]]
   if (!is.numeric(dist_type)) return(NA_real_)
   if (is.double(dist_type)) {
     limits <- field(x_sup, "lim")[[1]]
     tryCatch(
-      stats::integrate(function(at) density(x, at) * at, limits[1], limits[2])$value,
+      stats::integrate(function(at) density(dx, at)[[1L]] * at, limits[1], limits[2])$value,
       error = function(e) NA_real_
     )
   } else {
-    mean(quantile(x, stats::ppoints(1000)), na.rm = TRUE)
+    mean(quantile(dx, stats::ppoints(1000))[[1L]], na.rm = TRUE)
   }
 }
 #' @export
@@ -234,6 +238,7 @@ covariance.dist_default <- function(x, ...){
     # Univariate results are a vector; multivariate ones a list of matrices
     return(if (any(vapply(res, is.matrix, logical(1L)))) res else unlist(res))
   }
+  dx <- wrap_dist(list(x))
   x_sup <- support(x)
   dist_type <- field(x_sup, "x")[[1]]
   if (!is.numeric(dist_type)) return(NA_real_)
@@ -241,11 +246,11 @@ covariance.dist_default <- function(x, ...){
   else if (is.double(dist_type)) {
     limits <- field(x_sup, "lim")[[1]]
     tryCatch(
-      stats::integrate(function(at) density(x, at) * at^2, limits[1], limits[2])$value,
+      stats::integrate(function(at) density(dx, at)[[1L]] * at^2, limits[1], limits[2])$value,
       error = function(e) NA_real_
     ) - mean(x)^2
   } else {
-    stats::var(quantile(x, stats::ppoints(1000)), na.rm = TRUE)
+    stats::var(quantile(dx, stats::ppoints(1000))[[1L]], na.rm = TRUE)
   }
 }
 

@@ -311,11 +311,11 @@ test_that("transformed distributions in one vector with different transforms", {
 })
 
 test_that("transformed distributions of mixed inner families", {
-  d <- dist_transformed(c(dist_normal(0, 1), dist_gamma(2, 1), dist_poisson(3)), sqrt, function(x) x^2)
+  d <- dist_transformed(c(dist_normal(0, 1), dist_gamma(2, 1), dist_poisson(3)), function(x) 2 * x, function(x) x / 2)
   one <- function(f, ...) unlist(lapply(seq_along(d), function(i) f(d[i], ...)))
-  expect_equal(cdf(d, 1.2), one(cdf, 1.2))
+  expect_equal(cdf(d, 2), one(cdf, 2))
   expect_equal(quantile(d, 0.4), one(quantile, 0.4))
-  expect_equal(density(d, 1.2), one(density, 1.2))
+  expect_equal(density(d, 2), one(density, 2))
   expect_equal(format(d), c("t(N(0, 1))", "t(Gamma(2, 1))", "t(Pois(3))"))
   expect_equal(vapply(generate(d, times = 5), length, 1L), rep(5L, 3))
 })

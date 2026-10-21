@@ -45,3 +45,12 @@ test_that("dist_wrap() groups by function and environment", {
   expect_equal(g[[2]], c(-4, -4))
   expect_equal(format(x), c("myexp(1)", "myexp(1)", "exp(3)", "myexp(2)", "exp(4)"))
 })
+
+test_that("dist_wrap() has a numeric support, so mean() and variance() work", {
+  d <- dist_wrap("norm", mean = 1:3, sd = c(1, 2, 3))
+  expect_equal(unname(format(support(d))), rep("R", 3))
+  expect_equal(unlist(field(support(d), "lim")), rep(c(-Inf, Inf), 3))
+  expect_equal(mean(d), c(1, 2, 3), tolerance = 1e-6)
+  expect_equal(variance(d), c(1, 4, 9), tolerance = 1e-6)
+  expect_equal(mean(dist_wrap("norm")), 0, tolerance = 1e-6)
+})
