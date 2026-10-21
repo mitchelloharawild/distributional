@@ -45,11 +45,10 @@ vecvec_flatten_adj <- utils::getFromNamespace("vecvec_flatten_adj", "vecvec")
 #' or recyclable) arguments, returning a length-`n` result in one call -
 #' rather than assuming `x` is always a single distribution.
 #'
-#' `apply_dist()` consults this registry to decide, per storage slot, whether
-#' it can make one vectorised call to a family's method (ported) or must fall
-#' back to looping element-by-element and combining the results (not yet
-#' ported). This lets families be migrated one at a time without breaking the
-#' others; see `_dev/vecvec.md` phase 1.
+#' `apply_dist()` assumes every family is ported. This registry is only
+#' consulted by `format()` and `generate()`, which still loop
+#' element-by-element over families that are not listed here. See
+#' `_dev/dist-port.md` for the families still to be ported.
 #'
 #' @noRd
 dist_ported_families <- c("dist_normal", "dist_poisson", "dist_na")

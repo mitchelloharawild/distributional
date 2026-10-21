@@ -182,7 +182,7 @@ format.distribution <- function(x, ...) {
       # Not every not-yet-ported family's `format()` is naturally vectorised
       # (e.g. one that does `length(x[["field"]])` expecting `x` to be a
       # single distribution); loop per-element to match its pre-migration
-      # contract, as `apply_dist()` does for the other generics.
+      # contract.
       for (j in seq_along(pos)) out[pos[j]] <- format(vals[j], ...)
     }
   }
