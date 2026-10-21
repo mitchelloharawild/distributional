@@ -60,6 +60,8 @@ cdf.dist_default <- function(x, q, times = 1e5, ..., tail = "lower"){
   }
   # Use Monte Carlo integration
   r <- generate(x, times = times)
+  # Ported families return a list holding the draws of each distribution
+  if(is.list(r)) r <- r[[1L]]
   if(is.list(q)) {
     # Turn into matrix
     q <- do.call(rbind, q)
