@@ -45,7 +45,7 @@ vecvec_flatten_adj <- utils::getFromNamespace("vecvec_flatten_adj", "vecvec")
 #' or recyclable) arguments, returning a length-`n` result in one call -
 #' rather than assuming `x` is always a single distribution.
 #'
-#' `dist_apply()` consults this registry to decide, per storage slot, whether
+#' `apply_dist()` consults this registry to decide, per storage slot, whether
 #' it can make one vectorised call to a family's method (ported) or must fall
 #' back to looping element-by-element and combining the results (not yet
 #' ported). This lets families be migrated one at a time without breaking the

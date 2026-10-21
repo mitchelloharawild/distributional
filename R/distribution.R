@@ -126,7 +126,7 @@ dist_first_record <- function(x) dist_elem(x, 1L)
 # this way (rather than as a nested `distribution` container) so that a
 # length-1 slice's `x[["dist"]]` dispatches *directly* to the inner family's
 # own methods (as it did pre-migration), bypassing the container-level
-# broadcasting reshaping in `dist_apply()` that a bare multi-value `p`/`q`/
+# broadcasting reshaping in `apply_dist()` that a bare multi-value `p`/`q`/
 # `at` argument would otherwise trigger.
 dist_list <- function(x) {
   lapply(seq_len(length(x)), function(i) dist_elem(x, i))
@@ -170,7 +170,7 @@ vec_ptype_abbr.distribution <- function(x, ...){
 # where `format()` was always just per-element character formatting.
 #' @export
 format.distribution <- function(x, ...) {
-  loc <- dist_locate(x)
+  loc <- locate_slots(x)
   out <- rep(NA_character_, loc$n)
   for (k in seq_along(loc$slots)) {
     pos <- loc$pos[[k]]
@@ -182,7 +182,7 @@ format.distribution <- function(x, ...) {
       # Not every not-yet-ported family's `format()` is naturally vectorised
       # (e.g. one that does `length(x[["field"]])` expecting `x` to be a
       # single distribution); loop per-element to match its pre-migration
-      # contract, as `dist_apply()` does for the other generics.
+      # contract, as `apply_dist()` does for the other generics.
       for (j in seq_along(pos)) out[pos[j]] <- format(vals[j], ...)
     }
   }
@@ -333,7 +333,7 @@ density.distribution <- function(x, at, ..., log = FALSE){
   at <- validate_arg_dim(x, at, arg = "at")
   if(log) return(log_density(x, at, ...))
   at <- arg_listable(at, .ptype = NULL)
-  dist_apply(x, density, at = at, ...)
+  apply_dist(x, density, at = at, ...)
 }
 
 log_density <- function(x, at, ...) {
@@ -343,7 +343,7 @@ log_density <- function(x, at, ...) {
 log_density.distribution <- function(x, at, ...){
   at <- validate_arg_dim(x, at, arg = "at")
   at <- arg_listable(at, .ptype = NULL)
-  dist_apply(x, log_density, at = at, ...)
+  apply_dist(x, log_density, at = at, ...)
 }
 
 #' Distribution Quantiles
@@ -374,7 +374,7 @@ quantile.distribution <- function(x, p, ..., tail = c("lower", "upper"), log = F
   tail <- match.arg(tail)
   if(log) return(log_quantile(x, p, ..., tail = tail))
   p <- arg_listable(p, .ptype = double())
-  dist_apply(x, quantile, p = p, ..., tail = tail)
+  apply_dist(x, quantile, p = p, ..., tail = tail)
 }
 log_quantile <- function(x, p, ...) {
   UseMethod("log_quantile")
@@ -382,7 +382,7 @@ log_quantile <- function(x, p, ...) {
 #' @export
 log_quantile.distribution <- function(x, p, ...){
   p <- arg_listable(p, .ptype = double())
-  dist_apply(x, log_quantile, p = p, ...)
+  apply_dist(x, log_quantile, p = p, ...)
 }
 
 #' The cumulative distribution function
@@ -424,7 +424,7 @@ cdf.distribution <- function(x, q, ..., tail = c("lower", "upper")){
   tail <- match.arg(tail)
   q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
-  dist_apply(x, cdf, q = q, ..., tail = tail)
+  apply_dist(x, cdf, q = q, ..., tail = tail)
 }
 log_cdf <- function(x, q, ...) {
   UseMethod("log_cdf")
@@ -433,7 +433,7 @@ log_cdf <- function(x, q, ...) {
 log_cdf.distribution <- function(x, q, ...){
   q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
-  dist_apply(x, log_cdf, q = q, ...)
+  apply_dist(x, log_cdf, q = q, ...)
 }
 
 #' Randomly sample values from a distribution
@@ -473,7 +473,7 @@ generate.distribution <- function(x, times, ...){
   times <- vec_recycle(times, size = length(x))
 
   dn <- variates(x)
-  loc <- dist_locate(x)
+  loc <- locate_slots(x)
   out <- vector("list", loc$n)
 
   for (k in seq_along(loc$slots)) {
@@ -524,9 +524,9 @@ The same sample will be used for each distribution, i.e. `sample = list(sample)`
     sample <- list(sample)
   }
   if(log){
-    dist_apply(x, log_likelihood, sample = sample, ...)
+    apply_dist(x, log_likelihood, sample = sample, ...)
   } else {
-    dist_apply(x, likelihood, sample = sample, ...)
+    apply_dist(x, likelihood, sample = sample, ...)
   }
 }
 
@@ -537,7 +537,7 @@ log_likelihood <- function(x, ...) {
 }
 #' @export
 log_likelihood.distribution <- function(x, sample, ...){
-  dist_apply(x, log_likelihood, sample = sample, ...)
+  apply_dist(x, log_likelihood, sample = sample, ...)
 }
 
 #' Extract the parameters of a distribution
@@ -589,7 +589,7 @@ parameters <- function(x, ...) {
 #' @rdname parameters
 #' @export
 parameters.distribution <- function(x, recursive = FALSE, ...) {
-  loc <- dist_locate(x)
+  loc <- locate_slots(x)
   if (!length(loc$slots)) return(vctrs::new_data_frame(list(), n = loc$n))
 
   rows <- vector("list", loc$n)
@@ -663,7 +663,7 @@ parameters.distribution <- function(x, recursive = FALSE, ...) {
 #' @importFrom stats family
 #' @export
 family.distribution <- function(object, recursive = FALSE, ...) {
-  loc <- dist_locate(object)
+  loc <- locate_slots(object)
   if (recursive) {
     # Family trees are ragged, so describe each distribution individually.
     out <- rep(list(NA_character_), loc$n)
@@ -701,7 +701,7 @@ support <- function(x, ...) {
 #' @rdname support
 #' @export
 support.distribution <- function(x, ...) {
-  dist_apply(x, support, ...)
+  apply_dist(x, support, ...)
 }
 
 #' Mean of a probability distribution
@@ -717,7 +717,7 @@ support.distribution <- function(x, ...) {
 #'
 #' @export
 mean.distribution <- function(x, ...){
-  dist_apply(x, mean, ...)
+  apply_dist(x, mean, ...)
 }
 
 #' Variance
@@ -775,7 +775,7 @@ variance.matrix <- function(x, ...){
 #'
 #' @export
 variance.distribution <- function(x, ...){
-  dist_apply(x, variance, ...)
+  apply_dist(x, variance, ...)
 }
 
 #' Covariance
@@ -819,7 +819,7 @@ covariance.numeric <- function(x, ...){
 #'
 #' @export
 covariance.distribution <- function(x, ...){
-  dist_apply(x, covariance, ...)
+  apply_dist(x, covariance, ...)
 }
 
 #' Skewness of a probability distribution
@@ -837,7 +837,7 @@ skewness <- function(x, ...) {
 #' @rdname skewness
 #' @export
 skewness.distribution <- function(x, ...){
-  dist_apply(x, skewness, ...)
+  apply_dist(x, skewness, ...)
 }
 
 #' Kurtosis of a probability distribution
@@ -855,7 +855,7 @@ kurtosis <- function(x, ...) {
 #' @rdname kurtosis
 #' @export
 kurtosis.distribution <- function(x, ...){
-  dist_apply(x, kurtosis, ...)
+  apply_dist(x, kurtosis, ...)
 }
 
 #' Median of a probability distribution
@@ -873,7 +873,7 @@ kurtosis.distribution <- function(x, ...){
 #' @importFrom stats median
 #' @export
 median.distribution <- function(x, na.rm = FALSE, ...){
-  dist_apply(x, median, na.rm = na.rm, ...)
+  apply_dist(x, median, na.rm = na.rm, ...)
 }
 
 #' Probability intervals of a probability distribution
@@ -895,7 +895,7 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
   size <- arg_listable(size, .ptype = double())
-  dist_apply(x, hilo, size = size, ...)
+  apply_dist(x, hilo, size = size, ...)
 }
 
 #' Highest density regions of probability distributions
@@ -917,7 +917,7 @@ hilo.distribution <- function(x, size = 95, ...){
 #' @export
 hdr.distribution <- function(x, size = 95, n = 512, ...){
   size <- arg_listable(size, .ptype = double())
-  dist_apply(x, hdr, size = size, n = n, ...)
+  apply_dist(x, hdr, size = size, n = n, ...)
 }
 
 #' @export
@@ -931,7 +931,7 @@ sum.distribution <- function(x, ...){
 # Arithmetic dispatches element-by-element to the family-level `Ops.dist_*`/
 # `Math.dist_*` methods (unchanged from before the migration), which is what
 # lets the ~50 existing family implementations keep working unmodified.
-# Vectorising this loop per storage slot (as `dist_apply()` does for the
+# Vectorising this loop per storage slot (as `apply_dist()` does for the
 # stats generics) is a follow-up - see `_dev/vecvec.md` status notes.
 
 #' @export
@@ -1051,5 +1051,5 @@ has_symmetry <- function(x, ...) {
 
 #' @export
 has_symmetry.distribution <- function(x, ...) {
-  dist_apply(x, has_symmetry, ...)
+  apply_dist(x, has_symmetry, ...)
 }
