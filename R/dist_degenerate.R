@@ -93,32 +93,38 @@ format.dist_degenerate <- function(x, ...){
 
 #' @export
 density.dist_degenerate <- function(x, at, ...){
+  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
   ifelse(at == x[["x"]], 1, 0)
 }
 
 #' @export
 quantile.dist_degenerate <- function(x, p, ..., tail = "lower"){
   # Every quantile is the point mass, in either tail
+  n <- vctrs::vec_size(x)
+  p <- vctrs::vec_recycle(p, n)
   ifelse(p < 0 | p > 1, NaN, x[["x"]])
 }
 
 #' @export
 cdf.dist_degenerate <- function(x, q, ..., tail = "lower"){
+  n <- vctrs::vec_size(x)
+  q <- vctrs::vec_recycle(q, n)
   if(tail == "upper") return(ifelse(q >= x[["x"]], 0, 1))
   ifelse(q >= x[["x"]], 1, 0)
 }
 
 #' @export
 generate.dist_degenerate <- function(x, times, ...){
-  rep(x[["x"]], times)
+  vctrs::vec_chop(rep(x[["x"]], times), sizes = times)
 }
 
 #' @export
 support.dist_degenerate <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(vctrs::vec_init(x[["x"]], n = 0L)),
-    list(c(x[["x"]], x[["x"]])),
-    list(c(TRUE, TRUE))
+    rep_len(list(vctrs::vec_init(x[["x"]], n = 0L)), n),
+    lapply(x[["x"]], function(z) c(z, z)),
+    rep_len(list(c(TRUE, TRUE)), n)
   )
 }
 
@@ -129,11 +135,11 @@ mean.dist_degenerate <- function(x, ...){
 
 #' @export
 covariance.dist_degenerate <- function(x, ...){
-  0
+  rep(0, vctrs::vec_size(x))
 }
 
 #' @export
-skewness.dist_degenerate <- function(x, ...) NA_real_
+skewness.dist_degenerate <- function(x, ...) rep(NA_real_, vctrs::vec_size(x))
 
 #' @export
-kurtosis.dist_degenerate <- function(x, ...) NA_real_
+kurtosis.dist_degenerate <- function(x, ...) rep(NA_real_, vctrs::vec_size(x))

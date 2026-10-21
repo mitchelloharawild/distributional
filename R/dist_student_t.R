@@ -156,89 +156,113 @@ dist_student_t <- function(df, mu = 0, sigma = 1, ncp = NULL){
   if(any(sigma[!is.na(sigma)] <= 0)){
     abort("The scale (sigma) parameter of a Student t distribution must be strictly positive.")
   }
+  # `NA` means the non-centrality parameter is absent (a central t)
+  ncp <- if(is.null(ncp)) NA_real_ else vec_cast(ncp, double())
   new_dist(df = df, mu = mu, sigma = sigma, ncp = ncp, class = "dist_student_t")
+}
+
+# Apply a stats t function (dt, pt, qt) to paired arguments, using the
+# non-central form only for the elements with a non-centrality parameter
+student_t_stat <- function(f, q, df, ncp, ...){
+  n <- vctrs::vec_size(df)
+  q <- vctrs::vec_recycle(q, n)
+  has_ncp <- !is.na(ncp)
+  out <- numeric(n)
+  if(any(!has_ncp)) out[!has_ncp] <- f(q[!has_ncp], df[!has_ncp], ...)
+  if(any(has_ncp)) out[has_ncp] <- f(q[has_ncp], df[has_ncp], ncp[has_ncp], ...)
+  out
 }
 
 #' @export
 format.dist_student_t <- function(x, digits = 2, ...){
-  out <- sprintf(
+  ncp <- x[["ncp"]]
+  sprintf(
     "t(%s, %s, %s%s)",
     format(x[["df"]], digits = digits, ...),
     format(x[["mu"]], digits = digits, ...),
     format(x[["sigma"]], digits = digits, ...),
-    if(is.null(x[["ncp"]])) "" else paste(",", format(x[["ncp"]], digits = digits, ...))
+    ifelse(is.na(ncp), "", paste(",", format(ncp, digits = digits, trim = TRUE, ...)))
   )
 }
 
 #' @export
 density.dist_student_t <- function(x, at, ...){
-  ncp <- x[["ncp"]] %||% missing_arg()
   sigma <- x[["sigma"]]
+  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
 
-  stats::dt((at - x[["mu"]])/sigma, x[["df"]], ncp) / sigma
+  student_t_stat(stats::dt, (at - x[["mu"]])/sigma, x[["df"]], x[["ncp"]]) / sigma
 }
 
 #' @export
 log_density.dist_student_t <- function(x, at, ...){
-  ncp <- x[["ncp"]] %||% missing_arg()
   sigma <- x[["sigma"]]
+  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
 
-  stats::dt((at - x[["mu"]])/sigma, x[["df"]], ncp, log = TRUE) - log(sigma)
+  student_t_stat(stats::dt, (at - x[["mu"]])/sigma, x[["df"]], x[["ncp"]], log = TRUE) - log(sigma)
 }
 
 
 #' @export
 quantile.dist_student_t <- function(x, p, ..., tail = "lower"){
-  ncp <- x[["ncp"]] %||% missing_arg()
-
-  stats::qt(p, x[["df"]], ncp, lower.tail = tail == "lower") * x[["sigma"]] + x[["mu"]]
+  p <- vctrs::vec_recycle(p, vctrs::vec_size(x))
+  student_t_stat(stats::qt, p, x[["df"]], x[["ncp"]], lower.tail = tail == "lower") * x[["sigma"]] + x[["mu"]]
 }
 
 #' @export
 cdf.dist_student_t <- function(x, q, ..., tail = "lower"){
-  ncp <- x[["ncp"]] %||% missing_arg()
-
-  stats::pt((q - x[["mu"]])/x[["sigma"]], x[["df"]], ncp, lower.tail = tail == "lower")
+  q <- vctrs::vec_recycle(q, vctrs::vec_size(x))
+  student_t_stat(stats::pt, (q - x[["mu"]])/x[["sigma"]], x[["df"]], x[["ncp"]], lower.tail = tail == "lower")
 }
 
 #' @export
 generate.dist_student_t <- function(x, times, ...){
-  ncp <- x[["ncp"]] %||% missing_arg()
-
-  stats::rt(times, x[["df"]], ncp) * x[["sigma"]] + x[["mu"]]
+  df <- rep(x[["df"]], times)
+  ncp <- rep(x[["ncp"]], times)
+  has_ncp <- !is.na(ncp)
+  z <- numeric(length(df))
+  if(any(!has_ncp)) z[!has_ncp] <- stats::rt(sum(!has_ncp), df[!has_ncp])
+  if(any(has_ncp)){
+    # stats::rt() only accepts a single ncp, so draw the non-central t directly
+    m <- sum(has_ncp)
+    z[has_ncp] <- stats::rnorm(m, ncp[has_ncp]) / sqrt(stats::rchisq(m, df[has_ncp]) / df[has_ncp])
+  }
+  vctrs::vec_chop(z * rep(x[["sigma"]], times) + rep(x[["mu"]], times), sizes = times)
 }
 
 #' @export
 support.dist_student_t <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
+}
+
+# E(T) / (sigma * ncp) for the non-central standard t, with df > 1 assumed
+student_t_ncp_mean <- function(df){
+  sqrt(df/2) * (gamma((df-1)/2)/gamma(df/2))
 }
 
 #' @export
 mean.dist_student_t <- function(x, ...){
   df <- x[["df"]]
-  if(df <= 1) return(NA_real_)
-  if(is.null(x[["ncp"]])){
-    x[["mu"]]
-  } else {
-    x[["mu"]] + x[["ncp"]] * sqrt(df/2) * (gamma((df-1)/2)/gamma(df/2)) * x[["sigma"]]
-  }
+  ncp <- x[["ncp"]]
+  ok <- df > 1
+  # Evaluate the formula only where it is defined (df > 1)
+  df_ok <- ifelse(ok, df, 2)
+  shift <- ifelse(is.na(ncp), 0, ncp) * student_t_ncp_mean(df_ok) * x[["sigma"]]
+  ifelse(ok, x[["mu"]] + shift, NA_real_)
 }
 
 #' @export
 covariance.dist_student_t <- function(x, ...){
   df <- x[["df"]]
-  ncp <- x[["ncp"]]
-  if(df <= 1) return(NA_real_)
-  if(df <= 2) return(Inf)
-  if(is.null(ncp)){
-    df / (df - 2) * x[["sigma"]]^2
-  } else {
-    ((df*(1+ncp^2))/(df-2) - (ncp * sqrt(df/2) * (gamma((df-1)/2)/gamma(df/2)))^2) * x[["sigma"]]^2
-  }
+  ncp <- ifelse(is.na(x[["ncp"]]), 0, x[["ncp"]])
+  # Evaluate the formula only where it is defined (df > 2)
+  df_ok <- ifelse(df > 2, df, 3)
+  out <- ((df_ok*(1+ncp^2))/(df_ok-2) - (ncp * student_t_ncp_mean(df_ok))^2) * x[["sigma"]]^2
+  ifelse(df <= 1, NA_real_, ifelse(df <= 2, Inf, out))
 }
 
 #' @export

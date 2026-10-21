@@ -31,3 +31,28 @@ test_that("Degenerate distribution", {
   expect_equal(mean(dist), 1)
   expect_equal(variance(dist), 0)
 })
+
+test_that("Degenerate distribution is vectorised over distributions", {
+  dist <- dist_degenerate(c(1, 2, 3))
+
+  expect_equal(format(dist), c("1", "2", "3"))
+  expect_equal(quantile(dist, 0.5), c(1, 2, 3))
+  expect_equal(quantile(dist, c(0.2, 2)), list(c(1, NaN), c(2, NaN), c(3, NaN)))
+  expect_equal(quantile(dist, 0.5, tail = "upper"), c(1, 2, 3))
+  expect_equal(density(dist, 2), c(0, 1, 0))
+  expect_equal(density(dist, list(c(1, 1, 3)))[[1]], c(1, 0, 1))
+  expect_equal(cdf(dist, 2), c(1, 1, 0))
+  expect_equal(cdf(dist, 2, tail = "upper"), c(0, 0, 1))
+  expect_equal(mean(dist), c(1, 2, 3))
+  expect_equal(variance(dist), c(0, 0, 0))
+  expect_equal(skewness(dist), rep(NA_real_, 3))
+  expect_equal(kurtosis(dist), rep(NA_real_, 3))
+  expect_equal(median(dist), c(1, 2, 3))
+
+  gen <- generate(dist, 2)
+  expect_equal(gen, list(c(1, 1), c(2, 2), c(3, 3)))
+
+  supp <- support(dist)
+  expect_equal(vctrs::vec_size(supp), 3L)
+  expect_equal(vctrs::vec_proxy(support(dist)[2]), vctrs::vec_proxy(support(dist_degenerate(2))))
+})
