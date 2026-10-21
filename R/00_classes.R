@@ -61,7 +61,8 @@ dist_ported_families <- c(
   "dist_weibull", "dist_cauchy", "dist_f", "dist_inverse_exponential",
   "dist_inverse_gamma", "dist_student_t", "dist_degenerate", "dist_gev",
   "dist_gpd", "dist_gh", "dist_gk", "dist_studentized_range",
-  "dist_horseshoe", "dist_categorical", "dist_multinomial", "dist_dirichlet"
+  "dist_horseshoe", "dist_categorical", "dist_multinomial", "dist_dirichlet",
+  "dist_mvnorm", "dist_mvt"
 )
 
 is_ported_dist <- function(x) {

@@ -159,3 +159,47 @@ test_that("Multivariate t with different dimensions", {
   expect_equal(dim.dist_mvt(distributional:::dist_elem(dist1d, 1)), 1)
   expect_equal(format(dist1d), "MVT[1](5)")
 })
+
+test_that("Multivariate t methods are vectorised over distributions", {
+  skip_if_not_installed("mvtnorm")
+  df <- c(3, 4, 5)
+  mu <- list(c(0, 0), c(1, 1), c(2, 0))
+  sigma <- list(diag(2), 2 * diag(2), matrix(c(1, .5, .5, 1), 2))
+  dist <- dist_multivariate_t(df, mu, sigma)
+
+  expect_equal(format(dist), c("MVT[2](3)", "MVT[2](4)", "MVT[2](5)"))
+  expect_equal(mean(dist), do.call(rbind, mu))
+  expect_equal(covariance(dist), Map(function(d, s) d / (d - 2) * s, df, sigma))
+  expect_equal(variance(dist), do.call(rbind, Map(function(d, s) d / (d - 2) * diag(s), df, sigma)))
+  expect_equal(quantile(dist, 0.25, kind = "marginal"), rbind(
+    qt(.25, 3) * 1 + c(0, 0), qt(.25, 4) * sqrt(2) + c(1, 1), qt(.25, 5) * 1 + c(2, 0)
+  ))
+
+  at <- rbind(c(0, 0), c(1, 0), c(2, 2))
+  expect_equal(
+    density(dist, list(at))[[1]],
+    vapply(1:3, function(i) mvtnorm::dmvt(at[i, ], mu[[i]], sigma[[i]], df[i], log = FALSE), 1)
+  )
+  expect_equal(
+    density(dist, cbind(1, 0)),
+    vapply(1:3, function(i) mvtnorm::dmvt(c(1, 0), mu[[i]], sigma[[i]], df[i], log = FALSE), 1)
+  )
+
+  draws <- generate(dist, c(2, 3, 4))
+  expect_equal(vapply(draws, nrow, 1L), c(2L, 3L, 4L))
+})
+
+test_that("Multivariate t guards undefined moments per distribution", {
+  dist <- dist_multivariate_t(c(1, 2, 5), list(c(0, 0), c(1, 1), c(2, 2)), list(diag(2), diag(2), diag(2)))
+  expect_warning(m <- mean(dist), "undefined")
+  expect_equal(m, rbind(c(NA, NA), c(1, 1), c(2, 2)))
+  expect_warning(v <- variance(dist), "undefined")
+  expect_equal(v, rbind(c(NA, NA), c(NA, NA), c(5 / 3, 5 / 3)))
+})
+
+test_that("Multivariate t distributions can differ in dimensionality", {
+  dist <- dist_multivariate_t(c(3, 5), list(c(0, 0), c(1, 2, 3)), list(diag(2), diag(3)))
+  expect_equal(format(dist), c("MVT[2](3)", "MVT[3](5)"))
+  expect_equal(mean(dist), rbind(c(0, 0, NA), c(1, 2, 3)))
+  expect_equal(vapply(generate(dist, c(2, 5)), ncol, 1L), c(2L, 3L))
+})

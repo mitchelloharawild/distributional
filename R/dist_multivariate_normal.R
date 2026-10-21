@@ -89,24 +89,61 @@ dist_multivariate_normal <- function(mu = 0, sigma = list(diag(1))){
 
 #' @export
 format.dist_mvnorm <- function(x, digits = 2, ...){
-  sprintf(
-    "MVN[%i]",
-    length(x[["mu"]])
+  sprintf("MVN[%i]", lengths(mv_field(x, "mu")))
+}
+
+# The list of `n` parameter vectors/matrices of a multivariate distribution.
+# `x[["mu"]]` unwraps a size 1 list field, so the field is read directly.
+mv_field <- function(x, name){
+  as.list(vctrs::field(x, name))
+}
+
+# Rows of a recycled argument (`n` rows, or 1 row to be shared by all)
+mv_arg_rows <- function(arg, n){
+  arg <- as.matrix(arg)
+  lapply(if (nrow(arg) == 1L) rep_len(1L, n) else seq_len(n), function(i) arg[i, ])
+}
+
+# Stack vectors as the rows of a matrix. Distributions of different
+# dimensionality are padded with `NA` up to the largest dimension.
+mv_stack <- function(rows){
+  k <- max(lengths(rows), 0L)
+  out <- matrix(NA_real_, nrow = length(rows), ncol = k)
+  for (i in seq_along(rows)) out[i, seq_along(rows[[i]])] <- rows[[i]]
+  out
+}
+
+mv_support <- function(mu){
+  new_support_region(
+    lapply(mu, function(m) {
+      matrix(numeric(), nrow = 0L, ncol = length(m),
+             dimnames = if (!is.null(names(m))) list(NULL, names(m)))
+    }),
+    lapply(mu, function(m) matrix(c(-Inf, Inf), nrow = 2L, ncol = length(m))),
+    rep(list(c(FALSE, FALSE)), length(mu))
   )
 }
 
 #' @export
 density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
   require_package("mvtnorm")
-  if(is.list(at)) return(vapply(at, density, numeric(1L), x = x, ...))
-  mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]])
+  mu <- mv_field(x, "mu")
+  sigma <- mv_field(x, "sigma")
+  at <- mv_arg_rows(at, length(mu))
+  vapply(seq_along(mu), function(i) {
+    mvtnorm::dmvnorm(at[[i]], mu[[i]], sigma[[i]])
+  }, numeric(1L))
 }
 
 #' @export
 log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
   require_package("mvtnorm")
-  if(is.list(at)) return(vapply(at, log_density, numeric(1L), x = x, ...))
-  mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]], log = TRUE)
+  mu <- mv_field(x, "mu")
+  sigma <- mv_field(x, "sigma")
+  at <- mv_arg_rows(at, length(mu))
+  vapply(seq_along(mu), function(i) {
+    mvtnorm::dmvnorm(at[[i]], mu[[i]], sigma[[i]], log = TRUE)
+  }, numeric(1L))
 }
 
 #' @export
@@ -122,27 +159,35 @@ quantile.dist_mvnorm <- function(x, p, kind = c("marginal", "equicoordinate"),
     kind <- type
   }
   kind <- match.arg(kind)
-  q <- if (kind == "marginal") {
-    stats::qnorm(p, mean = rep(x[["mu"]], each = length(p)),
-                 sd = rep(sqrt(diag(x[["sigma"]])), each = length(p)), ...,
-                 lower.tail = tail == "lower")
-  } else {
-    require_package("mvtnorm")
-    if (tail == "upper") p <- 1 - p
-    vapply(p, function(p, ...) {
-      if (p == 0) return(-Inf) else if (p == 1) return(Inf)
-      mvtnorm::qmvnorm(p, ...)$quantile
-    }, numeric(1L), mean = x[["mu"]], sigma = x[["sigma"]], ...)
+  mu <- mv_field(x, "mu")
+  sigma <- mv_field(x, "sigma")
+  n <- length(mu)
+  if (kind == "marginal") {
+    return(stats::qnorm(
+      p, mean = mv_stack(mu), sd = sqrt(mv_stack(lapply(sigma, diag))), ...,
+      lower.tail = tail == "lower"
+    ))
   }
-
-  matrix(q, nrow = length(p), ncol = dim(x))
+  require_package("mvtnorm")
+  if (tail == "upper") p <- 1 - p
+  p <- rep_len(p, n)
+  q <- vapply(seq_len(n), function(i) {
+    if (is.na(p[i])) return(NA_real_)
+    if (p[i] == 0) return(-Inf) else if (p[i] == 1) return(Inf)
+    mvtnorm::qmvnorm(p[i], mean = mu[[i]], sigma = sigma[[i]], ...)$quantile
+  }, numeric(1L))
+  mv_stack(lapply(seq_len(n), function(i) rep(q[i], length(mu[[i]]))))
 }
 
 #' @export
 cdf.dist_mvnorm <- function(x, q, ..., na.rm = FALSE, tail = "lower"){
-  if(is.list(q)) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
   require_package("mvtnorm")
-  p <- mvtnorm::pmvnorm(upper = as.numeric(q), mean = x[["mu"]], sigma = x[["sigma"]], ...)[1]
+  mu <- mv_field(x, "mu")
+  sigma <- mv_field(x, "sigma")
+  q <- mv_arg_rows(q, length(mu))
+  p <- vapply(seq_along(mu), function(i) {
+    mvtnorm::pmvnorm(upper = as.numeric(q[[i]]), mean = mu[[i]], sigma = sigma[[i]], ...)[1]
+  }, numeric(1L))
   # The upper tail of a multivariate distribution is the complement 1 - F(q)
   if (tail == "lower") p else 1 - p
 }
@@ -150,25 +195,22 @@ cdf.dist_mvnorm <- function(x, q, ..., na.rm = FALSE, tail = "lower"){
 #' @export
 generate.dist_mvnorm <- function(x, times, ..., na.rm = FALSE){
   require_package("mvtnorm")
-  mvtnorm::rmvnorm(times, x[["mu"]], x[["sigma"]], ...)
+  mu <- mv_field(x, "mu")
+  sigma <- mv_field(x, "sigma")
+  times <- rep_len(times, length(mu))
+  lapply(seq_along(mu), function(i) {
+    mvtnorm::rmvnorm(times[i], mu[[i]], sigma[[i]], ...)
+  })
 }
 
 #' @export
 support.dist_mvnorm <- function(x, ...) {
-  mu <- x[["mu"]]
-  k <- length(mu)
-  proto <- matrix(numeric(), nrow = 0L, ncol = k,
-                  dimnames = if (!is.null(names(mu))) list(NULL, names(mu)))
-  new_support_region(
-    list(proto),
-    list(matrix(c(-Inf, Inf), nrow = 2L, ncol = k)),
-    list(c(FALSE, FALSE))
-  )
+  mv_support(mv_field(x, "mu"))
 }
 
 #' @export
 mean.dist_mvnorm <- function(x, ...){
-  matrix(x[["mu"]], nrow = 1)
+  mv_stack(mv_field(x, "mu"))
 }
 
 #' @export
@@ -176,11 +218,15 @@ median.dist_mvnorm <- mean.dist_mvnorm
 
 #' @export
 covariance.dist_mvnorm <- function(x, ...){
-  # Wrap in list to preserve matrix structure
-  list(x[["sigma"]])
+  lapply(mv_field(x, "sigma"), unclass)
+}
+
+#' @export
+variance.dist_mvnorm <- function(x, ...){
+  mv_stack(lapply(mv_field(x, "sigma"), diag))
 }
 
 #' @export
 dim.dist_mvnorm <- function(x){
-  length(x[["mu"]])
+  length(mv_field(x, "mu")[[1L]])
 }
