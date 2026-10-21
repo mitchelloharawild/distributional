@@ -1,3 +1,20 @@
+# These defaults are inherently per-distribution numerical methods. When they
+# are used by a vectorised (ported) family with more than one element sharing
+# the call, they loop over `vec_slice(x, i)`, pairing `vec_slice()` of the
+# broadcast argument (size `n` or 1) with each element. See `_dev/dist-port.md`.
+default_arg_slice <- function(arg, i) {
+  if (vctrs::vec_size(arg) == 1L) arg else vctrs::vec_slice(arg, i)
+}
+
+# Combine per-element results into a vector, or a matrix with one row each.
+default_bind <- function(res) {
+  if (any(vapply(res, is.matrix, logical(1L)))) {
+    do.call(rbind, res)
+  } else {
+    unlist(res)
+  }
+}
+
 #' @export
 density.dist_default <- function(x, ...){
   abort(
@@ -14,6 +31,11 @@ log_density.dist_default <- function(x, ...){
 #' @export
 quantile.dist_default <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") return(quantile(x, 1 - p, ...))
+  if (vctrs::vec_size(x) != 1L) {
+    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
+      quantile(vctrs::vec_slice(x, i), default_arg_slice(p, i), ...)
+    })))
+  }
   # abort(
   #   sprintf("The distribution class `%s` does not support `quantile()`",
   #           class(x)[1])
@@ -31,6 +53,11 @@ log_quantile.dist_default <- function(x, p, ...){
 #' @export
 cdf.dist_default <- function(x, q, times = 1e5, ..., tail = "lower"){
   if(tail == "upper") return(1 - cdf(x, q, times = times, ...))
+  if (vctrs::vec_size(x) != 1L) {
+    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
+      cdf(vctrs::vec_slice(x, i), default_arg_slice(q, i), times = times, ...)
+    })))
+  }
   # Use Monte Carlo integration
   r <- generate(x, times = times)
   if(is.list(q)) {
@@ -53,16 +80,32 @@ log_cdf.dist_default <- function(x, q, ...){
 
 #' @export
 generate.dist_default <- function(x, times, ...){
+  if (vctrs::vec_size(x) != 1L) {
+    times <- vctrs::vec_recycle(times, vctrs::vec_size(x))
+    return(lapply(vctrs::vec_seq_along(x), function(i) {
+      generate(vctrs::vec_slice(x, i), times = times[[i]], ...)
+    }))
+  }
   vapply(stats::runif(times,0,1), quantile, numeric(1L), x = x, ...)
 }
 
 #' @export
 likelihood.dist_default <- function(x, sample, ...){
+  if (vctrs::vec_size(x) != 1L) {
+    return(vapply(vctrs::vec_seq_along(x), function(i) {
+      likelihood(vctrs::vec_slice(x, i), sample, ...)
+    }, numeric(1L)))
+  }
   prod(vapply(sample, density, numeric(1L), x = x))
 }
 
 #' @export
 log_likelihood.dist_default <- function(x, sample, ...){
+  if (vctrs::vec_size(x) != 1L) {
+    return(vapply(vctrs::vec_seq_along(x), function(i) {
+      log_likelihood(vctrs::vec_slice(x, i), sample, ...)
+    }, numeric(1L)))
+  }
   sum(vapply(sample, log_density, numeric(1L), x = x))
 }
 
@@ -159,6 +202,11 @@ has_symmetry.dist_default <- function(x, ...){
 
 #' @export
 mean.dist_default <- function(x, ...){
+  if (vctrs::vec_size(x) != 1L) {
+    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
+      mean(vctrs::vec_slice(x, i), ...)
+    })))
+  }
   x_sup <- support(x)
   dist_type <- field(x_sup, "x")[[1]]
   if (!is.numeric(dist_type)) return(NA_real_)
@@ -174,6 +222,11 @@ mean.dist_default <- function(x, ...){
 }
 #' @export
 variance.dist_default <- function(x, ...){
+  if (vctrs::vec_size(x) != 1L) {
+    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
+      variance(vctrs::vec_slice(x, i), ...)
+    })))
+  }
   x <- covariance(x, ...)
   if(is.matrix(x[[1]]) && ncol(x[[1]]) > 1){
     matrix(diag(x[[1]]), nrow = 1)
@@ -181,6 +234,13 @@ variance.dist_default <- function(x, ...){
 }
 #' @export
 covariance.dist_default <- function(x, ...){
+  if (vctrs::vec_size(x) != 1L) {
+    res <- lapply(vctrs::vec_seq_along(x), function(i) {
+      covariance(vctrs::vec_slice(x, i), ...)
+    })
+    # Univariate results are a vector; multivariate ones a list of matrices
+    return(if (any(vapply(res, is.matrix, logical(1L)))) res else unlist(res))
+  }
   x_sup <- support(x)
   dist_type <- field(x_sup, "x")[[1]]
   if (!is.numeric(dist_type)) return(NA_real_)
@@ -206,11 +266,12 @@ hilo.dist_default <- function(x, size = 95, ...){
   lower <- quantile(x, (100-size)/200, ...)
   upper <- quantile(x, (100+size)/200, ...)
   if(is.matrix(lower) && is.matrix(upper)) {
-    return(
+    # One row of `hilo` columns per distribution
+    return(vctrs::vec_rbind(!!!lapply(seq_len(nrow(lower)), function(i) {
       vctrs::new_data_frame(split(
-        new_hilo(drop(lower), drop(upper), size = rep_len(size, length(lower))),
-      seq_along(lower)))
-    )
+        new_hilo(lower[i, ], upper[i, ], size = rep_len(size, ncol(lower))),
+        seq_len(ncol(lower))))
+    })))
   }
   new_hilo(lower, upper, size)
 }
