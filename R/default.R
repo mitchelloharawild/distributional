@@ -447,7 +447,7 @@ Ops.dist_default <- function(e1, e2) {
   trans <- if(all(is_dist)) {
     if(inherits(e1, "dist_transformed") && inherits(e2, "dist_transformed") &&
        identical(e1$dist, e2$dist)){
-      new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
+      new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform[[1L]])(x), (!!e2$transform[[1L]])(x))))
     } else {
       stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
     }
