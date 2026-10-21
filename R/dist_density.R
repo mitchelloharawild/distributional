@@ -190,10 +190,12 @@ density_intervals <- function(at, f) {
   list(x = at, f = f, w = w, slope = diff(f) / w, cdf = c(0, cumsum(prob)))
 }
 
+#' @export
 format.dist_pdf <- function(x, ...){
   sprintf("density[%s]", lengths(vctrs::field(x, "x")))
 }
 
+#' @export
 density.dist_pdf <- function(x, at, ...){
   grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), at, pdf_density)
 }
@@ -205,6 +207,7 @@ pdf_density <- function(x, f, at) {
   out
 }
 
+#' @export
 cdf.dist_pdf <- function(x, q, ..., tail = "lower"){
   out <- grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), q, pdf_cdf)
   if (tail == "lower") out else 1 - out
@@ -234,6 +237,7 @@ pdf_cdf <- function(x, f, q) {
   out
 }
 
+#' @export
 quantile.dist_pdf <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") p <- 1 - p
   grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), p, pdf_quantile)
@@ -267,6 +271,7 @@ pdf_quantile <- function(x, f, p) {
   out
 }
 
+#' @export
 generate.dist_pdf <- function(x, times, ...){
   grid_generate(
     vctrs::field(x, "x"), vctrs::field(x, "density"), times,
@@ -317,10 +322,12 @@ mean.dist_pdf <- function(x, ...) {
   grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) density_moments(x, f, order = 1L)$mean)
 }
 
+#' @export
 covariance.dist_pdf <- function(x, ...) {
   grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) density_moments(x, f, order = 2L)$m2)
 }
 
+#' @export
 skewness.dist_pdf <- function(x, ...) {
   grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) {
     m <- density_moments(x, f, order = 3L)
@@ -328,6 +335,7 @@ skewness.dist_pdf <- function(x, ...) {
   })
 }
 
+#' @export
 kurtosis.dist_pdf <- function(x, ...) {
   grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) {
     m <- density_moments(x, f, order = 4L)
@@ -335,6 +343,7 @@ kurtosis.dist_pdf <- function(x, ...) {
   })
 }
 
+#' @export
 support.dist_pdf <- function(x, ...) {
   new_support_region(
     rep_len(list(double()), length(vctrs::field(x, "x"))),

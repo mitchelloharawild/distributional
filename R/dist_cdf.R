@@ -97,28 +97,34 @@ format.dist_cdf <- function(x, ...){
   sprintf("cdf[%s]", lengths(x[["x"]]))
 }
 
+#' @export
 density.dist_cdf <- function(x, at, ...){
   grid_map(x[["x"]], x[["cdf"]], at, interp_density, ...)
 }
 
+#' @export
 quantile.dist_cdf <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") p <- 1 - p
   grid_map(x[["x"]], x[["cdf"]], p, interp_quantile)
 }
 
+#' @export
 cdf.dist_cdf <- function(x, q, ..., tail = "lower"){
   p <- grid_map(x[["x"]], x[["cdf"]], q, interp_cdf)
   if (tail == "lower") p else 1 - p
 }
 
+#' @export
 generate.dist_cdf <- function(x, times, ...){
   grid_generate(x[["x"]], x[["cdf"]], times, interp_generate)
 }
 
+#' @export
 mean.dist_cdf <- function(x, ...) {
   grid_map(x[["x"]], x[["cdf"]], NULL, function(x, p, at) interp_mean(x, p))
 }
 
+#' @export
 support.dist_cdf <- function(x, ...) {
   interp_support(x[["x"]], x[["cdf"]])
 }
