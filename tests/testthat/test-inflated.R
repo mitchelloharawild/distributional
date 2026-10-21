@@ -118,3 +118,62 @@ test_that("quantile.dist_inflated scalar and length-1 vector agree", {
   dist <- dist_inflated(dist_poisson(4), prob = 0.30, x = 0)
   expect_equal(quantile(dist, 0.5), quantile(dist, c(0.5))[[1]])
 })
+
+test_that("Inflated distributions are vectorised over mixed families", {
+  dist <- c(
+    dist_inflated(dist_poisson(6), 0.33),
+    dist_inflated(dist_normal(0, 1), 0.3, x = 1),
+    dist_inflated(dist_poisson(4), 0.2, x = 2)
+  )
+  each <- function(f) unlist(lapply(seq_along(dist), function(i) f(dist[i])))
+
+  expect_equal(format(dist), c("0+Pois(6)", "1+N(0, 1)", "2+Pois(4)"))
+  expect_equal(density(dist, 2), each(function(d) density(d, 2)))
+  expect_equal(density(dist, 1), c(0.67 * dpois(1, 6), 0.3 + 0.7 * dnorm(1), 0.8 * dpois(1, 4)))
+  expect_equal(cdf(dist, 1), each(function(d) cdf(d, 1)))
+  expect_equal(cdf(dist, 1, tail = "upper"), each(function(d) cdf(d, 1, tail = "upper")))
+  expect_equal(
+    cdf(dist, list(c(0, 1, 2)))[[1]],
+    c(cdf(dist[1], 0), cdf(dist[2], 1), cdf(dist[3], 2))
+  )
+  for (p in c(0, 0.1, 0.5, 0.9, 1)) {
+    expect_equal(quantile(dist, p), each(function(d) quantile(d, p)))
+    expect_equal(quantile(dist, p, tail = "upper"), each(function(d) quantile(d, p, tail = "upper")))
+  }
+  expect_equal(mean(dist), c(0.67 * 6, 0.3 + 0.7 * 0, 0.2 * 2 + 0.8 * 4))
+  expect_equal(variance(dist)[1], 0.67 * 6 + (0.33 / 0.67) * (0.67 * 6)^2)
+  expect_true(all(is.na(variance(dist)[2:3])))
+  expect_equal(field(support(dist), "lim")[[2]], c(-Inf, Inf))
+})
+
+test_that("Inflated distributions are vectorised over the probability", {
+  dist <- dist_inflated(dist_poisson(4), prob = c(0.1, 0.3, 0.6), x = 0)
+  expect_equal(density(dist, 0), c(0.1, 0.3, 0.6) + (1 - c(0.1, 0.3, 0.6)) * dpois(0, 4))
+  expect_equal(quantile(dist, 0.2), c(quantile(dist[1], 0.2), 0, 0))
+  expect_equal(
+    quantile(dist, c(0.2, 0.7))[[2]],
+    c(quantile(dist[2], 0.2), quantile(dist[2], 0.7))
+  )
+  expect_equal(mean(dist), (1 - c(0.1, 0.3, 0.6)) * 4)
+  expect_error(dist_inflated(dist_poisson(4), prob = c(0.1, 1.2)), "between 0 and 1")
+})
+
+test_that("Inflated distributions can inflate non-numeric values", {
+  dist <- dist_inflated(dist_categorical(list(c(0.5, 0.5)), list(c("a", "b"))), 0.2, x = "a")
+  expect_equal(density(dist, "a"), 0.2 + 0.8 * 0.5)
+  expect_equal(density(dist, "b"), 0.8 * 0.5)
+  expect_true(is.na(mean(dist)))
+  set.seed(1)
+  draws <- generate(dist, 20)[[1]]
+  expect_type(draws, "character")
+  expect_length(draws, 20)
+})
+
+test_that("Inflated distributions generate the right number of draws", {
+  dist <- c(dist_inflated(dist_poisson(6), 0.5), dist_inflated(dist_normal(0, 1), 1, x = 3))
+  set.seed(1)
+  draws <- generate(dist, list(c(100, 5)))
+  expect_length(draws[[1]], 100)
+  expect_equal(draws[[2]], rep(3, 5))
+  expect_gt(mean(draws[[1]] == 0), 0.4)
+})

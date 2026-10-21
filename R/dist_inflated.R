@@ -103,7 +103,7 @@
 #' @export
 dist_inflated <- function(dist, prob, x = 0){
   vec_is(dist, new_dist())
-  if(prob < 0 || prob > 1){
+  if(any(prob < 0 | prob > 1)){
     abort("The inflation probability must be between 0 and 1.")
   }
   new_dist(dist = dist, x = x, p = prob,
@@ -114,103 +114,121 @@ dist_inflated <- function(dist, prob, x = 0){
 format.dist_inflated <- function(x, ...){
   sprintf(
     "%s+%s",
-    format(x[["x"]]),
+    vapply(vec_chop(x[["x"]]), format, character(1L)),
     format(x[["dist"]])
   )
 }
 
 #' @export
 density.dist_inflated <- function(x, at, ...){
-  x[["p"]]*(at==x[["x"]]) + (1-x[["p"]])*density(x[["dist"]], at, ...)
+  x[["p"]]*(at==x[["x"]]) + (1-x[["p"]])*dist_paired(density, x[["dist"]], at = at, ...)
 }
 
 #' @export
 quantile.dist_inflated <- function(x, p, ..., tail = "lower") {
-  p_inf  <- x[["p"]]
-  x_inf  <- x[["x"]]
-  # Probability in the requested tail of the base distribution at x_inf
-  cdf_at <- cdf(x[["dist"]], x_inf, ..., tail = tail)
+  # Probability in the requested tail of the base distribution at the
+  # inflation point
+  cdf_at <- dist_paired(cdf, x[["dist"]], q = x[["x"]], ..., tail = tail)
+  par <- vec_recycle_common(p = p, p_inf = x[["p"]], x_inf = x[["x"]], cdf_at = cdf_at)
+  dist <- vec_recycle(x[["dist"]], vec_size(par$p))
 
-  # Range of tail probabilities covered by the point mass at x_inf
-  p_jump_lo <- (1 - p_inf) * cdf_at
-  p_jump_hi <- p_inf + (1 - p_inf) * cdf_at
+  # Range of tail probabilities covered by the point mass at the inflation point
+  p_jump_lo <- (1 - par$p_inf) * par$cdf_at
+  p_jump_hi <- par$p_inf + (1 - par$p_inf) * par$cdf_at
 
   # In order of increasing `p`, quantiles reached before (`pre`) and after
   # (`post`) the point mass
   if (tail == "lower") {
-    pre <- p <= p_jump_lo
-    post <- p > p_jump_hi
+    pre <- par$p <= p_jump_lo
+    post <- par$p > p_jump_hi
   } else {
-    pre <- p < p_jump_lo
-    post <- p >= p_jump_hi
+    pre <- par$p < p_jump_lo
+    post <- par$p >= p_jump_hi
   }
+  # A fully inflated distribution is the point mass
+  pre <- which(pre & par$p_inf < 1)
+  post <- which(post & par$p_inf < 1)
 
-  qt <- rep(x_inf, length(p))
-  if (any(pre))
-    qt[pre] <- quantile(x[["dist"]], p[pre] / (1 - p_inf), ..., tail = tail)
-  if (any(post))
-    qt[post] <- quantile(x[["dist"]], (p[post] - p_inf) / (1 - p_inf), ..., tail = tail)
+  qt <- par$x_inf
+  if (length(pre))
+    qt[pre] <- dist_paired(
+      quantile, vec_slice(dist, pre), p = par$p[pre] / (1 - par$p_inf[pre]), ..., tail = tail
+    )
+  if (length(post))
+    qt[post] <- dist_paired(
+      quantile, vec_slice(dist, post), p = (par$p[post] - par$p_inf[post]) / (1 - par$p_inf[post]), ..., tail = tail
+    )
   qt
 }
 
 #' @export
 cdf.dist_inflated <- function(x, q, ..., tail = "lower"){
   in_tail <- if (tail == "lower") q >= x[["x"]] else q < x[["x"]]
-  x[["p"]]*in_tail + (1-x[["p"]])*cdf(x[["dist"]], q, ..., tail = tail)
+  x[["p"]]*in_tail + (1-x[["p"]])*dist_paired(cdf, x[["dist"]], q = q, ..., tail = tail)
 }
 
 #' @export
 generate.dist_inflated <- function(x, times, ...){
-  p <- x[["p"]]
-  inf <- stats::runif(times) < p
-  r <- vec_init(x[["x"]], times)
-  r[inf] <- x[["x"]]
-  r_dist <- generate(x[["dist"]], sum(!inf))
-  # Ported families' `generate()` always returns a list (see
-  # `_dev/vecvec.md` #6.10); not-yet-ported families still return a plain
-  # vector directly when called on a single raw record.
-  if (is.list(r_dist)) r_dist <- r_dist[[1L]]
-  r[!inf] <- r_dist
-  r
+  n <- vec_size(x)
+  # Draws for each distribution are contiguous, as are the inflated points
+  # and the draws from the base distribution within them
+  id <- rep(seq_len(n), times)
+  inf <- stats::runif(sum(times)) < x[["p"]][id]
+  r_dist <- generate(x[["dist"]], times = list(tabulate(id[!inf], nbins = n)))
+  r_dist <- vec_c(!!!r_dist)
+  x_inf <- vec_slice(x[["x"]], id[inf])
+
+  r <- vec_init(vec_ptype2(x_inf, r_dist), sum(times))
+  r <- vec_assign(r, which(inf), x_inf)
+  r <- vec_assign(r, which(!inf), r_dist)
+  vec_chop(r, sizes = times)
 }
 
 #' @export
 support.dist_inflated <- function(x, ...){
   sup <- support(x[["dist"]])
-  proto <- field(sup, "x")[[1L]]
+  proto <- field(sup, "x")
+  lim <- field(sup, "lim")
+  closed <- field(sup, "closed")
   x_inf <- x[["x"]]
-  # The support is only extended for univariate numeric inflation
-  if (!is.numeric(x_inf) || is.matrix(proto) || !(is.numeric(proto) || is.logical(proto))) {
-    return(NextMethod())
-  }
-  # Integer support is kept when inflating at an integer
-  if (is.integer(proto) || is.logical(proto)) {
-    proto <- if (isTRUE(x_inf == round(x_inf))) integer() else numeric()
-  }
-  lim <- field(sup, "lim")[[1L]]
-  closed <- field(sup, "closed")[[1L]]
   p <- x[["p"]]
-  if (p == 1) {
-    lim <- c(x_inf, x_inf)
-    closed <- c(TRUE, TRUE)
-  } else if (p > 0) {
-    # The inflation point is attained, widening the base support if needed
-    if (isTRUE(x_inf <= lim[1])) {
-      lim[1] <- x_inf
-      closed[1] <- TRUE
+  # The support is extended for univariate numeric inflation
+  extend <- is.numeric(x_inf) &
+    vapply(proto, function(z) !is.matrix(z) && (is.numeric(z) || is.logical(z)), logical(1L))
+  for (i in which(!extend)) {
+    # Otherwise the support is found from the quantiles
+    sup_i <- support.dist_default(vec_slice(x, i))
+    proto[[i]] <- field(sup_i, "x")[[1L]]
+    lim[[i]] <- field(sup_i, "lim")[[1L]]
+    closed[[i]] <- field(sup_i, "closed")[[1L]]
+  }
+  for (i in which(extend)) {
+    # Integer support is kept when inflating at an integer
+    if (is.integer(proto[[i]]) || is.logical(proto[[i]])) {
+      proto[[i]] <- if (isTRUE(x_inf[i] == round(x_inf[i]))) integer() else numeric()
     }
-    if (isTRUE(x_inf >= lim[2])) {
-      lim[2] <- x_inf
-      closed[2] <- TRUE
+    if (p[i] == 1) {
+      lim[[i]] <- c(x_inf[i], x_inf[i])
+      closed[[i]] <- c(TRUE, TRUE)
+    } else if (p[i] > 0) {
+      # The inflation point is attained, widening the base support if needed
+      if (isTRUE(x_inf[i] <= lim[[i]][1])) {
+        lim[[i]][1] <- x_inf[i]
+        closed[[i]][1] <- TRUE
+      }
+      if (isTRUE(x_inf[i] >= lim[[i]][2])) {
+        lim[[i]][2] <- x_inf[i]
+        closed[[i]][2] <- TRUE
+      }
     }
   }
-  new_support_region(list(proto), list(lim), list(closed))
+  new_support_region(proto, lim, closed)
 }
 
 #' @export
 mean.dist_inflated <- function(x, ...){
   # Can't compute if inflation value is not numeric
-  if(!vec_is(x[["x"]], numeric())) return(NA_real_)
+  if(!vec_is(x[["x"]], numeric())) return(rep(NA_real_, vec_size(x)))
 
   p <- x[["p"]]
   p*x[["x"]] + (1-p)*mean(x[["dist"]])
@@ -218,14 +236,18 @@ mean.dist_inflated <- function(x, ...){
 
 #' @export
 covariance.dist_inflated <- function(x, ...){
+  out <- rep(NA_real_, vec_size(x))
   # Can't compute if inflation value is not numeric
-  if(!vec_is(x[["x"]], numeric())) return(NA_real_)
+  if(!vec_is(x[["x"]], numeric())) return(out)
   # Can't (easily) compute if inflation value is not zero
-  if(x[["x"]] != 0) return(NA_real_)
+  zero <- which(x[["x"]] == 0)
+  if (!length(zero)) return(out)
 
-  m1 <- mean(x[["dist"]])
-  v <- variance(x[["dist"]])
+  dist <- vec_slice(x[["dist"]], zero)
+  m1 <- mean(dist)
+  v <- variance(dist)
   m2 <- v + m1^2
-  p <- x[["p"]]
-  (1-p)*v + p*(1-p)*m1^2
+  p <- x[["p"]][zero]
+  out[zero] <- (1-p)*v + p*(1-p)*m1^2
+  out
 }

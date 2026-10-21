@@ -147,3 +147,55 @@ test_that("Truncated zero-inflated discrete distributions keep the lower bound m
   expect_equal(density(dist, 1:3), list(dpois(1:3, 3) / (1 - dpois(0, 3))))
   expect_equal(quantile(dist, 0), 1)
 })
+
+test_that("Truncated distributions are vectorised over mixed families", {
+  # Truncated normals and poissons (a lattice) in one vector
+  dist <- c(
+    dist_truncated(dist_normal(0, 1), -1, 2),
+    dist_truncated(dist_poisson(3), 1, 5),
+    dist_truncated(dist_normal(2, 1), 0)
+  )
+  each <- function(f) unlist(lapply(seq_along(dist), function(i) f(dist[i])))
+
+  expect_equal(format(dist), c("N(0, 1)[-1,2]", "Pois(3)[1,5]", "N(2, 1)[0,Inf)"))
+  expect_equal(density(dist, 2), each(function(d) density(d, 2)))
+  expect_equal(cdf(dist, 1), each(function(d) cdf(d, 1)))
+  expect_equal(cdf(dist, 1, tail = "upper"), each(function(d) cdf(d, 1, tail = "upper")))
+  expect_equal(quantile(dist, 0.3), each(function(d) quantile(d, 0.3)))
+  expect_equal(quantile(dist, 0.3, tail = "upper"), each(function(d) quantile(d, 0.3, tail = "upper")))
+  expect_equal(mean(dist), each(mean), tolerance = 1e-6)
+
+  # Lists pair a value with each distribution
+  expect_equal(
+    cdf(dist, list(c(0, 3, 1)))[[1]],
+    c(cdf(dist[1], 0), cdf(dist[2], 3), cdf(dist[3], 1))
+  )
+  expect_equal(
+    density(dist, list(c(0, 3, 1)))[[1]],
+    c(density(dist[1], 0), density(dist[2], 3), density(dist[3], 1))
+  )
+
+  # The lower bound mass is only kept for the lattice distribution
+  expect_equal(density(dist[2], 1)[[1]], dpois(1, 3) / (ppois(5, 3) - dpois(0, 3)))
+  expect_equal(quantile(dist, 0), c(-1, 1, 0))
+
+  # Bounds that differ for the same distribution
+  dist <- dist_truncated(dist_poisson(3), lower = c(0, 1, 2), upper = c(4, 5, Inf))
+  expect_equal(
+    cdf(dist, 2),
+    c(ppois(2, 3) / ppois(4, 3),
+      (ppois(2, 3) - dpois(0, 3)) / (ppois(5, 3) - dpois(0, 3)),
+      dpois(2, 3) / (1 - ppois(1, 3)))
+  )
+  expect_equal(support(dist)[[1]], support(dist[1])[[1]])
+  expect_equal(quantile(dist, 0), c(0, 1, 2))
+  expect_equal(quantile(dist, 1), c(4, 5, Inf))
+
+  # Sampling respects the bounds of each distribution
+  set.seed(1)
+  draws <- generate(c(dist_truncated(dist_normal(0, 1), -1, 2), dist_truncated(dist_poisson(3), 1, 5)), list(c(50, 20)))
+  expect_length(draws[[1]], 50)
+  expect_length(draws[[2]], 20)
+  expect_true(all(draws[[1]] >= -1 & draws[[1]] <= 2))
+  expect_true(all(draws[[2]] >= 1 & draws[[2]] <= 5))
+})

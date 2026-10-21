@@ -174,3 +174,15 @@ test_that("pillar_shaft() min_width is not inflated by padded parameters", {
   expect_true(any(grepl("<dist>", out, fixed = TRUE)))
   expect_true(any(grepl("N(200, 152)", out, fixed = TRUE)))
 })
+
+test_that("dist_paired() pairs its argument with the distributions", {
+  dist <- c(dist_normal(0, 1), dist_poisson(3), dist_normal(1, 2))
+  expect_equal(dist_paired(cdf, dist, q = c(0, 2, 3)), c(0.5, ppois(2, 3), pnorm(3, 1, 2)))
+  # Mapped by cdf(), but paired by dist_paired()
+  expect_length(cdf(dist, c(0, 2, 3)), 3)
+  expect_equal(dist_paired(cdf, dist, q = 1), c(pnorm(1), ppois(1, 3), pnorm(1, 1, 2)))
+  expect_equal(
+    dist_paired(quantile, dist, p = 0.5, tail = "upper"),
+    c(0, qpois(0.5, 3, lower.tail = FALSE), 1)
+  )
+})
