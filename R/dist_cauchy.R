@@ -106,36 +106,40 @@ cdf.dist_cauchy <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_cauchy <- function(x, times, ...){
-  stats::rcauchy(times, x[["location"]], x[["scale"]])
+  vctrs::vec_chop(
+    stats::rcauchy(sum(times), rep(x[["location"]], times), rep(x[["scale"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_cauchy <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
 #' @export
 mean.dist_cauchy <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 covariance.dist_cauchy <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 skewness.dist_cauchy <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 kurtosis.dist_cauchy <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export

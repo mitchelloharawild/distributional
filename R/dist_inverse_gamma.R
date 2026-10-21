@@ -126,26 +126,30 @@ cdf.dist_inverse_gamma <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_inverse_gamma <- function(x, times, ...){
   require_package("actuar")
-  actuar::rinvgamma(times, x[["s"]], x[["r"]])
+  vctrs::vec_chop(
+    actuar::rinvgamma(sum(times), rep(x[["s"]], times), rep(x[["r"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_inverse_gamma <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
 #' @export
 mean.dist_inverse_gamma <- function(x, ...){
-  if(x[["s"]] <= 1) return(NA_real_)
-  1/(x[["r"]]*(x[["s"]]-1))
+  s <- x[["s"]]
+  ifelse(!is.na(s) & s > 1, 1/(x[["r"]]*(s-1)), NA_real_)
 }
 
 #' @export
 covariance.dist_inverse_gamma <- function(x, ...){
-  if(x[["s"]] <= 2) return(NA_real_)
-  1/(x[["r"]]^2*(x[["s"]]-1)^2*(x[["s"]]-2))
+  s <- x[["s"]]
+  ifelse(!is.na(s) & s > 2, 1/(x[["r"]]^2*(s-1)^2*(s-2)), NA_real_)
 }

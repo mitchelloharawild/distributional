@@ -27,3 +27,18 @@ test_that("Inverse Gamma distribution", {
   expect_equal(median(dist[[1]]), actuar::qinvgamma(0.5, 3, 2))
   expect_equal(variance(dist), (1/2)^2/((3-1)^2*(3-2)))
 })
+
+test_that("Inverse Gamma vectorised over several distributions", {
+  skip_if_not_installed("actuar")
+  dist <- dist_inverse_gamma(c(1, 2, 3, 4), c(1, 2, 3, 4))
+  expect_equal(mean(dist), c(NA, 1/(2*1), 1/(3*2), 1/(4*3)))
+  expect_equal(variance(dist), c(NA, NA, 1/(9*4*1), 1/(16*9*2)))
+  expect_equal(density(dist, 1), actuar::dinvgamma(1, c(1, 2, 3, 4), c(1, 2, 3, 4)))
+  expect_equal(log_density(dist, 1), actuar::dinvgamma(1, c(1, 2, 3, 4), c(1, 2, 3, 4), log = TRUE))
+  expect_equal(cdf(dist, 1), actuar::pinvgamma(1, c(1, 2, 3, 4), c(1, 2, 3, 4)))
+  expect_equal(quantile(dist, 0.3), actuar::qinvgamma(0.3, c(1, 2, 3, 4), c(1, 2, 3, 4)))
+  expect_equal(vctrs::vec_size(support(dist)), 4L)
+  expect_length(format(dist), 4L)
+  set.seed(1)
+  expect_equal(lengths(generate(dist, list(1:4))), 1:4)
+})

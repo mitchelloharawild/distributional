@@ -208,20 +208,24 @@ cdf.dist_f <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_f <- function(x, times, ...){
-  if(is.null(x[["ncp"]])) {
-    stats::rf(times, x[["df1"]], x[["df2"]])
+  df1 <- rep(x[["df1"]], times)
+  df2 <- rep(x[["df2"]], times)
+  draws <- if(is.null(x[["ncp"]])) {
+    stats::rf(sum(times), df1, df2)
   } else {
-    stats::rf(times, x[["df1"]], x[["df2"]], x[["ncp"]])
+    stats::rf(sum(times), df1, df2, rep(x[["ncp"]], times))
   }
+  vctrs::vec_chop(draws, sizes = times)
 }
 
 #' @export
 support.dist_f <- function(x, ...) {
   # The density at 0 is positive (or infinite) when df1 <= 2
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(isTRUE(x[["df1"]] <= 2), FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    lapply(!is.na(x[["df1"]]) & x[["df1"]] <= 2, function(z) c(z, FALSE))
   )
 }
 
@@ -229,56 +233,47 @@ support.dist_f <- function(x, ...) {
 mean.dist_f <- function(x, ...){
   df1 <- x[["df1"]]
   df2 <- x[["df2"]]
-  if(df2 > 2) {
-    if(is.null(x[["ncp"]])){
-      df2 / (df2 - 2)
-    } else {
-      (df2 * (df1 + x[["ncp"]])) / (df1 * (df2 - 2))
-    }
+  out <- if(is.null(x[["ncp"]])){
+    df2 / (df2 - 2)
   } else {
-    NA_real_
+    (df2 * (df1 + x[["ncp"]])) / (df1 * (df2 - 2))
   }
+  ifelse(!is.na(df2) & df2 > 2, out, NA_real_)
 }
 
 #' @export
 covariance.dist_f <- function(x, ...){
   df1 <- x[["df1"]]
   df2 <- x[["df2"]]
-  if(df2 > 4) {
-    if(is.null(x[["ncp"]])){
-      (2 * df2^2 * (df1 + df2 - 2))/(df1*(df2-2)^2*(df2-4))
-    } else {
-      2*((df1 + x[["ncp"]])^2 + (df1 + 2*x[["ncp"]])*(df2 - 2))/((df2-2)^2*(df2-4)) * (df2^2/df1^2)
-    }
+  out <- if(is.null(x[["ncp"]])){
+    (2 * df2^2 * (df1 + df2 - 2))/(df1*(df2-2)^2*(df2-4))
   } else {
-    NA_real_
+    2*((df1 + x[["ncp"]])^2 + (df1 + 2*x[["ncp"]])*(df2 - 2))/((df2-2)^2*(df2-4)) * (df2^2/df1^2)
   }
+  ifelse(!is.na(df2) & df2 > 4, out, NA_real_)
 }
 
 #' @export
 skewness.dist_f <- function(x, ...) {
   df1 <- x[["df1"]]
   df2 <- x[["df2"]]
-  if(!is.null(x[["ncp"]])) return(NA_real_)
-  if (df2 > 6) {
-    a <- (2 * df1 + df2 - 2) * sqrt(8 * (df2 - 4))
-    b <- (df2 - 6) * sqrt(df1 * (df1 + df2 - 2))
-    a / b
-  } else {
-    NA_real_
-  }
+  if(!is.null(x[["ncp"]])) return(rep_len(NA_real_, vctrs::vec_size(x)))
+  ok <- !is.na(df2) & df2 > 6
+  out <- rep_len(NA_real_, vctrs::vec_size(x))
+  df1 <- rep_len(df1, length(out))[ok]
+  df2 <- df2[ok]
+  a <- (2 * df1 + df2 - 2) * sqrt(8 * (df2 - 4))
+  b <- (df2 - 6) * sqrt(df1 * (df1 + df2 - 2))
+  out[ok] <- a / b
+  out
 }
 
 #' @export
 kurtosis.dist_f <- function(x, ...) {
   df1 <- x[["df1"]]
   df2 <- x[["df2"]]
-  if(!is.null(x[["ncp"]])) return(NA_real_)
-  if (df2 > 8) {
-    a <- df1 * (5 * df2 - 22) * (df1 + df2 - 2) + (df2 - 4) * (df2 - 2)^2
-    b <- df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2)
-    12 * a / b
-  } else {
-    NA_real_
-  }
+  if(!is.null(x[["ncp"]])) return(rep_len(NA_real_, vctrs::vec_size(x)))
+  a <- df1 * (5 * df2 - 22) * (df1 + df2 - 2) + (df2 - 4) * (df2 - 2)^2
+  b <- df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2)
+  ifelse(!is.na(df2) & df2 > 8, 12 * a / b, NA_real_)
 }

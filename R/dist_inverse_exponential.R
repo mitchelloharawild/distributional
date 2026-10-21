@@ -113,24 +113,28 @@ cdf.dist_inverse_exponential <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_inverse_exponential <- function(x, times, ...){
   require_package("actuar")
-  actuar::rinvexp(times, x[["r"]])
+  vctrs::vec_chop(
+    actuar::rinvexp(sum(times), rep(x[["r"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_inverse_exponential <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
 #' @export
 mean.dist_inverse_exponential <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
 
 #' @export
 covariance.dist_inverse_exponential <- function(x, ...){
-  NA_real_
+  rep_len(NA_real_, vctrs::vec_size(x))
 }
