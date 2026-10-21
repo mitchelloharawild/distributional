@@ -183,12 +183,16 @@ dist_mixture <- function(..., weights = numeric(), type = c("probability", "quan
 
   vec_is(weights, numeric(), length(dist))
 
-  if (!abs(sum(weights) - 1) < sqrt(.Machine$double.eps)) {
-    abort("Weights of a mixture model must sum to 1.")
-  }
-  if (any(weights < 0)) {
-    abort("All weights in a mixtue model must be non-negative.")
-  }
+  check_mixture_weights(weights)
+
+  # Recycle the components to a common length, then build the `distribution`
+  # vector of components for each output position.
+  dist <- do.call(vec_recycle_common, dist)
+  lapply(dist, vec_assert, ptype = new_dist())
+  n <- vec_size(dist[[1L]])
+  parts <- lapply(dist, vec_chop)
+  comps <- lapply(seq_len(n), function(i) vec_c(!!!lapply(parts, `[[`, i)))
+  w <- rep(list(weights), n)
 
   if (type == "quantile") {
     # Quantile mixtures require univariate components
@@ -196,68 +200,149 @@ dist_mixture <- function(..., weights = numeric(), type = c("probability", "quan
     if (any(dims > 1L)) {
       abort("Quantile mixtures only support univariate distributions.")
     }
-    return(new_dist(
-      dist = dist_transpose_list(dist), w = list(weights),
-      class = "dist_q_mixture"
-    ))
+    return(new_dist(dist = comps, w = w, class = "dist_q_mixture"))
   }
 
   dn <- unique(lapply(dist, variates))
   dn <- if (length(dn) == 1) dn[[1]] else NULL
 
-  new_dist(
-    dist = dist_transpose_list(dist), w = list(weights),
-    class = "dist_mixture", dimnames = dn
+  new_dist(dist = comps, w = w, class = "dist_mixture", dimnames = dn)
+}
+
+check_mixture_weights <- function(weights) {
+  if (!abs(sum(weights) - 1) < sqrt(.Machine$double.eps)) {
+    abort("Weights of a mixture model must sum to 1.")
+  }
+  if (any(weights < 0)) {
+    abort("All weights in a mixture model must be non-negative.")
+  }
+  invisible(weights)
+}
+
+# ---- Helpers -----------------------------------------------------------------
+
+# A mixture record holds a list of `distribution` vectors (the K components of
+# each mixture) and a list of weights, both ragged. All of the components are
+# flattened into a single `distribution` vector, so that each family's methods
+# are called once with every component of every mixture. `idx` maps each
+# component back to its mixture. The fields are read with `field()`, as `[[`
+# unwraps a size 1 list field.
+mixture_parts <- function(x) {
+  comps <- field(x, "dist")
+  w <- field(x, "w")
+  list(
+    flat = vec_c(!!!comps),
+    w = unlist(w, use.names = FALSE),
+    idx = rep(seq_along(w), lengths(w)),
+    n = length(w),
+    comps = comps,
+    w_list = w
   )
+}
+
+# Repeat the broadcast argument (size `n` or 1) for each of the components
+mixture_arg <- function(arg, idx) {
+  vec_slice(arg, if (vec_size(arg) == 1L) rep_len(1L, length(idx)) else idx)
+}
+
+# Weighted sum of the components' values (a vector or a matrix with a row for
+# each component) in each mixture
+mixture_sum <- function(v, parts) {
+  out <- rowsum(parts$w * v, parts$idx, reorder = FALSE)
+  if (is.matrix(v)) {
+    dimnames(out) <- NULL
+    out
+  } else {
+    as.vector(out)
+  }
+}
+
+# Call the generic `.f` on the flattened components without a broadcast argument
+mixture_apply <- function(parts, .f, ...) {
+  apply_slots(parts$flat, .f, list2(...))
+}
+
+mixture_dim <- function(x) {
+  dim(dist_elem(field(x, "dist")[[1L]], 1L))
+}
+
+mixture_family <- function(object, fam, recursive = FALSE, ...) {
+  if (!recursive) return(rep_len(fam, vec_size(object)))
+  comps <- field(object, "dist")
+  if (vec_size(object) != 1L) {
+    return(lapply(vec_seq_along(object), function(i) {
+      family(vec_slice(object, i), recursive = TRUE)
+    }))
+  }
+  list(family = fam, dist = unname(family(comps[[1L]], recursive = TRUE)))
+}
+
+mixture_format <- function(x, fam, width, ...) {
+  comps <- field(x, "dist")
+  w <- field(x, "w")
+  vapply(seq_along(w), function(i) {
+    # Each component is formatted alone, so that they are not padded to a common width
+    dists <- vapply(vec_chop(comps[[i]]), format, character(1L), ...)
+    long_dist <- paste0(fam, "(", paste0(w[[i]], "*", dists, collapse = ", "), ")")
+    short_dist <- paste0(fam, "(n=", length(dists), ")")
+    if (nchar(long_dist) <= width) long_dist else short_dist
+  }, character(1L))
 }
 
 # ---- Probability mixture -----------------------------------------------------
 
 #' @export
 format.dist_mixture <- function(x, width = getOption("width"), ...) {
-  dists <- unlist(lapply(x[["dist"]], format))
+  mixture_format(x, "mixture", width, ...)
+}
 
-  dist_info <- paste0(x[["w"]], "*", dists, collapse = ", ")
-
-  long_dist <- paste0("mixture(", dist_info, ")")
-  short_dist <- paste0("mixture(n=", length(dists), ")")
-  ifelse(nchar(long_dist) <= width, long_dist, short_dist)
+#' @export
+family.dist_mixture <- function(object, recursive = FALSE, ...) {
+  mixture_family(object, "mixture", recursive)
 }
 
 #' @export
 density.dist_mixture <- function(x, at, ...) {
-  if (NROW(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
-  sum(x[["w"]] * vapply(x[["dist"]], density, numeric(1L), at = at, ...))
+  parts <- mixture_parts(x)
+  mixture_sum(dist_paired(density, parts$flat, at = mixture_arg(at, parts$idx), ...), parts)
 }
 
 #' @export
 quantile.dist_mixture <- function(x, p, ..., tail = "lower") {
-  d <- dim(x)
-  if (d > 1) {
+  if (mixture_dim(x) > 1) {
     stop("quantile is not implemented for multivariate mixtures.")
   }
-  if (length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ..., tail = tail))
+  parts <- mixture_parts(x)
+  p <- vec_recycle(p, parts$n)
 
   # Find bounds for optimisation based on range of each quantile
-  dist_q <- vapply(x[["dist"]], quantile, numeric(1L), p, ..., tail = tail, USE.NAMES = FALSE)
-  if (vctrs::vec_unique_count(dist_q) == 1) return(dist_q[1])
-  if (p == 0) return(if (tail == "lower") min(dist_q) else max(dist_q))
-  if (p == 1) return(if (tail == "lower") max(dist_q) else min(dist_q))
+  dist_q <- dist_paired(quantile, parts$flat, p = mixture_arg(p, parts$idx), ..., tail = tail)
+  dist_q <- split(dist_q, factor(parts$idx, seq_len(parts$n)))
 
-  # Search the cdf() for appropriate quantile
-  stats::uniroot(
-    function(pos) p - cdf(x, pos, ..., tail = tail),
-    interval = c(min(dist_q), max(dist_q)),
-    extendInt = "yes"
-  )$root
+  vapply(seq_len(parts$n), function(i) {
+    dq <- unname(dist_q[[i]])
+    pi <- p[i]
+    if (is.na(pi)) return(NA_real_)
+    if (vctrs::vec_unique_count(dq) == 1) return(dq[1])
+    if (pi == 0) return(if (tail == "lower") min(dq) else max(dq))
+    if (pi == 1) return(if (tail == "lower") max(dq) else min(dq))
+
+    # Search the cdf() for appropriate quantile
+    comps <- parts$comps[[i]]
+    w <- parts$w_list[[i]]
+    stats::uniroot(
+      function(pos) pi - sum(w * dist_paired(cdf, comps, q = pos, ..., tail = tail)),
+      interval = c(min(dq), max(dq)),
+      extendInt = "yes"
+    )$root
+  }, numeric(1L))
 }
 
 #' @export
 cdf.dist_mixture <- function(x, q, ..., tail = "lower") {
-  d <- dim(x)
-  if (d == 1L) {
-    if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
-    sum(x[["w"]] * vapply(x[["dist"]], cdf, numeric(1L), q = q, ..., tail = tail))
+  if (mixture_dim(x) == 1L) {
+    parts <- mixture_parts(x)
+    mixture_sum(dist_paired(cdf, parts$flat, q = mixture_arg(q, parts$idx), ..., tail = tail), parts)
   } else {
     NextMethod()
   }
@@ -265,178 +350,251 @@ cdf.dist_mixture <- function(x, q, ..., tail = "lower") {
 
 #' @export
 generate.dist_mixture <- function(x, times, ...) {
-  dist_idx <- .bincode(stats::runif(times), breaks = c(0, cumsum(x[["w"]])))
-  r <- matrix(nrow = times, ncol = dim(x))
-  for (i in seq_along(x[["dist"]])) {
-    r_pos <- dist_idx == i
-    if (any(r_pos)) {
-      r_i <- generate(x[["dist"]][[i]], sum(r_pos), ...)
-      # Ported families' `generate()` always returns a list (see
-      # `_dev/vecvec.md` #6.10); not-yet-ported families still return a
-      # plain vector/matrix directly when called on a single raw record.
-      if (is.list(r_i)) r_i <- r_i[[1L]]
-      r[r_pos, ] <- r_i
-    }
-  }
-  r[, seq(NCOL(r)), drop = TRUE]
+  parts <- mixture_parts(x)
+  n <- parts$n
+  d <- mixture_dim(x)
+  times <- vec_recycle(times, n)
+
+  # Choose a component for each draw. Offsetting the cumulative weights and
+  # the uniform draws by the mixture number finds all of the components at once.
+  cw <- unlist(lapply(parts$w_list, function(w) {
+    cw <- cumsum(w)
+    cw[length(cw)] <- 1
+    cw
+  }), use.names = FALSE) + (parts$idx - 1)
+  e <- rep(seq_len(n), times)
+  comp <- .bincode(stats::runif(sum(times)) + (e - 1), c(0, cw), TRUE, TRUE)
+
+  # Generate from each component the number of times that it was chosen
+  m <- tabulate(comp, nbins = length(cw))
+  keep <- which(m > 0L)
+  draws <- dist_paired(generate, vec_slice(parts$flat, keep), times = m[keep], ...)
+  draws <- if (d == 1L) unlist(draws, use.names = FALSE) else do.call(rbind, draws)
+
+  r <- if (d == 1L) numeric(length(comp)) else matrix(NA_real_, length(comp), d)
+  ord <- order(comp)
+  if (d == 1L) r[ord] <- draws else r[ord, ] <- draws
+  vec_chop(r, sizes = times)
 }
 
 #' @export
 mean.dist_mixture <- function(x, ...) {
-  d <- dim(x)
-  m <- vapply(x[["dist"]], mean, numeric(d), ...)
-  if (d == 1L) {
-    sum(x[["w"]] * m)
-  } else {
-    matrix(x[["w"]], ncol = d, nrow = 1) %*% t(m)
-  }
+  parts <- mixture_parts(x)
+  mixture_sum(mixture_apply(parts, mean, ...), parts)
 }
 
 #' @export
 covariance.dist_mixture <- function(x, ...) {
-  d <- dim(x)
-  if (d == 1L) {
-    m <- vapply(x[["dist"]], mean, numeric(1L), ...)
-    v <- vapply(x[["dist"]], variance, numeric(1L), ...)
-    m1 <- sum(x[["w"]] * m)
-    m2 <- sum(x[["w"]] * (m^2 + v))
+  parts <- mixture_parts(x)
+  m <- mixture_apply(parts, mean, ...)
+  if (mixture_dim(x) == 1L) {
+    v <- mixture_apply(parts, variance, ...)
+    m1 <- mixture_sum(m, parts)
+    m2 <- mixture_sum(m^2 + v, parts)
     m2 - m1^2
   } else {
-    m <- lapply(x[["dist"]], mean)
-    w <- as.list(x[["w"]])
-    mbar <- mapply("*", m, w, SIMPLIFY = FALSE)
-    mbar <- do.call("+", mbar)
-    m <- lapply(m, function(u) {
-      u - mbar
+    v <- mixture_apply(parts, covariance, ...)
+    mbar <- mixture_sum(m, parts)
+    lapply(seq_len(parts$n), function(i) {
+      k <- which(parts$idx == i)
+      dev <- m[k, , drop = FALSE] - rep(mbar[i, ], each = length(k))
+      w <- parts$w[k]
+      # Weighted spread of the component means plus weighted covariances
+      Reduce(`+`, Map(`*`, w, v[k]), crossprod(dev * sqrt(w)))
     })
-    v <- lapply(x[["dist"]], function(u) {
-      covariance(u)[[1]]
-    })
-    cov <- mapply(function(m, v, w) {
-      w * (t(m) %*% m + v)
-    }, m, v, w, SIMPLIFY = FALSE)
-    list(do.call("+", cov))
   }
 }
 
 #' @export
+support.dist_mixture <- function(x, ...) {
+  parts <- mixture_parts(x)
+  sup <- support(parts$flat)
+  proto <- split(field(sup, "x"), parts$idx)
+  lim <- split(field(sup, "lim"), parts$idx)
+  closed <- split(field(sup, "closed"), parts$idx)
+
+  # The support is the union of the supports of the components
+  union_lim <- lapply(seq_len(parts$n), function(i) {
+    l <- lim[[i]]
+    if (is.matrix(l[[1L]])) {
+      lo <- do.call(pmin, lapply(l, function(z) z[1L, ]))
+      hi <- do.call(pmax, lapply(l, function(z) z[2L, ]))
+      return(rbind(lo, hi, deparse.level = 0))
+    }
+    c(min(vapply(l, `[`, numeric(1L), 1L)), max(vapply(l, `[`, numeric(1L), 2L)))
+  })
+  union_closed <- lapply(seq_len(parts$n), function(i) {
+    l <- lim[[i]]
+    cl <- closed[[i]]
+    at_bound <- function(j, bound) {
+      vapply(seq_along(l), function(k) {
+        z <- if (is.matrix(l[[k]])) l[[k]][j, ] else l[[k]][j]
+        isTRUE(cl[[k]][j]) && all(z == bound, na.rm = TRUE)
+      }, logical(1L))
+    }
+    ul <- union_lim[[i]]
+    if (is.matrix(ul)) {
+      return(c(any(at_bound(1L, ul[1L, ])), any(at_bound(2L, ul[2L, ]))))
+    }
+    c(any(at_bound(1L, ul[1L])), any(at_bound(2L, ul[2L])))
+  })
+  union_proto <- lapply(proto, function(p) {
+    if (all(vapply(p, function(z) is.integer(z) || is.logical(z), logical(1L)))) {
+      p[[1L]]
+    } else {
+      p[[which(!vapply(p, function(z) is.integer(z) || is.logical(z), logical(1L)))[1L]]]
+    }
+  })
+  new_support_region(unname(union_proto), union_lim, union_closed)
+}
+
+#' @export
 dim.dist_mixture <- function(x) {
-  dim(x[["dist"]][[1]])
+  mixture_dim(x)
 }
 
 # ---- Quantile mixture --------------------------------------------------------
 
 #' @export
 format.dist_q_mixture <- function(x, width = getOption("width"), ...) {
-  dists <- unlist(lapply(x[["dist"]], format))
-  dist_info <- paste0(x[["w"]], "*", dists, collapse = ", ")
-  long_dist <- paste0("mixture<q>(", dist_info, ")")
-  short_dist <- paste0("mixture<q>(n=", length(dists), ")")
-  ifelse(nchar(long_dist) <= width, long_dist, short_dist)
+  mixture_format(x, "mixture<q>", width, ...)
+}
+
+#' @export
+family.dist_q_mixture <- function(object, recursive = FALSE, ...) {
+  mixture_family(object, "q_mixture", recursive)
+}
+
+# The quantile function of the mixture of the components of each mixture,
+# where `p` is paired with the mixtures (size `n` or 1)
+q_mixture_quantile <- function(parts, p, ..., tail = "lower") {
+  mixture_sum(
+    dist_paired(quantile, parts$flat, p = mixture_arg(p, parts$idx), ..., tail = tail),
+    parts
+  )
 }
 
 #' @export
 quantile.dist_q_mixture <- function(x, p, ..., tail = "lower") {
-  if (length(p) > 1) return(vapply(p, quantile, numeric(1L), x = x, ..., tail = tail))
-  sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ..., tail = tail))
+  q_mixture_quantile(mixture_parts(x), p, ..., tail = tail)
 }
 
 #' @export
 cdf.dist_q_mixture <- function(x, q, ..., tail = "lower") {
-  if (length(q) > 1) return(vapply(q, cdf, numeric(1L), x = x, ..., tail = tail))
-
-  # Find p in (0, 1) such that Q(p) = q by inverting the quantile function.
-  # For the upper tail this inverts the upper tail quantile function, which
-  # keeps precision for small upper tail probabilities.
-  fn <- function(p) {
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ..., tail = tail)) - q
-  }
+  parts <- mixture_parts(x)
+  n <- parts$n
+  q <- vec_recycle(q, n)
 
   # Compute support bounds directly from the quantile function to avoid
   # calling support(x), which would trigger density() -> cdf() recursion.
-  lims <- c(
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 0, ...)),
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 1, ...))
-  )
+  lims_lo <- q_mixture_quantile(parts, 0, ...)
+  lims_hi <- q_mixture_quantile(parts, 1, ...)
 
-  # q is at or below the lower bound of the mixture support
-  if (q <= lims[1]) return(if (tail == "lower") 0 else 1)
-  # q is at or above the upper bound of the mixture support
-  if (q >= lims[2]) return(if (tail == "lower") 1 else 0)
+  vapply(seq_len(n), function(i) {
+    qi <- q[i]
+    if (is.na(qi)) return(NA_real_)
 
-  # Use the smallest representable eps so the search interval covers
-  # far tails (e.g., normal distributions). For q beyond Q(eps) or Q(1-eps),
-  # return the boundary probability rather than erroring in uniroot.
-  # The upper tail quantile function is decreasing, so its sign is flipped.
-  eps <- .Machine$double.eps
-  s <- if (tail == "lower") 1 else -1
-  lo_val <- s * fn(eps)
-  hi_val <- s * fn(1 - eps)
+    # q is at or below the lower bound of the mixture support
+    if (qi <= lims_lo[i]) return(if (tail == "lower") 0 else 1)
+    # q is at or above the upper bound of the mixture support
+    if (qi >= lims_hi[i]) return(if (tail == "lower") 1 else 0)
 
-  if (lo_val >= 0) return(eps)
-  if (hi_val <= 0) return(1 - eps)
+    # Find p in (0, 1) such that Q(p) = q by inverting the quantile function.
+    # For the upper tail this inverts the upper tail quantile function, which
+    # keeps precision for small upper tail probabilities.
+    comps <- parts$comps[[i]]
+    w <- parts$w_list[[i]]
+    fn <- function(p) {
+      sum(w * dist_paired(quantile, comps, p = p, ..., tail = tail)) - qi
+    }
 
-  stats::uniroot(fn, interval = c(eps, 1 - eps), tol = 1e-8)$root
+    # Use the smallest representable eps so the search interval covers
+    # far tails (e.g., normal distributions). For q beyond Q(eps) or Q(1-eps),
+    # return the boundary probability rather than erroring in uniroot.
+    # The upper tail quantile function is decreasing, so its sign is flipped.
+    eps <- .Machine$double.eps
+    s <- if (tail == "lower") 1 else -1
+    lo_val <- s * fn(eps)
+    hi_val <- s * fn(1 - eps)
+
+    if (lo_val >= 0) return(eps)
+    if (hi_val <= 0) return(1 - eps)
+
+    stats::uniroot(fn, interval = c(eps, 1 - eps), tol = 1e-8)$root
+  }, numeric(1L))
 }
 
 #' @export
 support.dist_q_mixture <- function(x, ...) {
-  lims <- c(
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 0, ...)),
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), 1, ...))
-  )
-  closed <- is.finite(lims)
+  parts <- mixture_parts(x)
+  lims <- cbind(q_mixture_quantile(parts, 0, ...), q_mixture_quantile(parts, 1, ...))
   new_support_region(
-    list(numeric(0)),
-    list(lims),
-    list(closed)
+    rep(list(numeric(0)), parts$n),
+    lapply(seq_len(parts$n), function(i) lims[i, ]),
+    lapply(seq_len(parts$n), function(i) is.finite(lims[i, ]))
   )
 }
 
 #' @export
 density.dist_q_mixture <- function(x, at, ...) {
-  if (length(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
+  parts <- mixture_parts(x)
+  at <- vec_recycle(at, parts$n)
 
   # p = F(at) via CDF inversion
   p <- cdf(x, at, ...)
 
-  # Outside (or at boundary of) the support
-  if (p <= 0 || p >= 1) return(0)
+  # Outside (or at boundary of) the support the density is 0
+  out <- ifelse(is.na(p), NA_real_, 0)
+  valid <- which(!is.na(p) & p > 0 & p < 1)
+  if (!length(valid)) return(out)
 
   # Q'(p) = sum(w_i * Q_i'(p)) = sum(w_i / f_i(Q_i(p)))
   # => f(at) = 1 / Q'(p)
-  qi_vals <- vapply(x[["dist"]], quantile, numeric(1L), p, ...)
-  fi_vals <- vapply(
-    seq_along(x[["dist"]]),
-    function(i) density(x[["dist"]][[i]], qi_vals[[i]], ...),
-    numeric(1L)
-  )
+  use <- parts$idx %in% valid
+  flat <- vec_slice(parts$flat, use)
+  qi_vals <- dist_paired(quantile, flat, p = p[parts$idx[use]], ...)
+  fi_vals <- dist_paired(density, flat, at = qi_vals, ...)
+  w <- parts$w[use]
+  idx <- parts$idx[use]
+  zero <- unique(idx[fi_vals == 0])
+  out[valid] <- as.vector(1 / rowsum(w / fi_vals, idx, reorder = FALSE))
+  out[zero] <- 0
+  out
+}
 
-  if (any(fi_vals == 0)) return(0)
-
-  1 / sum(x[["w"]] / fi_vals)
+#' @export
+generate.dist_q_mixture <- function(x, times, ...) {
+  # Inverse transform sampling, with each distribution repeated `times` times
+  x_rep <- vec_slice(x, rep(vec_seq_along(x), times))
+  vec_chop(quantile(x_rep, stats::runif(sum(times)), ...), sizes = times)
 }
 
 #' @export
 mean.dist_q_mixture <- function(x, ...) {
   # E[X] = integral_0^1 Q(p) dp = sum(w_i * mu_i)
-  sum(x[["w"]] * vapply(x[["dist"]], mean, numeric(1L), ...))
+  parts <- mixture_parts(x)
+  mixture_sum(mixture_apply(parts, mean, ...), parts)
 }
 
 #' @export
 covariance.dist_q_mixture <- function(x, ...) {
   # Var(X) = E[X^2] - (E[X])^2
   # E[X^2] = integral_0^1 Q(p)^2 dp  (numerical)
+  parts <- mixture_parts(x)
   mu <- mean(x, ...)
-  q_fn <- function(p) {
-    sum(x[["w"]] * vapply(x[["dist"]], quantile, numeric(1L), p, ...))
-  }
-  e2 <- stats::integrate(
-    function(p) vapply(p, function(pp) q_fn(pp)^2, numeric(1L)),
-    lower = 0, upper = 1,
-    rel.tol = 1e-5
-  )$value
-  e2 - mu^2
+  vapply(seq_len(parts$n), function(i) {
+    comps <- parts$comps[[i]]
+    w <- parts$w_list[[i]]
+    q_fn <- function(p) {
+      colSums(w * do.call(rbind, quantile(comps, p, ...)))
+    }
+    e2 <- stats::integrate(
+      function(p) q_fn(p)^2,
+      lower = 0, upper = 1,
+      rel.tol = 1e-5
+    )$value
+    e2 - mu[i]^2
+  }, numeric(1L))
 }
 
 #' @export

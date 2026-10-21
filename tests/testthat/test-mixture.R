@@ -220,3 +220,110 @@ test_that("Quantile mixture rejects multivariate distributions", {
     "univariate"
   )
 })
+
+test_that("Mixtures with different K and component families in one vector", {
+  m2 <- dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.5, 0.5))
+  m3 <- dist_mixture(
+    dist_normal(0, 1), dist_student_t(10), dist_degenerate(2),
+    weights = c(0.2, 0.5, 0.3)
+  )
+  m1 <- dist_mixture(dist_exponential(2), dist_exponential(3), weights = c(0.1, 0.9))
+  x <- c(m2, m3, m1)
+
+  expect_equal(
+    format(x),
+    c(format(m2), format(m3), format(m1))
+  )
+  expect_equal(family(x), rep("mixture", 3))
+  expect_equal(
+    family(x, recursive = TRUE),
+    list(
+      list(family = "mixture", dist = list("normal", "normal")),
+      list(family = "mixture", dist = list("normal", "student_t", "degenerate")),
+      list(family = "mixture", dist = list("exponential", "exponential"))
+    )
+  )
+
+  # Each element matches the same mixture on its own
+  each <- function(f, ...) unlist(lapply(seq_along(x), function(i) f(x[i], ...)))
+  expect_equal(mean(x), each(mean))
+  expect_equal(variance(x), each(variance))
+  expect_equal(density(x, 1), each(density, 1))
+  expect_equal(cdf(x, 1), each(cdf, 1))
+  expect_equal(cdf(x, 1, tail = "upper"), 1 - cdf(x, 1))
+  expect_equal(quantile(x, 0.3), each(quantile, 0.3), tolerance = 1e-6)
+  expect_equal(
+    quantile(x, 0.3, tail = "upper"), quantile(x, 0.7), tolerance = 1e-5
+  )
+  expect_equal(
+    cdf(x, list(c(0, 1, 2)))[[1]],
+    c(cdf(x[1], 0), cdf(x[2], 1), cdf(x[3], 2))
+  )
+
+  # Support is the union of component supports
+  expect_equal(field(support(x), "lim")[[3]], c(0, Inf))
+  expect_equal(field(support(x), "lim")[[2]], c(-Inf, Inf))
+  expect_equal(field(support(x[c(1, 1)]), "lim")[[2]], c(-Inf, Inf))
+  expect_equal(field(support(c(m1, m1)), "lim")[[2]], c(0, Inf))
+
+  # Draws
+  set.seed(1)
+  g <- generate(x, list(c(5, 3, 4)))
+  expect_equal(lengths(g), c(5, 3, 4))
+  g <- generate(x, 2000)
+  expect_equal(vapply(g, mean, numeric(1)), mean(x), tolerance = 0.2)
+  expect_equal(g[[3]] >= 0, rep(TRUE, 2000))
+})
+
+test_that("Quantile mixtures with different K in one vector", {
+  m2 <- dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.5, 0.5), type = "quantile")
+  m3 <- dist_mixture(
+    dist_normal(0, 1), dist_normal(5, 1), dist_exponential(1),
+    weights = c(0.2, 0.5, 0.3), type = "quantile"
+  )
+  x <- c(m2, m3)
+  each <- function(f, ...) unlist(lapply(seq_along(x), function(i) f(x[i], ...)))
+
+  expect_equal(format(x), c(format(m2), format(m3)))
+  expect_equal(mean(x), each(mean))
+  expect_equal(variance(x), each(variance))
+  expect_equal(quantile(x, 0.3), each(quantile, 0.3))
+  expect_equal(cdf(x, 2), each(cdf, 2))
+  expect_equal(cdf(x, list(quantile(x, 0.4)))[[1]], c(0.4, 0.4), tolerance = 1e-5)
+  expect_equal(cdf(x, 2, tail = "upper"), 1 - cdf(x, 2), tolerance = 1e-6)
+  expect_equal(density(x, 2), each(density, 2))
+  expect_equal(density(x, 100), c(0, 0))
+  expect_equal(field(support(x), "lim")[[1]], c(-Inf, Inf))
+  expect_equal(lengths(generate(x, list(c(3, 6)))), c(3, 6))
+})
+
+test_that("Multivariate mixtures in one vector", {
+  mv <- function(mu, sigma = diag(2)) dist_multivariate_normal(mu = list(mu), sigma = list(sigma))
+  x <- c(
+    dist_mixture(mv(c(0, 0)), mv(c(1, 2), diag(2) * 2), weights = c(0.3, 0.7)),
+    dist_mixture(mv(c(5, 5)), mv(c(1, 1)), mv(c(-1, 0)), weights = c(0.2, 0.3, 0.5))
+  )
+  expect_equal(mean(x), rbind(c(0.7, 1.4), 0.2 * c(5, 5) + 0.3 * c(1, 1) + 0.5 * c(-1, 0)))
+  cv <- covariance(x)
+  expect_equal(lengths(cv), c(4L, 4L))
+  m <- c(0.7, 1.4)
+  expect_equal(
+    cv[[1]],
+    0.3 * (tcrossprod(c(0, 0) - m) + diag(2)) + 0.7 * (tcrossprod(c(1, 2) - m) + 2 * diag(2))
+  )
+  at <- rbind(c(0, 0), c(1, 1))
+  expect_equal(
+    density(x, list(at))[[1]],
+    c(density(x[1], at[1, , drop = FALSE]), density(x[2], at[2, , drop = FALSE]))
+  )
+  expect_equal(
+    density(x[1], rbind(c(0, 0))),
+    0.3 * mvtnorm::dmvnorm(c(0, 0)) + 0.7 * mvtnorm::dmvnorm(c(0, 0), c(1, 2), 2 * diag(2))
+  )
+  expect_error(quantile(x, 0.5))
+  set.seed(1)
+  g <- generate(x, list(c(4, 7)))
+  expect_equal(vapply(g, nrow, integer(1)), c(4L, 7L))
+  expect_equal(vapply(g, ncol, integer(1)), c(2L, 2L))
+  expect_equal(format(field(support(x), "lim")[[1]]), format(matrix(c(-Inf, Inf), 2, 2)))
+})

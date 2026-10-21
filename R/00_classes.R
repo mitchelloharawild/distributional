@@ -64,7 +64,7 @@ dist_ported_families <- c(
   "dist_horseshoe", "dist_categorical", "dist_multinomial", "dist_dirichlet",
   "dist_mvnorm", "dist_mvt", "dist_cdf", "dist_pdf", "dist_quantile",
   "dist_sample", "dist_truncated", "dist_inflated", "dist_wrap",
-  "dist_transformed", "dist_convolved"
+  "dist_transformed", "dist_convolved", "dist_mixture", "dist_q_mixture"
 )
 
 is_ported_dist <- function(x) {
