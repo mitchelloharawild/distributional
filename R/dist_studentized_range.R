@@ -74,9 +74,19 @@ cdf.dist_studentized_range <- function(x, q, ..., tail = "lower"){
 
 #' @export
 support.dist_studentized_range <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
+  )
+}
+
+#' @export
+generate.dist_studentized_range <- function(x, times, ...){
+  u <- stats::runif(sum(times))
+  vec_chop(
+    stats::qtukey(u, rep(x[["nm"]], times), rep(x[["df"]], times), rep(x[["nr"]], times)),
+    sizes = times
   )
 }

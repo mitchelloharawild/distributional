@@ -5,7 +5,7 @@ test_that("Horseshoe distribution - format and structure", {
   expect_length(dist, 3L)
 
   # format
-  expect_equal(format(dist), c("HS(0.5, 1)", "HS(1, 1)", "HS(2, 1)"))
+  expect_equal(format(dist), c("HS(0.5, 1)", "HS(1.0, 1)", "HS(2.0, 1)"))
 })
 
 test_that("Horseshoe distribution - density", {
@@ -80,4 +80,22 @@ test_that("Horseshoe distribution - larger tau scales distribution", {
 
   # Larger tau => more spread => lower peak at 0
   expect_gt(density(dist_small, 0), density(dist_large, 0))
+})
+
+test_that("Horseshoe distribution is vectorised over several distributions", {
+  dist <- dist_horseshoe(c(0.5, 1, 2), c(1, 2, 3))
+  at <- c(-1, 0, 1)
+
+  expect_equal(density(dist, list(at))[[1]], LaplacesDemon::dhs(at, c(0.5, 1, 2), c(1, 2, 3)))
+  expect_equal(vec_size(support(dist)), 3L)
+
+  # generate() returns one draw vector per distribution
+  set.seed(1)
+  draws <- generate(dist, list(c(2L, 0L, 5L)))
+  expect_equal(lengths(draws), c(2L, 0L, 5L))
+
+  # The numerical cdf() is Monte Carlo, so compare with a tolerance
+  set.seed(1)
+  p <- cdf(dist, 0)
+  expect_equal(p, rep(0.5, 3), tolerance = 0.02)
 })

@@ -60,7 +60,8 @@ dist_ported_families <- c(
   "dist_poisson_inverse_gaussian", "dist_tweedie", "dist_uniform",
   "dist_weibull", "dist_cauchy", "dist_f", "dist_inverse_exponential",
   "dist_inverse_gamma", "dist_student_t", "dist_degenerate", "dist_gev",
-  "dist_gpd"
+  "dist_gpd", "dist_gh", "dist_gk", "dist_studentized_range",
+  "dist_horseshoe"
 )
 
 is_ported_dist <- function(x) {

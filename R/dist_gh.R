@@ -91,7 +91,11 @@ format.dist_gh <- function(x, digits = 2, ...){
     format(x[["B"]], digits = digits, ...),
     format(x[["g"]], digits = digits, ...),
     format(x[["h"]], digits = digits, ...),
-    if (x[["c"]]==0.8) "" else paste0(", c = ", format(x[["c"]], digits = digits, ...))
+    ifelse(
+      !is.na(x[["c"]]) & x[["c"]] == 0.8,
+      "",
+      paste0(", c = ", format(x[["c"]], digits = digits, ...))
+    )
   )
 }
 
@@ -124,14 +128,21 @@ cdf.dist_gh <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_gh <- function(x, times, ...){
   require_package("gk")
-  gk::rgh(times, x[["A"]], x[["B"]], x[["g"]], x[["h"]], x[["c"]])
+  vec_chop(
+    gk::rgh(
+      sum(times), rep(x[["A"]], times), rep(x[["B"]], times),
+      rep(x[["g"]], times), rep(x[["h"]], times), rep(x[["c"]], times)
+    ),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_gh <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }

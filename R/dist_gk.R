@@ -80,7 +80,11 @@ format.dist_gk <- function(x, digits = 2, ...){
     format(x[["B"]], digits = digits, ...),
     format(x[["g"]], digits = digits, ...),
     format(x[["k"]], digits = digits, ...),
-    if (x[["c"]]==0.8) "" else paste0(", c = ", format(x[["c"]], digits = digits, ...))
+    ifelse(
+      !is.na(x[["c"]]) & x[["c"]] == 0.8,
+      "",
+      paste0(", c = ", format(x[["c"]], digits = digits, ...))
+    )
   )
 }
 
@@ -113,14 +117,21 @@ cdf.dist_gk <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_gk <- function(x, times, ...){
   require_package("gk")
-  gk::rgk(times, x[["A"]], x[["B"]], x[["g"]], x[["k"]], x[["c"]])
+  vec_chop(
+    gk::rgk(
+      sum(times), rep(x[["A"]], times), rep(x[["B"]], times),
+      rep(x[["g"]], times), rep(x[["k"]], times), rep(x[["c"]], times)
+    ),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_gk <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }

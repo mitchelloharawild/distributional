@@ -102,14 +102,18 @@ log_density.dist_horseshoe <- function(x, at, ..., na.rm = FALSE) {
 #' @export
 generate.dist_horseshoe <- function(x, times, ..., na.rm = FALSE) {
   require_package("LaplacesDemon")
-  LaplacesDemon::rhs(times, lambda = x[["lambda"]], tau = x[["tau"]])
+  vec_chop(
+    LaplacesDemon::rhs(sum(times), lambda = rep(x[["lambda"]], times), tau = rep(x[["tau"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_horseshoe <- function(x, ...) {
+  n <- vec_size(x)
   new_support_region(
-    list(0),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
