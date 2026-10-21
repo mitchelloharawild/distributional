@@ -141,8 +141,9 @@ wrap_dist <- function(x, dimnames = NULL){
   out
 }
 
-#' @export
-vec_ptype_abbr.distribution <- function(x, ...){
+# vctrs finds these by the first class only, which is the S7 class name
+# (registered in .onLoad() in zzz.R)
+vec_ptype_abbr_distribution <- function(x, ...){
   "dist"
 }
 
@@ -157,8 +158,7 @@ vec_ptype_abbr.distribution <- function(x, ...){
 format.distribution <- function(x, ...) {
   apply_dist(x, format, ...) %||% character()
 }
-#' @export
-vec_ptype_full.distribution <- function(x, ...){
+vec_ptype_full_distribution <- function(x, ...){
   "distribution"
 }
 

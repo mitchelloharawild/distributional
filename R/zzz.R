@@ -6,16 +6,24 @@
 
   # Register vec_ptype2()/vec_cast() so `distribution` participates in vctrs'
   # coercion system, mirroring mixtime's `class_mixtime` registration.
-  # NB: despite the parameter names, `vecvec_register()`'s `f_cast_to` is the
-  # function invoked when `x` (not `to`) is our class - i.e. it casts *from*
-  # a distribution to something else - and `f_cast_from` is invoked casting
-  # some other type *to* a distribution. Wired up accordingly (confirmed
-  # against the registered S3 method table, not just the docs).
+  # `f_cast_to` is used for casting other types *to* a distribution
+  # (`vec_cast.<class>.*`), and `f_cast_from` for casting a distribution to
+  # other types (`vec_cast.*.<class>`).
   vecvec::vecvec_register(
     class_distribution,
     f_ptype2 = vec_ptype2_distribution,
-    f_cast_to = vec_cast_from_distribution,
-    f_cast_from = vec_cast_to_distribution
+    f_cast_to = vec_cast_to_distribution,
+    f_cast_from = vec_cast_from_distribution
+  )
+
+  # vctrs dispatches these on the first class only, which is the S7 class name
+  register_s3_method(
+    "vctrs", "vec_ptype_abbr", "distributional::distribution",
+    vec_ptype_abbr_distribution
+  )
+  register_s3_method(
+    "vctrs", "vec_ptype_full", "distributional::distribution",
+    vec_ptype_full_distribution
   )
 
   if (getRversion() >= "4.3.0") {

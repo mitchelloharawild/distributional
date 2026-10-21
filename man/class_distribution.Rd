@@ -22,8 +22,8 @@ operate on a \emph{vector} of same-family distributions in one call, instead of
 looping element-by-element. See \verb{_dev/vecvec.md} for the design.
 
 \code{class_distribution} also carries the legacy \code{"distribution"} S3 class
-string (prepended to the S7-generated class vector) so that the existing
-\verb{<generic>.distribution} S3 methods in this package - and, for now, any
+string (inserted after the S7 class name, which must stay first for vctrs)
+so that the existing \verb{<generic>.distribution} S3 methods in this package - and, for now, any
 extension package that dispatches on \code{"distribution"} - keep working
 unchanged. See \verb{_dev/vecvec.md} section 9.5 for the trade-offs of this choice.
 }

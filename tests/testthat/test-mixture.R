@@ -140,9 +140,7 @@ test_that("Mixture with bad weights",{
                weights = c(0.2177682569661155698,
                            0.0491619687405063024,
                            0.7330697742933780514))
-  expect_equal(
-    class(dist)[1],
-    "distribution")
+  expect_s3_class(dist, "distribution")
 
 })
 

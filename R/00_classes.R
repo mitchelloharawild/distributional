@@ -9,8 +9,8 @@
 #' looping element-by-element. See `_dev/vecvec.md` for the design.
 #'
 #' `class_distribution` also carries the legacy `"distribution"` S3 class
-#' string (prepended to the S7-generated class vector) so that the existing
-#' `<generic>.distribution` S3 methods in this package - and, for now, any
+#' string (inserted after the S7 class name, which must stay first for vctrs)
+#' so that the existing `<generic>.distribution` S3 methods in this package - and, for now, any
 #' extension package that dispatches on `"distribution"` - keep working
 #' unchanged. See `_dev/vecvec.md` section 9.5 for the trade-offs of this choice.
 #'
@@ -27,7 +27,9 @@ class_distribution <- S7::new_class(
   parent = vecvec::class_vecvec,
   constructor = function(x = list(), i = seq_len(sum(lengths(x)))) {
     obj <- S7::new_object(vecvec::class_vecvec(vecvec_flatten_adj(x), i))
-    class(obj) <- c("distribution", class(obj))
+    # vctrs dispatches on the first class only, where vecvec_register() has
+    # registered the coercion methods (as "distributional::distribution")
+    class(obj) <- append(class(obj), "distribution", after = 1L)
     obj
   }
 )
