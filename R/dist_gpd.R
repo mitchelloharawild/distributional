@@ -138,42 +138,41 @@ dist_gpd <- function(location, scale, shape) {
 format.dist_gpd <- function(x, digits = 2, ...) {
   sprintf(
     "GPD(%s, %s, %s)",
-    format(x[["location"]], digits = digits, ...),
-    format(x[["scale"]], digits = digits, ...),
-    format(x[["shape"]], digits = digits, ...)
+    vapply(x[["location"]], format, character(1L), digits = digits, ...),
+    vapply(x[["scale"]], format, character(1L), digits = digits, ...),
+    vapply(x[["shape"]], format, character(1L), digits = digits, ...)
   )
 }
 
 #' @exportS3Method distributional::log_density
 log_density.dist_gpd <- function(x, at, ...) {
   z <- (at - x[["location"]]) / x[["scale"]]
-  if (x[["shape"]] == 0) {
-    pdf <- -z
-  } else {
-    xx <- if (x[["shape"]] < 0) {
-      # Equivalent to 1 + shape * z, but exactly 0 at the upper bound (as
-      # computed by support() and quantile(x, 1)) and without cancellation
-      # near it. Values beyond the bound are set to -Inf below.
-      upper <- x[["location"]] - x[["scale"]] / x[["shape"]]
-      pmax(-x[["shape"]] * (upper - at) / x[["scale"]], 0)
-    } else {
-      1 + x[["shape"]] * z
-    }
-    pdf <- if (x[["shape"]] == -1) {
-      # Uniform, avoiding 0 * log(0) at the upper bound
-      rep_len(0, length(xx))
-    } else {
-      -(1 / x[["shape"]] + 1) * log(xx)
-    }
-    pdf[is.na(pdf)] <- -Inf
-  }
-  if (x[["shape"]] >= 0) {
-    pdf[z < 0] <- -Inf
-  } else {
-    # Compare on the data scale, as support() and quantile(x, 1) compute the
-    # upper bound, so the bound itself is in the support
-    pdf[z < 0 | at > upper] <- -Inf
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  neg <- !is.na(shape) & shape < 0
+  # Avoid dividing by zero in the shape != 0 branch
+  sh <- ifelse(zero, 1, shape)
+  upper <- x[["location"]] - x[["scale"]] / sh
+  # For shape < 0, equivalent to 1 + shape * z, but exactly 0 at the upper
+  # bound (as computed by support() and quantile(x, 1)) and without
+  # cancellation near it. Values beyond the bound are set to -Inf below.
+  xx <- ifelse(
+    neg,
+    pmax(-sh * (upper - at) / x[["scale"]], 0),
+    pmax(1 + sh * z, 0)
+  )
+  pdf <- ifelse(
+    sh == -1,
+    # Uniform, avoiding 0 * log(0) at the upper bound
+    0,
+    -(1 / sh + 1) * log(xx)
+  )
+  pdf[is.na(pdf)] <- -Inf
+  pdf <- ifelse(zero, -z, pdf)
+  # Compare on the data scale, as support() and quantile(x, 1) compute the
+  # upper bound, so the bound itself is in the support
+  outside <- (z < 0 | (neg & at > upper))
+  pdf[!is.na(outside) & outside] <- -Inf
   pdf - log(x[["scale"]])
 }
 
@@ -185,12 +184,11 @@ density.dist_gpd <- function(x, at, ...) {
 #' @exportS3Method distributional::cdf
 cdf.dist_gpd <- function(x, q, ..., tail = "lower") {
   z <- pmax(q - x[["location"]], 0) / x[["scale"]]
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  sh <- ifelse(zero, 1, shape)
   # Upper tail probability
-  s <- if (x[["shape"]] == 0) {
-    exp(-z)
-  } else {
-    pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]])
-  }
+  s <- ifelse(zero, exp(-z), pmax(1 + sh * z, 0)^(-1 / sh))
   if (tail == "lower") 1 - s else s
 }
 
@@ -198,47 +196,62 @@ cdf.dist_gpd <- function(x, q, ..., tail = "lower") {
 quantile.dist_gpd <- function(x, p, ..., tail = "lower") {
   # Upper tail probability
   s <- if (tail == "lower") 1 - p else p
-  if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(s)
-  } else {
-    x[["location"]] + x[["scale"]] * (s^(-x[["shape"]]) - 1) / x[["shape"]]
-  }
+  zero <- x[["shape"]] == 0
+  sh <- ifelse(zero, 1, x[["shape"]])
+  ifelse(
+    zero,
+    x[["location"]] - x[["scale"]] * log(s),
+    x[["location"]] + x[["scale"]] * (s^(-sh) - 1) / sh
+  )
 }
 
 #' @exportS3Method distributional::generate
 generate.dist_gpd <- function(x, times, ...) {
-  if (x[["shape"]] == 0) {
-    x[["location"]] + x[["scale"]] * stats::rexp(times)
-  } else {
-    quantile(x, stats::runif(times))
-  }
+  e <- stats::rexp(sum(times))
+  location <- rep(x[["location"]], times)
+  scale <- rep(x[["scale"]], times)
+  shape <- rep(x[["shape"]], times)
+  zero <- shape == 0
+  sh <- ifelse(zero, 1, shape)
+  # With e = -log(S) for upper tail probability S, S^(-shape) = exp(shape * e)
+  vec_chop(
+    location + scale * ifelse(zero, e, expm1(sh * e) / sh),
+    sizes = times
+  )
 }
 
 #' @export
 mean.dist_gpd <- function(x, ...) {
-  if (x[["shape"]] < 1) {
-    x[["location"]] + x[["scale"]] / (1 - x[["shape"]])
-  } else {
+  shape <- x[["shape"]]
+  ifelse(
+    shape < 1,
+    x[["location"]] + x[["scale"]] / (1 - ifelse(shape < 1, shape, 0)),
     Inf
-  }
+  )
 }
 
 #' @exportS3Method stats::median
 median.dist_gpd <- function(x, ...) {
-  if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(0.5)
-  } else {
-    x[["location"]] + x[["scale"]] * (2^x[["shape"]] - 1) / x[["shape"]]
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  sh <- ifelse(zero, 1, shape)
+  ifelse(
+    zero,
+    x[["location"]] - x[["scale"]] * log(0.5),
+    x[["location"]] + x[["scale"]] * (2^sh - 1) / sh
+  )
 }
 
 #' @exportS3Method distributional::covariance
 covariance.dist_gpd <- function(x, ...) {
-  if (x[["shape"]] < 0.5) {
-    x[["scale"]]^2 / (1 - x[["shape"]])^2 / (1 - 2 * x[["shape"]])
-  } else {
+  shape <- x[["shape"]]
+  finite <- shape < 0.5
+  sh <- ifelse(finite, shape, 0)
+  ifelse(
+    finite,
+    x[["scale"]]^2 / (1 - sh)^2 / (1 - 2 * sh),
     Inf
-  }
+  )
 }
 
 #' @export
@@ -246,22 +259,18 @@ support.dist_gpd <- function(x, ...) {
   shape <- x[["shape"]]
   location <- x[["location"]]
   scale <- x[["scale"]]
-  
-  # Determine limits based on shape parameter
-  if (!isTRUE(shape < 0)) {
-    # Support: [location, Inf)
-    lims <- list(c(location, Inf))
-    closed <- list(c(TRUE, FALSE))
-  } else {
-    # Support: [location, location - scale/shape]
-    # The density at the upper bound is 0 for -1 < shape < 0, 1/scale for
-    # shape = -1, and infinite for shape < -1
-    upper <- location - scale / shape
-    lims <- list(c(location, upper))
-    closed <- list(c(TRUE, shape <= -1))
-  }
-  
-  x_proto <- list(vctrs::vec_init(numeric(), n = 0L))
-  
-  new_support_region(x_proto, lims, closed)
+  n <- vec_size(x)
+
+  neg <- !is.na(shape) & shape < 0
+  # Support: [location, Inf) unless shape < 0, then [location, location - scale/shape]
+  # The density at the upper bound is 0 for -1 < shape < 0, 1/scale for
+  # shape = -1, and infinite for shape < -1
+  upper <- ifelse(neg, location - scale / ifelse(neg, shape, 1), Inf)
+  closed_upper <- neg & shape <= -1
+
+  new_support_region(
+    rep_len(list(vctrs::vec_init(numeric(), n = 0L)), n),
+    .mapply(c, list(location, upper), NULL),
+    lapply(closed_upper, function(cl) c(TRUE, cl))
+  )
 }

@@ -171,23 +171,24 @@ dist_gev <- function(location, scale, shape) {
 format.dist_gev <- function(x, digits = 2, ...) {
   sprintf(
     "GEV(%s, %s, %s)",
-    format(x[["location"]], digits = digits, ...),
-    format(x[["scale"]], digits = digits, ...),
-    format(x[["shape"]], digits = digits, ...)
+    vapply(x[["location"]], format, character(1L), digits = digits, ...),
+    vapply(x[["scale"]], format, character(1L), digits = digits, ...),
+    vapply(x[["shape"]], format, character(1L), digits = digits, ...)
   )
 }
 
 #' @exportS3Method distributional::log_density
 log_density.dist_gev <- function(x, at, ...) {
   z <- (at - x[["location"]]) / x[["scale"]]
-  if (x[["shape"]] == 0) {
-    pdf <- -z - exp(-z)
-  } else {
-    xx <- 1 + x[["shape"]] * z
-    xx[xx <= 0] <- NA_real_
-    pdf <- -xx^(-1 / x[["shape"]]) - (1 / x[["shape"]] + 1) * log(xx)
-    pdf[is.na(pdf)] <- -Inf
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  # Avoid dividing by zero in the shape != 0 branch
+  sh <- ifelse(zero, 1, shape)
+  xx <- 1 + sh * z
+  xx[!is.na(xx) & xx <= 0] <- NA_real_
+  pdf <- -xx^(-1 / sh) - (1 / sh + 1) * log(xx)
+  pdf[is.na(pdf)] <- -Inf
+  pdf <- ifelse(zero, -z - exp(-z), pdf)
   pdf - log(x[["scale"]])
 }
 
@@ -199,11 +200,10 @@ density.dist_gev <- function(x, at, ...) {
 #' @exportS3Method distributional::cdf
 cdf.dist_gev <- function(x, q, ..., tail = "lower") {
   z <- (q - x[["location"]]) / x[["scale"]]
-  t <- if (x[["shape"]] == 0) {
-    exp(-z)
-  } else {
-    pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]])
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  sh <- ifelse(zero, 1, shape)
+  t <- ifelse(zero, exp(-z), pmax(1 + sh * z, 0)^(-1 / sh))
   if (tail == "lower") exp(-t) else -expm1(-t)
 }
 
@@ -211,21 +211,30 @@ cdf.dist_gev <- function(x, q, ..., tail = "lower") {
 quantile.dist_gev <- function(x, p, ..., tail = "lower") {
   # -log(F), where F is the lower tail probability
   t <- if (tail == "lower") -log(p) else -log1p(-p)
-  if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(t)
-  } else {
-    x[["location"]] + x[["scale"]] * (t^(-x[["shape"]]) - 1) / x[["shape"]]
-  }
+  gev_quantile_t(x[["location"]], x[["scale"]], x[["shape"]], t)
+}
+
+# Quantile as a function of t = -log(F), selecting the Gumbel form per element
+gev_quantile_t <- function(location, scale, shape, t) {
+  zero <- shape == 0
+  sh <- ifelse(zero, 1, shape)
+  ifelse(
+    zero,
+    location - scale * log(t),
+    location + scale * (t^(-sh) - 1) / sh
+  )
 }
 
 #' @exportS3Method distributional::generate
 generate.dist_gev <- function(x, times, ...) {
-  z <- stats::rexp(times)
-  if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(z)
-  } else {
-    x[["location"]] + x[["scale"]] * (z^(-x[["shape"]]) - 1) / x[["shape"]]
-  }
+  z <- stats::rexp(sum(times))
+  vec_chop(
+    gev_quantile_t(
+      rep(x[["location"]], times), rep(x[["scale"]], times),
+      rep(x[["shape"]], times), z
+    ),
+    sizes = times
+  )
 }
 
 #' @export
@@ -233,55 +242,64 @@ support.dist_gev <- function(x, ...) {
   location <- x[["location"]]
   scale <- x[["scale"]]
   shape <- x[["shape"]]
-  if (isTRUE(shape > 0)) {
-    # Support: (location - scale/shape, Inf), the density vanishes at the bound
-    lims <- c(location - scale / shape, Inf)
-    closed <- c(FALSE, FALSE)
-  } else if (isTRUE(shape < 0)) {
-    # Support: (-Inf, location - scale/shape], the density at the bound is
-    # positive (shape = -1) or infinite (shape < -1) when shape <= -1
-    lims <- c(-Inf, location - scale / shape)
-    closed <- c(FALSE, shape <= -1)
-  } else {
-    lims <- c(-Inf, Inf)
-    closed <- c(FALSE, FALSE)
-  }
+  n <- vec_size(x)
+  pos <- !is.na(shape) & shape > 0
+  neg <- !is.na(shape) & shape < 0
+  # shape > 0: (location - scale/shape, Inf), the density vanishes at the bound
+  # shape < 0: (-Inf, location - scale/shape], the density at the bound is
+  # positive (shape = -1) or infinite (shape < -1) when shape <= -1
+  bound <- location - scale / ifelse(pos | neg, shape, 1)
+  lower <- ifelse(pos, bound, -Inf)
+  upper <- ifelse(neg, bound, Inf)
+  closed_upper <- neg & shape <= -1
   new_support_region(
-    list(numeric()),
-    list(lims),
-    list(closed)
+    rep_len(list(numeric()), n),
+    .mapply(c, list(lower, upper), NULL),
+    lapply(closed_upper, function(cl) c(FALSE, cl))
   )
 }
 
 #' @export
 mean.dist_gev <- function(x, ...) {
-  if (x[["shape"]] == 0) {
-    x[["location"]] + x[["scale"]] * 0.57721566490153286
-  } else if (x[["shape"]] < 1) {
-    x[["location"]] + x[["scale"]] * (gamma(1 - x[["shape"]]) - 1) / x[["shape"]]
-  } else {
-    Inf
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  finite <- shape < 1
+  # Avoid dividing by zero and evaluating gamma() at its poles
+  sh <- ifelse(zero | !finite, 0.5, shape)
+  ifelse(
+    zero,
+    x[["location"]] + x[["scale"]] * 0.57721566490153286,
+    ifelse(
+      finite,
+      x[["location"]] + x[["scale"]] * (gamma(1 - sh) - 1) / sh,
+      Inf
+    )
+  )
 }
 
 #' @exportS3Method stats::median
 median.dist_gev <- function(x, ...) {
-  if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(log(2))
-  } else {
-    x[["location"]] + x[["scale"]] * (log(2)^(-x[["shape"]]) - 1) / x[["shape"]]
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  sh <- ifelse(zero, 1, shape)
+  ifelse(
+    zero,
+    x[["location"]] - x[["scale"]] * log(log(2)),
+    x[["location"]] + x[["scale"]] * (log(2)^(-sh) - 1) / sh
+  )
 }
 
 #' @exportS3Method distributional::covariance
 covariance.dist_gev <- function(x, ...) {
-  if (x[["shape"]] == 0) {
-    x[["scale"]]^2 * pi^2 / 6
-  } else if (x[["shape"]] < 0.5) {
-    g2 <- gamma(1 - 2 * x[["shape"]])
-    g1 <- gamma(1 - x[["shape"]])
-    x[["scale"]]^2 * (g2 - g1^2) / x[["shape"]]^2
-  } else {
-    Inf
-  }
+  shape <- x[["shape"]]
+  zero <- shape == 0
+  finite <- shape < 0.5
+  sh <- ifelse(zero | !finite, 0.25, shape)
+  g2 <- gamma(1 - 2 * sh)
+  g1 <- gamma(1 - sh)
+  ifelse(
+    zero,
+    x[["scale"]]^2 * pi^2 / 6,
+    ifelse(finite, x[["scale"]]^2 * (g2 - g1^2) / sh^2, Inf)
+  )
 }

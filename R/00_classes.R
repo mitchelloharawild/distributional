@@ -59,7 +59,8 @@ dist_ported_families <- c(
   "dist_logistic", "dist_lognormal", "dist_negbin", "dist_pareto",
   "dist_poisson_inverse_gaussian", "dist_tweedie", "dist_uniform",
   "dist_weibull", "dist_cauchy", "dist_f", "dist_inverse_exponential",
-  "dist_inverse_gamma", "dist_student_t", "dist_degenerate"
+  "dist_inverse_gamma", "dist_student_t", "dist_degenerate", "dist_gev",
+  "dist_gpd"
 )
 
 is_ported_dist <- function(x) {

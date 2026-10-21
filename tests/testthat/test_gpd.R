@@ -78,3 +78,50 @@ test_that("GPD support and density agree at the upper bound", {
   z <- (at - 0.1) / 0.3
   expect_equal(density(dist[3], at), list((1 - 2 * z)^(1 / 2 - 1) / 0.3))
 })
+
+test_that("GPD is vectorised over mixed shape signs", {
+  loc <- c(0, 1, -1, 2)
+  scale <- c(1, 2, 3, 0.5)
+  shape <- c(-0.2, 0, 0.3, 1.5)
+  ev <- function(f, a) as.vector(mapply(f, a, loc = loc, scale = scale, shape = shape))
+  ev_d <- function(a) ev(evd::dgpd, a)
+  ev_p <- function(a) ev(evd::pgpd, a)
+  ev_q <- function(a) ev(evd::qgpd, a)
+  dist <- dist_gpd(loc, scale, shape)
+  at <- c(0.5, 1.5, 2, 3)
+  p <- c(0.2, 0.5, 0.7, 0.9)
+
+  expect_equal(density(dist, list(at))[[1]], ev_d(at))
+  expect_equal(log_density(dist, list(at))[[1]], log(ev_d(at)))
+  expect_equal(cdf(dist, list(at))[[1]], ev_p(at))
+  expect_equal(cdf(dist, list(at), tail = "upper")[[1]], 1 - ev_p(at))
+  expect_equal(quantile(dist, list(p))[[1]], ev_q(p))
+  expect_equal(quantile(dist, 0.3), ev_q(0.3))
+  expect_equal(median(dist), ev_q(0.5))
+
+  # Moments agree with the single distribution results
+  expect_no_warning(m <- mean(dist))
+  expect_no_warning(v <- variance(dist))
+  expect_equal(m, vapply(vec_chop(dist), mean, 1))
+  expect_equal(v, vapply(vec_chop(dist), variance, 1))
+  expect_equal(m[4], Inf)
+  expect_equal(v[4], Inf)
+
+  # Support depends on the sign of the shape
+  s <- support(dist)
+  expect_equal(vec_size(s), 4L)
+  expect_equal(
+    field(s, "lim"),
+    list(c(0, 5), c(1, Inf), c(-1, Inf), c(2, Inf))
+  )
+  expect_equal(format(s)[1:2], c("[0,5)", "[1,Inf)"))
+  expect_equal(density(dist, list(rep(-100, 4)))[[1]], rep(0, 4))
+
+  # generate() draws the requested sizes per distribution
+  set.seed(1)
+  draws <- generate(dist, list(c(1L, 0L, 3L, 2L)))
+  expect_equal(lengths(draws), c(1L, 0L, 3L, 2L))
+  expect_true(all(draws[[1]] >= 0 & draws[[1]] <= 5))
+  expect_true(all(draws[[3]] >= -1))
+  expect_equal(format(dist)[2], "GPD(1, 2, 0)")
+})
