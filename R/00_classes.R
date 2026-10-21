@@ -52,9 +52,11 @@ vecvec_flatten_adj <- utils::getFromNamespace("vecvec_flatten_adj", "vecvec")
 #'
 #' @noRd
 dist_ported_families <- c(
-  "dist_normal", "dist_poisson", "dist_na",
-  "dist_bernoulli", "dist_beta", "dist_binomial", "dist_burr", "dist_chisq",
-  "dist_exponential", "dist_gamma"
+  "dist_normal", "dist_poisson", "dist_na", "dist_bernoulli", "dist_beta",
+  "dist_binomial", "dist_burr", "dist_chisq", "dist_exponential",
+  "dist_gamma", "dist_geometric", "dist_gumbel", "dist_hypergeometric",
+  "dist_inverse_gaussian", "dist_laplace", "dist_logarithmic",
+  "dist_logistic"
 )
 
 is_ported_dist <- function(x) {

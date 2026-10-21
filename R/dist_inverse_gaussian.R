@@ -133,15 +133,16 @@ cdf.dist_inverse_gaussian <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_inverse_gaussian <- function(x, times, ...){
   require_package("actuar")
-  actuar::rinvgauss(times, x[["m"]], x[["s"]])
+  vctrs::vec_chop(actuar::rinvgauss(sum(times), rep(x[["m"]], times), rep(x[["s"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_inverse_gaussian <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 

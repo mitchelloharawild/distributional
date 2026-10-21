@@ -120,26 +120,26 @@ cdf.dist_laplace <- function(x, q, ..., tail = "lower") {
   sigma <- x[["sigma"]]
   # The upper tail is the lower tail reflected about mu
   if (tail == "upper") q <- 2 * mu - q
-  ifelse(q < mu,
-    0.5 * exp((q - mu) / sigma),
-    1 - 0.5 * exp(-(q - mu) / sigma)
-  )
+  z <- (q - mu) / sigma
+  ifelse(z < 0, 0.5 * exp(z), 1 - 0.5 * exp(-z))
 }
 
 #' @export
 generate.dist_laplace <- function(x, times, ...) {
   mu <- x[["mu"]]
   sigma <- x[["sigma"]]
-  u <- stats::runif(times) - 0.5
-  mu - sigma * sign(u) * log(1 - 2 * abs(u))
+  u <- stats::runif(sum(times)) - 0.5
+  draws <- rep(mu, times) - rep(sigma, times) * sign(u) * log(1 - 2 * abs(u))
+  vctrs::vec_chop(draws, sizes = times)
 }
 
 #' @export
 support.dist_laplace <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
@@ -155,15 +155,15 @@ variance.dist_laplace <- function(x, ...) {
 
 #' @export
 skewness.dist_laplace <- function(x, ...) {
-  0
+  rep_len(0, vctrs::vec_size(x))
 }
 
 #' @export
 kurtosis.dist_laplace <- function(x, ...) {
-  3
+  rep_len(3, vctrs::vec_size(x))
 }
 
 #' @export
 has_symmetry.dist_laplace <- function(x, ...) {
-  TRUE
+  rep_len(TRUE, vctrs::vec_size(x))
 }

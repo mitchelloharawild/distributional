@@ -128,7 +128,10 @@ cdf.dist_hypergeometric <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_hypergeometric <- function(x, times, ...){
-  stats::rhyper(times, x[["m"]], x[["n"]], x[["k"]])
+  vctrs::vec_chop(
+    stats::rhyper(sum(times), rep(x[["m"]], times), rep(x[["n"]], times), rep(x[["k"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
@@ -136,10 +139,11 @@ support.dist_hypergeometric <- function(x, ...) {
   m <- x[["m"]]
   n <- x[["n"]]
   k <- x[["k"]]
+  n_x <- vctrs::vec_size(x)
   new_support_region(
-    list(integer()),
-    list(c(max(0, k - n), min(k, m))),
-    list(c(TRUE, TRUE))
+    rep_len(list(integer()), n_x),
+    .mapply(function(lo, hi) c(lo, hi), list(pmax(0, k - n), pmin(k, m)), NULL),
+    rep_len(list(c(TRUE, TRUE)), n_x)
   )
 }
 

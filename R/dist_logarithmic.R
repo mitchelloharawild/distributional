@@ -113,17 +113,17 @@ cdf.dist_logarithmic <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_logarithmic <- function(x, times, ...){
   require_package("actuar")
-  actuar::rlogarithmic(times, x[["p"]])
+  vctrs::vec_chop(actuar::rlogarithmic(sum(times), rep(x[["p"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_logarithmic <- function(x, ...) {
   # Degenerate at 1 when p = 0
-  degenerate <- isTRUE(x[["p"]] == 0)
+  degenerate <- !is.na(x[["p"]]) & x[["p"]] == 0
   new_support_region(
-    list(integer()),
-    list(c(1, if (degenerate) 1 else Inf)),
-    list(c(TRUE, degenerate))
+    rep_len(list(integer()), vctrs::vec_size(x)),
+    lapply(degenerate, function(d) c(1, if (d) 1 else Inf)),
+    lapply(degenerate, function(d) c(TRUE, d))
   )
 }
 

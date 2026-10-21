@@ -124,17 +124,17 @@ cdf.dist_geometric <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_geometric <- function(x, times, ...){
-  stats::rgeom(times, x[["p"]])
+  vctrs::vec_chop(stats::rgeom(sum(times), rep(x[["p"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_geometric <- function(x, ...) {
   # Degenerate at 0 when p = 1
-  degenerate <- isTRUE(x[["p"]] == 1)
+  degenerate <- !is.na(x[["p"]]) & x[["p"]] == 1
   new_support_region(
-    list(integer()),
-    list(c(0, if (degenerate) 0 else Inf)),
-    list(c(TRUE, degenerate))
+    rep_len(list(integer()), vctrs::vec_size(x)),
+    lapply(degenerate, function(d) c(0, if (d) 0 else Inf)),
+    lapply(degenerate, function(d) c(TRUE, d))
   )
 }
 

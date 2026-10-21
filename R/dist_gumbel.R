@@ -177,15 +177,16 @@ cdf.dist_gumbel <- function(x, q, ..., tail = "lower"){
 #' @export
 generate.dist_gumbel <- function(x, times, ...){
   require_package("actuar")
-  actuar::rgumbel(times, x[["a"]], x[["s"]])
+  vctrs::vec_chop(actuar::rgumbel(sum(times), rep(x[["a"]], times), rep(x[["s"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_gumbel <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
@@ -201,10 +202,10 @@ covariance.dist_gumbel <- function(x, ...){
 
 #' @export
 skewness.dist_gumbel <- function(x, ...) {
-  1.13954709940465
+  rep_len(1.13954709940465, vctrs::vec_size(x))
   # zeta3 <- 1.20205690315959401459612
   # (12 * sqrt(6) * zeta3) / pi^3
 }
 
 #' @export
-kurtosis.dist_gumbel <- function(x, ...) 12/5
+kurtosis.dist_gumbel <- function(x, ...) rep_len(12/5, vctrs::vec_size(x))

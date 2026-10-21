@@ -108,15 +108,16 @@ cdf.dist_logistic <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_logistic <- function(x, times, ...){
-  stats::rlogis(times, x[["l"]], x[["s"]])
+  vctrs::vec_chop(stats::rlogis(sum(times), rep(x[["l"]], times), rep(x[["s"]], times)), sizes = times)
 }
 
 #' @export
 support.dist_logistic <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(-Inf, Inf)),
-    list(c(FALSE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(-Inf, Inf)), n),
+    rep_len(list(c(FALSE, FALSE)), n)
   )
 }
 
@@ -131,10 +132,10 @@ covariance.dist_logistic <- function(x, ...){
 }
 
 #' @export
-skewness.dist_logistic <- function(x, ...) 0
+skewness.dist_logistic <- function(x, ...) rep_len(0, vctrs::vec_size(x))
 
 #' @export
-kurtosis.dist_logistic <- function(x, ...) 6 / 5
+kurtosis.dist_logistic <- function(x, ...) rep_len(6 / 5, vctrs::vec_size(x))
 
 #' @export
-has_symmetry.dist_logistic <- function(x, ...) TRUE
+has_symmetry.dist_logistic <- function(x, ...) rep_len(TRUE, vctrs::vec_size(x))
