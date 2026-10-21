@@ -94,31 +94,31 @@ dist_cdf <- function(x, cdf){
 
 #' @export
 format.dist_cdf <- function(x, ...){
-  sprintf("cdf[%s]", lengths(vctrs::field(x, "x")))
+  sprintf("cdf[%s]", lengths(x[["x"]]))
 }
 
 density.dist_cdf <- function(x, at, ...){
-  grid_map(vctrs::field(x, "x"), vctrs::field(x, "cdf"), at, interp_density, ...)
+  grid_map(x[["x"]], x[["cdf"]], at, interp_density, ...)
 }
 
 quantile.dist_cdf <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") p <- 1 - p
-  grid_map(vctrs::field(x, "x"), vctrs::field(x, "cdf"), p, interp_quantile)
+  grid_map(x[["x"]], x[["cdf"]], p, interp_quantile)
 }
 
 cdf.dist_cdf <- function(x, q, ..., tail = "lower"){
-  p <- grid_map(vctrs::field(x, "x"), vctrs::field(x, "cdf"), q, interp_cdf)
+  p <- grid_map(x[["x"]], x[["cdf"]], q, interp_cdf)
   if (tail == "lower") p else 1 - p
 }
 
 generate.dist_cdf <- function(x, times, ...){
-  grid_generate(vctrs::field(x, "x"), vctrs::field(x, "cdf"), times, interp_generate)
+  grid_generate(x[["x"]], x[["cdf"]], times, interp_generate)
 }
 
 mean.dist_cdf <- function(x, ...) {
-  grid_map(vctrs::field(x, "x"), vctrs::field(x, "cdf"), NULL, function(x, p, at) interp_mean(x, p))
+  grid_map(x[["x"]], x[["cdf"]], NULL, function(x, p, at) interp_mean(x, p))
 }
 
 support.dist_cdf <- function(x, ...) {
-  interp_support(vctrs::field(x, "x"), vctrs::field(x, "cdf"))
+  interp_support(x[["x"]], x[["cdf"]])
 }

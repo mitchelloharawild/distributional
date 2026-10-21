@@ -26,8 +26,7 @@ new_dist <- function(..., class = NULL, dimnames = NULL){
   # `vctrs::new_rcrd()` fields must be proper vectors, so a literal `NULL`
   # argument (a handful of families use it as an "unset" sentinel for an
   # optional parameter, e.g. `dist_student_t(ncp = NULL)`) can't be stored
-  # directly; recycle it to a `NULL`-per-position list field instead, which
-  # `dist_field_get()` auto-unwraps back to bare `NULL` for a length-1 slice.
+  # directly; recycle it to a `NULL`-per-position list field instead.
   is_null_arg <- vapply(args, is.null, logical(1L))
   if (any(is_null_arg)) {
     n <- if (all(is_null_arg)) 1L else vctrs::vec_size(args[!is_null_arg][[1L]])
@@ -48,11 +47,9 @@ new_dist <- function(..., class = NULL, dimnames = NULL){
 # now return a *vector* of `length(x)` parameter values rather than a scalar.
 #
 # List-valued fields (e.g. `dist_transformed()`'s `transform`/`inverse`
-# closures, or a nested `dist` field built for a single element) are
-# auto-unwrapped when `x` has length 1, so that `x$transform` continues to
-# give the raw closure rather than a length-1 list wrapping it - matching
-# the pre-migration per-element semantics that existing family methods (both
-# in this package and extension packages) still assume.
+# closures, or ragged parameters) are always returned as a list with one
+# entry per distribution, whatever the size of `x`, so a method never needs to
+# special-case the single-distribution slot.
 
 #' @export
 #' @method [[ dist_default
@@ -75,8 +72,7 @@ new_dist <- function(..., class = NULL, dimnames = NULL){
 # `vctrs::field()` errors instead, so guard it here to keep that behaviour.
 dist_field_get <- function(x, name) {
   if (!(name %in% vctrs::fields(x))) return(NULL)
-  val <- vctrs::field(x, name)
-  if (is.list(val) && length(val) == 1L) val[[1L]] else val
+  vctrs::field(x, name)
 }
 
 # Pre-migration `x[-(1:2)]`-style field dropping (e.g. `dist_wrap()` removing

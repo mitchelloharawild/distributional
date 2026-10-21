@@ -136,9 +136,9 @@ format.dist_categorical <- function(x, digits = 2, ...){
 
 # The list fields, by position. `x[["p"]]` would drop the list for a single
 # distribution, so these read the fields directly.
-categorical_p <- function(x) as.list(vctrs::field(x, "p"))
+categorical_p <- function(x) as.list(x[["p"]])
 categorical_x <- function(x) {
-  if ("x" %in% vctrs::fields(x)) as.list(vctrs::field(x, "x"))
+  if ("x" %in% vctrs::fields(x)) as.list(x[["x"]])
 }
 
 # The outcomes of each distribution (the positions when none are given)

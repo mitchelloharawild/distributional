@@ -96,33 +96,33 @@ dist_percentile <- function(x, percentile){
 
 #' @export
 format.dist_quantile <- function(x, ...){
-  sprintf("quantile[%s]", lengths(vctrs::field(x, "x")))
+  sprintf("quantile[%s]", lengths(x[["x"]]))
 }
 
 density.dist_quantile <- function(x, at, ...){
-  grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), at, interp_density, ...)
+  grid_map(x[["x"]], x[["quantile"]], at, interp_density, ...)
 }
 
 quantile.dist_quantile <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") p <- 1 - p
-  grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), p, interp_quantile)
+  grid_map(x[["x"]], x[["quantile"]], p, interp_quantile)
 }
 
 cdf.dist_quantile <- function(x, q, ..., tail = "lower"){
-  p <- grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), q, interp_cdf)
+  p <- grid_map(x[["x"]], x[["quantile"]], q, interp_cdf)
   if (tail == "lower") p else 1 - p
 }
 
 generate.dist_quantile <- function(x, times, ...){
-  grid_generate(vctrs::field(x, "x"), vctrs::field(x, "quantile"), times, interp_generate)
+  grid_generate(x[["x"]], x[["quantile"]], times, interp_generate)
 }
 
 mean.dist_quantile <- function(x, ...) {
-  grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), NULL, function(x, p, at) interp_mean(x, p))
+  grid_map(x[["x"]], x[["quantile"]], NULL, function(x, p, at) interp_mean(x, p))
 }
 
 support.dist_quantile <- function(x, ...) {
-  interp_support(vctrs::field(x, "x"), vctrs::field(x, "quantile"))
+  interp_support(x[["x"]], x[["quantile"]])
 }
 
 # Grid distributions store one grid per distribution, as list fields of

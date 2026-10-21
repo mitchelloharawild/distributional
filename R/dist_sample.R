@@ -127,18 +127,17 @@ format.dist_sample <- function(x, ...){
   # which would instead flatten a length-1 `x` down to a bare vector).
   sprintf(
     "sample[%s]",
-    vapply(vctrs::field(x, "x"), vctrs::vec_size, integer(1L))
+    vapply(x[["x"]], vctrs::vec_size, integer(1L))
   )
 }
 
 # `x[["x"]]` would auto-unwrap a length-1 `x` down to a bare sample vector
-sample_field <- function(x) vctrs::field(x, "x")
 
 # Samples are ragged, so every method maps over the per-distribution samples
-# in `sample_field(x)` (a `list_of`). Samples are multivariate when their elements are
+# in `x[["x"]]` (a `list_of`). Samples are multivariate when their elements are
 # matrices (one column per variate).
 sample_is_mv <- function(x) {
-  is.matrix(sample_field(x)[[1L]])
+  is.matrix(x[["x"]][[1L]])
 }
 
 #' @export
@@ -150,7 +149,7 @@ density.dist_sample <- function(x, at, ..., na.rm = TRUE){
   at <- vctrs::vec_recycle(at, n)
   vapply(seq_len(n), function(i) {
     if (!is.finite(at[i])) return(0)
-    stats::density(sample_field(x)[[i]], from = at[i], to = at[i], n = 1, ..., na.rm = na.rm)$y
+    stats::density(x[["x"]][[i]], from = at[i], to = at[i], n = 1, ..., na.rm = na.rm)$y
   }, numeric(1L))
 }
 
@@ -164,12 +163,12 @@ quantile.dist_sample <- function(x, p, type = 7, ..., na.rm = TRUE, tail = "lowe
   if(sample_is_mv(x)) {
     # Marginal quantiles
     out <- lapply(seq_len(n), function(i) {
-      apply(sample_field(x)[[i]], 2, stats::quantile, probs = p[i], type = type, ..., na.rm = na.rm, names = FALSE)
+      apply(x[["x"]][[i]], 2, stats::quantile, probs = p[i], type = type, ..., na.rm = na.rm, names = FALSE)
     })
     return(do.call(rbind, out))
   }
   vapply(seq_len(n), function(i) {
-    stats::quantile(sample_field(x)[[i]], probs = p[i], type = type, ..., na.rm = na.rm, names = FALSE)
+    stats::quantile(x[["x"]][[i]], probs = p[i], type = type, ..., na.rm = na.rm, names = FALSE)
   }, numeric(1L))
 }
 
@@ -179,7 +178,7 @@ cdf.dist_sample <- function(x, q, ..., na.rm = TRUE, tail = "lower"){
   mv <- sample_is_mv(x)
   q <- if (mv) q[if (nrow(q) == 1L) rep(1L, n) else seq_len(n), , drop = FALSE] else vctrs::vec_recycle(q, n)
   vapply(seq_len(n), function(i) {
-    xi <- sample_field(x)[[i]]
+    xi <- x[["x"]][[i]]
     if (mv) {
       p <- mean(sweep(xi, 2L, q[i, ], `<=`))
       if (tail == "lower") p else 1 - p
@@ -196,7 +195,7 @@ generate.dist_sample <- function(x, times, ...){
   times <- vctrs::vec_recycle(times, vctrs::vec_size(x))
   mv <- sample_is_mv(x)
   lapply(seq_along(times), function(i) {
-    xi <- sample_field(x)[[i]]
+    xi <- x[["x"]][[i]]
     j <- sample.int(vctrs::vec_size(xi), size = times[i], replace = TRUE)
     if (mv) xi[j, , drop = FALSE] else xi[j]
   })
@@ -205,29 +204,29 @@ generate.dist_sample <- function(x, times, ...){
 #' @export
 mean.dist_sample <- function(x, ...){
   if(sample_is_mv(x)) {
-    do.call(rbind, lapply(sample_field(x), function(xi) matrix(colMeans(xi, ...), nrow = 1L)))
+    do.call(rbind, lapply(x[["x"]], function(xi) matrix(colMeans(xi, ...), nrow = 1L)))
   } else {
-    vapply(sample_field(x), mean, numeric(1L), ...)
+    vapply(x[["x"]], mean, numeric(1L), ...)
   }
 }
 
 #' @export
 median.dist_sample <- function(x, na.rm = FALSE, ...){
   if(sample_is_mv(x))
-    do.call(rbind, lapply(sample_field(x), function(xi) matrix(apply(xi, 2, stats::median, na.rm = na.rm, ...), nrow = 1L)))
+    do.call(rbind, lapply(x[["x"]], function(xi) matrix(apply(xi, 2, stats::median, na.rm = na.rm, ...), nrow = 1L)))
   else
-    vapply(sample_field(x), stats::median, numeric(1L), na.rm = na.rm, ...)
+    vapply(x[["x"]], stats::median, numeric(1L), na.rm = na.rm, ...)
 }
 
 #' @export
 covariance.dist_sample <- function(x, ...){
-  if(sample_is_mv(x)) lapply(sample_field(x), stats::cov, ...) else vapply(sample_field(x), stats::var, numeric(1L), ...)
+  if(sample_is_mv(x)) lapply(x[["x"]], stats::cov, ...) else vapply(x[["x"]], stats::var, numeric(1L), ...)
 }
 
 #' @export
 skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
   if(sample_is_mv(x)) {abort("Multivariate sample skewness is not yet implemented.")}
-  vapply(sample_field(x), function(xi) {
+  vapply(x[["x"]], function(xi) {
     n <- length(xi)
     centered <- xi - mean(xi, na.rm = na.rm)
     sum_x2 <- sum(centered^2, na.rm = na.rm)
@@ -238,7 +237,7 @@ skewness.dist_sample <- function(x, ..., na.rm = FALSE) {
 
 #' @export
 support.dist_sample <- function(x, ...) {
-  xs <- as.list(sample_field(x))
+  xs <- as.list(x[["x"]])
   new_support_region(
     lapply(xs, vctrs::vec_init, n = 0L),
     lapply(xs, range),
@@ -258,7 +257,7 @@ sample_from_list <- function(x) {
 #' @export
 Math.dist_sample <- function(x, ...) {
   f <- get(.Generic)
-  sample_from_list(lapply(sample_field(x), f, ...))
+  sample_from_list(lapply(x[["x"]], f, ...))
 }
 
 #' @method Ops dist_sample
@@ -266,7 +265,7 @@ Math.dist_sample <- function(x, ...) {
 Ops.dist_sample <- function(e1, e2) {
   n <- max(vctrs::vec_size(e1), vctrs::vec_size(e2))
   as_samples <- function(e) {
-    if (inherits(e, "dist_sample")) as.list(sample_field(e))
+    if (inherits(e, "dist_sample")) as.list(e[["x"]])
     else vctrs::vec_chop(vctrs::vec_recycle(e, if (vctrs::vec_size(e) == 1L) 1L else n))[rep_len(seq_len(vctrs::vec_size(e)), n)]
   }
   e1 <- as_samples(e1)
