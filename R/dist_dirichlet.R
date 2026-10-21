@@ -80,7 +80,7 @@ dist_dirichlet <- function(alpha) {
 format.dist_dirichlet <- function(x, digits = 2, ...) {
   sprintf(
     "Dirichlet[%i]",
-    length(x[["alpha"]])
+    lengths(field(x, "alpha"))
   )
 }
 
@@ -88,60 +88,73 @@ format.dist_dirichlet <- function(x, digits = 2, ...) {
 density.dist_dirichlet <- function(x, at, ..., na.rm = FALSE) {
   require_package("LaplacesDemon")
   if (is.list(at)) return(vapply(at, density, numeric(1L), x = x, ...))
-  LaplacesDemon::ddirichlet(as.numeric(at), x[["alpha"]])
+  vapply(seq_along(field(x, "alpha")), function(i) {
+    LaplacesDemon::ddirichlet(as.numeric(multi_row(at, i)), field(x, "alpha")[[i]])
+  }, numeric(1L))
 }
 
 #' @export
 log_density.dist_dirichlet <- function(x, at, ..., na.rm = FALSE) {
   require_package("LaplacesDemon")
   if (is.list(at)) return(vapply(at, log_density, numeric(1L), x = x, ...))
-  LaplacesDemon::ddirichlet(as.numeric(at), x[["alpha"]], log = TRUE)
+  vapply(seq_along(field(x, "alpha")), function(i) {
+    LaplacesDemon::ddirichlet(as.numeric(multi_row(at, i)), field(x, "alpha")[[i]], log = TRUE)
+  }, numeric(1L))
 }
 
 #' @export
 generate.dist_dirichlet <- function(x, times, ..., na.rm = FALSE) {
   require_package("LaplacesDemon")
-  LaplacesDemon::rdirichlet(times, x[["alpha"]])
+  lapply(seq_along(field(x, "alpha")), function(i) {
+    LaplacesDemon::rdirichlet(times[i], field(x, "alpha")[[i]])
+  })
 }
 
 #' @export
 mean.dist_dirichlet <- function(x, ...) {
-  alpha <- x[["alpha"]]
-  alpha_0 <- sum(alpha)
-  matrix(alpha / alpha_0, nrow = 1)
+  bind_ragged_rows(lapply(field(x, "alpha"), function(alpha) alpha / sum(alpha)))
+}
+
+#' @export
+quantile.dist_dirichlet <- function(x, p, ..., tail = "lower") {
+  # Marginal quantiles, as each component is Beta(alpha[i], alpha_0 - alpha[i])
+  n <- vec_size(x)
+  p <- vec_recycle(p, n)
+  bind_ragged_rows(lapply(seq_len(n), function(i) {
+    alpha <- field(x, "alpha")[[i]]
+    stats::qbeta(p[i], alpha, sum(alpha) - alpha, lower.tail = tail == "lower")
+  }))
+}
+
+#' @export
+variance.dist_dirichlet <- function(x, ...) {
+  bind_ragged_rows(lapply(field(x, "alpha"), function(alpha) {
+    alpha_0 <- sum(alpha)
+    alpha * (alpha_0 - alpha) / (alpha_0^2 * (alpha_0 + 1))
+  }))
 }
 
 #' @export
 covariance.dist_dirichlet <- function(x, ...) {
-  alpha <- x[["alpha"]]
-  k <- length(alpha)
-  alpha_0 <- sum(alpha)
-  denom <- alpha_0^2 * (alpha_0 + 1)
-  sigma <- matrix(NA_real_, nrow = k, ncol = k)
-  for (i in seq_len(k)) {
-    for (j in seq_len(k)) {
-      sigma[i, j] <- if (i == j) {
-        alpha[i] * (alpha_0 - alpha[i]) / denom
-      } else {
-        -alpha[i] * alpha[j] / denom
-      }
-    }
-  }
-  list(sigma)
+  lapply(field(x, "alpha"), function(alpha) {
+    alpha_0 <- sum(alpha)
+    sigma <- -tcrossprod(alpha) / (alpha_0^2 * (alpha_0 + 1))
+    diag(sigma) <- alpha * (alpha_0 - alpha) / (alpha_0^2 * (alpha_0 + 1))
+    sigma
+  })
 }
 
 #' @export
 support.dist_dirichlet <- function(x, ...) {
-  k <- length(x[["alpha"]])
-  proto <- matrix(rep(0, k), nrow = 1)
+  alpha <- field(x, "alpha")
   new_support_region(
-    list(proto),
-    list(c(0, 1)),
-    list(c(TRUE, TRUE))
+    lapply(alpha, function(a) matrix(rep(0, length(a)), nrow = 1)),
+    rep_len(list(c(0, 1)), length(alpha)),
+    rep_len(list(c(TRUE, TRUE)), length(alpha))
   )
 }
 
 #' @export
 dim.dist_dirichlet <- function(x) {
-  length(x[["alpha"]])
+  lengths(field(x, "alpha"))[1L]
 }

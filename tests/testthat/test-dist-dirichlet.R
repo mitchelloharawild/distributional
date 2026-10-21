@@ -85,3 +85,39 @@ test_that("Dirichlet distribution - two-component reduces to Beta", {
   expected_var_x1 <- a * b / (alpha_0^2 * (alpha_0 + 1))
   expect_equal(as.numeric(variance(dist_dir))[1], expected_var_x1)
 })
+
+test_that("Dirichlet distribution with multiple distributions", {
+  alpha <- list(c(1, 2), c(2, 2), c(3, 1))
+  dist <- dist_dirichlet(alpha = alpha)
+
+  expect_equal(format(dist), rep("Dirichlet[2]", 3))
+  expect_equal(mean(dist), do.call(rbind, lapply(alpha, function(a) a / sum(a))))
+  expect_equal(
+    variance(dist),
+    do.call(rbind, lapply(alpha, function(a) a * (sum(a) - a) / (sum(a)^2 * (sum(a) + 1))))
+  )
+  expect_equal(length(covariance(dist)), 3L)
+  expect_equal(covariance(dist)[[2]], covariance(dist[2])[[1]])
+
+  at <- rbind(c(.3, .7), c(.5, .5), c(.9, .1))
+  expect_equal(
+    density(dist, list(at))[[1]],
+    vapply(1:3, function(i) LaplacesDemon::ddirichlet(at[i, ], alpha[[i]]), numeric(1))
+  )
+  expect_equal(
+    quantile(dist, 0.5)[3, ],
+    qbeta(0.5, c(3, 1), c(1, 3))
+  )
+
+  draws <- generate(dist, list(c(1, 2, 3)))
+  expect_equal(vapply(draws, nrow, integer(1)), 1:3)
+})
+
+test_that("Dirichlet distribution with different numbers of categories", {
+  dist <- dist_dirichlet(alpha = list(c(1, 2), c(2, 3, 4)))
+
+  expect_equal(format(dist), c("Dirichlet[2]", "Dirichlet[3]"))
+  expect_equal(mean(dist), rbind(c(1/3, 2/3, NA), c(2, 3, 4) / 9))
+  expect_equal(vapply(covariance(dist), nrow, integer(1)), c(2L, 3L))
+  expect_equal(vapply(generate(dist, list(c(2, 3))), ncol, integer(1)), c(2L, 3L))
+})

@@ -107,117 +107,151 @@ format.dist_multinomial <- function(x, digits = 2, ...){
   sprintf(
     "Multinomial(%s)[%s]",
     format(x[["s"]], digits = digits, ...),
-    format(length(x[["p"]]), digits = digits, ...)
+    format(lengths(field(x, "p")), digits = digits, ...)
   )
+}
+
+# The row of `at` paired with the i-th distribution (`at` has n rows, or 1)
+multi_row <- function(at, i) {
+  at <- as.matrix(at)
+  at[if (nrow(at) == 1L) 1L else i, ]
+}
+
+# Combine per-distribution vectors into a matrix with one row each. The
+# number of categories can differ between distributions, in which case the
+# shorter rows are padded with `NA`.
+bind_ragged_rows <- function(x) {
+  k <- lengths(x)
+  m <- matrix(NA_real_, nrow = length(x), ncol = max(k, 0L))
+  for (i in seq_along(x)) m[i, seq_len(k[i])] <- x[[i]]
+  if (length(x) && !is.null(names(x[[1L]])) && all(k == k[1L])) {
+    colnames(m) <- names(x[[1L]])
+  }
+  m
+}
+
+# Zero probability (rather than an error) outside of the support
+multinomial_density <- function(at, size, prob, log = FALSE) {
+  if (length(at) != length(prob) || anyNA(at) || sum(at) != size) {
+    return(if (log) -Inf else 0)
+  }
+  stats::dmultinom(at, size, prob, log = log)
 }
 
 #' @export
 density.dist_multinomial <- function(x, at, ...){
   if(is.list(at)) return(vapply(at, density, numeric(1L), x = x, ...))
-  stats::dmultinom(at, x[["s"]], x[["p"]])
+  vapply(seq_along(x[["s"]]), function(i) {
+    multinomial_density(multi_row(at, i), x[["s"]][i], field(x, "p")[[i]])
+  }, numeric(1L))
 }
 
 #' @export
 log_density.dist_multinomial <- function(x, at, ...){
   if(is.list(at)) return(vapply(at, log_density, numeric(1L), x = x, ...))
-  stats::dmultinom(at, x[["s"]], x[["p"]], log = TRUE)
+  vapply(seq_along(x[["s"]]), function(i) {
+    multinomial_density(multi_row(at, i), x[["s"]][i], field(x, "p")[[i]], log = TRUE)
+  }, numeric(1L))
 }
 
 #' @export
 generate.dist_multinomial <- function(x, times, ...){
-  t(stats::rmultinom(times, x[["s"]], x[["p"]]))
+  lapply(seq_along(x[["s"]]), function(i) {
+    t(stats::rmultinom(times[i], x[["s"]][i], field(x, "p")[[i]]))
+  })
 }
 
 #' @export
 support.dist_multinomial <- function(x, ...) {
-  p <- x[["p"]]
-  proto <- matrix(integer(), nrow = 0L, ncol = length(p),
-                  dimnames = if (!is.null(names(p))) list(NULL, names(p)))
+  p <- field(x, "p")
+  n <- length(p)
   new_support_region(
-    list(proto),
-    list(c(0, x[["s"]])),
-    list(c(TRUE, TRUE))
+    lapply(p, function(p) {
+      matrix(integer(), nrow = 0L, ncol = length(p),
+             dimnames = if (!is.null(names(p))) list(NULL, names(p)))
+    }),
+    lapply(x[["s"]], function(s) c(0, s)),
+    rep_len(list(c(TRUE, TRUE)), n)
   )
 }
 
 #' @export
 mean.dist_multinomial <- function(x, ...){
-  matrix(x[["s"]]*x[["p"]], nrow = 1)
+  bind_ragged_rows(.mapply(function(s, p) s * p, list(x[["s"]], field(x, "p")), NULL))
+}
+
+#' @export
+quantile.dist_multinomial <- function(x, p, ..., tail = "lower"){
+  # Marginal quantiles, as each category count is Binomial(size, prob[i])
+  n <- vec_size(x)
+  p <- vec_recycle(p, n)
+  bind_ragged_rows(lapply(seq_len(n), function(i) {
+    stats::qbinom(p[i], x[["s"]][i], field(x, "p")[[i]], lower.tail = tail == "lower")
+  }))
+}
+
+#' @export
+variance.dist_multinomial <- function(x, ...){
+  bind_ragged_rows(.mapply(function(s, p) s * p * (1 - p), list(x[["s"]], field(x, "p")), NULL))
 }
 
 #' @export
 covariance.dist_multinomial <- function(x, ...){
-  s <- x[["s"]]
-  p <- x[["p"]]
-  v <- numeric(length(p)^2)
-  for(i in seq_along(p)){
-    for(j in seq_along(p)){
-      v[(i-1)*length(p) + j] <- if(i == j) s*p[i]*(1-p[j]) else -s*p[i]*p[j]
-    }
-  }
-  list(matrix(v, nrow = length(p)))
+  .mapply(function(s, p) {
+    v <- -s * tcrossprod(p)
+    diag(v) <- s * p * (1 - p)
+    v
+  }, list(x[["s"]], field(x, "p")), NULL)
 }
 
 #' @export
 dim.dist_multinomial <- function(x){
-  length(x[["p"]])
+  lengths(field(x, "p"))[1L]
+}
+
+multinomial_cdf <- function(size, prob, q) {
+  k <- length(prob)
+
+  # Validate dimensions
+  if (length(q) != k) {
+    stop("Number of columns in q must match the number of categories in the multinomial distribution")
+  }
+
+  # Any negative quantile => CDF = 0
+  if (any(q < 0)) return(0)
+
+  # Discrete CDF: floor input values
+  q <- floor(q)
+
+  # Max counts for the first (k-1) categories
+  max_vec <- pmin(q[1:(k - 1)], size)
+
+  # Build ranges for first (k-1) categories
+  ranges <- lapply(max_vec, function(m) 0:m)
+
+  # Enumerate only the first (k-1) coordinates
+  partial <- expand.grid(ranges, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+
+  # Compute the last category as the remainder
+  xk <- size - rowSums(partial)
+
+  # Valid if 0 <= xk <= q_k
+  valid_idx <- which(xk >= 0 & xk <= q[k])
+  if (!length(valid_idx)) return(0)
+
+  # Construct full count vectors
+  counts <- cbind(as.matrix(partial[valid_idx, , drop = FALSE]), xk[valid_idx])
+
+  # Sum multinomial pmf over valid outcomes
+  sum(apply(counts, 1L, stats::dmultinom, size = size, prob = prob))
 }
 
 #' @export
 cdf.dist_multinomial <- function(x, q, ..., tail = "lower") {
-  # Extract parameters
-  size <- x$s
-  prob <- x$p
-  k <- length(prob)
-
-  # Validate dimensions
-  if (ncol(q) != k) {
-    stop("Number of columns in q must match the number of categories in the multinomial distribution")
-  }
-
-  n_queries <- nrow(q)
-  result <- numeric(n_queries)
-
-  for (i in seq_len(n_queries)) {
-    q_i <- q[i, ]
-
-    # Any negative quantile => CDF = 0
-    if (any(q_i < 0)) {
-      result[i] <- 0
-      next
-    }
-
-    # Discrete CDF: floor input values
-    q_i <- floor(q_i)
-
-    # Max counts for the first (k-1) categories
-    max_vec <- pmin(q_i[1:(k - 1)], size)
-
-    # Build ranges for first (k-1) categories
-    ranges <- lapply(max_vec, function(m) 0:m)
-
-    # Enumerate only the first (k-1) coordinates
-    partial <- expand.grid(ranges, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-
-    # Compute the last category as the remainder
-    sums <- rowSums(partial)
-    xk <- size - sums
-
-    # Valid if 0 <= xk <= q_k
-    valid_idx <- which(xk >= 0 & xk <= q_i[k])
-
-    if (!length(valid_idx)) {
-      result[i] <- 0
-      next
-    }
-
-    # Construct full count vectors
-    counts <- cbind(as.matrix(partial[valid_idx, , drop = FALSE]), xk[valid_idx])
-
-    # Sum multinomial pmf over valid outcomes
-    probs <- apply(counts, 1L, stats::dmultinom, size = size, prob = prob)
-    result[i] <- sum(probs)
-  }
+  q <- as.matrix(q)
+  result <- vapply(seq_along(x[["s"]]), function(i) {
+    multinomial_cdf(x[["s"]][i], field(x, "p")[[i]], multi_row(q, i))
+  }, numeric(1L))
 
   # The upper tail of a multivariate distribution is the complement 1 - F(q)
   if (tail == "lower") result else 1 - result
