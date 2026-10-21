@@ -183,34 +183,35 @@ validate_tabulated_density <- function(x, density) {
 # Interval widths, probabilities, and the cumulative distribution at the values
 # of a tabulated density. The density is linearly interpolated between the
 # values, so each interval's probability is exactly the area of a trapezoid.
-density_intervals <- function(x) {
-  at <- x[["x"]]
-  f <- x[["density"]]
+density_intervals <- function(at, f) {
   n <- length(at)
   w <- diff(at)
   prob <- w * (f[-1L] + f[-n]) / 2
   list(x = at, f = f, w = w, slope = diff(f) / w, cdf = c(0, cumsum(prob)))
 }
 
-#' @export
 format.dist_pdf <- function(x, ...){
-  sprintf(
-    "density[%s]",
-    length(x[["x"]])
-  )
+  sprintf("density[%s]", lengths(vctrs::field(x, "x")))
 }
 
-#' @export
 density.dist_pdf <- function(x, at, ...){
-  out <- stats::approx(x[["x"]], x[["density"]], xout = at)$y
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), at, pdf_density)
+}
+
+pdf_density <- function(x, f, at) {
+  out <- stats::approx(x, f, xout = at)$y
   # The density is zero beyond the tabulated values
   out[is.na(out) & !is.na(at)] <- 0
   out
 }
 
-#' @export
 cdf.dist_pdf <- function(x, q, ..., tail = "lower"){
-  d <- density_intervals(x)
+  out <- grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), q, pdf_cdf)
+  if (tail == "lower") out else 1 - out
+}
+
+pdf_cdf <- function(x, f, q) {
+  d <- density_intervals(x, f)
   n <- length(d$x)
 
   out <- rep(NA_real_, length(q))
@@ -230,13 +231,16 @@ cdf.dist_pdf <- function(x, q, ..., tail = "lower"){
   }
 
   out[ok] <- pmin(pmax(z, 0), 1)
-  if (tail == "lower") out else 1 - out
+  out
 }
 
-#' @export
 quantile.dist_pdf <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") p <- 1 - p
-  d <- density_intervals(x)
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), p, pdf_quantile)
+}
+
+pdf_quantile <- function(x, f, p) {
+  d <- density_intervals(x, f)
   n <- length(d$x)
 
   out <- rep(NA_real_, length(p))
@@ -263,16 +267,18 @@ quantile.dist_pdf <- function(x, p, ..., tail = "lower"){
   out
 }
 
-#' @export
 generate.dist_pdf <- function(x, times, ...){
-  quantile(x, stats::runif(times), ...)
+  grid_generate(
+    vctrs::field(x, "x"), vctrs::field(x, "density"), times,
+    function(x, f, times) pdf_quantile(x, f, stats::runif(times))
+  )
 }
 
 # The mean and central moments E((X-mean)^2), ..., E((X-mean)^order) of a
 # piecewise linear density, computed together in one pass up to the
 # requested `order`. Using central moments for numerical stability.
-density_moments <- function(x, order = 4L) {
-  d <- density_intervals(x)
+density_moments <- function(x, f, order = 4L) {
+  d <- density_intervals(x, f)
   n <- length(d$x)
   x1 <- d$x[-n]
   w <- d$w
@@ -308,32 +314,31 @@ density_moments <- function(x, order = 4L) {
 
 #' @export
 mean.dist_pdf <- function(x, ...) {
-  density_moments(x, order = 1L)$mean
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) density_moments(x, f, order = 1L)$mean)
 }
 
-#' @export
 covariance.dist_pdf <- function(x, ...) {
-  density_moments(x, order = 2L)$m2
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) density_moments(x, f, order = 2L)$m2)
 }
 
-#' @export
 skewness.dist_pdf <- function(x, ...) {
-  m <- density_moments(x, order = 3L)
-  m$m3 / m$m2^1.5
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) {
+    m <- density_moments(x, f, order = 3L)
+    m$m3 / m$m2^1.5
+  })
 }
 
-#' @export
 kurtosis.dist_pdf <- function(x, ...) {
-  m <- density_moments(x, order = 4L)
-  m$m4 / m$m2^2 - 3
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "density"), NULL, function(x, f, at) {
+    m <- density_moments(x, f, order = 4L)
+    m$m4 / m$m2^2 - 3
+  })
 }
 
-#' @export
 support.dist_pdf <- function(x, ...) {
-  f <- x[["density"]]
   new_support_region(
-    list(double()),
-    list(range(x[["x"]])),
-    list(!near(f[c(1L, length(f))], 0))
+    rep_len(list(double()), length(vctrs::field(x, "x"))),
+    lapply(vctrs::field(x, "x"), range),
+    lapply(vctrs::field(x, "density"), function(f) !near(f[c(1L, length(f))], 0))
   )
 }

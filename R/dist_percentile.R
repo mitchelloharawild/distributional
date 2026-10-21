@@ -90,48 +90,58 @@ dist_quantile <- function(x, quantile){
 dist_percentile <- function(x, percentile){
   x <- as_list_of(x, .ptype = double())
   percentile <- as_list_of(percentile, .ptype = double())
-  quantile <- lapply(percentile, function(p) p / 100)
+  quantile <- as_list_of(lapply(percentile, function(p) p / 100), .ptype = double())
   new_dist(x = x, quantile = quantile, class = "dist_quantile")
 }
 
 #' @export
 format.dist_quantile <- function(x, ...){
-  sprintf(
-    "quantile[%s]",
-    length(x[["x"]])
-  )
+  sprintf("quantile[%s]", lengths(vctrs::field(x, "x")))
 }
 
-#' @export
 density.dist_quantile <- function(x, at, ...){
-  interp_density(x[["x"]], x[["quantile"]], at, ...)
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), at, interp_density, ...)
 }
 
-#' @export
 quantile.dist_quantile <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") p <- 1 - p
-  interp_quantile(x[["x"]], x[["quantile"]], p)
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), p, interp_quantile)
 }
 
-#' @export
 cdf.dist_quantile <- function(x, q, ..., tail = "lower"){
-  p <- interp_cdf(x[["x"]], x[["quantile"]], q)
+  p <- grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), q, interp_cdf)
   if (tail == "lower") p else 1 - p
 }
 
-#' @export
 generate.dist_quantile <- function(x, times, ...){
-  interp_generate(x[["x"]], x[["quantile"]], times)
+  grid_generate(vctrs::field(x, "x"), vctrs::field(x, "quantile"), times, interp_generate)
 }
 
-#' @export
 mean.dist_quantile <- function(x, ...) {
-  interp_mean(x[["x"]], x[["quantile"]])
+  grid_map(vctrs::field(x, "x"), vctrs::field(x, "quantile"), NULL, function(x, p, at) interp_mean(x, p))
 }
 
-#' @export
 support.dist_quantile <- function(x, ...) {
-  interp_support(x[["x"]], x[["quantile"]])
+  interp_support(vctrs::field(x, "x"), vctrs::field(x, "quantile"))
+}
+
+# Grid distributions store one grid per distribution, as list fields of
+# varying length. These apply a function to the grids of each distribution in
+# turn, pairing the size `n` (or 1) argument `at` with the distributions by
+# position. `f(grid_x, grid_y, at)` returns a single number.
+grid_map <- function(x, y, at, f, ...) {
+  n <- length(x)
+  if(!is.null(at)) at <- vctrs::vec_recycle(at, n)
+  vapply(
+    seq_len(n), function(i) f(x[[i]], y[[i]], at[i], ...), double(1L)
+  )
+}
+
+# Generate `times[i]` draws from the grids of the `i`th distribution, with
+# `f(grid_x, grid_y, times)` returning the draws.
+grid_generate <- function(x, y, times, f) {
+  times <- vctrs::vec_recycle(times, length(x))
+  lapply(seq_along(x), function(i) f(x[[i]], y[[i]], times[i]))
 }
 
 # Core computations shared by dist_quantile() and dist_cdf(), which both
@@ -141,7 +151,7 @@ support.dist_quantile <- function(x, ...) {
 
 interp_density <- function(x, p, at, ...) {
   d <- density(
-    interp_generate(x, p, 1000), from = min(at), to = max(at), ..., na.rm = TRUE
+    interp_generate(x, p, 1000), from = min(at, x), to = max(at, x), ..., na.rm = TRUE
   )
   stats::approx(d$x, d$y, xout = at)$y
 }
@@ -169,9 +179,10 @@ interp_mean <- function(x, p) {
 }
 
 interp_support <- function(x, p) {
+  n <- length(x)
   new_support_region(
-    list(vctrs::vec_init(x, n = 0L)),
-    list(range(x)),
-    list(!near(range(p), 0))
+    rep_len(list(double()), n),
+    lapply(x, range),
+    lapply(p, function(p) !near(range(p), 0))
   )
 }

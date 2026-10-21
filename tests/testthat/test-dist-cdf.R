@@ -34,3 +34,26 @@ test_that("dist_cdf() describes the same distribution as dist_quantile()", {
   expect_equal(mean(dist), mean(qdist))
   expect_equal(support(dist), support(qdist))
 })
+
+test_that("CDF distributions with grids of different lengths", {
+  x1 <- seq(-3, 3, by = 0.1)
+  x2 <- c(0, 1, 2)
+  dist <- dist_cdf(list(x1, x2), list(stats::pnorm(x1), c(0, 0.5, 1)))
+
+  expect_equal(format(dist), c("cdf[61]", "cdf[3]"))
+  expect_equal(cdf(dist, list(c(0, 1.5)))[[1]], c(0.5, 0.75))
+  expect_equal(cdf(dist, 1, tail = "upper"), c(1 - stats::pnorm(1), 0.5))
+  expect_equal(quantile(dist, list(c(0.5, 0.25)))[[1]], c(0, 0.5))
+  expect_equal(mean(dist), c(0, 1), tolerance = 1e-3)
+  expect_equal(mean(dist[2]), mean(dist)[2])
+
+  set.seed(1)
+  g <- generate(dist, list(c(5, 2)))
+  expect_equal(lengths(g), c(5, 2))
+  expect_true(all(g[[2]] >= 0 & g[[2]] <= 2))
+
+  expect_equal(density(dist, 1)[2] > 0, TRUE)
+  expect_equal(
+    vctrs::field(support(dist), "lim"), list(c(-3, 3), c(0, 2))
+  )
+})

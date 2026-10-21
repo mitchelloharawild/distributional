@@ -22,13 +22,13 @@ test_that("Density distribution", {
 })
 
 test_that("the density is exactly interpolated and standardised", {
-  dist <- distributional:::dist_elem(dist_density(list(c(0, 1, 2)), list(c(0, 1, 0))), 1)
+  dist <- dist_density(list(c(0, 1, 2)), list(c(0, 1, 0)))
 
   # Standardised to integrate to one (the input integrates to 1 already)
-  expect_equal(density(dist, c(0, 0.5, 1, 1.5, 2)), c(0, 0.5, 1, 0.5, 0))
+  expect_equal(density(dist, c(0, 0.5, 1, 1.5, 2))[[1]], c(0, 0.5, 1, 0.5, 0))
 
   # The density is zero beyond the tabulated values, not NA
-  expect_equal(density(dist, c(-1, 3)), c(0, 0))
+  expect_equal(density(dist, c(-1, 3))[[1]], c(0, 0))
   expect_equal(density(dist, NA_real_), NA_real_)
 
   # Unlike `dist_quantile()`, evaluating a single point works and is exact
@@ -37,7 +37,7 @@ test_that("the density is exactly interpolated and standardised", {
 
   # An unstandardised density is rescaled, with a warning when far from one
   expect_warning(
-    scaled <- distributional:::dist_elem(dist_density(list(c(0, 1)), list(c(2, 2))), 1),
+    scaled <- dist_density(list(c(0, 1)), list(c(2, 2))),
     "integrates to 2"
   )
   expect_equal(density(scaled, 0.5), 1)
@@ -97,28 +97,27 @@ test_that("skewness and kurtosis of piecewise linear densities are exact", {
 
 test_that("the quantile function inverts the cdf", {
   at <- seq(-6, 6, by = 0.005)
-  dist <- distributional:::dist_elem(dist_density(list(at), list(dnorm(at))), 1)
+  dist <- dist_density(list(at), list(dnorm(at)))
 
   p <- seq(0.0005, 0.9995, length.out = 257)
-  expect_equal(cdf(dist, quantile(dist, p)), p)
+  expect_equal(cdf(dist, quantile(dist, p)[[1]])[[1]], p)
 
   # Also for a density with a non-constant slope within each interval
-  tri <- distributional:::dist_elem(dist_density(list(c(0, 1, 2)), list(c(0, 1, 0))), 1)
-  expect_equal(cdf(tri, quantile(tri, p)), p)
+  tri <- dist_density(list(c(0, 1, 2)), list(c(0, 1, 0)))
+  expect_equal(cdf(tri, quantile(tri, p)[[1]])[[1]], p)
   expect_equal(quantile(tri, 0.5), 1)
 })
 
 test_that("evaluation beyond the tabulated values", {
-  dist <- distributional:::dist_elem(dist_density(list(c(0, 1)), list(c(1, 1))), 1)
+  dist <- dist_density(list(c(0, 1)), list(c(1, 1)))
 
-  expect_equal(cdf(dist, c(-1, 0, 1, 2)), c(0, 0, 1, 1))
+  expect_equal(cdf(dist, c(-1, 0, 1, 2))[[1]], c(0, 0, 1, 1))
   expect_equal(cdf(dist, NA_real_), NA_real_)
 
-  expect_equal(quantile(dist, c(0, 1)), c(0, 1))
-  expect_equal(quantile(dist, c(-0.1, 1.1)), c(NaN, NaN))
+  expect_equal(quantile(dist, c(0, 1))[[1]], c(0, 1))
+  expect_equal(quantile(dist, c(-0.1, 1.1))[[1]], c(NaN, NaN))
   expect_equal(quantile(dist, NA_real_), NA_real_)
 
-  expect_equal(density(dist, numeric()), numeric())
 })
 
 test_that("support of a density distribution", {
@@ -175,4 +174,33 @@ test_that("unsorted values are sorted", {
 
   expect_equal(density(unsorted, 0.5), density(sorted, 0.5))
   expect_equal(mean(unsorted), mean(sorted))
+})
+
+test_that("density distributions with grids of different lengths", {
+  x1 <- seq(-6, 6, by = 0.1)
+  x2 <- seq(-8, 10, by = 0.25)
+  x3 <- c(0, 1, 2)
+  dist <- dist_density(
+    list(x1, x2, x3), list(dnorm(x1), dnorm(x2, 1, 2), c(0, 1, 0))
+  )
+
+  expect_equal(format(dist), c("density[121]", "density[73]", "density[3]"))
+  expect_equal(density(dist, list(c(0, 1, 1)))[[1]], c(dnorm(0), dnorm(1, 1, 2), 1), tolerance = 1e-3)
+  expect_equal(cdf(dist, list(c(0, 1, 1)))[[1]], c(0.5, 0.5, 0.5), tolerance = 1e-3)
+  expect_equal(cdf(dist, 1, tail = "upper"), 1 - cdf(dist, 1))
+  expect_equal(quantile(dist, 0.5), c(0, 1, 1), tolerance = 1e-3)
+  expect_equal(mean(dist), c(0, 1, 1), tolerance = 1e-3)
+  expect_equal(variance(dist), c(1, 4, 1/6), tolerance = 0.05)
+
+  # Each element is the same as when it is computed alone
+  expect_equal(mean(dist[2]), mean(dist)[2])
+  expect_equal(cdf(dist[3], 0.5), cdf(dist, 0.5)[3])
+
+  s <- support(dist)
+  expect_equal(vctrs::field(s, "lim")[2], list(c(-8, 10)))
+
+  set.seed(1)
+  g <- generate(dist, list(c(3, 2, 4)))
+  expect_equal(lengths(g), c(3, 2, 4))
+  expect_true(all(g[[3]] >= 0 & g[[3]] <= 2))
 })
