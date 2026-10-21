@@ -145,19 +145,23 @@ cdf.dist_binomial <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_binomial <- function(x, times, ...){
-  as.integer(stats::rbinom(times, x[["n"]], x[["p"]]))
+  vctrs::vec_chop(
+    as.integer(stats::rbinom(sum(times), rep(x[["n"]], times), rep(x[["p"]], times))),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_binomial <- function(x, ...) {
-  n <- x[["n"]]
-  p <- x[["p"]]
   # Degenerate at 0 (p = 0) or n (p = 1)
-  lims <- if (isTRUE(p == 0)) c(0L, 0L) else if (isTRUE(p == 1)) c(n, n) else c(0L, n)
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(integer()),
-    list(lims),
-    list(c(TRUE, TRUE))
+    rep_len(list(integer()), n),
+    unname(Map(
+      function(size, p) if (is.na(p)) c(0L, size) else if (p == 0) c(0L, 0L) else if (p == 1) c(size, size) else c(0L, size),
+      x[["n"]], x[["p"]]
+    )),
+    rep_len(list(c(TRUE, TRUE)), n)
   )
 }
 

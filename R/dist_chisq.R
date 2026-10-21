@@ -171,16 +171,20 @@ cdf.dist_chisq <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_chisq <- function(x, times, ...){
-  stats::rchisq(times, x[["df"]], x[["ncp"]])
+  vctrs::vec_chop(
+    stats::rchisq(sum(times), rep(x[["df"]], times), rep(x[["ncp"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_chisq <- function(x, ...) {
   # The density at 0 is positive (or infinite) when df <= 2
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(isTRUE(x[["df"]] <= 2), FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    lapply(!is.na(x[["df"]]) & x[["df"]] <= 2, function(z) c(z, FALSE))
   )
 }
 

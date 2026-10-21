@@ -137,18 +137,23 @@ cdf.dist_bernoulli <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_bernoulli <- function(x, times, ...){
-  as.logical(stats::rbinom(times, 1, x[["p"]]))
+  vctrs::vec_chop(
+    as.logical(stats::rbinom(sum(times), 1, rep(x[["p"]], times))),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_bernoulli <- function(x, ...) {
-  p <- x[["p"]]
   # Degenerate at FALSE (p = 0) or TRUE (p = 1)
-  lims <- if (isTRUE(p == 0)) c(FALSE, FALSE) else if (isTRUE(p == 1)) c(TRUE, TRUE) else c(FALSE, TRUE)
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(logical()),
-    list(lims),
-    list(c(TRUE, TRUE))
+    rep_len(list(logical()), n),
+    unname(Map(
+      function(p) if (is.na(p)) c(FALSE, TRUE) else if (p == 0) c(FALSE, FALSE) else if (p == 1) c(TRUE, TRUE) else c(FALSE, TRUE),
+      x[["p"]]
+    )),
+    rep_len(list(c(TRUE, TRUE)), n)
   )
 }
 

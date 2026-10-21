@@ -107,15 +107,19 @@ cdf.dist_exponential <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_exponential <- function(x, times, ...){
-  stats::rexp(times, x[["rate"]])
+  vctrs::vec_chop(
+    stats::rexp(sum(times), rep(x[["rate"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_exponential <- function(x, ...) {
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(TRUE, FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    rep_len(list(c(TRUE, FALSE)), n)
   )
 }
 
@@ -130,7 +134,7 @@ covariance.dist_exponential <- function(x, ...){
 }
 
 #' @export
-skewness.dist_exponential <- function(x, ...) 2
+skewness.dist_exponential <- function(x, ...) rep_len(2, vctrs::vec_size(x))
 
 #' @export
-kurtosis.dist_exponential <- function(x, ...) 6
+kurtosis.dist_exponential <- function(x, ...) rep_len(6, vctrs::vec_size(x))

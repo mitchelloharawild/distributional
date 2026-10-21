@@ -124,16 +124,20 @@ cdf.dist_gamma <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_gamma <- function(x, times, ...){
-  stats::rgamma(times, x[["shape"]], x[["rate"]])
+  vctrs::vec_chop(
+    stats::rgamma(sum(times), rep(x[["shape"]], times), rep(x[["rate"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_gamma <- function(x, ...) {
   # The density at 0 is positive (or infinite) when shape <= 1
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, Inf)),
-    list(c(isTRUE(x[["shape"]] <= 1), FALSE))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, Inf)), n),
+    lapply(!is.na(x[["shape"]]) & x[["shape"]] <= 1, function(z) c(z, FALSE))
   )
 }
 

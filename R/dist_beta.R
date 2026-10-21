@@ -117,16 +117,24 @@ cdf.dist_beta <- function(x, q, ..., tail = "lower"){
 
 #' @export
 generate.dist_beta <- function(x, times, ...){
-  stats::rbeta(times, x[["shape1"]], x[["shape2"]])
+  vctrs::vec_chop(
+    stats::rbeta(sum(times), rep(x[["shape1"]], times), rep(x[["shape2"]], times)),
+    sizes = times
+  )
 }
 
 #' @export
 support.dist_beta <- function(x, ...) {
   # The density at 0 (1) is positive (or infinite) when shape1 (shape2) <= 1
+  n <- vctrs::vec_size(x)
   new_support_region(
-    list(numeric()),
-    list(c(0, 1)),
-    list(c(isTRUE(x[["shape1"]] <= 1), isTRUE(x[["shape2"]] <= 1)))
+    rep_len(list(numeric()), n),
+    rep_len(list(c(0, 1)), n),
+    unname(Map(
+      c,
+      !is.na(x[["shape1"]]) & x[["shape1"]] <= 1,
+      !is.na(x[["shape2"]]) & x[["shape2"]] <= 1
+    ))
   )
 }
 
@@ -146,7 +154,7 @@ covariance.dist_beta <- function(x, ...){
 skewness.dist_beta <- function(x, ...) {
   a <- x[["shape1"]]
   b <- x[["shape2"]]
-  2 * (b - a) * sqrt(a + b + 1) / (a + b + 2) * sqrt(a * b)
+  2 * (b - a) * sqrt(a + b + 1) / ((a + b + 2) * sqrt(a * b))
 }
 
 #' @export

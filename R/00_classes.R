@@ -51,7 +51,11 @@ vecvec_flatten_adj <- utils::getFromNamespace("vecvec_flatten_adj", "vecvec")
 #' `_dev/dist-port.md` for the families still to be ported.
 #'
 #' @noRd
-dist_ported_families <- c("dist_normal", "dist_poisson", "dist_na")
+dist_ported_families <- c(
+  "dist_normal", "dist_poisson", "dist_na",
+  "dist_bernoulli", "dist_beta", "dist_binomial", "dist_burr", "dist_chisq",
+  "dist_exponential", "dist_gamma"
+)
 
 is_ported_dist <- function(x) {
   class(x)[1L] %in% dist_ported_families
