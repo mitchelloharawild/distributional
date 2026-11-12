@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 set.seed(0)
 ```
 
-# distributional
+# distributional <a href="https://pkg.mitchelloharawild.com/distributional"><img src="man/figures/logo.svg" align="right" height="139" alt="distributional website" /></a>
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)

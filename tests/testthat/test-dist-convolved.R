@@ -106,6 +106,10 @@ test_that("dist_convolved: invalid arguments are rejected", {
 test_that("dist_convolved: family returns 'convolved'", {
   d <- dist_convolved(dist_gamma(2, 2), dist_gamma(2, 2))
   expect_equal(family(d), "convolved")
+  expect_equal(
+    family(d, recursive = TRUE),
+    list(list(family = "convolved", dist = list("gamma", "gamma")))
+  )
 })
 
 test_that("dist_convolved: transformed distribution + distribution works", {

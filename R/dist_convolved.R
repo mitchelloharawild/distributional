@@ -159,11 +159,6 @@ covariance.dist_convolved <- function(x, ...) {
 }
 
 #' @export
-family.dist_convolved <- function(object, ...) {
-  "convolved"
-}
-
-#' @export
 support.dist_convolved <- function(x, ...) {
   info <- convolve_support(x[["dist"]])
 

@@ -341,8 +341,29 @@ parameters.distribution <- function(x, recursive = FALSE, ...) {
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
+#' Some distributions (such as [dist_mixture()], [dist_convolved()],
+#' [dist_inflated()] and [dist_transformed()]) are defined in terms of one or
+#' more other distributions. By default, `family()` only identifies the
+#' outermost distribution. Setting `recursive = TRUE` will also identify the
+#' families of these embedded distributions, returning a nested list
+#' describing the full family tree of each distribution.
+#'
 #' @param object The distribution(s).
+#' @param recursive If `TRUE`, the families of any distributions embedded
+#' within `object` (such as the components of a [dist_mixture()], or the
+#' base distribution of a [dist_inflated()] or [dist_transformed()]) are
+#' also identified, and returned as a nested list instead of a flat
+#' character vector.
 #' @param ... Additional arguments used by methods.
+#'
+#' @return If `recursive = FALSE` (the default), a character vector giving
+#' the family name of each distribution. If `recursive = TRUE`, a list with
+#' one element per distribution: a distribution with no embedded
+#' distributions is represented by a character scalar (as before), while a
+#' distribution built from others is represented by a named list with a
+#' `family` element and one element per embedded distribution (containing
+#' its recursive `family()` result, or a list of such results if that
+#' element holds more than one embedded distribution).
 #'
 #' @examples
 #' dist <- c(
@@ -353,10 +374,23 @@ parameters.distribution <- function(x, recursive = FALSE, ...) {
 #'   )
 #' family(dist)
 #'
+#' # Distributions composed of other distributions (such as the mixture
+#' # below) only identify the outer family by default.
+#' mix_dist <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2),
+#'   weights = c(0.3, 0.7))
+#' family(mix_dist)
+#'
+#' # With recursive = TRUE, the families of the mixture's components are
+#' # also identified.
+#' family(mix_dist, recursive = TRUE)
+#'
 #' @importFrom stats family
 #' @export
-family.distribution <- function(object, ...) {
-  vapply(vec_data(object), family, character(1L))
+family.distribution <- function(object, recursive = FALSE, ...) {
+  if (!recursive) {
+    return(vapply(vec_data(object), family, character(1L)))
+  }
+  lapply(vec_data(object), family, recursive = TRUE)
 }
 
 #' Region of support of a distribution

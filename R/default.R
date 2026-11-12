@@ -70,8 +70,25 @@ parameters.dist_default <- function(x, ...) {
 }
 
 #' @export
-family.dist_default <- function(object, ...) {
-  substring(class(object)[1], first = 6)
+family.dist_default <- function(object, recursive = FALSE, ...) {
+  fam <- substring(class(object)[1], first = 6)
+  if (!recursive) return(fam)
+
+  # Identify fields which hold embedded distribution(s), and recurse into
+  # them: either a single distribution (e.g. dist_inflated()'s `dist`), or a
+  # list of distributions (e.g. dist_mixture()'s `dist`).
+  nested <- lapply(unclass(object), function(z) {
+    if (inherits(z, "dist_default")) {
+      family(z, recursive = TRUE)
+    } else if (is.list(z) && length(z) && all(vapply(z, inherits, logical(1L), "dist_default"))) {
+      unname(lapply(z, family, recursive = TRUE))
+    } else {
+      NULL
+    }
+  })
+  nested <- nested[!vapply(nested, is.null, logical(1L))]
+
+  if (!length(nested)) fam else c(list(family = fam), nested)
 }
 
 #' @export

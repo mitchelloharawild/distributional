@@ -46,6 +46,8 @@ In most cases, a scalar or vector is the natural choice - the same statistic is 
 A single point is evaluated for every distribution, giving one value each. The
 result is an atomic vector with the same length as the distributions:
 
+![A scalar argument is broadcast to every distribution.](diagrams/broadcast-scalar.svg){width=100%}
+
 ```{r}
 density(dist, 0)
 ```
@@ -55,6 +57,8 @@ density(dist, 0)
 A bare vector is a set of points, and every point is evaluated against every
 distribution. Two distributions and two points give all four values, as one
 element per distribution:
+
+![Each element of a vector argument is mapped onto every distribution.](diagrams/broadcast-vector.svg){width=100%}
 
 ```{r}
 density(dist, c(0, 1))
@@ -95,6 +99,8 @@ These are the two values on the diagonal of the mapped result above: the first
 distribution is evaluated only at `0`, the second only at `1`.
 
 The result is a data frame with one row per distribution and one column per list element. The list elements are recycled against the distributions, so a single value is used for every distribution:
+
+![Each element of a list argument is recycled and applied to its corresponding distribution by index position rather than mapped onto every distribution.](diagrams/broadcast-list.svg){width=100%}
 
 ```{r}
 cdf(dist, list(fixed = 0, varying = c(0, 1)))
