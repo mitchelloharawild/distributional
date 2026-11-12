@@ -1,5 +1,14 @@
 # distributional (development version)
 
+## Improvements
+
+* `density()` for `dist_mixture()` and `dist_multivariate_normal()` is now
+  vectorised over `at`, rather than evaluating each point separately. This is
+  much faster for many points, e.g. ~100x for a mixture of multivariate normals.
+
+* Added `log_density()` for `dist_mixture()`, computed with log-sum-exp, so
+  `density(log = TRUE)` no longer underflows to `-Inf` far into the tails.
+
 # distributional 0.9.0
 
 ## New features
