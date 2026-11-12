@@ -112,6 +112,7 @@ test_that("Mixture of multivariate distributions", {
         w4 * mvtnorm::dmvnorm(at, mean = mu4, sigma = sigma1))
     )
   )
+  expect_equal(density(dist, at, log = TRUE), lapply(density(dist, at), log))
   # Mixture equivalent to multivariate normal
   dist <- dist_multivariate_normal(mu = list(mu2), sigma = list(sigma2))
   mdist <- dist_mixture(dist, dist, weights = c(w1, w2))
@@ -219,4 +220,35 @@ test_that("Quantile mixture rejects multivariate distributions", {
     ),
     "univariate"
   )
+})
+
+test_that("Mixture log density is vectorised and avoids underflow", {
+  dist <- dist_mixture(dist_normal(0, 1), dist_normal(10, 4), weights = c(0.3, 0.7))
+  at <- c(-3, 0, 5, 20)
+  expect_equal(
+    density(dist, at, log = TRUE)[[1]],
+    log(0.3 * dnorm(at) + 0.7 * dnorm(at, 10, 4))
+  )
+  # Far into the tail the density underflows to zero, but the log density does not
+  expect_equal(density(dist, 1000)[[1]], 0)
+  expect_equal(
+    density(dist, 1000, log = TRUE)[[1]],
+    log(0.7) + dnorm(1000, 10, 4, log = TRUE)
+  )
+
+  skip_if_not_installed("mvtnorm")
+  sigma <- diag(2)
+  mdist <- dist_mixture(
+    dist_multivariate_normal(list(c(0, 0)), list(sigma)),
+    dist_multivariate_normal(list(c(3, 3)), list(sigma)),
+    weights = c(0.4, 0.6)
+  )
+  at <- rbind(c(0, 0), c(1, 2), c(100, -100))
+  expected <- log(
+    0.4 * mvtnorm::dmvnorm(at, c(0, 0), sigma) +
+      0.6 * mvtnorm::dmvnorm(at, c(3, 3), sigma)
+  )
+  ld <- density(mdist, at, log = TRUE)[[1]]
+  expect_equal(ld[1:2], expected[1:2])
+  expect_true(is.finite(ld[3]))
 })

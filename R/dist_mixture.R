@@ -231,6 +231,18 @@ density.dist_mixture <- function(x, at, ...) {
 }
 
 #' @export
+log_density.dist_mixture <- function(x, at, ...) {
+  # Log-sum-exp avoids underflow far into the tails
+  ld <- Map(
+    function(w, d) log(w) + d,
+    x[["w"]], lapply(x[["dist"]], log_density, at = at, ...)
+  )
+  m <- Reduce(pmax, ld)
+  m[!is.finite(m)] <- 0
+  unname(m + log(Reduce(`+`, lapply(ld, function(l) exp(l - m)))))
+}
+
+#' @export
 quantile.dist_mixture <- function(x, p, ...) {
   d <- dim(x)
   if (d > 1) {
