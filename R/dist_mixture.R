@@ -226,8 +226,8 @@ format.dist_mixture <- function(x, width = getOption("width"), ...) {
 
 #' @export
 density.dist_mixture <- function(x, at, ...) {
-  if (NROW(at) > 1) return(vapply(at, density, numeric(1L), x = x, ...))
-  sum(x[["w"]] * vapply(x[["dist"]], density, numeric(1L), at = at, ...))
+  dens <- lapply(x[["dist"]], density, at = at, ...)
+  unname(Reduce(`+`, Map(`*`, x[["w"]], dens)))
 }
 
 #' @export

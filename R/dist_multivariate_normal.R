@@ -98,14 +98,14 @@ format.dist_mvnorm <- function(x, digits = 2, ...){
 #' @export
 density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
   require_package("mvtnorm")
-  if(is.list(at)) return(vapply(at, density, numeric(1L), x = x, ...))
+  if(is.list(at)) at <- do.call(rbind, at)
   mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]])
 }
 
 #' @export
 log_density.dist_mvnorm <- function(x, at, ..., na.rm = FALSE){
   require_package("mvtnorm")
-  if(is.list(at)) return(vapply(at, log_density, numeric(1L), x = x, ...))
+  if(is.list(at)) at <- do.call(rbind, at)
   mvtnorm::dmvnorm(at, x[["mu"]], x[["sigma"]], log = TRUE)
 }
 
