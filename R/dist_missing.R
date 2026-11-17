@@ -113,12 +113,7 @@ generate.dist_na <- function(x, times, ...){
 
 #' @export
 support.dist_na <- function(x, ...) {
-  n <- vctrs::vec_size(x)
-  new_support_region(
-    rep_len(list(numeric()), n),
-    rep_len(list(c(NA_real_, NA_real_)), n),
-    rep_len(list(c(FALSE, FALSE)), n)
-  )
+  vctrs::vec_init(new_support_region(), vctrs::vec_size(x))
 }
 
 #' @export

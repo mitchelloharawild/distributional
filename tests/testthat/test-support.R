@@ -127,7 +127,11 @@ test_that("support of truncated, inflated and missing distributions", {
   expect_true(is.integer(field(s, "x")[[1]]))
   expect_true(is.double(field(s, "x")[[2]]))
 
-  s <- support(dist_missing())
-  expect_equal(field(s, "lim"), list(c(NA_real_, NA_real_)))
-  expect_true(is.double(field(s, "x")[[1]]))
+})
+
+test_that("missing distributions have a missing support", {
+  s <- support(c(dist_normal(), NA, dist_missing()))
+  expect_equal(is.na(s), c(FALSE, TRUE, TRUE))
+  expect_equal(format(s), c("R", NA, NA))
+  expect_equal(format(support(dist_missing())), NA_character_)
 })
