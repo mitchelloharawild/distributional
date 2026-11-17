@@ -24,6 +24,14 @@
   widened to include the inflation point, keeping integer support when
   inflating at an integer) and `dist_missing()`.
 
+## Breaking changes
+
+* Points (`at`, `q`) for multivariate distributions must now be a matrix with
+  one column for each variate (such as `cdf(x, cbind(4, 4))`), or a list of
+  such matrices. Bare vectors, deprecated in 0.9.0, are now an error, as is a
+  matrix with the wrong number of columns or points for distributions with
+  different numbers of variates.
+
 ## Bug fixes
 
 * The `skewness()` of `dist_beta()` now uses the correct formula.

@@ -301,11 +301,8 @@ all.equal.distribution <- function(target, current, ...) {
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
-  # Validated before log_density(), which is one call further from the user,
-  # so that the deprecation for vector `at` is reported in the user's frame
-  at <- validate_arg_dim(x, at, arg = "at")
   if(log) return(log_density(x, at, ...))
-  at <- broadcast_arg(at, arg = "at")
+  at <- broadcast_arg(validate_arg_dim(x, at, arg = "at"), arg = "at")
   broadcast_dist(x, density, at = at, ..., .ptype = double())
 }
 

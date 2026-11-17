@@ -170,7 +170,7 @@ test_that("Recycling rules and output for applying multiple inputs over multiple
   )
 })
 
-test_that("Vector inputs to multivariate distributions are deprecated (#159)", {
+test_that("Vector inputs to multivariate distributions are an error (#159)", {
   skip_if_not_installed("mvtnorm")
 
   # <dist> is a trivariate distribution vector of length 2.
@@ -179,18 +179,12 @@ test_that("Vector inputs to multivariate distributions are deprecated (#159)", {
     mu = list(c(1,2,3), c(4,5,6)), sigma = list(sigma, sigma*2)
   )
 
-  # A bare vector is a deprecated way to write points, and is interpreted as a
-  # matrix with one column for each variate - matching the equivalent matrix.
-  lifecycle::expect_deprecated(v1 <- density(dist, c(1, 2, 3)))
-  expect_equal(v1, density(dist, cbind(1, 2, 3)))
-  lifecycle::expect_deprecated(v2 <- density(dist, c(1, 2, 3, 4, 5, 6)))
-  expect_equal(v2, density(dist, matrix(c(1, 2, 3, 4, 5, 6), ncol = 3)))
-
-  # Lengths which don't fill whole points are an error.
-  expect_error(
-    suppressWarnings(density(dist, c(1, 2))),
-    "input of length 2 as points of a distribution with 3 variates"
-  )
+  # A bare vector is ambiguous about whether it is one point or several, so
+  # points must be a matrix with one column for each variate.
+  expect_error(density(dist, c(1, 2, 3)), "one column for each of the 3 variates")
+  expect_error(cdf(dist, c(1, 2, 3), log = TRUE), "one column for each of the 3 variates")
+  expect_error(density(dist, cbind(1, 2)), "one column for each of the 3 variates")
+  expect_error(density(dist, list(c(1, 2, 3))), "one column for each of the 3 variates")
 
   # Probabilities are not variate values, and so are unaffected.
   expect_no_condition(quantile(dist, 0.5, kind = "marginal"))
@@ -234,9 +228,6 @@ test_that("Vector inputs to generate()'s times are deprecated (#99)", {
 
 test_that("points of multivariate distributions are validated", {
   mv <- dist_multivariate_normal(list(c(0, 0)), list(diag(2)))
-  lifecycle::expect_deprecated(
-    expect_equal(density(mv, list(c(0, 0))), density(mv, list(cbind(0, 0))))
-  )
   expect_error(
     density(c(mv, dist_normal()), cbind(0, 0)),
     "different numbers of variates \\(1, 2\\)"
