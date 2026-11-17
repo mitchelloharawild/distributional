@@ -187,6 +187,12 @@ test_that("dist_paired() pairs its argument with the distributions", {
   )
 })
 
+test_that("c() casts non-distribution inputs", {
+  x <- c(dist_normal(), NA, 1)
+  expect_equal(mean(x), c(0, NA, 1))
+  expect_equal(density(x, 1), c(dnorm(1), NA, 1))
+})
+
 test_that("likelihood() pairs samples with distributions by position", {
   x <- c(dist_normal(), dist_poisson(2))
   expect_equal(likelihood(x, list(1, 2)), c(dnorm(1), dpois(2, 2)))

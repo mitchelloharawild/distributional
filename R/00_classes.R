@@ -38,3 +38,7 @@ class_distribution <- S7::new_class(
 # etc. are combined into one). Not exported by vecvec, so re-exposed here
 # under our own name rather than reaching into vecvec:::.
 vecvec_flatten_adj <- utils::getFromNamespace("vecvec_flatten_adj", "vecvec")
+
+# vecvec's c() method, which `c.distribution` calls after casting its inputs
+# (S7 can't look up a parent's method for an external generic like c())
+vecvec_c <- function(...) utils::getS3method("c", "vecvec::vecvec")(...)

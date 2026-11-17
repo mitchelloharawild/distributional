@@ -944,6 +944,15 @@ is.finite.distribution <- function(x) rep_len(TRUE, length(x))
 # vctrs integration
 # ------------------------------------------------------------------------
 
+# vecvec's c() stores other inputs as raw slots, so cast them to distributions
+# first (numbers become `dist_degenerate()`, `NA` a missing distribution).
+# Called as a function, because `S7::method(c, ...) <-` would also assign a
+# local `c` in the namespace, masking base::c() for the rest of the package.
+S7::`method<-`(c, class_distribution, value = function(..., recursive = FALSE) {
+  dots <- lapply(list2(...), vctrs::vec_cast, to = new_dist())
+  inject(vecvec_c(!!!dots))
+})
+
 vec_ptype2_distribution <- function(x, y, ...) new_dist()
 vec_cast_to_distribution <- function(x, to, ...) {
   if (is_distribution(x)) return(x)
