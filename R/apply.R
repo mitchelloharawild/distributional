@@ -27,9 +27,7 @@
 #'
 #' @noRd
 apply_dist <- function(x, .f, ...){
-  out <- apply_slots(x, .f, list2(...))
-  dn <- variates(x)
-  if (vec_is_list(out)) lapply(out, set_matrix_dimnames, dn = dn) else set_matrix_dimnames(out, dn)
+  set_variate_names(apply_slots(x, .f, list2(...)), variates(x))
 }
 
 #' @rdname apply_dist
@@ -44,7 +42,7 @@ broadcast_dist <- function(x, .f, ...){
     validate_recycling(x, arg)
     out <- lapply(arg, function(a) {
       args[[1L]] <- a
-      set_matrix_dimnames(apply_slots(x, .f, args, 1L), dn)
+      set_variate_names(apply_slots(x, .f, args, 1L), dn)
     })
     return(new_data_frame(out, n = length(x)))
   }
@@ -56,7 +54,7 @@ broadcast_dist <- function(x, .f, ...){
     m <- vec_size(arg)
     args[[1L]] <- vec_rep(arg, n)
     out <- apply_slots(x[rep(seq_len(n), each = m)], .f, args, 1L)
-    return(lapply(vec_chop(out, sizes = rep(m, n)), set_matrix_dimnames, dn = dn))
+    return(set_variate_names(vec_chop(out, sizes = rep(m, n)), dn))
   }
 
   # Scalars are broadcast
@@ -82,11 +80,17 @@ apply_slots <- function(x, .f, args, pos = NULL) {
   )
 }
 
-set_matrix_dimnames <- function(x, dn) {
-  if((is.matrix(x) || is.data.frame(x)) && !is.null(dn)){
-    # Set dimension names
-    colnames(x) <- dn
+# Name the columns of results with one column per variate (a matrix of points
+# or moments, or a data frame of intervals) after the variates of `x`. A list of
+# results (one per distribution) is named element by element. Results whose
+# columns are not the variates are left as they are.
+set_variate_names <- function(x, dn) {
+  if (is.null(dn)) return(x)
+  if (is.matrix(x) || is.data.frame(x)) {
+    if (ncol(x) == length(dn)) colnames(x) <- dn
+    return(x)
   }
+  if (vec_is_list(x)) x[] <- lapply(x, set_variate_names, dn = dn)
   x
 }
 

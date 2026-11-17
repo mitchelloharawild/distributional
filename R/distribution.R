@@ -437,17 +437,9 @@ generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
 
-  dn <- variates(x)
   out <- dist_paired(generate, x, times = times, ...)
   if (!length(out)) out <- list()
-
-  if (!is.null(dn)) {
-    out <- lapply(out, function(y) {
-      if (is.matrix(y)) colnames(y) <- dn
-      y
-    })
-  }
-  out
+  set_variate_names(out, variates(x))
 }
 
 #' The (log) likelihood of a sample matching a distribution
