@@ -51,7 +51,7 @@ Imports:
     lifecycle,
     pillar,
     S7,
-    vecvec
+    vecvec (>= 1.5.0)
 Suggests: 
     testthat (>= 2.1.0),
     covr,
@@ -74,4 +74,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
