@@ -186,3 +186,8 @@ test_that("dist_paired() pairs its argument with the distributions", {
     c(0, qpois(0.5, 3, lower.tail = FALSE), 1)
   )
 })
+
+test_that("integer probabilities and interval sizes are accepted", {
+  expect_equal(quantile(dist_normal(), 1L), Inf)
+  expect_equal(hilo(dist_normal(), 95L), hilo(dist_normal(), 95))
+})

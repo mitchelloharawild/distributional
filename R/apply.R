@@ -1,9 +1,17 @@
 #' Apply a statistic/probability-function generic across a distribution vector
 #'
 #' @description
-#' Implements the broadcasting rules of `vignette("broadcasting")` for the
-#' argument marked with `arg_listable()` (at most one); all other arguments are
-#' passed unchanged to every call.
+#' `.f` is called once per storage slot (or group of slots) by
+#' [vecvec::vecvec_mapply()], so every family's methods must be vectorised:
+#' `.f(x, ...)` receives the `n` distributions of one family and returns a
+#' result of size `n`. See `_dev/dist-port.md` for the full contract.
+#'
+#' `apply_dist()` passes every argument in `...` unchanged to every call.
+#'
+#' `broadcast_dist()` combines its first argument in `...` (such as `at`, `q`,
+#' `p` or `size`, normalised by `broadcast_arg()`) with the distributions using
+#' the rules of `vignette("broadcasting")`. Other arguments are passed
+#' unchanged.
 #'
 #' * Scalars are broadcast: the size 1 argument is passed to every call.
 #' * Vectors are mapped: the distributions are repeated once per point and the
@@ -13,33 +21,31 @@
 #' * Lists are recycled: each element is paired with the distributions by
 #'   position, giving one data frame column.
 #'
-#' `.f` is called once per storage slot (or group of slots) by
-#' [vecvec::vecvec_mapply()], so every family's methods must be vectorised:
-#' `.f(x, arg)` receives the `n` distributions of one family and an `arg` of
-#' size `n` or 1 (for multivariate distributions, a matrix with one row per
-#' distribution), paired by position, and returns a result of size `n`. See
-#' `_dev/dist-port.md` for the families still to be ported to this contract.
+#' In every case the family methods only receive the argument paired with the
+#' distributions by position: size `n` or 1 (for multivariate distributions, a
+#' matrix with one row per distribution).
 #'
 #' @noRd
 apply_dist <- function(x, .f, ...){
+  out <- apply_slots(x, .f, list2(...))
   dn <- variates(x)
-  args <- dots_list(...)
-  is_arg_listable <- vapply(args, inherits, FUN.VALUE = logical(1L), "arg_listable")
-  if (sum(is_arg_listable) > 1) abort("Only one distribution argument can be unpacked at a time.\nThis shouldn't happen, please report a bug at https://github.com/mitchelloharawild/distributional/issues/")
+  if (vec_is_list(out)) lapply(out, set_matrix_dimnames, dn = dn) else set_matrix_dimnames(out, dn)
+}
 
-  if (!any(is_arg_listable)) {
-    out <- apply_slots(x, .f, args)
-    return(if (vec_is_list(out)) lapply(out, set_matrix_dimnames, dn = dn) else set_matrix_dimnames(out, dn))
-  }
-
-  arg_pos <- which(is_arg_listable)
-  arg <- args[[arg_pos]]
-  oldClass(arg) <- setdiff(oldClass(arg), "arg_listable")
+#' @rdname apply_dist
+#' @noRd
+broadcast_dist <- function(x, .f, ...){
+  args <- list2(...)
+  arg <- args[[1L]]
+  dn <- variates(x)
 
   # Lists are recycled
   if (is_list_of(arg)) {
     validate_recycling(x, arg)
-    out <- lapply(arg, function(a) set_matrix_dimnames(apply_slots(x, .f, args, arg_pos, a), dn))
+    out <- lapply(arg, function(a) {
+      args[[1L]] <- a
+      set_matrix_dimnames(apply_slots(x, .f, args, 1L), dn)
+    })
     return(new_data_frame(out, n = length(x)))
   }
 
@@ -48,27 +54,26 @@ apply_dist <- function(x, .f, ...){
     n <- length(x)
     if (n == 0L) return(list())
     m <- vec_size(arg)
-    out <- apply_slots(x[rep(seq_len(n), each = m)], .f, args, arg_pos, vec_rep(arg, n))
+    args[[1L]] <- vec_rep(arg, n)
+    out <- apply_slots(x[rep(seq_len(n), each = m)], .f, args, 1L)
     return(lapply(vec_chop(out, sizes = rep(m, n)), set_matrix_dimnames, dn = dn))
   }
 
   # Scalars are broadcast
-  args[[arg_pos]] <- arg
-  out <- apply_slots(x, .f, args)
-  if (vec_is_list(out)) lapply(out, set_matrix_dimnames, dn = dn) else set_matrix_dimnames(out, dn)
+  apply_dist(x, .f, !!!args)
 }
 
 # Evaluate `.f` for every distribution in `x`, once per storage slot. With
-# `pos`, `args[[pos]]` is taken from `a`, which is paired with the
-# distributions by position (and recycled if it has size 1).
-apply_slots <- function(x, .f, args, pos = NULL, a = NULL) {
+# `pos`, `args[[pos]]` is paired with the distributions by position (and
+# recycled if it has size 1). Other arguments are passed unchanged.
+apply_slots <- function(x, .f, args, pos = NULL) {
   if (is.null(pos)) {
     return(vecvec::vecvec_mapply(
       list(x), function(vals) inject(.f(vals, !!!args)), SIMPLIFY = TRUE
     ))
   }
   vecvec::vecvec_mapply(
-    list(x, a),
+    list(x, args[[pos]]),
     function(vals, a) {
       args[[pos]] <- a
       inject(.f(vals, !!!args))
@@ -85,19 +90,19 @@ set_matrix_dimnames <- function(x, dn) {
   x
 }
 
-# Declare a function's argument as allowing list inputs for mapping values
-arg_listable <- function(x, .ptype) {
+# Normalise an argument for `broadcast_dist()`: lists become named `list_of`s
+# (recycled over the distributions), and vectors are cast to `.ptype`.
+# Matrices (the points of multivariate distributions) are left as they are.
+broadcast_arg <- function(x, .ptype = NULL, arg = "x") {
   if(is.list(x)) {
-    x <- as_list_of(as.list(x), .ptype)
+    x <- as_list_of(as.list(x), .ptype = .ptype)
     if(is.null(names(x))) {
-      names(x) <- vec_as_names(character(vec_size(x)), repair = "unique")
+      names(x) <- vec_as_names(character(vec_size(x)), repair = "unique", quiet = TRUE)
     }
-  } else if(!is.matrix(x)) {
-    vec_assert(x, .ptype)
+    return(x)
   }
-  # Declares list arguments to be unpacked for apply_dist()
-  class(x) <- c("arg_listable", oldClass(x))
-  x
+  if(is.null(.ptype) || is.matrix(x)) return(x)
+  vec_cast(x, .ptype, x_arg = arg)
 }
 
 # Values of a multivariate distribution's variates (`at`, `q`) should be given
@@ -105,7 +110,7 @@ arg_listable <- function(x, .ptype) {
 # whether it describes one point or several, so it is deprecated and for now
 # interpreted as a matrix with one column for each variate.
 validate_arg_dim <- function(x, value, arg) {
-  # Matrices already describe the points, lists are unpacked by apply_dist()
+  # Matrices already describe the points, lists are recycled by broadcast_dist()
   if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
 
   # Number of variates (dim() methods for distributions return a single number)
@@ -136,11 +141,12 @@ validate_arg_dim <- function(x, value, arg) {
 }
 
 validate_recycling <- function(x, arg) {
-  if(is_list_of(arg)) return(lapply(arg, validate_recycling, x = x))
-  if(!any(vec_size(arg) == c(1, vec_size(x)))) {
+  sizes <- if (vec_is_list(arg)) list_sizes(arg) else vec_size(arg)
+  bad <- !sizes %in% c(1L, vec_size(x))
+  if(any(bad)) {
     abort(
       sprintf("Cannot recycle input of size %i to match the distributions (size %i).",
-              vec_size(arg), vec_size(x)
+              sizes[bad][1L], vec_size(x)
       )
     )
   }

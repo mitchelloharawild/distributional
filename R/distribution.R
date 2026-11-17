@@ -128,7 +128,7 @@ dist_first_record <- function(x) dist_elem(x, 1L)
 # the inner family methods once per family with all of their distributions.
 dist_paired <- function(.f, x, ...) {
   args <- list2(...)
-  apply_slots(x, .f, args, 1L, args[[1L]])
+  apply_slots(x, .f, args, 1L)
 }
 
 # Combine a list of raw (family-level) records into a `distribution` vector -
@@ -299,10 +299,9 @@ all.equal.distribution <- function(target, current, ...) {
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
-  at <- validate_arg_dim(x, at, arg = "at")
   if(log) return(log_density(x, at, ...))
-  at <- arg_listable(at, .ptype = NULL)
-  apply_dist(x, density, at = at, ...)
+  at <- broadcast_arg(validate_arg_dim(x, at, arg = "at"), arg = "at")
+  broadcast_dist(x, density, at = at, ...)
 }
 
 log_density <- function(x, at, ...) {
@@ -310,9 +309,8 @@ log_density <- function(x, at, ...) {
 }
 #' @export
 log_density.distribution <- function(x, at, ...){
-  at <- validate_arg_dim(x, at, arg = "at")
-  at <- arg_listable(at, .ptype = NULL)
-  apply_dist(x, log_density, at = at, ...)
+  at <- broadcast_arg(validate_arg_dim(x, at, arg = "at"), arg = "at")
+  broadcast_dist(x, log_density, at = at, ...)
 }
 
 #' Distribution Quantiles
@@ -342,16 +340,16 @@ log_density.distribution <- function(x, at, ...){
 quantile.distribution <- function(x, p, ..., tail = c("lower", "upper"), log = FALSE){
   tail <- match.arg(tail)
   if(log) return(log_quantile(x, p, ..., tail = tail))
-  p <- arg_listable(p, .ptype = double())
-  apply_dist(x, quantile, p = p, ..., tail = tail)
+  p <- broadcast_arg(p, .ptype = double(), arg = "p")
+  broadcast_dist(x, quantile, p = p, ..., tail = tail)
 }
 log_quantile <- function(x, p, ...) {
   UseMethod("log_quantile")
 }
 #' @export
 log_quantile.distribution <- function(x, p, ...){
-  p <- arg_listable(p, .ptype = double())
-  apply_dist(x, log_quantile, p = p, ...)
+  p <- broadcast_arg(p, .ptype = double(), arg = "p")
+  broadcast_dist(x, log_quantile, p = p, ...)
 }
 
 #' The cumulative distribution function
@@ -391,18 +389,16 @@ cdf <- function (x, q, ..., tail = c("lower", "upper"), log = FALSE){
 #' @export
 cdf.distribution <- function(x, q, ..., tail = c("lower", "upper")){
   tail <- match.arg(tail)
-  q <- validate_arg_dim(x, q, arg = "q")
-  q <- arg_listable(q, .ptype = NULL)
-  apply_dist(x, cdf, q = q, ..., tail = tail)
+  q <- broadcast_arg(validate_arg_dim(x, q, arg = "q"), arg = "q")
+  broadcast_dist(x, cdf, q = q, ..., tail = tail)
 }
 log_cdf <- function(x, q, ...) {
   UseMethod("log_cdf")
 }
 #' @export
 log_cdf.distribution <- function(x, q, ...){
-  q <- validate_arg_dim(x, q, arg = "q")
-  q <- arg_listable(q, .ptype = NULL)
-  apply_dist(x, log_cdf, q = q, ...)
+  q <- broadcast_arg(validate_arg_dim(x, q, arg = "q"), arg = "q")
+  broadcast_dist(x, log_cdf, q = q, ...)
 }
 
 #' Randomly sample values from a distribution
@@ -849,8 +845,8 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 #' @importFrom stats median
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
-  size <- arg_listable(size, .ptype = double())
-  apply_dist(x, hilo, size = size, ...)
+  size <- broadcast_arg(size, .ptype = double(), arg = "size")
+  broadcast_dist(x, hilo, size = size, ...)
 }
 
 #' Highest density regions of probability distributions
@@ -871,8 +867,8 @@ hilo.distribution <- function(x, size = 95, ...){
 #'
 #' @export
 hdr.distribution <- function(x, size = 95, n = 512, ...){
-  size <- arg_listable(size, .ptype = double())
-  apply_dist(x, hdr, size = size, n = n, ...)
+  size <- broadcast_arg(size, .ptype = double(), arg = "size")
+  broadcast_dist(x, hdr, size = size, n = n, ...)
 }
 
 #' @export
