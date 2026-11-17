@@ -8,6 +8,10 @@
 #'
 #' `apply_dist()` passes every argument in `...` unchanged to every call.
 #'
+#' `.ptype` is the type of the result for each distribution, which is used when
+#' there are no distributions to compute (`x` is empty or all missing), so that
+#' the result still has the type the generic usually returns.
+#'
 #' `broadcast_dist()` combines its first argument in `...` (such as `at`, `q`,
 #' `p` or `size`, normalised by `broadcast_arg()`) with the distributions using
 #' the rules of `vignette("broadcasting")`. Other arguments are passed
@@ -26,13 +30,13 @@
 #' matrix with one row per distribution).
 #'
 #' @noRd
-apply_dist <- function(x, .f, ...){
-  set_variate_names(apply_slots(x, .f, list2(...)), variates(x))
+apply_dist <- function(x, .f, ..., .ptype){
+  set_variate_names(apply_slots(x, .f, list2(...), .ptype = .ptype), variates(x))
 }
 
 #' @rdname apply_dist
 #' @noRd
-broadcast_dist <- function(x, .f, ...){
+broadcast_dist <- function(x, .f, ..., .ptype){
   args <- list2(...)
   arg <- args[[1L]]
   dn <- variates(x)
@@ -42,7 +46,7 @@ broadcast_dist <- function(x, .f, ...){
     validate_recycling(x, arg)
     out <- lapply(arg, function(a) {
       args[[1L]] <- a
-      set_variate_names(apply_slots(x, .f, args, 1L), dn)
+      set_variate_names(apply_slots(x, .f, args, 1L, .ptype), dn)
     })
     return(new_data_frame(out, n = length(x)))
   }
@@ -53,31 +57,27 @@ broadcast_dist <- function(x, .f, ...){
     if (n == 0L) return(list())
     m <- vec_size(arg)
     args[[1L]] <- vec_rep(arg, n)
-    out <- apply_slots(x[rep(seq_len(n), each = m)], .f, args, 1L)
+    out <- apply_slots(x[rep(seq_len(n), each = m)], .f, args, 1L, .ptype)
     return(set_variate_names(vec_chop(out, sizes = rep(m, n)), dn))
   }
 
   # Scalars are broadcast
-  apply_dist(x, .f, !!!args)
+  apply_dist(x, .f, !!!args, .ptype = .ptype)
 }
 
 # Evaluate `.f` for every distribution in `x`, once per storage slot. With
 # `pos`, `args[[pos]]` is paired with the distributions by position (and
-# recycled if it has size 1). Other arguments are passed unchanged.
-apply_slots <- function(x, .f, args, pos = NULL) {
-  if (is.null(pos)) {
-    return(vecvec::vecvec_mapply(
-      list(x), function(vals) inject(.f(vals, !!!args)), SIMPLIFY = TRUE
-    ))
-  }
-  vecvec::vecvec_mapply(
-    list(x, args[[pos]]),
-    function(vals, a) {
-      args[[pos]] <- a
-      inject(.f(vals, !!!args))
-    },
-    SIMPLIFY = TRUE
-  )
+# recycled if it has size 1). Other arguments are passed unchanged. When there
+# is nothing to compute (`x` is empty or all missing), the result is
+# `vec_init(.ptype, length(x))`.
+apply_slots <- function(x, .f, args, pos = NULL, .ptype = NULL) {
+  .l <- if (is.null(pos)) list(x) else list(x, args[[pos]])
+  out <- vecvec::vecvec_mapply(.l, function(vals, a) {
+    if (!missing(a)) args[[pos]] <- a
+    inject(.f(vals, !!!args))
+  })
+  if (!length(out@x) && !is.null(.ptype)) return(vec_init(.ptype, length(x)))
+  vecvec::unvecvec(out)
 }
 
 # Name the columns of results with one column per variate (a matrix of points

@@ -205,3 +205,23 @@ test_that("integer probabilities and interval sizes are accepted", {
   expect_equal(quantile(dist_normal(), 1L), Inf)
   expect_equal(hilo(dist_normal(), 95L), hilo(dist_normal(), 95))
 })
+
+test_that("empty and missing distributions give results of the usual type", {
+  x <- c(dist_normal(), dist_poisson(2))
+  for (d in list(x[0], x[c(NA, NA)])) {
+    n <- length(d)
+    expect_identical(density(d, 1), rep(NA_real_, n))
+    expect_identical(cdf(d, 1), rep(NA_real_, n))
+    expect_identical(quantile(d, 0.5), rep(NA_real_, n))
+    expect_identical(mean(d), rep(NA_real_, n))
+    expect_identical(has_symmetry(d), rep(NA, n))
+    expect_identical(format(d), rep(NA_character_, n))
+    expect_identical(likelihood(d, list(1)), rep(NA_real_, n))
+    expect_identical(generate(d, 1), vector("list", n))
+    expect_identical(covariance(d), vector("list", n))
+    expect_s3_class(hilo(d), "hilo")
+    expect_s3_class(support(d), "support_region")
+    expect_type(density(d, 1:2), "list")
+  }
+  expect_identical(density(x[0], list(a = 1)), data.frame(a = double()))
+})

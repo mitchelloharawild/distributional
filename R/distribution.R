@@ -121,14 +121,16 @@ dist_first_record <- function(x) dist_elem(x, 1L)
 # position, as the family methods receive their own broadcast argument. Other
 # arguments in `...` are passed unchanged. The argument has size `vec_size(x)`
 # or 1. Unlike `cdf(x, q)`, which would map a size-`n` `q` over all `n`
-# distributions, this gives one result for each distribution.
+# distributions, this gives one result for each distribution. `.ptype` is the
+# result type used when there are no distributions to compute (see
+# `apply_slots()`).
 #
 # Nested families (truncated, inflated, ...) store their inner distributions as
 # a `distribution` vector field, so `dist_paired(cdf, x[["dist"]], q = q)` calls
 # the inner family methods once per family with all of their distributions.
-dist_paired <- function(.f, x, ...) {
+dist_paired <- function(.f, x, ..., .ptype = NULL) {
   args <- list2(...)
-  apply_slots(x, .f, args, 1L)
+  apply_slots(x, .f, args, 1L, .ptype)
 }
 
 # Combine a list of raw (family-level) records into a `distribution` vector -
@@ -156,7 +158,7 @@ vec_ptype_abbr_distribution <- function(x, ...){
 # where `format()` was always just per-element character formatting.
 #' @export
 format.distribution <- function(x, ...) {
-  apply_dist(x, format, ...) %||% character()
+  apply_dist(x, format, ..., .ptype = character())
 }
 vec_ptype_full_distribution <- function(x, ...){
   "distribution"
@@ -301,7 +303,7 @@ all.equal.distribution <- function(target, current, ...) {
 density.distribution <- function(x, at, ..., log = FALSE){
   if(log) return(log_density(x, at, ...))
   at <- broadcast_arg(validate_arg_dim(x, at, arg = "at"), arg = "at")
-  broadcast_dist(x, density, at = at, ...)
+  broadcast_dist(x, density, at = at, ..., .ptype = double())
 }
 
 log_density <- function(x, at, ...) {
@@ -310,7 +312,7 @@ log_density <- function(x, at, ...) {
 #' @export
 log_density.distribution <- function(x, at, ...){
   at <- broadcast_arg(validate_arg_dim(x, at, arg = "at"), arg = "at")
-  broadcast_dist(x, log_density, at = at, ...)
+  broadcast_dist(x, log_density, at = at, ..., .ptype = double())
 }
 
 #' Distribution Quantiles
@@ -341,7 +343,7 @@ quantile.distribution <- function(x, p, ..., tail = c("lower", "upper"), log = F
   tail <- match.arg(tail)
   if(log) return(log_quantile(x, p, ..., tail = tail))
   p <- broadcast_arg(p, .ptype = double(), arg = "p")
-  broadcast_dist(x, quantile, p = p, ..., tail = tail)
+  broadcast_dist(x, quantile, p = p, ..., tail = tail, .ptype = double())
 }
 log_quantile <- function(x, p, ...) {
   UseMethod("log_quantile")
@@ -349,7 +351,7 @@ log_quantile <- function(x, p, ...) {
 #' @export
 log_quantile.distribution <- function(x, p, ...){
   p <- broadcast_arg(p, .ptype = double(), arg = "p")
-  broadcast_dist(x, log_quantile, p = p, ...)
+  broadcast_dist(x, log_quantile, p = p, ..., .ptype = double())
 }
 
 #' The cumulative distribution function
@@ -390,7 +392,7 @@ cdf <- function (x, q, ..., tail = c("lower", "upper"), log = FALSE){
 cdf.distribution <- function(x, q, ..., tail = c("lower", "upper")){
   tail <- match.arg(tail)
   q <- broadcast_arg(validate_arg_dim(x, q, arg = "q"), arg = "q")
-  broadcast_dist(x, cdf, q = q, ..., tail = tail)
+  broadcast_dist(x, cdf, q = q, ..., tail = tail, .ptype = double())
 }
 log_cdf <- function(x, q, ...) {
   UseMethod("log_cdf")
@@ -398,7 +400,7 @@ log_cdf <- function(x, q, ...) {
 #' @export
 log_cdf.distribution <- function(x, q, ...){
   q <- broadcast_arg(validate_arg_dim(x, q, arg = "q"), arg = "q")
-  broadcast_dist(x, log_cdf, q = q, ...)
+  broadcast_dist(x, log_cdf, q = q, ..., .ptype = double())
 }
 
 #' Randomly sample values from a distribution
@@ -437,8 +439,7 @@ generate.distribution <- function(x, times, ...){
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
 
-  out <- dist_paired(generate, x, times = times, ...)
-  if (!length(out)) out <- list()
+  out <- dist_paired(generate, x, times = times, ..., .ptype = list())
   set_variate_names(out, variates(x))
 }
 
@@ -471,7 +472,7 @@ The same sample will be used for each distribution, i.e. `sample = list(sample)`
   if(log) return(log_likelihood(x, sample, ...))
   # Each sample is paired with a distribution by position (or recycled)
   sample <- vec_recycle(sample, length(x), x_arg = "sample")
-  dist_paired(likelihood, x, sample = sample, ...)
+  dist_paired(likelihood, x, sample = sample, ..., .ptype = double())
 }
 
 #' @rdname likelihood
@@ -482,7 +483,7 @@ log_likelihood <- function(x, ...) {
 #' @export
 log_likelihood.distribution <- function(x, sample, ...){
   sample <- vec_recycle(sample, length(x), x_arg = "sample")
-  dist_paired(log_likelihood, x, sample = sample, ...)
+  dist_paired(log_likelihood, x, sample = sample, ..., .ptype = double())
 }
 
 #' Extract the parameters of a distribution
@@ -646,7 +647,7 @@ support <- function(x, ...) {
 #' @rdname support
 #' @export
 support.distribution <- function(x, ...) {
-  apply_dist(x, support, ...)
+  apply_dist(x, support, ..., .ptype = new_support_region())
 }
 
 #' Mean of a probability distribution
@@ -662,7 +663,7 @@ support.distribution <- function(x, ...) {
 #'
 #' @export
 mean.distribution <- function(x, ...){
-  apply_dist(x, mean, ...)
+  apply_dist(x, mean, ..., .ptype = double())
 }
 
 #' Variance
@@ -720,7 +721,7 @@ variance.matrix <- function(x, ...){
 #'
 #' @export
 variance.distribution <- function(x, ...){
-  apply_dist(x, variance, ...)
+  apply_dist(x, variance, ..., .ptype = double())
 }
 
 #' Covariance
@@ -764,7 +765,7 @@ covariance.numeric <- function(x, ...){
 #'
 #' @export
 covariance.distribution <- function(x, ...){
-  apply_dist(x, covariance, ...)
+  apply_dist(x, covariance, ..., .ptype = list())
 }
 
 #' Skewness of a probability distribution
@@ -782,7 +783,7 @@ skewness <- function(x, ...) {
 #' @rdname skewness
 #' @export
 skewness.distribution <- function(x, ...){
-  apply_dist(x, skewness, ...)
+  apply_dist(x, skewness, ..., .ptype = double())
 }
 
 #' Kurtosis of a probability distribution
@@ -800,7 +801,7 @@ kurtosis <- function(x, ...) {
 #' @rdname kurtosis
 #' @export
 kurtosis.distribution <- function(x, ...){
-  apply_dist(x, kurtosis, ...)
+  apply_dist(x, kurtosis, ..., .ptype = double())
 }
 
 #' Median of a probability distribution
@@ -818,7 +819,7 @@ kurtosis.distribution <- function(x, ...){
 #' @importFrom stats median
 #' @export
 median.distribution <- function(x, na.rm = FALSE, ...){
-  apply_dist(x, median, na.rm = na.rm, ...)
+  apply_dist(x, median, na.rm = na.rm, ..., .ptype = double())
 }
 
 #' Probability intervals of a probability distribution
@@ -840,7 +841,7 @@ median.distribution <- function(x, na.rm = FALSE, ...){
 #' @export
 hilo.distribution <- function(x, size = 95, ...){
   size <- broadcast_arg(size, .ptype = double(), arg = "size")
-  broadcast_dist(x, hilo, size = size, ...)
+  broadcast_dist(x, hilo, size = size, ..., .ptype = new_hilo())
 }
 
 #' Highest density regions of probability distributions
@@ -862,7 +863,7 @@ hilo.distribution <- function(x, size = 95, ...){
 #' @export
 hdr.distribution <- function(x, size = 95, n = 512, ...){
   size <- broadcast_arg(size, .ptype = double(), arg = "size")
-  broadcast_dist(x, hdr, size = size, n = n, ...)
+  broadcast_dist(x, hdr, size = size, n = n, ..., .ptype = new_hdr())
 }
 
 #' @export
@@ -1003,5 +1004,5 @@ has_symmetry <- function(x, ...) {
 
 #' @export
 has_symmetry.distribution <- function(x, ...) {
-  apply_dist(x, has_symmetry, ...)
+  apply_dist(x, has_symmetry, ..., .ptype = logical())
 }
