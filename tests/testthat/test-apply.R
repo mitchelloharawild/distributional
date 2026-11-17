@@ -234,6 +234,9 @@ test_that("Vector inputs to generate()'s times are deprecated (#99)", {
 
 test_that("points of multivariate distributions are validated", {
   mv <- dist_multivariate_normal(list(c(0, 0)), list(diag(2)))
+  lifecycle::expect_deprecated(
+    expect_equal(density(mv, list(c(0, 0))), density(mv, list(cbind(0, 0))))
+  )
   expect_error(
     density(c(mv, dist_normal()), cbind(0, 0)),
     "different numbers of variates \\(1, 2\\)"

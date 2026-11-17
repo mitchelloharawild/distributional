@@ -112,14 +112,16 @@ broadcast_arg <- function(x, .ptype = NULL, arg = "x") {
 # Values of a multivariate distribution's variates (`at`, `q`) should be given
 # as a matrix with one column for each variate. A bare vector is ambiguous about
 # whether it describes one point or several, so it is deprecated and for now
-# interpreted as a matrix with one column for each variate.
+# interpreted as a matrix with one column for each variate. The elements of a
+# list (recycled by broadcast_dist()) are interpreted in the same way.
 validate_arg_dim <- function(x, value, arg) {
-  # Matrices already describe the points, lists are recycled by broadcast_dist()
-  if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
-
   d <- n_variates(x, arg)
   # Vectors are unambiguous for univariate distributions (they are many points)
   if(d == 1L) return(value)
+
+  pts <- if(is.list(value)) value else list(value)
+  is_vec <- vapply(pts, function(p) !is.matrix(p) && !is_empty(p), logical(1L))
+  if(!any(is_vec)) return(value)
 
   lifecycle::deprecate_soft(
     when = "0.9.0",
@@ -134,13 +136,21 @@ validate_arg_dim <- function(x, value, arg) {
     user_env = caller_env(2)
   )
 
-  if(length(value) != 1L && length(value) %% d != 0L) {
-    abort(sprintf(
-      "Cannot use an input of length %i as points of a distribution with %i variates.",
-      length(value), d
-    ))
+  pts[is_vec] <- lapply(pts[is_vec], function(p) {
+    if(length(p) != 1L && length(p) %% d != 0L) {
+      abort(sprintf(
+        "Cannot use an input of length %i as points of a distribution with %i variates.",
+        length(p), d
+      ))
+    }
+    matrix(p, ncol = d)
+  })
+  if(is.list(value)) {
+    value[] <- pts
+    value
+  } else {
+    pts[[1L]]
   }
-  matrix(value, ncol = d)
 }
 
 # The number of variates of the distributions in `x` (1 if there are none).
