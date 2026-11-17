@@ -1,6 +1,13 @@
 url: https://pkg.mitchelloharawild.com/distributional
 
 template:
+  opengraph:
+    image:
+      src: pkgdown/social-card.png
+      alt: "The distributional hex sticker"
+    twitter:
+      creator: "@mitchoharawild"
+      card: summary
   params:
     bootswatch: cosmo
   includes:
