@@ -187,6 +187,14 @@ test_that("dist_paired() pairs its argument with the distributions", {
   )
 })
 
+test_that("likelihood() pairs samples with distributions by position", {
+  x <- c(dist_normal(), dist_poisson(2))
+  expect_equal(likelihood(x, list(1, 2)), c(dnorm(1), dpois(2, 2)))
+  expect_equal(likelihood(x, list(c(1, 2))), c(dnorm(1) * dnorm(2), dpois(1, 2) * dpois(2, 2)))
+  expect_equal(likelihood(x, list(1, 2), log = TRUE), c(dnorm(1, log = TRUE), dpois(2, 2, log = TRUE)))
+  expect_error(likelihood(x, list(1, 2, 3)), "recycle")
+})
+
 test_that("integer probabilities and interval sizes are accepted", {
   expect_equal(quantile(dist_normal(), 1L), Inf)
   expect_equal(hilo(dist_normal(), 95L), hilo(dist_normal(), 95))

@@ -86,24 +86,19 @@ generate.dist_default <- function(x, times, ...){
   })
 }
 
+# `sample` is a list of samples paired with the distributions by position
 #' @export
 likelihood.dist_default <- function(x, sample, ...){
-  if (vctrs::vec_size(x) != 1L) {
-    return(vapply(vctrs::vec_seq_along(x), function(i) {
-      likelihood(vctrs::vec_slice(x, i), sample, ...)
-    }, numeric(1L)))
-  }
-  prod(vapply(sample, density, numeric(1L), x = x))
+  vapply(vctrs::vec_seq_along(x), function(i) {
+    prod(vapply(sample[[i]], density, numeric(1L), x = vctrs::vec_slice(x, i)))
+  }, numeric(1L))
 }
 
 #' @export
 log_likelihood.dist_default <- function(x, sample, ...){
-  if (vctrs::vec_size(x) != 1L) {
-    return(vapply(vctrs::vec_seq_along(x), function(i) {
-      log_likelihood(vctrs::vec_slice(x, i), sample, ...)
-    }, numeric(1L)))
-  }
-  sum(vapply(sample, log_density, numeric(1L), x = x))
+  vapply(vctrs::vec_seq_along(x), function(i) {
+    sum(vapply(sample[[i]], log_density, numeric(1L), x = vctrs::vec_slice(x, i)))
+  }, numeric(1L))
 }
 
 #' @export

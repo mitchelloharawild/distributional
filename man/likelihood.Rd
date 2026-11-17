@@ -17,7 +17,9 @@ log_likelihood(x, ...)
 
 \item{...}{Additional arguments used by methods.}
 
-\item{sample}{A list of sampled values to compare to distribution(s).}
+\item{sample}{A list of samples to compare to the distribution(s), recycled
+against the distributions (length 1 or \code{length(x)}) so that each sample is
+compared with its distribution by position.}
 
 \item{log}{If \code{TRUE}, the log-likelihood will be computed.}
 }

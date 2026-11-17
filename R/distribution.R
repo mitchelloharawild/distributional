@@ -465,7 +465,9 @@ likelihood <- function (x, ...){
 }
 
 #' @rdname likelihood
-#' @param sample A list of sampled values to compare to distribution(s).
+#' @param sample A list of samples to compare to the distribution(s), recycled
+#' against the distributions (length 1 or `length(x)`) so that each sample is
+#' compared with its distribution by position.
 #' @param log If `TRUE`, the log-likelihood will be computed.
 #' @export
 likelihood.distribution <- function(x, sample, ..., log = FALSE){
@@ -474,11 +476,10 @@ likelihood.distribution <- function(x, sample, ..., log = FALSE){
 The same sample will be used for each distribution, i.e. `sample = list(sample)`.")
     sample <- list(sample)
   }
-  if(log){
-    apply_dist(x, log_likelihood, sample = sample, ...)
-  } else {
-    apply_dist(x, likelihood, sample = sample, ...)
-  }
+  if(log) return(log_likelihood(x, sample, ...))
+  # Each sample is paired with a distribution by position (or recycled)
+  sample <- vec_recycle(sample, length(x), x_arg = "sample")
+  dist_paired(likelihood, x, sample = sample, ...)
 }
 
 #' @rdname likelihood
@@ -488,7 +489,8 @@ log_likelihood <- function(x, ...) {
 }
 #' @export
 log_likelihood.distribution <- function(x, sample, ...){
-  apply_dist(x, log_likelihood, sample = sample, ...)
+  sample <- vec_recycle(sample, length(x), x_arg = "sample")
+  dist_paired(log_likelihood, x, sample = sample, ...)
 }
 
 #' Extract the parameters of a distribution
