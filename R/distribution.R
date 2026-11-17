@@ -882,10 +882,8 @@ sum.distribution <- function(x, ...){
 # Ops / Math (container level)
 # ------------------------------------------------------------------------
 # Arithmetic dispatches element-by-element to the family-level `Ops.dist_*`/
-# `Math.dist_*` methods (unchanged from before the migration), which is what
-# lets the ~50 existing family implementations keep working unmodified.
-# Vectorising this loop per storage slot (as `apply_dist()` does for the
-# stats generics) is a follow-up - see `_dev/vecvec.md` status notes.
+# `Math.dist_*` methods. Unlike the stats generics (`apply_dist()`), these are
+# not yet vectorised per storage slot.
 
 #' @export
 Ops.distribution <- function(e1, e2) {
@@ -898,8 +896,8 @@ Ops.distribution <- function(e1, e2) {
   dist_e1 <- is_distribution(e1)
   dist_e2 <- is_distribution(e2)
   n <- max(length(e1), length(e2))
-  if (dist_e1) e1 <- vctrs::vec_recycle(e1, n) else e1 <- vctrs::vec_recycle(e1, n)
-  if (dist_e2) e2 <- vctrs::vec_recycle(e2, n) else e2 <- vctrs::vec_recycle(e2, n)
+  e1 <- vctrs::vec_recycle(e1, n)
+  e2 <- vctrs::vec_recycle(e2, n)
 
   is_bool <- switch(.Generic, `<` = , `>` = , `==` = , `!=` = , `<=` = , `>=` = TRUE, FALSE)
 
