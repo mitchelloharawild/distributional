@@ -117,8 +117,7 @@ validate_arg_dim <- function(x, value, arg) {
   # Matrices already describe the points, lists are recycled by broadcast_dist()
   if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
 
-  # Number of variates (dim() methods for distributions return a single number)
-  d <- if (length(x@x)) (dim(x@x[[1L]][1]) %||% 1L) else 1L
+  d <- n_variates(x, arg)
   # Vectors are unambiguous for univariate distributions (they are many points)
   if(d == 1L) return(value)
 
@@ -142,6 +141,23 @@ validate_arg_dim <- function(x, value, arg) {
     ))
   }
   matrix(value, ncol = d)
+}
+
+# The number of variates of the distributions in `x` (1 if there are none).
+# Points can only describe distributions with the same number of variates, so
+# a vector mixing numbers of variates is an error. Missing distributions have
+# no variates, so they are ignored.
+n_variates <- function(x, arg) {
+  slots <- Filter(function(s) !inherits(s, "dist_na"), x@x)
+  # dim() methods for distributions return a single number
+  d <- unique(vapply(slots, function(s) as.integer(dim(s[1L]) %||% 1L), integer(1L)))
+  if(length(d) > 1L) {
+    abort(sprintf(
+      "Can't use `%s` with distributions that have different numbers of variates (%s).",
+      arg, paste(sort(d), collapse = ", ")
+    ))
+  }
+  if(length(d)) d else 1L
 }
 
 validate_recycling <- function(x, arg) {
