@@ -287,6 +287,6 @@ svg <- paste0(
   sprintf('<g clip-path="url(#clip-rising)">%s</g>', paste(body, collapse = "")),
   sprintf('<polygon points="%s" fill="none" stroke="%s" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" opacity=".5"/>',
           pts(hx_in$x, hx_in$y), pal$ink),
-  sprintf('<polygon points="%s" fill="none" stroke="%s" stroke-width="12" stroke-linejoin="round"/></svg>', pts(hx$x, hx$y), pal$ink)
+  sprintf('<polygon points="%s" fill="none" stroke="%s" stroke-width="12" stroke-linejoin="miter"/></svg>', pts(hx$x, hx$y), pal$ink)
 )
 writeLines(svg, out_file)
