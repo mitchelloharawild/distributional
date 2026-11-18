@@ -140,6 +140,12 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   it was -1.
 * `hdr()` of a transformed distribution (such as `hdr(2 * dist_poisson(3))`)
   no longer errors with "Can't recycle input of size 512 to size 1".
+* `support()` of a transformed discrete distribution no longer claims to be on
+  the integers when the transformation doesn't map integers to integers, so
+  `support(0.1 * dist_poisson(3))` is now `[0,Inf)` rather than `N0`. This
+  also corrects truncating such distributions, which treated their bounds as
+  integers. Integer support unbounded below now prints as `{...,-1,0}`, where
+  `-dist_poisson(3)` printed as `{-Inf,-Inf,...,0}`.
 
 ## Other changes
 

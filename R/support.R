@@ -35,6 +35,7 @@ format.support_region <- function(x, digits = 3, ...) {
     else if (type == "Z") {
       if (identical(z, c(0L, Inf))) "N0"
       else if (identical(z, c(1L, Inf))) "N+"
+      else if (is.infinite(z[1])) paste0("{...,", z[2]-1L, ",", z[2], "}")
       else paste0("{", z[1], ",", z[1]+1L, ",...,", z[2], "}")
     }
     else if (type == "R") paste0(br1, fz[1], ",", fz[2], br2, suffix)

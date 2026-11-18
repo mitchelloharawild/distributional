@@ -334,9 +334,11 @@ test_that("dist_convolved: support is derived from the components", {
   expect_equal(field(support(e), "lim")[[1]], c(0, Inf))
 })
 
-test_that("dist_convolved: lattice components off the integer lattice warn", {
+test_that("dist_convolved: lattice components off the integer lattice are approximated", {
+  # The support of 0.5 * Pois(1) isn't on the integers, so the sum is
+  # convolved on a grid (without first trying the integer lattice)
   d <- dist_convolved(0.5 * dist_poisson(1), dist_poisson(1))
-  expect_warning(p <- cdf(d, 1.75), "integer lattice")
+  expect_no_warning(p <- cdf(d, 1.75))
   # Approximated on the grid, so accurate away from the atoms
   expect_equal(
     p,

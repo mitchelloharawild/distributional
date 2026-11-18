@@ -46,7 +46,11 @@ single stored \code{inverse} and return \code{NA} with a warning.
 
 \strong{Support}: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}. When
 \eqn{g} cannot be verified to be monotonic over the whole support, the
-support limits are reported as unknown (\code{NA}).
+support limits are reported as unknown (\code{NA}). The support of a
+transformed discrete distribution is on the integers only when \eqn{g}
+maps the integers of its support to integers (such as
+\code{-dist_poisson(3)}), and is otherwise reported as an interval of the
+real numbers (such as \code{0.1 * dist_poisson(3)}).
 
 \strong{Mean}: Approximated numerically using a second-order Taylor expansion:
 

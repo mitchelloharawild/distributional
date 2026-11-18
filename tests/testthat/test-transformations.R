@@ -443,3 +443,37 @@ test_that("hdr() of transformed distributions", {
   expect_length(x, 3)
   expect_equal(vctrs::field(x, "upper")[[3]], qnorm(0.975))
 })
+
+test_that("support() of transformed discrete distributions", {
+  sup <- function(x) list(
+    x = vctrs::field(support(x), "x")[[1]],
+    lim = vctrs::field(support(x), "lim")[[1]],
+    closed = vctrs::field(support(x), "closed")[[1]]
+  )
+  # Integers are mapped to integers
+  expect_equal(sup(-dist_poisson(3)), list(x = integer(), lim = c(-Inf, 0), closed = c(FALSE, TRUE)))
+  expect_equal(format(support(-dist_poisson(3))), "{...,-1,0}")
+  expect_equal(sup(-dist_binomial(4, 0.5)), list(x = integer(), lim = c(-4, 0), closed = c(TRUE, TRUE)))
+  expect_equal(sup(2 * dist_poisson(3))$x, integer())
+  expect_equal(sup(dist_poisson(3)^2)$x, integer())
+  expect_equal(sup(dist_geometric(0.3) - 5), list(x = integer(), lim = c(-5, Inf), closed = c(TRUE, FALSE)))
+
+  # Integers aren't mapped to integers
+  expect_equal(sup(0.1 * dist_poisson(3)), list(x = double(), lim = c(0, Inf), closed = c(TRUE, FALSE)))
+  expect_equal(sup(dist_poisson(3) + 0.5)$x, double())
+  expect_equal(sup(sqrt(dist_poisson(3)))$x, double())
+  expect_equal(sup(exp(dist_poisson(3)))$x, double())
+  expect_equal(format(support(0.1 * dist_poisson(3))), "[0,Inf)")
+
+  # Logical support is kept only for 0 and 1
+  expect_equal(sup(1 - dist_bernoulli(0.3))$x, logical())
+  expect_equal(sup(2 * dist_bernoulli(0.3))$x, integer())
+  expect_equal(sup(0.5 * dist_bernoulli(0.3))$x, double())
+
+  # Truncating a transformed count off the integers
+  x <- dist_truncated(0.1 * dist_poisson(3), lower = 0.25)
+  expect_equal(cdf(x, 0.3), dpois(3, 3) / ppois(2, 3, lower.tail = FALSE))
+  expect_equal(cdf(x, 0.45), (ppois(4, 3) - ppois(2, 3)) / ppois(2, 3, lower.tail = FALSE))
+  expect_equal(quantile(x, 0.01), 0.3)
+  expect_equal(density(x, 0.4), dpois(4, 3) / ppois(2, 3, lower.tail = FALSE))
+})

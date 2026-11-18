@@ -37,7 +37,11 @@
 #'
 #'   **Support**: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}. When
 #'   \eqn{g} cannot be verified to be monotonic over the whole support, the
-#'   support limits are reported as unknown (`NA`).
+#'   support limits are reported as unknown (`NA`). The support of a
+#'   transformed discrete distribution is on the integers only when \eqn{g}
+#'   maps the integers of its support to integers (such as
+#'   `-dist_poisson(3)`), and is otherwise reported as an interval of the
+#'   real numbers (such as `0.1 * dist_poisson(3)`).
 #'
 #'   **Mean**: Approximated numerically using a second-order Taylor expansion:
 #'
@@ -222,7 +226,40 @@ transformed_support <- function(dist, tf, inv, base_sup = support(dist)) {
     }
     lim[[i]] <- lim_i
   }
-  new_support_region(field(base_sup, "x"), lim, closed)
+  proto <- field(base_sup, "x")
+  lattice <- support_is_lattice(base_sup)
+  if (any(lattice)) {
+    pts <- quantile(dist[lattice], p)
+    if (!is.list(pts)) pts <- list(pts)
+    proto[lattice] <- .mapply(transformed_lattice_proto, list(
+      proto[lattice], pts, field(base_sup, "lim")[lattice]
+    ), list(tf = tf))
+  }
+  new_support_region(proto, lim, closed)
+}
+
+# The prototype of the support of a transformed distribution on the integers
+# (or logicals), from points `pts` of its base support (its quantiles) and its
+# limits `lim`. The image is still on the integers when the transformation
+# maps these points (and their neighbours) to integers, up to the rounding
+# error tolerated by R's discrete p-functions, as for `2 * dist_poisson(3)` or
+# `-dist_poisson(3)`. Otherwise (as for `0.1 * dist_poisson(3)`) the image is
+# not on the integers, and is described as a subset of the real numbers.
+# Logical support is kept only when the transformation maps 0 and 1 to
+# themselves.
+transformed_lattice_proto <- function(proto, pts, lim, tf) {
+  k <- c(pts, lim)
+  k <- unique(k[is.finite(k)])
+  k <- unique(c(k, k + 1))
+  if (is.logical(proto)) k <- c(0, 1)
+  v <- suppressWarnings(tf(k))
+  v <- v[!is.na(v)]
+  if (!length(v)) return(proto)
+  finite <- is.finite(v)
+  int <- all(abs(v[finite] - round(v[finite])) < 1e-7 * pmax(1, abs(v[finite])))
+  if (!int) return(double())
+  if (is.logical(proto) && !identical(sort(as.double(v)), c(0, 1))) return(integer())
+  proto
 }
 
 #' @export
