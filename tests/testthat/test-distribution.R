@@ -256,3 +256,13 @@ test_that("same-family slots are merged, even when not adjacent", {
   nm <- c(first = m(0), second = m(10))
   expect_equal(mean(nm), c(0.5, 10.5))
 })
+
+test_that("all.equal() compares distributions by family and parameters", {
+  x <- c(dist_normal(1:2), dist_poisson(3))
+  expect_true(all.equal(x, c(dist_normal(1:2), dist_poisson(3))))
+  expect_match(all.equal(x, c(dist_normal(1:2), dist_poisson(4))), "Element 3: Component .l.")
+  expect_match(all.equal(x, c(dist_normal(1:2), dist_gamma(3, 1))), "Element 3: family classes differ")
+  expect_match(all.equal(dist_normal(1:3), c(dist_normal(1), dist_normal(5), dist_normal(3))), "Element 2:")
+  expect_match(all.equal(x, x[1:2]), "Lengths")
+  expect_true(all.equal(dist_normal(1:2)[2:1], dist_normal(2:1)))
+})

@@ -244,10 +244,10 @@ is.numeric.distribution <- function(x) FALSE
 # S3 list-objects, so base R's `all.equal.list()` recursed through it (and
 # through each per-element object, itself a plain list) for free - which is
 # what `expect_equal()` (testthat 2e) relies on. The vecvec-backed container
-# no longer has that structure (its `typeof()` is "integer", not "list"), so
-# provide an explicit method that compares element-by-element via each raw
-# family record's fields (also plain lists once unclassed), matching the
-# pre-migration comparison.
+# no longer has that structure (its `typeof()` is not "list"), so
+# provide an explicit method that compares the raw family records' fields (also
+# plain lists once unclassed) for runs of elements sharing a family, matching
+# the pre-migration comparison.
 #' @export
 all.equal.distribution <- function(target, current, ...) {
   if (!is_distribution(current)) {
@@ -257,17 +257,27 @@ all.equal.distribution <- function(target, current, ...) {
     return(sprintf("Lengths (%d, %d) differ", length(target), length(current)))
   }
   msgs <- character(0)
-  for (i in seq_len(length(target))) {
-    a <- dist_elem(target, i)
-    b <- dist_elem(current, i)
+  offset <- 0L
+  # Each call compares the records of one run of elements that are stored in
+  # the same family in both vectors, so only runs which differ are searched
+  # for the elements that differ.
+  vecvec::vecvec_mapply(list(target, current), function(a, b) {
+    n <- vctrs::vec_size(a)
     if (!identical(class(a), class(b))) {
-      msgs <- c(msgs, sprintf("Element %d: family classes differ: %s, %s",
-                               i, paste(class(a), collapse = "/"), paste(class(b), collapse = "/")))
-      next
+      msgs <<- c(msgs, sprintf("Element %d: family classes differ: %s, %s",
+                               offset + seq_len(n),
+                               paste(class(a), collapse = "/"), paste(class(b), collapse = "/")))
+    } else if (!isTRUE(all.equal(unclass(a), unclass(b), ...))) {
+      for (j in seq_len(n)) {
+        cmp <- all.equal(unclass(vctrs::vec_slice(a, j)), unclass(vctrs::vec_slice(b, j)), ...)
+        if (!isTRUE(cmp)) {
+          msgs <<- c(msgs, sprintf("Element %d: %s", offset + j, paste(cmp, collapse = "; ")))
+        }
+      }
     }
-    cmp <- all.equal(unclass(a), unclass(b), ...)
-    if (!isTRUE(cmp)) msgs <- c(msgs, sprintf("Element %d: %s", i, paste(cmp, collapse = "; ")))
-  }
+    offset <<- offset + n
+    rep(TRUE, n)
+  })
   if (length(msgs) == 0L) TRUE else msgs
 }
 
