@@ -5,9 +5,21 @@
 * Distributions are now stored and computed on in a vectorised way using the
   vecvec package. A vector of distributions is held as one record vector per
   family, and every method (`density()`, `cdf()`, `quantile()`, `generate()`,
-  `format()`, moments, `support()`, and so on) handles all distributions of a
-  family in one call rather than looping over them one at a time. This makes
-  working with long vectors of distributions much faster.
+  `format()`, moments, `support()`, arithmetic, and so on) handles all
+  distributions of a family in one call rather than looping over them one at a
+  time. This makes working with long vectors of distributions much faster.
+* Arithmetic and mathematical functions on distributions (such as `x + 1`,
+  `x * y` and `exp(x)`) are computed once for each family rather than once for
+  each distribution.
+* Arithmetic gives a missing result when either operand is missing, whichever
+  side the missing distribution is on. `dist_normal(1:2) + dist_missing(2)` and
+  `dist_missing(2) + dist_normal(1:2)` are both missing, where the first
+  previously gave a convolution with a missing distribution.
+* Arithmetic on an empty distribution vector now gives an empty distribution
+  vector, such as `dist_normal(1:2)[0] + 1`.
+* `as.character()` now works for distributions, and returns `format()`.
+* `c()` of many distributions is faster, and distributions from the same family
+  are stored together even when they are not adjacent.
 * `cdf()` and `quantile()` gain a `tail` argument (`"lower"` or `"upper"`).
   `cdf(x, q, tail = "upper")` gives the survival function P(X > q), and can be
   combined with `log = TRUE` (for example `-cdf(x, q, tail = "upper", log = TRUE)`
@@ -31,6 +43,46 @@
   such matrices. Bare vectors, deprecated in 0.9.0, are now an error, as is a
   matrix with the wrong number of columns or points for distributions with
   different numbers of variates.
+* The class of a distribution is now an S7 class, so `class(x)` is
+  `c("distributional::distribution", "distribution", "vecvec::vecvec", "double", "S7_object")`.
+  `inherits(x, "distribution")` and `is_distribution()` still work, but code
+  that compares the whole class vector should be checked.
+* `vctrs::vec_data()` and `unclass()` no longer give a list with one object for
+  each distribution. Use `as.list()` to get the distributions individually.
+* `dimnames()` and `dimnames<-()` for distributions are deprecated in favour of
+  `variates()` and `variates<-()`.
+* `parameters()` now returns one row for every distribution, with `NA` in the
+  rows of missing distributions and in the columns of other families.
+  Previously it errored when the vector contained a missing distribution.
+* `min()`, `max()`, `range()` and `prod()` of distributions now give an error.
+  They previously returned a distribution (for example `min(x)` returned the
+  first element). The cumulative functions `cumsum()`, `cumprod()`, `cummax()`
+  and `cummin()` also give an error, where `cumsum()` previously returned a
+  transformed distribution. `sum()` is unchanged.
+
+### Breaking changes for extension packages
+
+Packages that define their own distribution families with `new_dist()` need to
+update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
+`?class_distribution`, `?variates` and `vignette("broadcasting")` for details.
+
+* Methods for a family (such as `density.dist_myfamily()`) are now called with
+  a record holding `n` distributions of that family, rather than a single
+  distribution, and must return a result of size `n`: a vector, a matrix with
+  `n` rows, a list of length `n`, or a record of size `n`. Never assume
+  `n == 1`.
+* `x[["par"]]` and `x$par` now return a vector of length `n` rather than a
+  single value. Fields that are lists (such as closures or parameters which
+  differ in length between distributions) are always returned as a list of
+  length `n`. A record is not a list, so `unclass(x)`, `names(x)` and
+  `lapply(x, ...)` no longer give the parameters.
+* `generate()` methods are called with a vector of `n` sizes in `times`, and
+  must return a list of `n` vectors.
+* `Ops` and `Math` methods for a family receive whole records, with any numeric
+  operand as a vector paired with the distributions by position, and must
+  return a record.
+* Families which wrap other distributions now store a `distribution` vector in
+  their `dist` field, rather than a single `dist_*` object.
 
 ## Bug fixes
 
