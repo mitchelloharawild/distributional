@@ -529,4 +529,7 @@ Ops.dist_default <- function(e1, e2) {
 }
 
 # If there are mix of Ops with default, then use the default method
-chooseOpsMethod.dist_default <- function(x, y, mx, my, cl, reverse) TRUE
+chooseOpsMethod.dist_default <- function(x, y, mx, my, cl, reverse) {
+  # A missing operand gives a missing result, whichever side it is on
+  inherits(x, "dist_na") || !inherits(y, "dist_na")
+}

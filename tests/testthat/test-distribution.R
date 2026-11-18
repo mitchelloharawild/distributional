@@ -281,3 +281,15 @@ test_that("Summary functions other than sum() are not supported", {
   expect_error(prod(x), "not supported")
   expect_equal(format(sum(x)), "N(6, 3)")
 })
+
+test_that("a missing operand gives a missing result in either order", {
+  x <- dist_normal(1:2)
+  m <- dist_missing(2)
+  for (op in c("+", "-", "*", "/")) {
+    f <- match.fun(op)
+    expect_equal(is.na(f(x, m)), c(TRUE, TRUE))
+    expect_equal(is.na(f(m, x)), c(TRUE, TRUE))
+  }
+  expect_equal(is.na(dist_normal(1) + dist_missing(2)), c(TRUE, TRUE))
+  expect_equal(is.na(exp(x) + m), c(TRUE, TRUE))
+})
