@@ -514,3 +514,24 @@ test_that("support() of transformed discrete distributions", {
   expect_equal(quantile(x, 0.01), 0.3)
   expect_equal(density(x, 0.4), dpois(4, 3) / ppois(2, 3, lower.tail = FALSE))
 })
+
+test_that("odd integer powers are invertible for negative values", {
+  for (k in c(3, 5)) {
+    y <- dist_normal()^k
+    at <- c(-2, -1, -0.5, 0.5, 1, 2)
+    root <- sign(at) * abs(at)^(1/k)
+    expect_equal(unlist(cdf(y, at)), pnorm(root), tolerance = 1e-6)
+    expect_equal(unlist(density(y, at)), dnorm(root) * abs(at)^(1/k - 1) / k, tolerance = 1e-4)
+  }
+  y <- dist_normal()^3
+  expect_equal(density(y, -1), dnorm(-1) / 3, tolerance = 1e-6)
+  expect_equal(cdf(y, -1), pnorm(-1))
+  expect_no_error(hdr(y))
+  expect_warning(cdf(dist_normal()^2, 1))
+})
+
+test_that("odd roots of a normal use R's x^(1/3) forward transform", {
+  y <- dist_normal(5, 1)^(1/3)
+  expect_equal(cdf(y, 1.7), pnorm(1.7^3, 5, 1))
+  expect_equal(density(y, 1.7), dnorm(1.7^3, 5, 1) * 3 * 1.7^2, tolerance = 1e-5)
+})

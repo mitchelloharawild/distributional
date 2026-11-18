@@ -383,7 +383,15 @@ get_binary_inverse_1 <- function(f, constant) {
     `-` = function(x) x + constant,
     `*` = function(x) x / constant,
     `/` = function(x) x * constant,
-    `^` = function(x) x ^ (1/constant),
+    `^` = function(x) {
+      # Odd integer powers are monotonic over the reals, so their real root
+      # must be defined for negative x (where `x^(1/k)` is NaN in R).
+      if (length(constant) == 1L && is.finite(constant) && constant %% 2 == 1) {
+        sign(x) * abs(x) ^ (1/constant)
+      } else {
+        x ^ (1/constant)
+      }
+    },
 
     invert_fail
   )
