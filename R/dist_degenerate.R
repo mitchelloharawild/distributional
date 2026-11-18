@@ -121,6 +121,7 @@ point_mass.dist_degenerate <- function(x, at, ...){
 
 #' @export
 generate.dist_degenerate <- function(x, times, ...){
+  times <- vctrs::vec_recycle(times, vctrs::vec_size(x))
   vctrs::vec_chop(rep(x[["x"]], times), sizes = times)
 }
 

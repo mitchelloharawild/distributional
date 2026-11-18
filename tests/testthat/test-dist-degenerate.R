@@ -56,3 +56,10 @@ test_that("Degenerate distribution is vectorised over distributions", {
   expect_equal(vctrs::vec_size(supp), 3L)
   expect_equal(vctrs::vec_proxy(support(dist)[2]), vctrs::vec_proxy(support(dist_degenerate(2))))
 })
+
+test_that("generate.dist_degenerate() recycles a scalar `times`", {
+  x <- dist_degenerate(1:3)
+  expect_equal(generate(x@x[[1]], times = 2), list(c(1L, 1L), c(2L, 2L), c(3L, 3L)))
+  expect_equal(generate(x@x[[1]], times = c(1, 0, 2)), list(1L, integer(), c(3L, 3L)))
+  expect_equal(generate(x, 2), generate(x@x[[1]], times = 2))
+})
