@@ -190,6 +190,16 @@ cdf.dist_sample <- function(x, q, ..., na.rm = TRUE, tail = "lower"){
   }, numeric(1L))
 }
 
+# The proportion of the sample equal to `at`. Equality is exact, as in `cdf()`
+# (and `ecdf()`), so that `cdf()` and `point_mass()` agree.
+#' @export
+point_mass.dist_sample <- function(x, at, ..., na.rm = TRUE){
+  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
+  as.double(unlist(.mapply(function(s, a) {
+    if (is.na(a)) NA_real_ else mean(s == a, na.rm = na.rm)
+  }, list(x[["x"]], at), NULL)))
+}
+
 #' @export
 generate.dist_sample <- function(x, times, ...){
   times <- vctrs::vec_recycle(times, vctrs::vec_size(x))

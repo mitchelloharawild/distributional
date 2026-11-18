@@ -33,11 +33,14 @@ distribution whose probability is that of the comparison being true, so
 side. The probabilities are computed with \code{\link[=cdf]{cdf()}}, using the upper tail for
 \code{>} and \code{>=} so that small upper tail probabilities keep their precision.
 The difference between \code{<} and \code{<=} (and between \code{>} and \code{>=}) is the
-probability mass at the number, which is 0 for continuous distributions and
-\code{density(x, q)} for discrete distributions. The point mass of mixed
-distributions with a continuous part (such as \code{\link[=dist_inflated]{dist_inflated()}} of a
-continuous distribution) isn't included, so comparisons exactly at it are
-approximate.
+probability mass at the number. This is 0 for continuous distributions and
+\code{density(x, q)} for discrete distributions, and includes the point masses of
+mixed distributions (such as \code{\link[=dist_inflated]{dist_inflated()}} of a continuous
+distribution, or a \code{\link[=dist_mixture]{dist_mixture()}} of continuous and discrete
+distributions). As in R's discrete distribution functions (such as
+\code{\link[stats:ppois]{stats::ppois()}}), a number within rounding error of an integer is treated as that
+integer for distributions on the integers, so \code{0.1 * dist_poisson(3) >= 0.3}
+includes the mass at 3.
 
 Comparing two distributions, \code{x > y} is the probability \eqn{P(X - Y > 0)},
 computed from \code{x - y}. This assumes that \code{x} and \code{y} are independent (as

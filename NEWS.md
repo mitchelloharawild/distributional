@@ -22,7 +22,13 @@
   number, or between two (independent) distributions, now give a Bernoulli
   distribution of the probability that the comparison is true (#16). For
   example, `mean(dist_normal() > 1.96)` is 0.025. These previously returned a
-  transformed distribution. See `?Ops.distribution`.
+  transformed distribution. The difference between `>=` and `>` (and `<` and
+  `<=`) is the probability mass at the number, including the point masses of
+  mixed distributions such as `dist_inflated(dist_normal(), 0.2)` and of
+  mixtures of continuous and discrete distributions. As in `ppois()`, a number
+  within rounding error of an integer is treated as that integer, so that
+  `0.1 * dist_poisson(3) >= 0.3` includes the mass at 3. See
+  `?Ops.distribution`.
 * `&`, `|` and `!` now combine Bernoulli distributions (such as the results of
   comparisons) as independent events, with logicals treated as certain events.
   For example `(x > 0) & (y > 0)` is a Bernoulli distribution of

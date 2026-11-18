@@ -113,6 +113,12 @@ cdf.dist_degenerate <- function(x, q, ..., tail = "lower"){
   ifelse(q >= x[["x"]], 1, 0)
 }
 
+# The whole mass is at the point. Equality is exact, as in `cdf()`.
+#' @export
+point_mass.dist_degenerate <- function(x, at, ...){
+  density.dist_degenerate(x, at)
+}
+
 #' @export
 generate.dist_degenerate <- function(x, times, ...){
   vctrs::vec_chop(rep(x[["x"]], times), sizes = times)

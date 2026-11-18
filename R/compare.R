@@ -18,11 +18,14 @@
 #' side. The probabilities are computed with [cdf()], using the upper tail for
 #' `>` and `>=` so that small upper tail probabilities keep their precision.
 #' The difference between `<` and `<=` (and between `>` and `>=`) is the
-#' probability mass at the number, which is 0 for continuous distributions and
-#' `density(x, q)` for discrete distributions. The point mass of mixed
-#' distributions with a continuous part (such as [dist_inflated()] of a
-#' continuous distribution) isn't included, so comparisons exactly at it are
-#' approximate.
+#' probability mass at the number. This is 0 for continuous distributions and
+#' `density(x, q)` for discrete distributions, and includes the point masses of
+#' mixed distributions (such as [dist_inflated()] of a continuous
+#' distribution, or a [dist_mixture()] of continuous and discrete
+#' distributions). As in R's discrete distribution functions (such as
+#' [stats::ppois()]), a number within rounding error of an integer is treated as that
+#' integer for distributions on the integers, so `0.1 * dist_poisson(3) >= 0.3`
+#' includes the mass at 3.
 #'
 #' Comparing two distributions, `x > y` is the probability \eqn{P(X - Y > 0)},
 #' computed from `x - y`. This assumes that `x` and `y` are independent (as
@@ -192,43 +195,44 @@ dist_order <- function(e1, e2, op) {
   new_bernoulli(p)
 }
 
-# The probability mass P(X = at) of each distribution in `x` at `at` (paired
-# by position). It is 0 for continuous distributions, and `density()` for
-# distributions with integer (or logical) support and for point masses.
-# Sample distributions give the proportion of draws equal to `at`, and
-# transformed distributions the mass of the base distribution at the inverse
-# of `at` (the `density()` of a transformed discrete distribution includes a
-# Jacobian, so it isn't the probability mass).
-#
-# Mixed distributions are judged by their support alone. A continuous
-# distribution with a point mass (such as `dist_inflated()` of a continuous
-# distribution) gives 0, so comparisons at the point mass are approximate.
-point_mass <- function(x, at) {
-  dist_paired(function(x, at) {
-    if (inherits(x, "dist_degenerate")) return(density(x, at))
-    if (inherits(x, "dist_sample")) {
-      return(as.double(unlist(.mapply(function(s, a) mean(s == a, na.rm = TRUE), list(x[["x"]], at), NULL))))
-    }
-    if (inherits(x, "dist_transformed")) {
-      n <- vctrs::vec_size(x)
-      return(transformed_by_group(x, function(dist, tf, inv, idx) {
-        at <- transformed_arg(at, idx, n)
-        # A transformation without an inverse has an unknown mass
-        base_at <- tryCatch(suppressWarnings(inv(at)), error = function(e) rep_len(NA_real_, length(at)))
-        point_mass(dist, base_at)
-      }))
-    }
-    out <- numeric(vctrs::vec_size(x))
-    discrete <- vapply(
-      vctrs::field(support(x), "x"),
-      function(proto) is.integer(proto) || is.logical(proto),
-      logical(1L)
-    )
-    # The mass is only at integers (avoiding warnings from `density()`)
-    discrete <- discrete & is.finite(at) & at == trunc(at)
-    if (any(discrete)) out[discrete] <- density(x[discrete], at[discrete])
-    out
-  }, x, at = at, .ptype = double())
+# The probability mass P(X = at) of each distribution in `x` at `at`, paired
+# by position. This is 0 for continuous distributions. `point_mass()` is an
+# internal generic: the `distribution` method calls the family methods once
+# per storage slot (with `at` paired by position, of size `n` or 1), and the
+# family methods return a mass for each of their `n` distributions. Families
+# that are mixed (with a continuous part and point masses, such as
+# `dist_inflated()` of a continuous distribution), nested or sample based have
+# their own methods.
+point_mass <- function(x, at, ...) {
+  UseMethod("point_mass")
+}
+
+#' @export
+point_mass.distribution <- function(x, at, ...) {
+  dist_paired(point_mass, x, at = at, ..., .ptype = double())
+}
+
+# Distributions with integer (or logical) support have their mass at the
+# integers, given by `density()`. As in R's discrete p-functions (such as
+# `ppois()`), a value within 1e-7 (relative) of an integer is treated as that
+# integer, so that `cdf()` and `point_mass()` agree. Other distributions are
+# taken to be continuous.
+#' @export
+point_mass.dist_default <- function(x, at, ...) {
+  n <- vctrs::vec_size(x)
+  at <- vctrs::vec_recycle(at, n)
+  out <- rep_len(0, n)
+  out[is.na(at)] <- NA_real_
+  int <- lattice_integer(at, is_lattice(x))
+  if (any(int)) out[int] <- density(vctrs::vec_slice(x, int), round(at[int]))
+  out
+}
+
+# Which values of `at` are integers, for the distributions on the integers
+# (`lattice`, paired by position)? As in R's discrete p-functions, values
+# within 1e-7 (relative) of an integer are integers.
+lattice_integer <- function(at, lattice) {
+  lattice & is.finite(at) & abs(at - round(at)) < 1e-7 * pmax(1, abs(at))
 }
 
 # Bernoulli distributions with probabilities `p`, which are missing where `p`

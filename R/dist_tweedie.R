@@ -142,6 +142,16 @@ log_cdf.dist_tweedie <- function(x, q, ..., tail = "lower"){
   tweedieDistr::ptweedie(q, x[["mu"]], x[["phi"]], x[["p"]], log.p = TRUE, lower.tail = tail == "lower")
 }
 
+# The compound Poisson-gamma distribution has a point mass at 0
+#' @export
+point_mass.dist_tweedie <- function(x, at, ...){
+  at <- vec_recycle(at, vec_size(x))
+  out <- ifelse(is.na(at), NA_real_, 0)
+  zero <- which(at == 0)
+  if (length(zero)) out[zero] <- cdf(vec_slice(x, zero), 0)
+  out
+}
+
 #' @export
 generate.dist_tweedie <- function(x, times, ...){
   require_package("tweedieDistr")

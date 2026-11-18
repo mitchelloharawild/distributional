@@ -349,6 +349,12 @@ cdf.dist_mixture <- function(x, q, ..., tail = "lower") {
 }
 
 #' @export
+point_mass.dist_mixture <- function(x, at, ...) {
+  parts <- mixture_parts(x)
+  mixture_sum(dist_paired(point_mass, parts$flat, at = mixture_arg(at, parts$idx), ...), parts)
+}
+
+#' @export
 generate.dist_mixture <- function(x, times, ...) {
   parts <- mixture_parts(x)
   n <- parts$n
@@ -522,6 +528,19 @@ cdf.dist_q_mixture <- function(x, q, ..., tail = "lower") {
 
     stats::uniroot(fn, interval = c(eps, 1 - eps), tol = 1e-8)$root
   }, numeric(1L))
+}
+
+# The quantile function is a weighted average of the components' quantile
+# functions, so it is strictly increasing (and the mixture continuous) when any
+# component is continuous. A mixture of discrete components has point masses
+# wherever all of their quantile functions are flat together, which isn't
+# computed, so their mass is unknown (`NA`).
+#' @export
+point_mass.dist_q_mixture <- function(x, at, ...) {
+  parts <- mixture_parts(x)
+  at <- vec_recycle(at, parts$n)
+  discrete <- unname(vapply(split(is_lattice(parts$flat), parts$idx), all, logical(1L)))
+  ifelse(is.na(at) | discrete, NA_real_, 0)
 }
 
 #' @export

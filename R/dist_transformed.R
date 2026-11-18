@@ -226,6 +226,42 @@ support.dist_transformed <- function(x, ...) {
   })
 }
 
+# The preimage `inv(at)` of `at` in the base distributions, for finding their
+# point masses. The inverse is often inexact in floating point (`0.3 / 0.1` is
+# `2.9999999999999996`), so it is replaced by the nearest integer when the
+# transformation maps that integer back to `at`, up to rounding error. This
+# doesn't rely on the inverse being exact, and leaves a value that isn't the
+# image of an integer (such as 1.5 for `2 * dist_poisson(3)` at 3) as it is.
+# The tolerance is a few thousand ulps (relative): wide enough for rounding
+# error in the transformation, but narrow enough not to mistake neighbouring
+# points of a shifted lattice (such as `dist_poisson(3) + 1e9`) for `at`.
+transformed_preimage <- function(tf, inv, at) {
+  y <- suppressWarnings(inv(at))
+  k <- round(y)
+  fwd <- suppressWarnings(tf(k))
+  snap <- which(abs(fwd - at) <= 1e-12 * pmax(abs(at), abs(fwd)))
+  y[snap] <- k[snap]
+  y
+}
+
+# The mass of the base distributions `dist` at the preimage of `at`. A value
+# outside the image of the support has no preimage with mass, so its mass is 0.
+# Without an inverse the mass is unknown (`NA`) for discrete distributions, and
+# is taken to be 0 otherwise.
+transformed_mass <- function(dist, tf, inv, at, ...) {
+  y <- tryCatch(transformed_preimage(tf, inv, at), error = function(e) NULL)
+  if (is.null(y)) return(ifelse(is_lattice(dist), NA_real_, 0))
+  dist_paired(point_mass, dist, at = y, ...)
+}
+
+#' @export
+point_mass.dist_transformed <- function(x, at, ...){
+  n <- vec_size(x)
+  transformed_by_group(x, function(dist, tf, inv, idx) {
+    transformed_mass(dist, tf, inv, transformed_arg(at, idx, n), ...)
+  })
+}
+
 #' @export
 density.dist_transformed <- function(x, at, ...){
   n <- vec_size(x)

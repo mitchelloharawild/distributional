@@ -168,6 +168,11 @@ cdf.dist_inflated <- function(x, q, ..., tail = "lower"){
 }
 
 #' @export
+point_mass.dist_inflated <- function(x, at, ...){
+  x[["p"]]*(at==x[["x"]]) + (1-x[["p"]])*dist_paired(point_mass, x[["dist"]], at = at, ...)
+}
+
+#' @export
 generate.dist_inflated <- function(x, times, ...){
   n <- vec_size(x)
   # Draws for each distribution are contiguous, as are the inflated points

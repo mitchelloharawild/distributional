@@ -132,6 +132,166 @@ test_that("ordering comparisons include the mass at the threshold for discrete d
   expect_equal(prob(y < 4), ppois(1, 3))
 })
 
+test_that("ordering comparisons include the point masses of mixed distributions", {
+  # Inflation of a continuous distribution
+  x <- dist_inflated(dist_normal(), 0.2, 0)
+  expect_equal(prob(x >= 0), 0.2 + 0.8 * 0.5)
+  expect_equal(prob(x > 0), 0.8 * 0.5)
+  expect_equal(prob(x < 0), 0.8 * 0.5)
+  expect_equal(prob(x <= 0), cdf(x, 0))
+  expect_equal(prob(x >= 1), pnorm(1, lower.tail = FALSE) * 0.8)
+
+  # Inflation at a non-zero point, of continuous and discrete distributions
+  x <- dist_inflated(dist_normal(), 0.3, 1.5)
+  expect_equal(prob(x >= 1.5), 0.3 + 0.7 * pnorm(1.5, lower.tail = FALSE))
+  expect_equal(prob(x < 1.5), 0.7 * pnorm(1.5))
+  x <- dist_inflated(dist_poisson(3), 0.2, 2)
+  expect_equal(prob(x >= 2), 0.2 + 0.8 * ppois(1, 3, lower.tail = FALSE))
+  expect_equal(prob(x < 2), 0.8 * ppois(1, 3))
+  expect_equal(prob(x >= 3), 0.8 * ppois(2, 3, lower.tail = FALSE))
+
+  # Mixtures of continuous and discrete distributions
+  m <- dist_mixture(dist_normal(), dist_poisson(3), weights = c(0.5, 0.5))
+  expect_equal(
+    prob(m >= 2),
+    0.5 * pnorm(2, lower.tail = FALSE) + 0.5 * ppois(1, 3, lower.tail = FALSE)
+  )
+  expect_equal(
+    prob(m > 2),
+    0.5 * pnorm(2, lower.tail = FALSE) + 0.5 * ppois(2, 3, lower.tail = FALSE)
+  )
+  expect_equal(prob(m < 2), 0.5 * pnorm(2) + 0.5 * ppois(1, 3))
+  expect_equal(
+    prob(m >= c(0, 1.5, 3)),
+    0.5 * pnorm(c(0, 1.5, 3), lower.tail = FALSE) +
+      0.5 * c(1, ppois(1, 3, lower.tail = FALSE), ppois(2, 3, lower.tail = FALSE))
+  )
+})
+
+test_that("ordering comparisons treat thresholds within rounding error of an integer as integers", {
+  x <- dist_poisson(3)
+  expect_equal(prob(x >= 3 - 1e-12), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(x >= 3 + 1e-12), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(x < 3 - 1e-12), ppois(2, 3))
+  # As in ppois(), which treats values within 1e-7 of an integer as integers
+  expect_equal(prob(x >= 3 - 1e-6), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(x >= 3 - 1e-3), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(x > 3 - 1e-3), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(x > 3 - 1e-12), ppois(3, 3, lower.tail = FALSE))
+})
+
+test_that("ordering comparisons of transformed discrete distributions use the mass at the preimage", {
+  # 0.3 / 0.1 is 2.9999999999999996
+  y <- 0.1 * dist_poisson(3)
+  q <- c(0, 0.1, 0.2, 0.3, 0.7, 0.25)
+  k <- c(0, 1, 2, 3, 7, 2.5)
+  expect_equal(prob(y >= q), ppois(ceiling(k) - 1, 3, lower.tail = FALSE))
+  expect_equal(prob(y > q), ppois(floor(k), 3, lower.tail = FALSE))
+  expect_equal(prob(y < q), ppois(ceiling(k) - 1, 3))
+  expect_equal(prob(y <= q), ppois(floor(k), 3))
+  expect_equal(prob(y >= 0.3), ppois(2, 3, lower.tail = FALSE))
+
+  # 3 isn't in the image of the support, so it has no mass
+  y <- 2 * dist_poisson(3)
+  expect_equal(prob(y >= 3), ppois(1, 3, lower.tail = FALSE))
+  expect_equal(prob(y > 3), ppois(1, 3, lower.tail = FALSE))
+  expect_equal(prob(y < 3), ppois(1, 3))
+  expect_equal(point_mass(y, 3), 0)
+  expect_equal(point_mass(y, c(3, 4, 6)), c(0, dpois(2:3, 3)))
+
+  # Other transformations
+  expect_equal(point_mass(exp(dist_poisson(3)), exp(2)), dpois(2, 3))
+  expect_equal(point_mass(dist_poisson(3) + 0.1, 2.1), dpois(2, 3))
+  expect_equal(point_mass(dist_poisson(3) + 1e9, 1e9 + 2.5), 0)
+  expect_equal(point_mass(sqrt(dist_poisson(3)), sqrt(2)), dpois(2, 3))
+  # Continuous base distributions have no mass
+  expect_equal(point_mass(exp(dist_normal()), 1), 0)
+  # Transformations of mixed distributions keep their point masses
+  expect_equal(prob(2 * dist_inflated(dist_normal(), 0.2, 0) >= 0), 0.6)
+})
+
+test_that("point_mass() gives the probability mass of each distribution", {
+  expect_equal(point_mass(dist_poisson(3), 0:4), dpois(0:4, 3))
+  expect_equal(point_mass(dist_poisson(3), c(2.5, -1, Inf)), c(0, 0, 0))
+  expect_equal(point_mass(dist_normal(), 0), 0)
+  expect_equal(point_mass(dist_bernoulli(0.3), c(0, 1)), c(0.7, 0.3))
+  expect_equal(point_mass(dist_binomial(4, 0.5), 2), dbinom(2, 4, 0.5))
+  expect_equal(point_mass(dist_wrap("pois", lambda = 3), 2), dpois(2, 3))
+  expect_equal(point_mass(dist_degenerate(c(1, 2)), 1), c(1, 0))
+  expect_equal(point_mass(dist_sample(list(c(1, 2, 2, 3))), c(2, 2.5)), c(0.5, 0))
+  expect_equal(
+    point_mass(dist_mixture(dist_degenerate(1), dist_poisson(1), weights = c(0.4, 0.6)), 1),
+    0.4 + 0.6 * dpois(1, 1)
+  )
+  # Missing distributions and thresholds
+  expect_equal(point_mass(c(dist_poisson(3), NA, dist_missing()), 2), c(dpois(2, 3), NA, NA))
+  expect_equal(point_mass(dist_poisson(3), NA_real_), NA_real_)
+  expect_equal(point_mass(dist_normal(), NA_real_), NA_real_)
+
+  # Mixed families, with thresholds paired by position
+  x <- c(
+    dist_normal(), dist_poisson(3), dist_inflated(dist_normal(), 0.2, 1),
+    dist_degenerate(4), 0.1 * dist_poisson(3), dist_poisson(2)
+  )
+  expect_equal(
+    point_mass(x, c(0, 2, 1, 4, 0.3, 1 - 1e-12)),
+    c(0, dpois(2, 3), 0.2, 1, dpois(3, 3), dpois(1, 2))
+  )
+  expect_equal(
+    prob(x >= c(0, 2, 1, 4, 0.3, 1 - 1e-12)),
+    c(0.5, ppois(1, 3, lower.tail = FALSE), 0.2 + 0.8 * pnorm(1, lower.tail = FALSE),
+      1, ppois(2, 3, lower.tail = FALSE), ppois(0, 2, lower.tail = FALSE))
+  )
+
+  # rep()-compressed vectors
+  x <- rep(c(dist_poisson(3), dist_inflated(dist_normal(), 0.5, 0)), 3)
+  expect_equal(point_mass(x, 0), rep(c(dpois(0, 3), 0.5), 3))
+  expect_equal(
+    prob(x >= c(0, 0, 1, 1, 2, 2)),
+    c(1, 0.75, ppois(0, 3, lower.tail = FALSE), 0.5 * pnorm(1, lower.tail = FALSE),
+      ppois(1, 3, lower.tail = FALSE), 0.5 * pnorm(2, lower.tail = FALSE))
+  )
+  expect_length(point_mass(x[0], 1), 0)
+})
+
+test_that("point_mass() handles families with mass at a point of continuous support", {
+  skip_if_not_installed("tweedieDistr")
+  x <- dist_tweedie(1, 1, 1.5)
+  expect_equal(point_mass(x, c(0, 1)), c(cdf(x, 0), 0))
+  expect_equal(prob(x >= 0), 1)
+  expect_equal(prob(x > 0), 1 - cdf(x, 0))
+})
+
+test_that("point_mass() of quantile mixtures is unknown for discrete components", {
+  q <- dist_mixture(dist_poisson(3), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile")
+  expect_equal(point_mass(q, 4), NA_real_)
+  q <- dist_mixture(dist_normal(), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile")
+  expect_equal(point_mass(q, 4), 0)
+})
+
+test_that("point_mass() of truncated distributions keeps the mass at the bounds", {
+  x <- dist_truncated(dist_poisson(3), lower = 2, upper = 5)
+  z <- ppois(5, 3) - ppois(1, 3)
+  expect_equal(point_mass(x, 1:6), c(0, dpois(2:5, 3) / z, 0))
+  expect_equal(point_mass(x, 2 - 1e-12), dpois(2, 3) / z)
+  expect_equal(point_mass(x, 5 + 1e-12), dpois(5, 3) / z)
+  expect_equal(sum(point_mass(x, 2:5)), 1)
+  expect_equal(prob(x >= 2), 1)
+  expect_equal(prob(x > 2), 1 - dpois(2, 3) / z)
+  expect_equal(prob(x < 5), 1 - dpois(5, 3) / z)
+  expect_equal(prob(x <= 5), 1)
+  expect_equal(prob(x >= 4), (dpois(4, 3) + dpois(5, 3)) / z)
+
+  # Non-integer bounds of discrete distributions
+  x <- dist_truncated(dist_poisson(3), lower = 1.5, upper = 4.5)
+  z <- ppois(4, 3) - ppois(1, 3)
+  expect_equal(point_mass(x, 1:5), c(0, dpois(2:4, 3) / z, 0))
+  expect_equal(prob(x >= 2), 1)
+
+  # Continuous distributions have no mass at the bounds
+  expect_equal(point_mass(dist_truncated(dist_normal(), 0, 1), c(0, 0.5, 1)), c(0, 0, 0))
+})
+
 test_that("ordering comparisons pair thresholds and mixed families by position", {
   x <- c(dist_normal(0, 1), dist_poisson(2), dist_gamma(2, 1))
   q <- c(1, 2, 3)

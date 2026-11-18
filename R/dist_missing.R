@@ -103,6 +103,11 @@ log_quantile.dist_na <- quantile.dist_na
 cdf.dist_na <- function(x, q, ...){
   rep_len(NA_real_, vctrs::vec_size(x))
 }
+
+#' @export
+point_mass.dist_na <- function(x, at, ...){
+  rep_len(NA_real_, vctrs::vec_size(x))
+}
 #' @export
 log_cdf.dist_na <- cdf.dist_na
 

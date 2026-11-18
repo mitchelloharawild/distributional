@@ -130,7 +130,7 @@ format.dist_truncated <- function(x, ...){
 # Is each distribution supported on (a subset of) the integers? As in
 # `convolve_support()`, the prototype stored by `support()` is integer (or
 # logical) for lattice families.
-truncated_is_lattice <- function(dist) {
+is_lattice <- function(dist) {
   sup <- tryCatch(support(dist), error = function(e) NULL)
   if (is.null(sup)) return(rep(FALSE, vec_size(dist)))
   vapply(field(sup, "x"), function(proto) is.integer(proto) || is.logical(proto), logical(1L))
@@ -182,13 +182,30 @@ support.dist_truncated <- function(x, ...){
 density.dist_truncated <- function(x, at, ...){
   in_lim <- at >= x[["lower"]] & at <= x[["upper"]]
   cdf_upr <- dist_paired(cdf, x[["dist"]], q = x[["upper"]])
-  cdf_lwr <- cdf_truncated_lower(x, truncated_is_lattice(x[["dist"]]))
+  cdf_lwr <- cdf_truncated_lower(x, is_lattice(x[["dist"]]))
   ifelse(in_lim, dist_paired(density, x[["dist"]], at = at, ...)/(cdf_upr - cdf_lwr), 0)
+}
+
+# The mass of the base distribution inside the bounds, normalised as in
+# `density()` and `cdf()`. The bounds are closed, so the mass at a bound is
+# kept. For distributions on the integers, `at` is first rounded as in
+# `point_mass.dist_default()`, so that a value within rounding error of a
+# bound is inside it.
+#' @export
+point_mass.dist_truncated <- function(x, at, ...){
+  lattice <- is_lattice(x[["dist"]])
+  at <- vec_recycle(at, vec_size(x))
+  int <- lattice_integer(at, lattice)
+  at[int] <- round(at[int])
+  in_lim <- at >= x[["lower"]] & at <= x[["upper"]]
+  cdf_upr <- dist_paired(cdf, x[["dist"]], q = x[["upper"]])
+  cdf_lwr <- cdf_truncated_lower(x, lattice)
+  ifelse(in_lim, dist_paired(point_mass, x[["dist"]], at = at, ...)/(cdf_upr - cdf_lwr), 0)
 }
 
 #' @export
 quantile.dist_truncated <- function(x, p, ..., tail = "lower"){
-  lattice <- truncated_is_lattice(x[["dist"]])
+  lattice <- is_lattice(x[["dist"]])
   if (tail == "lower") {
     F_lwr <- cdf_truncated_lower(x, lattice)
     F_upr <- dist_paired(cdf, x[["dist"]], q = x[["upper"]])
@@ -209,7 +226,7 @@ quantile.dist_truncated <- function(x, p, ..., tail = "lower"){
 cdf.dist_truncated <- function(x, q, ..., tail = "lower"){
   q_lwr <- q < x[["lower"]]
   q_upr <- q > x[["upper"]]
-  lattice <- truncated_is_lattice(x[["dist"]])
+  lattice <- is_lattice(x[["dist"]])
   if (tail == "lower") {
     cdf_upr <- dist_paired(cdf, x[["dist"]], q = x[["upper"]])
     cdf_lwr <- cdf_truncated_lower(x, lattice)
