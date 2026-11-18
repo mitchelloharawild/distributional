@@ -377,6 +377,18 @@ test_that("quantiles of transformed discrete distributions invert the cdf", {
   expect_equal(quantile(2 * dist_poisson(3), p)[[1]], 2 * qpois(p, 3))
   expect_equal(quantile(-dist_poisson(3), p, tail = "upper")[[1]], -qpois(p, 3))
 
+  # At the probabilities of the support points, in both tails
+  for (y in list(-dist_poisson(3), -0.1 * dist_poisson(3), 0.1 * dist_poisson(3), 2 * dist_poisson(3))) {
+    pts <- unique(quantile(y, p)[[1]])
+    expect_equal(quantile(y, cdf(y, pts)[[1]])[[1]], pts)
+  }
+  y <- -dist_poisson(3)
+  pts <- -(0:8)
+  expect_equal(quantile(y, cdf(y, pts, tail = "upper")[[1]], tail = "upper")[[1]], pts)
+  expect_equal(quantile(y, ppois(1, 3, lower.tail = FALSE)), -2)
+  expect_equal(quantile(y, ppois(1, 3), tail = "upper"), -2)
+  expect_equal(quantile(y, c(0, 1))[[1]], c(-Inf, 0))
+  expect_equal(quantile(-dist_normal(), 0.3), -qnorm(0.7))
 })
 
 test_that("density of transformed discrete distributions is the mass at the preimage", {

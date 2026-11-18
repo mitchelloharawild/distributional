@@ -131,6 +131,10 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   is used for continuous distributions. `density(2 * dist_poisson(3), 4)` is
   now P(Y = 2) = 0.22, where it was half of that, and the `likelihood()` of
   transformed counts is now that of the counts.
+* `quantile()` of a decreasing transformation of a discrete distribution is
+  now correct at the probabilities of its support points, so that it inverts
+  `cdf()`. At p = P(Y >= 2), `quantile(-dist_poisson(3), p)` is now -2, where
+  it was -1.
 
 ## Other changes
 

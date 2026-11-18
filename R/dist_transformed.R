@@ -309,11 +309,12 @@ density.dist_transformed <- function(x, at, ...){
 # transformation. A decreasing transformation swaps the tails, and a
 # non-monotonic transformation gives `NA`.
 #
-# For `cdf()`, swapping the tails of a decreasing transformation `g` gives
-# P(g(X) <= q) as P(X > g^-1(q)), but it is P(X >= g^-1(q)). They differ by
-# the mass of the base distribution at `a = g^-1(q)`, which is added to the
-# lower tail and subtracted from the upper tail when `mass` is `TRUE`.
-transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", mass = FALSE) {
+# Swapping the tails is only exact for continuous distributions, so the
+# results of a decreasing transformation are corrected by
+# `decreasing(dist, a, out, base_tail)`, where `out` is the result of `.f` in
+# the swapped tail `base_tail` (see `transformed_cdf_mass()` and
+# `transformed_quantile_atom()`).
+transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", decreasing = NULL) {
   dir <- transformed_dir(tf, dist)
   if (any(dir == 0L)) {
     warning(sprintf(
@@ -327,12 +328,35 @@ transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", mass =
     i <- which(dir == d)
     if (!length(i)) next
     out[i] <- dist_paired(.f, dist[i], a[i], ..., tail = if (d == 1L) tail else swap)
-    if (mass && d == -1L) {
-      m <- dist_paired(point_mass, dist[i], at = a[i])
-      out[i] <- pmin(pmax(if (tail == "lower") out[i] + m else out[i] - m, 0), 1)
+    if (d == -1L && !is.null(decreasing)) {
+      out[i] <- decreasing(dist[i], a[i], out[i], swap)
     }
   }
   out
+}
+
+# For a decreasing transformation `g`, the swapped tail gives P(g(X) <= q) as
+# P(X > g^-1(q)), but it is P(X >= g^-1(q)). They differ by the mass of the
+# base distribution at `a = g^-1(q)`, which is added to the lower tail (when
+# the base tail is "upper") and subtracted from the upper tail.
+transformed_cdf_mass <- function(dist, a, p, base_tail) {
+  m <- dist_paired(point_mass, dist, at = a)
+  pmin(pmax(if (base_tail == "upper") p + m else p - m, 0), 1)
+}
+
+# For a decreasing transformation `g`, the quantile at `p` is g(k) for the
+# largest `k` with P(X >= k) >= p, while the base quantile in the swapped tail
+# is the smallest `k` with P(X > k) <= p. They differ when P(X > k) is `p`
+# (up to rounding error): `p` is then the cdf at an atom, and the quantile is
+# at the next atom, k + 1 for distributions on the integers. The upper tail is
+# the same, with P(X <= k) in place of P(X > k).
+transformed_quantile_atom <- function(dist, p, k, base_tail) {
+  lattice <- is_lattice(dist)
+  if (!any(lattice)) return(k)
+  s <- dist_paired(cdf, dist, q = k, tail = base_tail)
+  next_atom <- which(lattice & is.finite(k) & abs(s - p) <= 1e-12 * p)
+  k[next_atom] <- k[next_atom] + 1
+  k
 }
 
 #' @export
@@ -342,7 +366,7 @@ cdf.dist_transformed <- function(x, q, ..., tail = "lower"){
     q <- transformed_arg(q, idx, n)
     p <- transformed_inner(
       cdf, dist, tf, transformed_preimage(tf, inv, q), "the cdf", ...,
-      tail = tail, mass = TRUE
+      tail = tail, decreasing = transformed_cdf_mass
     )
 
     # TODO: Rework for support of closed limits and prevent computation
@@ -364,7 +388,10 @@ quantile.dist_transformed <- function(x, p, ..., tail = "lower"){
   transformed_by_group(x, function(dist, tf, inv, idx) {
     p <- transformed_arg(p, idx, n)
     # Quantiles of the base distribution (`NA` for non-monotonic transformations)
-    tf(transformed_inner(quantile, dist, tf, p, "quantiles", ..., tail = tail))
+    tf(transformed_inner(
+      quantile, dist, tf, p, "quantiles", ..., tail = tail,
+      decreasing = transformed_quantile_atom
+    ))
   })
 }
 
