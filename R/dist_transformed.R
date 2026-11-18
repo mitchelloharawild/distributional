@@ -239,7 +239,9 @@ transformed_preimage <- function(tf, inv, at) {
   y <- suppressWarnings(inv(at))
   k <- round(y)
   fwd <- suppressWarnings(tf(k))
-  snap <- which(abs(fwd - at) <= 1e-12 * pmax(abs(at), abs(fwd)))
+  snap <- which(
+    is.finite(fwd) & is.finite(at) & abs(fwd - at) <= 1e-12 * pmax(abs(at), abs(fwd))
+  )
   y[snap] <- k[snap]
   y
 }
@@ -287,7 +289,12 @@ density.dist_transformed <- function(x, at, ...){
 # (paired with the distributions), accounting for the direction of the
 # transformation. A decreasing transformation swaps the tails, and a
 # non-monotonic transformation gives `NA`.
-transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower") {
+#
+# For `cdf()`, swapping the tails of a decreasing transformation `g` gives
+# P(g(X) <= q) as P(X > g^-1(q)), but it is P(X >= g^-1(q)). They differ by
+# the mass of the base distribution at `a = g^-1(q)`, which is added to the
+# lower tail and subtracted from the upper tail when `mass` is `TRUE`.
+transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", mass = FALSE) {
   dir <- transformed_dir(tf, dist)
   if (any(dir == 0L)) {
     warning(sprintf(
@@ -301,6 +308,10 @@ transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower") {
     i <- which(dir == d)
     if (!length(i)) next
     out[i] <- dist_paired(.f, dist[i], a[i], ..., tail = if (d == 1L) tail else swap)
+    if (mass && d == -1L) {
+      m <- dist_paired(point_mass, dist[i], at = a[i])
+      out[i] <- pmin(pmax(if (tail == "lower") out[i] + m else out[i] - m, 0), 1)
+    }
   }
   out
 }
@@ -311,7 +322,8 @@ cdf.dist_transformed <- function(x, q, ..., tail = "lower"){
   transformed_by_group(x, function(dist, tf, inv, idx) {
     q <- transformed_arg(q, idx, n)
     p <- transformed_inner(
-      cdf, dist, tf, suppressWarnings(inv(q)), "the cdf", ..., tail = tail
+      cdf, dist, tf, transformed_preimage(tf, inv, q), "the cdf", ...,
+      tail = tail, mass = TRUE
     )
 
     # TODO: Rework for support of closed limits and prevent computation

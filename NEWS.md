@@ -123,6 +123,9 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   `density()` now returns `1/scale` (`shape = -1`) or `Inf` (`shape < -1`)
   there instead of 0. The density near the upper bound is also computed
   without floating point cancellation.
+* `cdf()` of a decreasing transformation of a discrete distribution now
+  includes the probability mass at the threshold. `cdf(-dist_poisson(3), -2)`
+  is now P(Y >= 2) = 0.80, where it was P(Y > 2) = 0.58.
 
 ## Other changes
 

@@ -319,3 +319,62 @@ test_that("transformed distributions of mixed inner families", {
   expect_equal(format(d), c("t(N(0, 1))", "t(Gamma(2, 1))", "t(Pois(3))"))
   expect_equal(vapply(generate(d, times = 5), length, 1L), rep(5L, 3))
 })
+
+test_that("cdf of decreasing transformations of discrete distributions keeps the mass at the threshold", {
+  prob <- function(x) mean(x)
+  y <- -dist_poisson(3)
+  # P(-Y <= -k) = P(Y >= k)
+  expect_equal(cdf(y, -2), ppois(1, 3, lower.tail = FALSE))
+  expect_equal(cdf(y, -2, tail = "upper"), ppois(1, 3))
+  expect_equal(cdf(y, -(0:6))[[1]], ppois(-1:5, 3, lower.tail = FALSE))
+  expect_equal(cdf(y, -(0:6), tail = "upper")[[1]], ppois(-1:5, 3))
+  expect_equal(cdf(y, 0), 1)
+  expect_equal(cdf(y, 0, tail = "upper"), 0)
+  # Between the support points there is no mass
+  expect_equal(cdf(y, -2.5), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(y >= -2), ppois(2, 3))
+  expect_equal(prob(y > -2), ppois(1, 3))
+  expect_equal(prob(y < -2), ppois(2, 3, lower.tail = FALSE))
+  expect_equal(prob(y <= -2), ppois(1, 3, lower.tail = FALSE))
+
+  # Inexact inverses: -0.3 / -0.1 is 2.9999999999999996
+  y <- -0.1 * dist_poisson(3)
+  q <- -c(0, 0.1, 0.2, 0.3, 0.7)
+  expect_equal(cdf(y, q)[[1]], ppois(c(0, 1, 2, 3, 7) - 1, 3, lower.tail = FALSE))
+  expect_equal(prob(y >= q), ppois(c(0, 1, 2, 3, 7), 3))
+  expect_equal(prob(y < q), ppois(c(0, 1, 2, 3, 7), 3, lower.tail = FALSE))
+
+  # Other decreasing transformations, and those of mixed distributions
+  expect_equal(cdf(1 / dist_poisson(3), 0.5), ppois(1, 3, lower.tail = FALSE))
+  x <- -dist_inflated(dist_normal(), 0.2, 0)
+  expect_equal(cdf(x, 0), 0.6)
+  expect_equal(cdf(x, 0, tail = "upper"), 0.4)
+
+  # The cdf of continuous distributions is unchanged
+  expect_equal(cdf(-dist_normal(1), -0.5), pnorm(0.5, 1, lower.tail = FALSE))
+
+  # Increasing and decreasing transformations in one vector, with rep()
+  x <- rep(c(-dist_poisson(3), 2 * dist_poisson(3), -dist_normal()), 2)
+  q <- c(-2, 4, 1, -3, 6, -1)
+  expect_equal(
+    cdf(x, list(q))[[1]],
+    c(ppois(1, 3, lower.tail = FALSE), ppois(2, 3), pnorm(1),
+      ppois(2, 3, lower.tail = FALSE), ppois(3, 3), pnorm(-1))
+  )
+  expect_equal(
+    cdf(x, list(q), tail = "upper")[[1]],
+    c(ppois(1, 3), ppois(2, 3, lower.tail = FALSE), pnorm(1, lower.tail = FALSE),
+      ppois(2, 3), ppois(3, 3, lower.tail = FALSE), pnorm(-1, lower.tail = FALSE))
+  )
+  expect_equal(cdf(c(-dist_poisson(3), NA), -2), c(ppois(1, 3, lower.tail = FALSE), NA))
+})
+
+test_that("quantiles of transformed discrete distributions invert the cdf", {
+  p <- c(0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 0.99)
+  # The smallest y with P(-Y <= y) >= p is -k for the largest k with P(Y >= k) >= p
+  expect_equal(quantile(-dist_poisson(3), p)[[1]], -qpois(p, 3, lower.tail = FALSE))
+  expect_equal(quantile(0.1 * dist_poisson(3), p)[[1]], 0.1 * qpois(p, 3))
+  expect_equal(quantile(2 * dist_poisson(3), p)[[1]], 2 * qpois(p, 3))
+  expect_equal(quantile(-dist_poisson(3), p, tail = "upper")[[1]], -qpois(p, 3))
+
+})
