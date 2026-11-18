@@ -138,6 +138,8 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   now correct at the probabilities of its support points, so that it inverts
   `cdf()`. At p = P(Y >= 2), `quantile(-dist_poisson(3), p)` is now -2, where
   it was -1.
+* `hdr()` of a transformed distribution (such as `hdr(2 * dist_poisson(3))`)
+  no longer errors with "Can't recycle input of size 512 to size 1".
 
 ## Other changes
 

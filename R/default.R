@@ -287,10 +287,14 @@ hdr.dist_default <- function(x, size = 95, n = 4096, ...){
     )
   }
 
-  dist_x <- quantile(x, seq(0.5/n, 1 - 0.5/n, length.out = n))
+  # `x` is a single raw distribution, whose methods only take arguments paired
+  # with it by position (size 1). Go through `distribution`, which maps the
+  # vectors of probabilities and points over it (one list element).
+  dx <- wrap_dist(list(x))
+  dist_x <- quantile(dx, seq(0.5/n, 1 - 0.5/n, length.out = n))[[1L]]
   # Remove duplicate values of dist_x from less continuous distributions
   dist_x <- unique(dist_x)
-  dist_y <- density(x, dist_x)
+  dist_y <- density(dx, dist_x)[[1L]]
   alpha <- quantile(dist_y, probs = 1-size/100)
 
   crossing_alpha <- function(alpha, x, y){

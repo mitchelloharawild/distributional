@@ -420,3 +420,26 @@ test_that("density of transformed discrete distributions is the mass at the prei
   expect_equal(likelihood(y, list(c(2, 4, 6)), log = TRUE), sum(dpois(1:3, 3, log = TRUE)))
   expect_equal(likelihood(y, list(c(2, 3))), 0)
 })
+
+test_that("hdr() of transformed distributions", {
+  # The 95% HDR of exp(X), X ~ Gamma(2, 1), with density log(y) / y^2 for y > 1
+  f <- function(y) log(y) / y^2
+  ends <- function(a) {
+    c(stats::uniroot(function(y) f(y) - a, c(1, exp(0.5)), tol = 1e-12)$root,
+      stats::uniroot(function(y) f(y) - a, c(exp(0.5), 1e8), tol = 1e-12)$root)
+  }
+  a <- stats::uniroot(function(a) diff(pgamma(log(ends(a)), 2)) - 0.95, c(1e-6, f(exp(0.5)) - 1e-6), tol = 1e-14)$root
+  x <- hdr(exp(dist_gamma(2, 1)), n = 1e4)
+  expect_equal(c(vctrs::field(x, "lower")[[1]], vctrs::field(x, "upper")[[1]]), ends(a), tolerance = 0.01)
+
+  # A transformed discrete distribution has the HDR of the base, transformed
+  x <- hdr(2 * dist_poisson(3))
+  y <- hdr(dist_poisson(3))
+  expect_equal(vctrs::field(x, "lower")[[1]], vctrs::field(y, "lower")[[1]] * 2)
+  expect_equal(vctrs::field(x, "upper")[[1]], vctrs::field(y, "upper")[[1]] * 2)
+
+  # Vectors of transformed and other distributions
+  x <- hdr(c(2 * dist_poisson(3), exp(dist_gamma(2, 1)), dist_normal()))
+  expect_length(x, 3)
+  expect_equal(vctrs::field(x, "upper")[[3]], qnorm(0.975))
+})
