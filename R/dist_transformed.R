@@ -76,6 +76,11 @@
 #'   \eqn{|d/dy \, g^{-1}(y)|} is computed numerically using 
 #'   [`numDeriv::jacobian()`].
 #'
+#'   For a discrete base distribution, the probability mass function is the
+#'   mass at the preimage, \eqn{P(Y = y) = P(X = g^{-1}(y))}, without the
+#'   Jacobian. It is 0 when \eqn{y} is not the image of a point in the
+#'   support (such as odd numbers for `2 * dist_poisson(3)`).
+#'
 #'   **Cumulative distribution function (c.d.f)**:
 #'
 #'   For monotonically increasing \eqn{g}:
@@ -87,12 +92,13 @@
 #'
 #'   For monotonically decreasing \eqn{g}:
 #'   \deqn{
-#'     F_Y(y) = 1 - F_X(g^{-1}(y))
+#'     F_Y(y) = 1 - F_X(g^{-1}(y)) + P(X = g^{-1}(y))
 #'   }{
-#'     F_Y(y) = 1 - F_X(g^(-1)(y))
+#'     F_Y(y) = 1 - F_X(g^(-1)(y)) + P(X = g^(-1)(y))
 #'   }
 #'
-#'   where \eqn{F_X} is the c.d.f. of the base distribution.
+#'   where \eqn{F_X} is the c.d.f. of the base distribution. The probability
+#'   mass \eqn{P(X = g^{-1}(y))} is 0 for continuous distributions.
 #'
 #'   **Quantile function**: The inverse of the c.d.f.
 #'
