@@ -15,6 +15,27 @@ default_bind <- function(res) {
   }
 }
 
+# Call `.f(x_i, arg_i, ...)` for each distribution `x_i` of `x` (as a size 1
+# `distribution` vector slice), where `arg_i` is the argument paired with it by
+# position (`arg` is omitted if `.f` doesn't take one), and combine the results
+# with `.combine()`, which takes the list of results.
+per_dist <- function(x, .f, arg, ..., .combine = default_bind) {
+  has_arg <- !missing(arg)
+  res <- lapply(vctrs::vec_seq_along(x), function(i) {
+    if (!has_arg) {
+      .f(vctrs::vec_slice(x, i), ...)
+    } else {
+      .f(vctrs::vec_slice(x, i), default_arg_slice(arg, i), ...)
+    }
+  })
+  .combine(res)
+}
+bind_c <- function(res) vctrs::vec_c(!!!res)
+# Univariate results are a vector; multivariate ones a list of matrices
+bind_covariance <- function(res) {
+  if (any(vapply(res, is.matrix, logical(1L)))) res else unlist(res)
+}
+
 #' @export
 density.dist_default <- function(x, ...){
   abort(
@@ -31,11 +52,7 @@ log_density.dist_default <- function(x, ...){
 #' @export
 quantile.dist_default <- function(x, p, ..., tail = "lower"){
   if(tail == "upper") return(quantile(x, 1 - p, ...))
-  if (vctrs::vec_size(x) != 1L) {
-    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
-      quantile(vctrs::vec_slice(x, i), default_arg_slice(p, i), ...)
-    })))
-  }
+  if (vctrs::vec_size(x) != 1L) return(per_dist(x, quantile, p, ...))
   # abort(
   #   sprintf("The distribution class `%s` does not support `quantile()`",
   #           class(x)[1])
@@ -53,11 +70,7 @@ log_quantile.dist_default <- function(x, p, ...){
 #' @export
 cdf.dist_default <- function(x, q, times = 1e5, ..., tail = "lower"){
   if(tail == "upper") return(1 - cdf(x, q, times = times, ...))
-  if (vctrs::vec_size(x) != 1L) {
-    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
-      cdf(vctrs::vec_slice(x, i), default_arg_slice(q, i), times = times, ...)
-    })))
-  }
+  if (vctrs::vec_size(x) != 1L) return(per_dist(x, cdf, q, times = times, ...))
   # Use Monte Carlo integration
   r <- generate(x, times = times)[[1L]]
   if(is.list(q)) {
@@ -118,9 +131,7 @@ family.dist_default <- function(object, recursive = FALSE, ...) {
   # default is used by a vectorised (ported) family with more than one
   # element sharing the call. See `_dev/vecvec.md` section 3.4.
   if (vctrs::vec_size(object) != 1L) {
-    return(lapply(vctrs::vec_seq_along(object), function(i) {
-      family(vctrs::vec_slice(object, i), recursive = TRUE)
-    }))
+    return(per_dist(object, family, recursive = TRUE, .combine = identity))
   }
 
   # Identify fields which hold embedded distribution(s), and recurse into
@@ -153,7 +164,7 @@ support.dist_default <- function(x, ...) {
   # this default is used by a vectorised (ported) family with more than one
   # element sharing the call. See `_dev/vecvec.md` section 3.4.
   if (vctrs::vec_size(x) != 1L) {
-    return(vctrs::vec_c(!!!lapply(vctrs::vec_seq_along(x), function(i) support(vctrs::vec_slice(x, i), ...))))
+    return(per_dist(x, support, ..., .combine = bind_c))
   }
   # `x` is a single raw distribution here, so its methods can't be mapped over
   # several points. Go through `distribution` which maps (one list element).
@@ -189,9 +200,7 @@ has_symmetry.dist_default <- function(x, ...){
 #' @export
 mean.dist_default <- function(x, ...){
   if (vctrs::vec_size(x) != 1L) {
-    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
-      mean(vctrs::vec_slice(x, i), ...)
-    })))
+    return(per_dist(x, mean, ...))
   }
   dx <- wrap_dist(list(x))
   x_sup <- support(x)
@@ -210,9 +219,7 @@ mean.dist_default <- function(x, ...){
 #' @export
 variance.dist_default <- function(x, ...){
   if (vctrs::vec_size(x) != 1L) {
-    return(default_bind(lapply(vctrs::vec_seq_along(x), function(i) {
-      variance(vctrs::vec_slice(x, i), ...)
-    })))
+    return(per_dist(x, variance, ...))
   }
   x <- covariance(x, ...)
   if(is.matrix(x[[1]]) && ncol(x[[1]]) > 1){
@@ -222,11 +229,7 @@ variance.dist_default <- function(x, ...){
 #' @export
 covariance.dist_default <- function(x, ...){
   if (vctrs::vec_size(x) != 1L) {
-    res <- lapply(vctrs::vec_seq_along(x), function(i) {
-      covariance(vctrs::vec_slice(x, i), ...)
-    })
-    # Univariate results are a vector; multivariate ones a list of matrices
-    return(if (any(vapply(res, is.matrix, logical(1L)))) res else unlist(res))
+    return(per_dist(x, covariance, ..., .combine = bind_covariance))
   }
   dx <- wrap_dist(list(x))
   x_sup <- support(x)
@@ -271,9 +274,7 @@ hdr.dist_default <- function(x, size = 95, n = 4096, ...){
   # (ported) family with more than one element sharing the call. See
   # `_dev/vecvec.md` section 3.4.
   if (vctrs::vec_size(x) != 1L) {
-    return(vctrs::vec_c(!!!lapply(vctrs::vec_seq_along(x), function(i) {
-      hdr(vctrs::vec_slice(x, i), size = size, n = n, ...)
-    })))
+    return(per_dist(x, hdr, size = size, n = n, ..., .combine = bind_c))
   }
   # Use exact quantiles for symmetric distributions
   if (has_symmetry(x)) {
