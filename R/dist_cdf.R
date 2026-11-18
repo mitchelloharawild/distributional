@@ -125,9 +125,6 @@ mean.dist_cdf <- function(x, ...) {
 }
 
 #' @export
-point_mass.dist_cdf <- point_mass_continuous
-
-#' @export
 support.dist_cdf <- function(x, ...) {
   interp_support(x[["x"]], x[["cdf"]])
 }

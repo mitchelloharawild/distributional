@@ -134,9 +134,6 @@ generate.dist_laplace <- function(x, times, ...) {
 }
 
 #' @export
-point_mass.dist_laplace <- point_mass_continuous
-
-#' @export
 support.dist_laplace <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

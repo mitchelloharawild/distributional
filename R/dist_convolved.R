@@ -135,6 +135,11 @@ convolved_map <- function(x, at, .f, simplify = TRUE) {
   if (simplify) vec_c(!!!out, .ptype = double()) else out
 }
 
+# A convolution is on the integers only when all its components are, so this
+# differs between the distributions of the family.
+#' @export
+point_mass.dist_convolved <- point_mass_elementwise
+
 #' @export
 format.dist_convolved <- function(x, ...) {
   vapply(x[["dist"]], function(d) paste(format(d, ...), collapse = " + "), character(1L))

@@ -114,9 +114,6 @@ generate.dist_exponential <- function(x, times, ...){
 }
 
 #' @export
-point_mass.dist_exponential <- point_mass_continuous
-
-#' @export
 support.dist_exponential <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

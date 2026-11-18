@@ -201,7 +201,6 @@ log_density.dist_student_t <- function(x, at, ...){
   student_t_stat(stats::dt, (at - x[["mu"]])/sigma, x[["df"]], x[["ncp"]], log = TRUE) - log(sigma)
 }
 
-
 #' @export
 quantile.dist_student_t <- function(x, p, ..., tail = "lower"){
   p <- vctrs::vec_recycle(p, vctrs::vec_size(x))
@@ -228,9 +227,6 @@ generate.dist_student_t <- function(x, times, ...){
   }
   vctrs::vec_chop(z * rep(x[["sigma"]], times) + rep(x[["mu"]], times), sizes = times)
 }
-
-#' @export
-point_mass.dist_student_t <- point_mass_continuous
 
 #' @export
 support.dist_student_t <- function(x, ...) {

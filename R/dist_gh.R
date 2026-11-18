@@ -138,9 +138,6 @@ generate.dist_gh <- function(x, times, ...){
 }
 
 #' @export
-point_mass.dist_gh <- point_mass_continuous
-
-#' @export
 support.dist_gh <- function(x, ...) {
   n <- vec_size(x)
   new_support_region(

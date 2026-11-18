@@ -238,9 +238,6 @@ generate.dist_gev <- function(x, times, ...) {
 }
 
 #' @export
-point_mass.dist_gev <- point_mass_continuous
-
-#' @export
 support.dist_gev <- function(x, ...) {
   location <- x[["location"]]
   scale <- x[["scale"]]

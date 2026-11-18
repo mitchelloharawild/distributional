@@ -128,9 +128,6 @@ generate.dist_lognormal <- function(x, times, ...){
 }
 
 #' @export
-point_mass.dist_lognormal <- point_mass_continuous
-
-#' @export
 support.dist_lognormal <- function(x, ...) {
   n <- vec_size(x)
   new_support_region(

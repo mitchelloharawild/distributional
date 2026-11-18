@@ -113,9 +113,6 @@ generate.dist_cauchy <- function(x, times, ...){
 }
 
 #' @export
-point_mass.dist_cauchy <- point_mass_continuous
-
-#' @export
 support.dist_cauchy <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

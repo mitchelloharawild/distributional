@@ -98,6 +98,10 @@ format.dist_wrap <- function(x, ...){
   sprintf("%s(%s)", x[["dist"]], args)
 }
 
+# The data type of a wrapped distribution depends on the function it wraps.
+#' @export
+point_mass.dist_wrap <- point_mass_elementwise
+
 #' @export
 density.dist_wrap <- function(x, at, ...){
   dist_wrap_apply(x, "d", at, function(fn, at, par) do.call(fn, c(list(at), par)))

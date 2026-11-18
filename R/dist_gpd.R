@@ -255,9 +255,6 @@ covariance.dist_gpd <- function(x, ...) {
 }
 
 #' @export
-point_mass.dist_gpd <- point_mass_continuous
-
-#' @export
 support.dist_gpd <- function(x, ...) {
   shape <- x[["shape"]]
   location <- x[["location"]]

@@ -134,9 +134,6 @@ generate.dist_pareto <- function(x, times, ...){
 }
 
 #' @export
-point_mass.dist_pareto <- point_mass_continuous
-
-#' @export
 support.dist_pareto <- function(x, ...) {
   n <- vec_size(x)
   new_support_region(

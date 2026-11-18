@@ -216,25 +216,36 @@ point_mass.distribution <- function(x, at, ...) {
 # integers, given by `density()`. As in R's discrete p-functions (such as
 # `ppois()`), a value within 1e-7 (relative) of an integer is treated as that
 # integer, so that `cdf()` and `point_mass()` agree. Other distributions are
-# taken to be continuous. Continuous families have their own (cheaper) method,
-# `point_mass_continuous()`.
+# taken to be continuous.
+#
+# Whether a family is on the integers is a property of its data type (the
+# prototype stored by `support()`), which is the same for every distribution
+# of a family. So `x` (one storage slot) is checked from its first element
+# only, rather than building the support of every distribution. Families
+# whose data type can differ between their distributions (such as
+# `dist_convolved()` and `dist_wrap()`) use `point_mass_elementwise()`.
 #' @export
 point_mass.dist_default <- function(x, at, ...) {
+  n <- vctrs::vec_size(x)
+  lattice <- n > 0L && is_lattice(vctrs::vec_slice(x, 1L))
+  point_mass_lattice(x, at, rep_len(lattice, n))
+}
+
+# As `point_mass.dist_default()`, checking the data type of each distribution.
+point_mass_elementwise <- function(x, at, ...) {
+  point_mass_lattice(x, at, is_lattice(x))
+}
+
+# The mass at `at` of distributions that are on the integers where `lattice`
+# is `TRUE`, and continuous otherwise.
+point_mass_lattice <- function(x, at, lattice) {
   n <- vctrs::vec_size(x)
   at <- vctrs::vec_recycle(at, n)
   out <- rep_len(0, n)
   out[is.na(at)] <- NA_real_
-  int <- lattice_integer(at, is_lattice(x))
+  int <- lattice_integer(at, lattice)
   if (any(int)) out[int] <- density(vctrs::vec_slice(x, int), round(at[int]))
   out
-}
-
-# Continuous families have no point masses. They use this method rather than
-# the default, which would build their `support()` only to find that it isn't
-# on the integers (slow for many distributions).
-point_mass_continuous <- function(x, at, ...) {
-  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
-  ifelse(is.na(at), NA_real_, 0)
 }
 
 # Which values of `at` are integers, for the distributions on the integers

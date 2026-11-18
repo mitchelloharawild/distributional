@@ -254,7 +254,7 @@ test_that("point_mass() gives the probability mass of each distribution", {
   expect_length(point_mass(x[0], 1), 0)
 })
 
-test_that("point_mass() of continuous families is 0 without building their support", {
+test_that("point_mass() of continuous families is 0", {
   x <- c(
     dist_normal(), dist_gamma(2, 1), dist_uniform(0, 1), dist_student_t(3),
     dist_beta(2, 2), dist_exponential(1), dist_lognormal(), dist_weibull(2, 1)
@@ -262,9 +262,39 @@ test_that("point_mass() of continuous families is 0 without building their suppo
   expect_equal(point_mass(x, 1), rep(0, 8))
   expect_equal(point_mass(x, NA_real_), rep(NA_real_, 8))
   expect_equal(point_mass(dist_normal(1:3), c(1, NA, 3)), c(0, NA, 0))
-  local_mocked_bindings(support.dist_normal = function(x, ...) stop("support() was built"))
   expect_equal(prob(dist_normal(0:2) >= 1), pnorm(1, 0:2, lower.tail = FALSE))
   expect_equal(prob(dist_normal(0:2) < 1), pnorm(1, 0:2))
+})
+
+test_that("point_mass() builds the support of one distribution per family", {
+  n_built <- 0L
+  sup <- support.dist_normal
+  local_mocked_bindings(support.dist_normal = function(x, ...) {
+    n_built <<- n_built + vctrs::vec_size(x)
+    sup(x, ...)
+  })
+  expect_equal(point_mass(dist_normal(1:100), 1), rep(0, 100))
+  expect_equal(n_built, 1L)
+  expect_equal(point_mass(dist_poisson(1:3), c(1, 1.5, NA)), c(dpois(1, 1), 0, NA))
+})
+
+test_that("point_mass() checks the data type of each convolved or wrapped distribution", {
+  # One storage slot holding both a lattice and a continuous distribution
+  x <- c(dist_poisson(3) + dist_gamma(2, 1), dist_poisson(1) + dist_poisson(2))
+  expect_equal(point_mass(x, 2), c(0, dpois(2, 3)))
+  expect_equal(prob(x >= 2)[2], ppois(1, 3, lower.tail = FALSE))
+
+  dcnt <- function(x, a) dpois(x, a)
+  pcnt <- function(q, a, ...) ppois(q, a, ...)
+  qcnt <- function(p, a, ...) qpois(p, a, ...)
+  rcnt <- function(n, a) rpois(n, a)
+  dcts <- function(x, a) dexp(x, a)
+  pcts <- function(q, a, ...) pexp(q, a, ...)
+  qcts <- function(p, a, ...) qexp(p, a, ...)
+  rcts <- function(n, a) rexp(n, a)
+  w <- c(dist_wrap("cts", a = 1), dist_wrap("cnt", a = 3))
+  expect_equal(point_mass(w, 2), c(0, dpois(2, 3)))
+  expect_equal(prob(w >= 2), c(pexp(2, 1, lower.tail = FALSE), ppois(1, 3, lower.tail = FALSE)))
 })
 
 test_that("point_mass() handles families with mass at a point of continuous support", {
