@@ -268,12 +268,12 @@ test_that("point_mass() of continuous families is 0", {
 
 test_that("point_mass() builds the support of one distribution per family", {
   n_built <- 0L
-  sup <- support.dist_normal
-  local_mocked_bindings(support.dist_normal = function(x, ...) {
+  sup <- support.dist_logistic
+  local_mocked_bindings(support.dist_logistic = function(x, ...) {
     n_built <<- n_built + vctrs::vec_size(x)
     sup(x, ...)
   })
-  expect_equal(point_mass(dist_normal(1:100), 1), rep(0, 100))
+  expect_equal(point_mass(dist_logistic(1:100, 1), 1), rep(0, 100))
   expect_equal(n_built, 1L)
   expect_equal(point_mass(dist_poisson(1:3), c(1, 1.5, NA)), c(dpois(1, 1), 0, NA))
 })
@@ -495,4 +495,32 @@ test_that("logical operators error for operands that aren't events", {
 test_that("unary minus and plus still dispatch through Ops", {
   expect_identical(format(-dist_normal(1)), "N(-1, 1)")
   expect_identical(format(+dist_normal(1)), "N(1, 1)")
+})
+
+test_that("a normal with sd 0 has a point mass at its mean", {
+  d <- dist_normal(2, 0)
+  expect_equal(mean(d >= 2), 1)
+  expect_equal(mean(d > 2), 0)
+  expect_equal(mean(d <= 2), 1)
+  expect_equal(mean(d < 2), 0)
+  expect_equal(mean(d >= 3), 0)
+  expect_equal(mean(d < 3), 1)
+  expect_equal(mean(d > 1), 1)
+  expect_equal(mean(d <= 1), 0)
+  # Vectorised, with missing values and positive sd
+  x <- dist_normal(c(2, 2, 2, NA), c(0, 1, 0, 0))
+  expect_equal(mean(x >= 2), c(1, 0.5, 1, NA))
+  expect_equal(mean(x < 2), c(0, 0.5, 0, NA))
+  expect_equal(mean(dist_normal(2, 0) >= c(2, NA)), c(1, NA))
+})
+
+test_that("a log-normal with sdlog 0 has a point mass at exp(mu)", {
+  d <- dist_lognormal(log(2), 0)
+  expect_equal(mean(d >= 2), 1)
+  expect_equal(mean(d < 2), 0)
+  expect_equal(mean(d > 2), 0)
+  expect_equal(mean(d <= 2), 1)
+  expect_equal(mean(d >= 3), 0)
+  expect_equal(mean(d < 0), 0)
+  expect_equal(mean(dist_lognormal(0, 1) >= 1), 0.5)
 })

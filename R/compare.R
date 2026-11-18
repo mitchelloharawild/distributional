@@ -231,6 +231,28 @@ point_mass.dist_default <- function(x, at, ...) {
   point_mass_lattice(x, at, rep_len(lattice, n))
 }
 
+# A normal (or log-normal) distribution with a standard deviation of 0 is
+# degenerate, with all its mass at `mu` (`exp(mu)`), as its `cdf()` is a step.
+# `at` is paired by position with the `n` distributions of `x`.
+point_mass_scale0 <- function(x, at, loc) {
+  n <- vctrs::vec_size(x)
+  at <- vctrs::vec_recycle(at, n)
+  sd <- x[["sigma"]]
+  out <- as.numeric(!is.na(sd) & sd == 0 & !is.na(at) & loc(at) == x[["mu"]])
+  out[is.na(at) | is.na(sd)] <- NA_real_
+  out
+}
+
+#' @export
+point_mass.dist_normal <- function(x, at, ...) {
+  point_mass_scale0(x, at, identity)
+}
+
+#' @export
+point_mass.dist_lognormal <- function(x, at, ...) {
+  point_mass_scale0(x, at, function(a) suppressWarnings(log(a)))
+}
+
 # As `point_mass.dist_default()`, checking the data type of each distribution.
 point_mass_elementwise <- function(x, at, ...) {
   point_mass_lattice(x, at, is_lattice(x))
