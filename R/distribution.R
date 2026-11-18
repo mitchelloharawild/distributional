@@ -870,7 +870,22 @@ is.finite.distribution <- function(x) rep_len(TRUE, length(x))
 # Called as a function, because `S7::method(c, ...) <-` would also assign a
 # local `c` in the namespace, masking base::c() for the rest of the package.
 S7::`method<-`(c, class_distribution, value = function(..., recursive = FALSE) {
-  dots <- lapply(list2(...), vctrs::vec_cast, to = new_dist())
+  dots <- lapply(list2(...), function(d) {
+    if (is_distribution(d)) d else vctrs::vec_cast(d, new_dist())
+  })
+  # Runs of distributions with a single record (the common result of combining
+  # many separate distributions) are merged by family in one step
+  single <- vapply(dots, function(d) {
+    length(d) == 1L && length(d@x) == 1L && vctrs::vec_size(d@x[[1L]]) == 1L && !anyNA(d)
+  }, logical(1L))
+  if (sum(single) > 1L) {
+    run <- cumsum(c(TRUE, single[-1L] != single[-length(single)]))
+    dots <- unlist(lapply(unname(split(seq_along(dots), run)), function(idx) {
+      if (!single[[idx[[1L]]]] || length(idx) == 1L) return(dots[idx])
+      list(class_distribution(lapply(unname(dots[idx]), function(d) d@x[[1L]])))
+    }), recursive = FALSE)
+    if (length(dots) == 1L) return(dots[[1L]])
+  }
   inject(vecvec_c(!!!dots))
 })
 

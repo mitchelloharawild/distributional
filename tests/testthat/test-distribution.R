@@ -225,3 +225,34 @@ test_that("empty and missing distributions give results of the usual type", {
   }
   expect_identical(density(x[0], list(a = 1)), data.frame(a = double()))
 })
+
+test_that("same-family slots are merged, even when not adjacent", {
+  parts <- lapply(1:20, function(i) if (i %% 2) dist_normal(i) else dist_poisson(i))
+  x <- do.call(c, parts)
+  expect_length(x@x, 2L)
+  expect_length(x, 20L)
+  expect_equal(family(x), rep(c("normal", "poisson"), 10))
+  expect_equal(mean(x), as.numeric(1:20))
+  expect_equal(density(x, 2)[[1]], dist_density_ref <- stats::dnorm(2, 1, 1))
+  expect_equal(format(x[1:4]), c("N(1, 1)", "Pois(2)", "N(3, 1)", "Pois(4)"))
+
+  # Missing indices stay missing, and reordering is kept
+  y <- c(dist_normal(1:2)[c(2, NA)], dist_poisson(3), dist_normal(4))
+  expect_length(y@x, 2L)
+  expect_equal(format(y), c("N(2, 1)", NA, "Pois(3)", "N(4, 1)"))
+  expect_equal(is.na(y), c(FALSE, TRUE, FALSE, FALSE))
+
+  # Variate names are kept apart
+  a <- dist_multivariate_normal(mu = list(c(1, 2)), sigma = list(diag(2)))
+  b <- a
+  variates(b) <- c("p", "q")
+  z <- c(a, dist_normal(0), b, a)
+  expect_length(z@x, 3L)
+  expect_equal(family(z), rep(c("mvnorm", "normal", "mvnorm", "mvnorm"), 1L))
+  expect_equal(dist_elem(z, 3L), dist_elem(b, 1L))
+
+  # Names of the inputs aren't carried into the merged records
+  m <- function(a) dist_mixture(dist_normal(a), dist_normal(a + 1), weights = c(0.5, 0.5))
+  nm <- c(first = m(0), second = m(10))
+  expect_equal(mean(nm), c(0.5, 10.5))
+})
