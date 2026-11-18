@@ -29,28 +29,6 @@ unpack <- function(data, cols, sep = ".") {
   data
 }
 
-# Locate every logical position of a `distribution` vector within its
-# storage slots: which slot it belongs to (`pos`, one integer vector of
-# positions per slot) and its position within that slot (`local`). NA
-# (missing) index positions are excluded from every `pos[[k]]`, so a family
-# method never sees them - see `_dev/vecvec.md` #3.3.
-locate_slots <- function(x) {
-  idx <- S7::S7_data(x)
-  slots <- x@x
-  n <- length(idx)
-  if (!length(slots) || !n) {
-    return(list(n = n, slots = slots, pos = vector("list", length(slots)), local = integer(n)))
-  }
-  starts <- c(0L, cumsum(lengths(slots)))
-  not_na <- !is.na(idx)
-  slot_id <- integer(n)
-  slot_id[not_na] <- findInterval(idx[not_na], starts, left.open = TRUE)
-  local <- integer(n)
-  local[not_na] <- idx[not_na] - starts[slot_id[not_na]]
-  pos <- lapply(seq_along(slots), function(k) which(not_na & slot_id == k))
-  list(n = n, slots = slots, pos = pos, local = local)
-}
-
 # inlined from https://github.com/r-lib/cli/blob/master/R/utf8.R
 is_utf8_output <- function() {
   opt <- getOption("cli.unicode", NULL)

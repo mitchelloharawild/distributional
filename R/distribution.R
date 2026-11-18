@@ -116,22 +116,6 @@ dist_elem <- function(x, i) {
 }
 dist_first_record <- function(x) dist_elem(x, 1L)
 
-# Call the generic `.f` on the `distribution` vector `x` with its first
-# argument in `...` (for example `q = q`) paired with the distributions by
-# position, as the family methods receive their own broadcast argument. Other
-# arguments in `...` are passed unchanged. The argument has size `vec_size(x)`
-# or 1. Unlike `cdf(x, q)`, which would map a size-`n` `q` over all `n`
-# distributions, this gives one result for each distribution. `.ptype` is the
-# result type used when there are no distributions to compute (see
-# `apply_slots()`).
-#
-# Nested families (truncated, inflated, ...) store their inner distributions as
-# a `distribution` vector field, so `dist_paired(cdf, x[["dist"]], q = q)` calls
-# the inner family methods once per family with all of their distributions.
-dist_paired <- function(.f, x, ..., .ptype = NULL) {
-  args <- list2(...)
-  apply_slots(x, .f, args, 1L, .ptype)
-}
 
 # Combine a list of raw (family-level) records into a `distribution` vector -
 # the inverse of `dist_elem()`. Used by `Ops.dist_default()`/
@@ -241,13 +225,9 @@ dimnames.distribution <- function(x){
 #' @export
 `[[.distribution` <- function(x, i, ...) x[i, ...]
 
-# vecvec stores the index as the S7 object's underlying data (`class_vecvec`
-# has `parent = S7::class_integer`), so `typeof(x) == "integer"` and base R's
-# `is.numeric()` (which falls back to the base type when no method matches)
-# would otherwise report a `distribution` as numeric - which, among other
-# things, makes `testthat`'s (2e) `all.equal()`-based `expect_equal()` try to
-# subtract/compare distributions as if they were plain numbers. Restore the
-# pre-migration `FALSE`.
+# vecvec's base type is numeric, so base R's `is.numeric()` would report a
+# `distribution` as numeric, and testthat's (2e) `expect_equal()` would compare
+# distributions as plain numbers. Restore the pre-migration `FALSE`.
 #' @export
 is.numeric.distribution <- function(x) FALSE
 
@@ -535,18 +515,7 @@ parameters <- function(x, ...) {
 #' @rdname parameters
 #' @export
 parameters.distribution <- function(x, recursive = FALSE, ...) {
-  loc <- locate_slots(x)
-  if (!length(loc$slots)) return(vctrs::new_data_frame(list(), n = loc$n))
-
-  rows <- vector("list", loc$n)
-  for (k in seq_along(loc$slots)) {
-    pos <- loc$pos[[k]]
-    if (!length(pos)) next
-    vals <- loc$slots[[k]][loc$local[pos]]
-    rows[pos] <- vctrs::vec_chop(parameters(vals))
-  }
-  present <- !vapply(rows, is.null, logical(1L))
-  x <- vec_rbind(!!!rows[present])
+  x <- apply_dist(x, parameters, .ptype = new_data_frame(n = 0L))
   if (recursive) {
     # Identify distributions
     dist_col <- which(vapply(x, inherits, logical(1L), what = "distribution"))
@@ -609,25 +578,13 @@ parameters.distribution <- function(x, recursive = FALSE, ...) {
 #' @importFrom stats family
 #' @export
 family.distribution <- function(object, recursive = FALSE, ...) {
-  loc <- locate_slots(object)
   if (recursive) {
     # Family trees are ragged, so describe each distribution individually.
-    out <- rep(list(NA_character_), loc$n)
-    for (k in seq_along(loc$slots)) {
-      pos <- loc$pos[[k]]
-      vals <- loc$slots[[k]][loc$local[pos]]
-      for (j in seq_along(pos)) {
-        out[[pos[j]]] <- family(vals[j], recursive = TRUE)
-      }
-    }
-    return(out)
+    return(apply_dist(object, function(v, ...) {
+      lapply(seq_along(v), function(j) family(v[j], recursive = TRUE))
+    }, .ptype = list()))
   }
-  out <- rep(NA_character_, loc$n)
-  for (k in seq_along(loc$slots)) {
-    pos <- loc$pos[[k]]
-    if (length(pos)) out[pos] <- family(loc$slots[[k]][loc$local[pos]])
-  }
-  out
+  apply_dist(object, family, .ptype = character())
 }
 
 #' Region of support of a distribution

@@ -80,6 +80,23 @@ apply_slots <- function(x, .f, args, pos = NULL, .ptype = NULL) {
   vecvec::unvecvec(out)
 }
 
+# Call the generic `.f` on the `distribution` vector `x` with its first
+# argument in `...` (for example `q = q`) paired with the distributions by
+# position, as the family methods receive their own broadcast argument. Other
+# arguments in `...` are passed unchanged. The argument has size `vec_size(x)`
+# or 1. Unlike `cdf(x, q)`, which would map a size-`n` `q` over all `n`
+# distributions, this gives one result for each distribution. `.ptype` is the
+# result type used when there are no distributions to compute (see
+# `apply_slots()`).
+#
+# Nested families (truncated, inflated, ...) store their inner distributions as
+# a `distribution` vector field, so `dist_paired(cdf, x[["dist"]], q = q)` calls
+# the inner family methods once per family with all of their distributions.
+dist_paired <- function(.f, x, ..., .ptype = NULL) {
+  args <- list2(...)
+  apply_slots(x, .f, args, 1L, .ptype)
+}
+
 # Name the columns of results with one column per variate (a matrix of points
 # or moments, or a data frame of intervals) after the variates of `x`. A list of
 # results (one per distribution) is named element by element. Results whose

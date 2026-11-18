@@ -10,13 +10,13 @@ class_distribution(x = list(), i = seq_len(sum(lengths(x))))
 \item{x}{A list of distribution family record vectors (each inheriting
 from \code{"dist_default"}).}
 
-\item{i}{An integer index locating each logical distribution within \code{x}.
+\item{i}{An index locating each logical distribution within \code{x}.
 Defaults to \code{1:sum(lengths(x))} (no compression/repetition).}
 }
 \description{
 \code{distribution} vectors are stored as a \link[vecvec:class_vecvec]{vecvec::class_vecvec}: a list of
 typed "slots" (one \code{vctrs::vctrs_rcrd()} per distribution family present in
-the vector) plus an integer index locating each logical distribution in
+the vector) plus an index locating each logical distribution in
 its slot. This lets family methods (\code{density.dist_normal()}, and so on)
 operate on a \emph{vector} of same-family distributions in one call, instead of
 looping element-by-element. See \verb{_dev/vecvec.md} for the design.
