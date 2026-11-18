@@ -532,7 +532,12 @@ Ops.dist_default <- function(e1, e2) {
   ))
 }
 
-# If there are mix of Ops with default, then use the default method
+# If there are mix of Ops with default, then use the default method.
+# `chooseOpsMethod()` only exists in R >= 4.3.0, so this method is registered
+# conditionally in `.onLoad()` (R/zzz.R) rather than in the NAMESPACE.
+# `@exportS3Method NULL` tells roxygen that it isn't exported on purpose.
+#' @exportS3Method NULL
+#' @noRd
 chooseOpsMethod.dist_default <- function(x, y, mx, my, cl, reverse) {
   # A missing operand gives a missing result, whichever side it is on
   inherits(x, "dist_na") || !inherits(y, "dist_na")

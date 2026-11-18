@@ -126,3 +126,10 @@ test_that("arithmetic with missing and empty distributions", {
 test_that("sum() of a distribution vector", {
   expect_equal(sum(dist_normal(1:3)), dist_normal(6, sqrt(3)))
 })
+
+test_that("chooseOpsMethod() is registered for R >= 4.3.0 only", {
+  skip_if(getRversion() < "4.3.0")
+  expect_false(is.null(getS3method("chooseOpsMethod", "dist_default", optional = TRUE)))
+  expect_equal(format(dist_missing() + dist_normal()), "NA")
+  expect_equal(format(dist_normal() + dist_missing()), "NA")
+})
