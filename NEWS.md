@@ -107,6 +107,12 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
 
 ## Bug fixes
 
+* `hdr()` of distributions on the integers (or logicals) is now the smallest
+  set of points with probability of at least `size`, rather than interpolated
+  on a grid of `n` quantiles as for a continuous density. `hdr(dist_poisson(3))`
+  is now [0, 6], where it was [0, 9.5] (and [0, 11.4] with `n = 1e4`).
+  Multimodal distributions give several intervals, and transformations of
+  counts (including non-monotonic ones) enumerate the points of their base.
 * The `skewness()` of `dist_beta()` now uses the correct formula.
 * `dist_multinomial()` and `dist_dirichlet()` `quantile()` now return the
   marginal quantiles of each variate.

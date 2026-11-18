@@ -276,6 +276,12 @@ hdr.dist_default <- function(x, size = 95, n = 4096, ...){
   if (vctrs::vec_size(x) != 1L) {
     return(per_dist(x, hdr, size = size, n = n, ..., .combine = bind_c))
   }
+  # Distributions on the integers have their HDR found from their point
+  # masses, rather than by interpolating a density
+  if (is_lattice(x)) {
+    out <- hdr_lattice(x, size)
+    if (!is.null(out)) return(out)
+  }
   # Use exact quantiles for symmetric distributions
   if (has_symmetry(x)) {
     return(
@@ -319,6 +325,81 @@ hdr.dist_default <- function(x, size = 95, n = 4096, ...){
   hdr <- crossing_alpha(alpha, dist_x, dist_y)
   lower_hdr <- seq_along(hdr)%%2==1
   new_hdr(lower = list(hdr[lower_hdr]), upper = list(hdr[!lower_hdr]), size = size)
+}
+
+# The HDR of a distribution `x` (one raw distribution) on the integers: the
+# smallest set of its points whose masses sum to at least `size`%. Its points
+# (see `lattice_points()`) are sorted by their mass (from `point_mass()`), and
+# the most likely are kept until they reach `size`. Points with the same mass
+# as the last one kept are kept too, so that the region doesn't depend on the
+# order of tied points. The region is given as the ranges of runs of
+# consecutive points (of positive mass) in the set, so a set with gaps gives
+# several intervals. `NULL` is returned when the points can't be enumerated.
+hdr_lattice <- function(x, size, max_points = 1e6) {
+  pts <- lattice_points(x, max_points = max_points)
+  if (is.null(pts) || !length(pts)) return(NULL)
+  mass <- point_mass(vctrs::vec_rep(x, length(pts)), pts)
+  if (anyNA(mass)) return(NULL)
+  keep <- mass > 0
+  pts <- pts[keep]
+  mass <- mass[keep]
+
+  ord <- order(mass, decreasing = TRUE)
+  k <- which(cumsum(mass[ord]) >= size / 100 * (1 - 1e-12))[1L]
+  # An enumeration of a tail-truncated support can miss the total by rounding
+  # error, so keep all of its points
+  if (is.na(k)) k <- length(ord)
+  in_hdr <- mass >= mass[ord[k]] * (1 - 1e-10)
+
+  runs <- rle(in_hdr)
+  ends <- cumsum(runs$lengths)
+  starts <- ends - runs$lengths + 1L
+  new_hdr(
+    lower = list(as.double(pts[starts[runs$values]])),
+    upper = list(as.double(pts[ends[runs$values]])),
+    size = size
+  )
+}
+
+# The sorted points of a distribution `x` (one raw distribution) on the
+# integers, which include all of its points with mass. A finite support is
+# enumerated in full, and an infinite support between its tail quantiles at
+# 1e-12 (as in `transformed_enumerate()`). `NULL` is returned when there are
+# more than `max_points` points, or they can't be found.
+lattice_points <- function(x, ...) {
+  UseMethod("lattice_points")
+}
+
+#' @export
+lattice_points.dist_default <- function(x, max_points = 1e6, ...) {
+  dx <- wrap_dist(list(x))
+  lim <- suppressWarnings(quantile(dx, c(0, 1))[[1L]])
+  if (!all(is.finite(lim))) {
+    lim <- suppressWarnings(c(
+      quantile(dx, 1e-12)[[1L]], quantile(dx, 1e-12, tail = "upper")[[1L]]
+    ))
+  }
+  if (!all(is.finite(lim))) return(NULL)
+  # Quantiles found numerically (such as of mixtures) may not be integers
+  lim <- c(floor(lim[1L] + 1e-7), ceiling(lim[2L] - 1e-7))
+  if (lim[2L] - lim[1L] + 1 > max_points) return(NULL)
+  seq(lim[1L], lim[2L])
+}
+
+# The points of a transformation of a distribution on the integers are the
+# images of the points of the base distribution. This gives every point of a
+# non-monotonic transformation (such as `(dist_poisson(3) - 3)^2`), whose
+# quantiles are unknown, and only the points of its image (such as the even
+# numbers for `2 * dist_poisson(3)`).
+#' @export
+lattice_points.dist_transformed <- function(x, max_points = 1e6, ...) {
+  base <- apply_dist(x[["dist"]], function(d) {
+    list(lattice_points(d, max_points = max_points))
+  }, .ptype = list())[[1L]]
+  if (is.null(base)) return(NULL)
+  pts <- suppressWarnings(x[["transform"]][[1L]](base))
+  if (anyNA(pts)) return(NULL)
+  sort(unique(pts))
 }
 
 #' @export
