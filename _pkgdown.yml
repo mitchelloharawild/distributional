@@ -54,6 +54,9 @@ reference:
     - hdr.distribution
     - hdr
     - is_hdr
+- subtitle: Operators
+  contents:
+    - Ops.distribution
 
 - title: Probability distributions
   desc: >

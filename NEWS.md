@@ -18,6 +18,11 @@
 * Arithmetic on an empty distribution vector now gives an empty distribution
   vector, such as `dist_normal(1:2)[0] + 1`.
 * `as.character()` now works for distributions, and returns `format()`.
+* `==` and `!=` now compare distributions by family and parameters, and give a
+  logical vector. A number is compared as a `dist_degenerate()`, so
+  `dist_degenerate(1) == 1` is `TRUE` and `dist_normal(1) == 1` is `FALSE`.
+  They previously returned a transformed distribution. See
+  `?Ops.distribution`.
 * `c()` of many distributions is faster, and distributions from the same family
   are stored together even when they are not adjacent.
 * `cdf()` and `quantile()` gain a `tail` argument (`"lower"` or `"upper"`).
