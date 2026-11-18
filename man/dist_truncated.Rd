@@ -28,7 +28,9 @@ underlying distribution \eqn{Y}, truncation bounds \code{lower} = \eqn{a} and
 the left limit of the c.d.f. at \eqn{a}, so that the mass at the lower
 bound is retained. For continuous \eqn{Y} this equals \eqn{F_Y(a)}, and
 for \eqn{Y} supported on the integers it is
-\eqn{F_Y(\lceil a \rceil - 1)}.
+\eqn{F_Y(\lceil a \rceil - 1)}. For mixed distributions with a point
+mass at \eqn{a} (such as \code{\link[=dist_inflated]{dist_inflated()}} of a continuous distribution)
+it is \eqn{F_Y(a) - P(Y = a)}.
 
 \strong{Support}: \eqn{[a, b]}
 

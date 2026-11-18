@@ -118,6 +118,9 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   discrete distributions, so that the truncated `density()`, `cdf()` and
   `quantile()` respect the documented closed support `[lower, upper]`.
   This now includes truncated zero-inflated count distributions.
+  It also keeps the point mass at the `lower` bound of mixed distributions,
+  so `cdf(dist_truncated(dist_inflated(dist_normal(), 0.2, 0), lower = 0), 0)`
+  is now 1/3, where it was 0.
 * `dist_gpd()` with `shape < 0` now has a consistent upper bound: `support()`
   only includes it when the density there is positive (`shape <= -1`), and
   `density()` now returns `1/scale` (`shape = -1`) or `Inf` (`shape < -1`)

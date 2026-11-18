@@ -20,7 +20,9 @@
 #'   the left limit of the c.d.f. at \eqn{a}, so that the mass at the lower
 #'   bound is retained. For continuous \eqn{Y} this equals \eqn{F_Y(a)}, and
 #'   for \eqn{Y} supported on the integers it is
-#'   \eqn{F_Y(\lceil a \rceil - 1)}.
+#'   \eqn{F_Y(\lceil a \rceil - 1)}. For mixed distributions with a point
+#'   mass at \eqn{a} (such as [dist_inflated()] of a continuous distribution)
+#'   it is \eqn{F_Y(a) - P(Y = a)}.
 #'
 #'   **Support**: \eqn{[a, b]}
 #'
@@ -144,15 +146,25 @@ support_is_lattice <- function(sup) {
 # The left limit of the c.d.f. at the lower truncation bound, P(Y < lower).
 #
 # The support of a truncated distribution is the closed interval [lower, upper],
-# so the mass at `lower` must be kept when normalising. For continuous
-# distributions P(Y < lower) = P(Y <= lower), but for distributions on the
-# integers (`lattice`) it is the c.d.f. at the largest integer below `lower`.
+# so the mass at `lower` must be kept when normalising. For distributions on
+# the integers (`lattice`) this is the c.d.f. at the largest integer below
+# `lower`. Otherwise it is P(Y <= lower) - P(Y = lower), which keeps the point
+# mass of mixed distributions (such as `dist_inflated()` of a continuous
+# distribution) and equals P(Y <= lower) for continuous distributions.
 #
 # With `tail = "upper"` this is the complement, P(Y >= lower).
 cdf_truncated_lower <- function(x, lattice, ..., tail = "lower") {
   lower <- x[["lower"]]
   lower[lattice] <- ceiling(lower[lattice]) - 1
-  dist_paired(cdf, x[["dist"]], q = lower, ..., tail = tail)
+  out <- dist_paired(cdf, x[["dist"]], q = lower, ..., tail = tail)
+  if (all(lattice)) return(out)
+  other <- which(!lattice & is.finite(lower))
+  if (!length(other)) return(out)
+  dist <- x[["dist"]][other]
+  m <- dist_paired(point_mass, dist, at = lower[other])
+  m[is.na(m)] <- 0
+  out[other] <- pmin(pmax(if (tail == "lower") out[other] - m else out[other] + m, 0), 1)
+  out
 }
 
 #' @export

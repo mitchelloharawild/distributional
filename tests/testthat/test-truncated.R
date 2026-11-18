@@ -199,3 +199,34 @@ test_that("Truncated distributions are vectorised over mixed families", {
   expect_true(all(draws[[1]] >= -1 & draws[[1]] <= 2))
   expect_true(all(draws[[2]] >= 1 & draws[[2]] <= 5))
 })
+
+test_that("Truncated mixed distributions keep the point mass at the lower bound", {
+  # F(0^-) = F(0) - P(Y = 0) = 0.6 - 0.2, so the normalising constant is 0.6
+  x <- dist_truncated(dist_inflated(dist_normal(), 0.2, 0), lower = 0)
+  expect_equal(cdf(x, 0), 0.2 / (0.2 + 0.8 * 0.5))
+  expect_equal(cdf(x, 0, tail = "upper"), 1 - 1 / 3)
+  expect_equal(cdf(x, 1), (0.2 + 0.8 * (pnorm(1) - 0.5)) / 0.6)
+  expect_equal(cdf(x, 1, tail = "upper"), 0.8 * pnorm(1, lower.tail = FALSE) / 0.6)
+  expect_equal(density(x, 1), 0.8 * dnorm(1) / 0.6)
+  expect_equal(point_mass(x, 0), 1 / 3)
+  expect_equal(mean(x >= 0), 1)
+  expect_equal(mean(x < 0), 0)
+  expect_equal(quantile(x, c(0, 0.2, 1 / 3))[[1]], c(0, 0, 0))
+  expect_equal(quantile(x, 0.5), qnorm(0.5 + 0.6 * (0.5 - 1 / 3) / 0.8))
+  expect_equal(quantile(x, 0.5, tail = "upper"), qnorm(0.5 + 0.6 * (0.5 - 1 / 3) / 0.8))
+  set.seed(1)
+  draws <- generate(x, 1e4)[[1]]
+  expect_true(all(draws >= 0))
+  expect_equal(mean(draws == 0), 1 / 3, tolerance = 0.05)
+
+  # A mixture with a discrete component, truncated at one of its atoms
+  m <- dist_mixture(dist_normal(), dist_poisson(3), weights = c(0.5, 0.5))
+  x <- dist_truncated(m, lower = 2)
+  F_lwr <- 0.5 * pnorm(2) + 0.5 * ppois(1, 3)
+  expect_equal(cdf(x, 2), (0.5 * pnorm(2) + 0.5 * ppois(2, 3) - F_lwr) / (1 - F_lwr))
+  expect_equal(point_mass(x, 2), 0.5 * dpois(2, 3) / (1 - F_lwr))
+
+  # The bound away from the atom is unaffected
+  x <- dist_truncated(dist_inflated(dist_normal(), 0.2, 0), lower = 1)
+  expect_equal(cdf(x, 2), (pnorm(2) - pnorm(1)) / pnorm(1, lower.tail = FALSE))
+})
