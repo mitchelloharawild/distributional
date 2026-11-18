@@ -3,10 +3,31 @@
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
-#' `==` and `!=` compare the structure of distributions: two distributions are
-#' equal when they are from the same family and have identical parameters.
+#' The ordering operators `<`, `<=`, `>` and `>=` give the probability that the
+#' comparison is true, as a [dist_bernoulli()] distribution. `==` and `!=`
+#' compare the structure of distributions: two distributions are equal when
+#' they are from the same family and have identical parameters.
 #'
 #' @details
+#' **Ordering.** Comparing a distribution with a number gives a Bernoulli
+#' distribution whose probability is that of the comparison being true, so
+#' `dist_normal() > 1.96` is `Bernoulli(0.025)` and
+#' `mean(dist_normal() > 1.96)` is the probability. The number can be on either
+#' side. The probabilities are computed with [cdf()], using the upper tail for
+#' `>` and `>=` so that small upper tail probabilities keep their precision.
+#' The difference between `<` and `<=` (and between `>` and `>=`) is the
+#' probability mass at the number, which is 0 for continuous distributions and
+#' `density(x, q)` for discrete distributions. The point mass of mixed
+#' distributions with a continuous part (such as [dist_inflated()] of a
+#' continuous distribution) isn't included, so comparisons exactly at it are
+#' approximate.
+#'
+#' Comparing two distributions, `x > y` is the probability \eqn{P(X - Y > 0)},
+#' computed from `x - y`. This assumes that `x` and `y` are independent (as
+#' arithmetic between distributions does), and uses a closed form where one is
+#' known (such as for two normal distributions) or [dist_convolved()]
+#' otherwise.
+#'
 #' **Equality.** `x == y` is `TRUE` when `x` and `y` are the same family with
 #' the same parameters, and gives a logical vector. A number on either side is
 #' treated as a [dist_degenerate()] point mass, so `dist_degenerate(1) == 1` is
@@ -16,12 +37,28 @@
 #' \eqn{P(X = k)} is `density(x, k)`.
 #'
 #' The operands are paired by position, and an operand of size 1 is recycled.
+#' Missing distributions or numbers give missing results.
 #'
 #' @param e1,e2 Distributions, numbers or logicals.
 #'
-#' @return `==` and `!=` give a logical vector.
+#' @return `<`, `<=`, `>` and `>=` give a vector of Bernoulli distributions.
+#' `==` and `!=` give a logical vector.
+#'
+#' @seealso [cdf()], [density()]
 #'
 #' @examples
+#' # The probability of exceeding a threshold
+#' x <- dist_normal()
+#' x > 1.96
+#' mean(x > 1.96)
+#'
+#' # Vectors of thresholds or distributions are paired by position
+#' dist_poisson(1:3) >= 2
+#' 0 < dist_normal(-1:1)
+#'
+#' # Comparing two independent distributions
+#' dist_normal(1) > dist_normal(0)
+#'
 #' # Equality compares the family and parameters
 #' dist_normal(1:3) == dist_normal(1)
 #' dist_degenerate(1) == 1
@@ -37,8 +74,101 @@ Ops.distribution <- function(e1, e2) {
     .Generic,
     `==` = dist_equal(e1, e2),
     `!=` = !dist_equal(e1, e2),
+    `<` = ,
+    `<=` = ,
+    `>` = ,
+    `>=` = dist_order(e1, e2, .Generic),
     NextMethod()
   )
+}
+
+# The probability that the ordering comparison `op` between `e1` and `e2` is
+# true, as a Bernoulli distribution. One operand may be a number (either
+# side), paired with the distributions by position. Two distributions are
+# compared through their difference, assuming they are independent.
+dist_order <- function(e1, e2, op) {
+  if (is_distribution(e1) && is_distribution(e2)) {
+    return(dist_order(e1 - e2, 0, op))
+  }
+  # Write `q op x` as `x op' q`
+  if (!is_distribution(e1)) {
+    q <- e1
+    x <- e2
+    op <- switch(op, `<` = ">", `<=` = ">=", `>` = "<", `>=` = "<=")
+  } else {
+    x <- e1
+    q <- e2
+  }
+  if (!is.numeric(q) && !is.logical(q)) {
+    abort(sprintf(
+      "Can't compare a distribution with <%s> using `%s`.",
+      class(q)[1L], op
+    ), call = NULL)
+  }
+  if (n_variates(x, "q") > 1L) {
+    abort(sprintf("Can't compare multivariate distributions using `%s`.", op), call = NULL)
+  }
+  q <- vctrs::vec_cast(unname(q), double())
+  args <- vctrs::vec_recycle_common(x = x, q = q, .call = NULL)
+  x <- args$x
+  q <- args$q
+
+  # The upper tail is computed directly to keep its precision
+  tail <- if (op %in% c(">", ">=")) "upper" else "lower"
+  p <- dist_paired(cdf, x, q = q, tail = tail, .ptype = double())
+  if (op == "<") p <- p - point_mass(x, q)
+  if (op == ">=") p <- p + point_mass(x, q)
+  new_bernoulli(p)
+}
+
+# The probability mass P(X = at) of each distribution in `x` at `at` (paired
+# by position). It is 0 for continuous distributions, and `density()` for
+# distributions with integer (or logical) support and for point masses.
+# Sample distributions give the proportion of draws equal to `at`, and
+# transformed distributions the mass of the base distribution at the inverse
+# of `at` (the `density()` of a transformed discrete distribution includes a
+# Jacobian, so it isn't the probability mass).
+#
+# Mixed distributions are judged by their support alone. A continuous
+# distribution with a point mass (such as `dist_inflated()` of a continuous
+# distribution) gives 0, so comparisons at the point mass are approximate.
+point_mass <- function(x, at) {
+  dist_paired(function(x, at) {
+    if (inherits(x, "dist_degenerate")) return(density(x, at))
+    if (inherits(x, "dist_sample")) {
+      return(as.double(unlist(.mapply(function(s, a) mean(s == a, na.rm = TRUE), list(x[["x"]], at), NULL))))
+    }
+    if (inherits(x, "dist_transformed")) {
+      n <- vctrs::vec_size(x)
+      return(transformed_by_group(x, function(dist, tf, inv, idx) {
+        at <- transformed_arg(at, idx, n)
+        # A transformation without an inverse has an unknown mass
+        base_at <- tryCatch(suppressWarnings(inv(at)), error = function(e) rep_len(NA_real_, length(at)))
+        point_mass(dist, base_at)
+      }))
+    }
+    out <- numeric(vctrs::vec_size(x))
+    discrete <- vapply(
+      vctrs::field(support(x), "x"),
+      function(proto) is.integer(proto) || is.logical(proto),
+      logical(1L)
+    )
+    # The mass is only at integers (avoiding warnings from `density()`)
+    discrete <- discrete & is.finite(at) & at == trunc(at)
+    if (any(discrete)) out[discrete] <- density(x[discrete], at[discrete])
+    out
+  }, x, at = at, .ptype = double())
+}
+
+# Bernoulli distributions with probabilities `p`, which are missing where `p`
+# is missing. Rounding error (such as from subtracting a point mass) is kept
+# within [0, 1].
+new_bernoulli <- function(p) {
+  p <- pmin(pmax(as.double(p), 0), 1)
+  miss <- is.na(p)
+  out <- dist_bernoulli(replace(p, miss, 0))
+  if (any(miss)) out[miss] <- NA
+  out
 }
 
 # Structural equality of the distributions in `e1` and `e2`, paired by

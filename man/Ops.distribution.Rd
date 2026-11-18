@@ -11,15 +11,37 @@
 \item{e1, e2}{Distributions, numbers or logicals.}
 }
 \value{
+\code{<}, \code{<=}, \code{>} and \code{>=} give a vector of Bernoulli distributions.
 \code{==} and \code{!=} give a logical vector.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-\code{==} and \code{!=} compare the structure of distributions: two distributions are
-equal when they are from the same family and have identical parameters.
+The ordering operators \code{<}, \code{<=}, \code{>} and \code{>=} give the probability that the
+comparison is true, as a \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution. \code{==} and \code{!=}
+compare the structure of distributions: two distributions are equal when
+they are from the same family and have identical parameters.
 }
 \details{
+\strong{Ordering.} Comparing a distribution with a number gives a Bernoulli
+distribution whose probability is that of the comparison being true, so
+\code{dist_normal() > 1.96} is \code{Bernoulli(0.025)} and
+\code{mean(dist_normal() > 1.96)} is the probability. The number can be on either
+side. The probabilities are computed with \code{\link[=cdf]{cdf()}}, using the upper tail for
+\code{>} and \code{>=} so that small upper tail probabilities keep their precision.
+The difference between \code{<} and \code{<=} (and between \code{>} and \code{>=}) is the
+probability mass at the number, which is 0 for continuous distributions and
+\code{density(x, q)} for discrete distributions. The point mass of mixed
+distributions with a continuous part (such as \code{\link[=dist_inflated]{dist_inflated()}} of a
+continuous distribution) isn't included, so comparisons exactly at it are
+approximate.
+
+Comparing two distributions, \code{x > y} is the probability \eqn{P(X - Y > 0)},
+computed from \code{x - y}. This assumes that \code{x} and \code{y} are independent (as
+arithmetic between distributions does), and uses a closed form where one is
+known (such as for two normal distributions) or \code{\link[=dist_convolved]{dist_convolved()}}
+otherwise.
+
 \strong{Equality.} \code{x == y} is \code{TRUE} when \code{x} and \code{y} are the same family with
 the same parameters, and gives a logical vector. A number on either side is
 treated as a \code{\link[=dist_degenerate]{dist_degenerate()}} point mass, so \code{dist_degenerate(1) == 1} is
@@ -29,8 +51,21 @@ variables are equal. For discrete distributions, the probability
 \eqn{P(X = k)} is \code{density(x, k)}.
 
 The operands are paired by position, and an operand of size 1 is recycled.
+Missing distributions or numbers give missing results.
 }
 \examples{
+# The probability of exceeding a threshold
+x <- dist_normal()
+x > 1.96
+mean(x > 1.96)
+
+# Vectors of thresholds or distributions are paired by position
+dist_poisson(1:3) >= 2
+0 < dist_normal(-1:1)
+
+# Comparing two independent distributions
+dist_normal(1) > dist_normal(0)
+
 # Equality compares the family and parameters
 dist_normal(1:3) == dist_normal(1)
 dist_degenerate(1) == 1
@@ -39,4 +74,7 @@ dist_normal(1) == 1
 # The probability of a point is density()
 density(dist_poisson(3), 2)
 
+}
+\seealso{
+\code{\link[=cdf]{cdf()}}, \code{\link[=density]{density()}}
 }
