@@ -275,11 +275,35 @@ test_that("point_mass() handles families with mass at a point of continuous supp
   expect_equal(prob(x > 0), 1 - cdf(x, 0))
 })
 
-test_that("point_mass() of quantile mixtures is unknown for discrete components", {
+test_that("point_mass() of quantile mixtures of discrete components", {
+  # Q(p) = sum(w * qpois(p, lambda)) is constant between the cdf values of the
+  # components, so the mass at `a` is the total length of these intervals
+  # where Q is `a`
+  truth <- function(w, lambda, a) {
+    b <- sort(unique(c(0, 1, unlist(lapply(lambda, function(l) ppois(0:80, l))))))
+    mid <- (head(b, -1) + tail(b, -1)) / 2
+    Q <- Reduce(`+`, Map(function(wk, l) wk * qpois(mid, l), w, lambda))
+    vapply(a, function(ai) sum(diff(b)[abs(Q - ai) < 1e-9]), numeric(1))
+  }
   q <- dist_mixture(dist_poisson(3), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile")
-  expect_equal(point_mass(q, 4), NA_real_)
+  a <- c(0, 0.5, 2, 2.5, 3, 4, 7, 2.25, -1, 100)
+  expect_equal(point_mass(q, a), truth(c(0.5, 0.5), c(3, 5), a))
+  expect_equal(point_mass(q, 0), dpois(0, 5))
+  q <- dist_mixture(dist_poisson(3), dist_poisson(5), weights = c(0.3, 0.7), type = "quantile")
+  a <- c(0, 0.7, 1.4, 2.7, 3.7, 4.4, 1)
+  expect_equal(point_mass(q, a), truth(c(0.3, 0.7), c(3, 5), a))
+
+  # A continuous component makes the mixture continuous
   q <- dist_mixture(dist_normal(), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile")
-  expect_equal(point_mass(q, 4), 0)
+  expect_equal(point_mass(q, c(4, 2.5)), c(0, 0))
+
+  # Vectors of mixtures, with missing thresholds
+  q <- c(
+    dist_mixture(dist_poisson(3), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile"),
+    dist_mixture(dist_normal(), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile")
+  )
+  expect_equal(point_mass(q, c(2.5, 2.5)), c(truth(c(0.5, 0.5), c(3, 5), 2.5), 0))
+  expect_equal(point_mass(q, NA_real_), c(NA_real_, NA_real_))
 })
 
 test_that("point_mass() of truncated distributions keeps the mass at the bounds", {

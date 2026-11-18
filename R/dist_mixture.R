@@ -530,17 +530,54 @@ cdf.dist_q_mixture <- function(x, q, ..., tail = "lower") {
   }, numeric(1L))
 }
 
-# The quantile function is a weighted average of the components' quantile
-# functions, so it is strictly increasing (and the mixture continuous) when any
-# component is continuous. A mixture of discrete components has point masses
-# wherever all of their quantile functions are flat together, which isn't
-# computed, so their mass is unknown (`NA`).
+# The quantile function Q(p) = sum(w * Q_k(p)) is a weighted average of the
+# components' nondecreasing quantile functions, so it is flat at `at` exactly
+# where every Q_k is flat, at x_k = Q_k(p*) for any p* with Q(p*) = at. Q_k is
+# flat at x_k for p in (F_k(x_k^-), F_k(x_k)], where F_k(x_k^-) = F_k(x_k) -
+# P(X_k = x_k), so the mass at `at` is the length of the intersection of these
+# intervals. This is 0 when any component is continuous at x_k. A p* is found
+# by bisection on Q, and atoms with mass below about 2^-60 are missed.
 #' @export
 point_mass.dist_q_mixture <- function(x, at, ...) {
   parts <- mixture_parts(x)
-  at <- vec_recycle(at, parts$n)
-  discrete <- unname(vapply(split(is_lattice(parts$flat), parts$idx), all, logical(1L)))
-  ifelse(is.na(at) | discrete, NA_real_, 0)
+  n <- parts$n
+  at <- vec_recycle(at, n)
+  out <- ifelse(is.na(at), NA_real_, 0)
+  todo <- which(!is.na(at))
+  if (!length(todo)) return(out)
+
+  # Bisect for a p with Q(p) = at, for all mixtures at once
+  lo <- rep(0, n)
+  hi <- rep(1, n)
+  p_star <- rep(NA_real_, n)
+  tol <- function(a) 1e-12 * pmax(1, abs(a))
+  for (iter in seq_len(60L)) {
+    if (!length(todo)) break
+    mid <- (lo + hi) / 2
+    q <- q_mixture_quantile(parts, mid, ...)
+    eq <- todo[!is.na(q[todo]) & abs(q[todo] - at[todo]) <= tol(at[todo])]
+    p_star[eq] <- mid[eq]
+    todo <- setdiff(todo, eq)
+    below <- todo[!is.na(q[todo]) & q[todo] < at[todo]]
+    above <- todo[!is.na(q[todo]) & q[todo] > at[todo]]
+    lo[below] <- mid[below]
+    hi[above] <- mid[above]
+    todo <- intersect(todo, c(below, above))
+  }
+
+  found <- which(!is.na(p_star))
+  if (!length(found)) return(out)
+  use <- parts$idx %in% found
+  flat <- vec_slice(parts$flat, use)
+  idx <- parts$idx[use]
+  x_k <- dist_paired(quantile, flat, p = p_star[idx], ...)
+  F_k <- dist_paired(cdf, flat, q = x_k, ...)
+  m_k <- dist_paired(point_mass, flat, at = x_k, ...)
+  lwr <- vapply(split(F_k - m_k, idx), max, numeric(1L))
+  upr <- vapply(split(F_k, idx), min, numeric(1L))
+  grp <- as.integer(names(upr))
+  out[grp] <- pmax(upr - lwr, 0)
+  out
 }
 
 #' @export
