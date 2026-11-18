@@ -114,13 +114,22 @@ dist_elem <- function(x, i) {
     xi@x[[1L]]
   }
 }
-dist_first_record <- function(x) dist_elem(x, 1L)
 
+# The record (of every distribution, in order) of a `distribution` vector
+# freshly built by a family constructor (`new_dist()`), which has a single
+# slot and no compression. Used by the family-level `Ops`/`Math` methods,
+# which must return a record rather than a `distribution`.
+dist_record <- function(x) {
+  if (length(x@x) != 1L || vctrs::vec_size(x@x[[1L]]) != length(x)) {
+    abort("Internal error: `dist_record()` needs a distribution with a single uncompressed slot.", .internal = TRUE)
+  }
+  x@x[[1L]]
+}
 
 # Combine a list of raw (family-level) records into a `distribution` vector -
 # the inverse of `dist_elem()`. Used by `Ops.dist_default()`/
-# `Math.dist_default()` (default.R) which build a `dist_transformed()`/
-# `dist_convolved()` result from one or two single-element operands.
+# `Math.dist_default()` (default.R) to build a `dist_transformed()`/
+# `dist_convolved()` result from a record, and by the numerical fallbacks.
 wrap_dist <- function(x, dimnames = NULL){
   out <- do.call(c, lapply(x, function(z) class_distribution(list(z))))
   if (!is.null(dimnames)) variates(out) <- dimnames
@@ -825,53 +834,17 @@ hdr.distribution <- function(x, size = 95, n = 512, ...){
 
 #' @export
 sum.distribution <- function(x, ...){
-  Reduce(`+`, x)
+  # Sum the distributions as size 1 `distribution` vectors (`x[[i]]` would be
+  # a raw family record, whose arithmetic gives a raw record)
+  Reduce(`+`, lapply(seq_along(x), function(i) x[i]))
 }
 
 # ------------------------------------------------------------------------
 # Ops / Math (container level)
 # ------------------------------------------------------------------------
-# Arithmetic dispatches element-by-element to the family-level `Ops.dist_*`/
-# `Math.dist_*` methods. Unlike the stats generics (`apply_dist()`), these are
-# not yet vectorised per storage slot.
-
-#' @export
-Ops.distribution <- function(e1, e2) {
-  if (missing(e2)) {
-    n <- length(e1)
-    out <- lapply(seq_len(n), function(i) get(.Generic)(dist_elem(e1, i)))
-    return(dist_combine_ops(out))
-  }
-
-  dist_e1 <- is_distribution(e1)
-  dist_e2 <- is_distribution(e2)
-  n <- max(length(e1), length(e2))
-  e1 <- vctrs::vec_recycle(e1, n)
-  e2 <- vctrs::vec_recycle(e2, n)
-
-  is_bool <- switch(.Generic, `<` = , `>` = , `==` = , `!=` = , `<=` = , `>=` = TRUE, FALSE)
-
-  out <- vector("list", n)
-  for (i in seq_len(n)) {
-    a <- if (dist_e1) dist_elem(e1, i) else e1[i]
-    b <- if (dist_e2) dist_elem(e2, i) else e2[i]
-    out[[i]] <- get(.Generic)(a, b)
-  }
-  if (is_bool) return(unlist(out))
-  dist_combine_ops(out)
-}
-
-dist_combine_ops <- function(out) {
-  if (!length(out)) return(logical())
-  do.call(c, lapply(out, function(z) class_distribution(list(z))))
-}
-
-#' @export
-Math.distribution <- function(x, ...) {
-  n <- length(x)
-  out <- lapply(seq_len(n), function(i) get(.Generic)(dist_elem(x, i), ...))
-  dist_combine_ops(out)
-}
+# Arithmetic uses vecvec's own `Ops`/`Math` group methods, which call the
+# family-level `Ops.dist_*`/`Math.dist_*` methods once per storage slot (or
+# pair of slots), with whole records (and numeric vectors paired by position).
 
 # `is.nan()`/`is.infinite()`/`is.finite()` are their own S3 generics, not
 # members of the base R "Math" group (unlike pre-migration, where the old

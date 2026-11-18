@@ -237,6 +237,6 @@ Ops.dist_normal <- function(e1, e2){
 #' @export
 Math.dist_normal <- function(x, ...) {
   # Shortcut to get log-normal distribution from Normal.
-  if(.Generic == "exp") return(dist_first_record(dist_lognormal(x[["mu"]], x[["sigma"]])))
+  if(.Generic == "exp") return(dist_record(dist_lognormal(x[["mu"]], x[["sigma"]])))
   NextMethod()
 }

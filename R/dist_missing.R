@@ -135,5 +135,6 @@ Math.dist_na <- function(x, ...) {
 
 #' @export
 Ops.dist_na <- function(e1, e2) {
-  dist_missing(max(length(e1), length(e2)))
+  n <- if (missing(e2)) vctrs::vec_size(e1) else max(vctrs::vec_size(e1), vctrs::vec_size(e2))
+  dist_record(dist_missing(n))
 }

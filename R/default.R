@@ -403,17 +403,57 @@ get_binary_inverse_2 <- function(f, constant) {
   )
 }
 
+# Whether a record of distributions is multivariate (judged from its first
+# distribution, as `dim()` of a family describes the whole family)
+dist_is_multivariate <- function(x) {
+  vctrs::vec_size(x) > 0L && dim(vctrs::vec_slice(x, 1L)) > 1
+}
+
+# Group the positions of a list of functions `fns` by `identical()` functions,
+# returning a group id for each position (in order of first appearance).
+fn_group_id <- function(fns) {
+  id <- integer(length(fns))
+  reps <- list()
+  for (i in seq_along(fns)) {
+    k <- 0L
+    for (j in seq_along(reps)) {
+      if (identical(fns[[i]], fns[[reps[[j]]]])) {
+        k <- j
+        break
+      }
+    }
+    if (k == 0L) {
+      reps[[length(reps) + 1L]] <- i
+      k <- length(reps)
+    }
+    id[i] <- k
+  }
+  id
+}
+
+# Build one function with `.f(i)` for each group of positions sharing the same
+# `...` keys (vectors or group ids of equal size), and return them as a list
+# with one (shared) function object per position. Sharing the function objects
+# lets `transformed_by_group()` handle the positions of a group together.
+fns_by_group <- function(.f, ...) {
+  keys <- list(...)
+  names(keys) <- paste0("k", seq_along(keys))
+  group <- vctrs::vec_group_id(vctrs::new_data_frame(keys))
+  first <- match(seq_len(attr(group, "n")), group)
+  lapply(first, .f)[group]
+}
+
 #' @method Math dist_default
 #' @export
 Math.dist_default <- function(x, ...) {
-  if(dim(x) > 1) stop("Transformations of multivariate distributions are not yet supported.")
+  if(dist_is_multivariate(x)) stop("Transformations of multivariate distributions are not yet supported.")
 
   trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!!dots_list(...))))
 
   inverse_fun <- get_unary_inverse(.Generic)
   inverse <- new_function(exprs(x = ), body = expr((!!inverse_fun)(x, !!!dots_list(...))))
 
-  dist_first_record(dist_transformed(wrap_dist(list(x)), trans, inverse))
+  dist_record(dist_transformed(wrap_dist(list(x)), trans, inverse))
 }
 
 #' @method Ops dist_default
@@ -425,9 +465,14 @@ Ops.dist_default <- function(e1, e2) {
     .Generic <- "*"
   }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
-  if(any(vapply(list(e1, e2)[is_dist], dim, numeric(1L)) > 1)){
+  if(any(vapply(list(e1, e2)[is_dist], dist_is_multivariate, logical(1L)))){
     stop("Transformations of multivariate distributions are not yet supported.")
   }
+
+  # The operands are paired by position (a size 1 operand is recycled)
+  n <- max(vctrs::vec_size(e1), vctrs::vec_size(e2))
+  e1 <- vctrs::vec_recycle(e1, n)
+  e2 <- vctrs::vec_recycle(e2, n)
 
   # For + and - between two independent distributions use numerical convolution
   if (all(is_dist) && .Generic %in% c("+", "-")) {
@@ -436,31 +481,50 @@ Ops.dist_default <- function(e1, e2) {
     if (.Generic == "-") {
       d2 <- -d2
     }
-    return(dist_first_record(dist_convolved(d1, d2)))
+    return(dist_record(dist_convolved(d1, d2)))
   }
 
-  trans <- if(all(is_dist)) {
-    if(inherits(e1, "dist_transformed") && inherits(e2, "dist_transformed") &&
-       identical(e1$dist, e2$dist)){
-      new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform[[1L]])(x), (!!e2$transform[[1L]])(x))))
-    } else {
+  if(all(is_dist)) {
+    # Transformations of the same distributions can be combined. The
+    # distributions are compared one at a time as their raw records, since
+    # `identical()` doesn't compare the storage of `distribution` vectors.
+    same <- inherits(e1, "dist_transformed") && inherits(e2, "dist_transformed") &&
+      all(vapply(seq_len(n), function(i) {
+        identical(dist_elem(e1[["dist"]], i), dist_elem(e2[["dist"]], i))
+      }, logical(1L)))
+    if (!same) {
       stop(sprintf("The %s operation is not supported for <%s> and <%s>", .Generic, class(e1)[1], class(e2)[1]))
     }
-  } else if(is_dist[1]){
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(x, !!e2)))
-  } else {
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, x)))
+    tf1 <- e1[["transform"]]
+    tf2 <- e2[["transform"]]
+    trans <- fns_by_group(function(i) {
+      new_function(exprs(x = ), expr((!!sym(.Generic))((!!tf1[[i]])(x), (!!tf2[[i]])(x))))
+    }, fn_group_id(tf1), fn_group_id(tf2))
+    return(dist_record(dist_transformed(e1[["dist"]], trans, list(invert_fail))))
   }
 
-  inverse <- if(all(is_dist)) {
-    invert_fail
-  } else if(is_dist[1]){
-    get_binary_inverse_1(.Generic, e2)
+  # Ops between distributions and constants, with one transformation (and
+  # inverse) for each unique constant
+  generic <- .Generic
+  if (is_dist[1]) {
+    dist <- e1
+    constant <- e2
+    trans_i <- function(i) {
+      new_function(exprs(x = ), body = expr((!!sym(generic))(x, !!constant[[i]])))
+    }
+    inverse_i <- function(i) get_binary_inverse_1(generic, constant[[i]])
   } else {
-    get_binary_inverse_2(.Generic, e1)
+    dist <- e2
+    constant <- e1
+    trans_i <- function(i) {
+      new_function(exprs(x = ), body = expr((!!sym(generic))(!!constant[[i]], x)))
+    }
+    inverse_i <- function(i) get_binary_inverse_2(generic, constant[[i]])
   }
-
-  dist_first_record(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))
+  constant <- unname(constant)
+  dist_record(dist_transformed(
+    wrap_dist(list(dist)), fns_by_group(trans_i, constant), fns_by_group(inverse_i, constant)
+  ))
 }
 
 # If there are mix of Ops with default, then use the default method

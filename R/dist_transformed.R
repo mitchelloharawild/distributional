@@ -153,24 +153,11 @@ transformed_by_group <- function(x, .f) {
   n <- vec_size(x)
 
   # Group positions by identical functions
-  group <- integer(n)
-  reps <- list()
-  for (i in seq_len(n)) {
-    k <- 0L
-    for (j in seq_along(reps)) {
-      if (identical(tf[[i]], tf[[reps[[j]]]]) && identical(inv[[i]], inv[[reps[[j]]]])) {
-        k <- j
-        break
-      }
-    }
-    if (k == 0L) {
-      reps[[length(reps) + 1L]] <- i
-      k <- length(reps)
-    }
-    group[i] <- k
-  }
+  group <- vec_group_id(vctrs::new_data_frame(list(
+    tf = fn_group_id(tf), inv = fn_group_id(inv)
+  )))
 
-  if (length(reps) == 1L) {
+  if (attr(group, "n") == 1L) {
     return(.f(dist, tf[[1L]], inv[[1L]], seq_len(n)))
   }
   idx <- unname(split(seq_len(n), group))
@@ -365,12 +352,23 @@ variance.dist_transformed <- function(x, ...){
 #' @method Math dist_transformed
 #' @export
 Math.dist_transformed <- function(x, ...) {
-  trans <- new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!x$transform[[1L]])(x), !!!dots_list(...))))
-
+  tf <- x[["transform"]]
+  inv <- x[["inverse"]]
+  generic <- .Generic
+  dots <- dots_list(...)
   inverse_fun <- get_unary_inverse(.Generic)
-  inverse <- new_function(exprs(x = ), body = expr((!!x$inverse[[1L]])((!!inverse_fun)(x, !!!dots_list(...)))))
 
-  dist_first_record(dist_transformed(x[["dist"]], trans, inverse))
+  # Compose the transformation with each distinct transformation (and inverse)
+  key_tf <- fn_group_id(tf)
+  key_inv <- fn_group_id(inv)
+  trans <- fns_by_group(function(i) {
+    new_function(exprs(x = ), body = expr((!!sym(generic))((!!tf[[i]])(x), !!!dots)))
+  }, key_tf, key_inv)
+  inverse <- fns_by_group(function(i) {
+    new_function(exprs(x = ), body = expr((!!inv[[i]])((!!inverse_fun)(x, !!!dots))))
+  }, key_tf, key_inv)
+
+  dist_record(dist_transformed(x[["dist"]], trans, inverse))
 }
 
 #' @method Ops dist_transformed
@@ -383,26 +381,48 @@ Ops.dist_transformed <- function(e1, e2) {
   }
   is_dist <- c(inherits(e1, "dist_default"), inherits(e2, "dist_default"))
 
-  trans <- if(all(is_dist)) {
+  if(all(is_dist)) {
     # Fall back to default distribution Ops
     return(NextMethod())
-  } else if(is_dist[1]){
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))((!!e1$transform[[1L]])(x), !!e2)))
-  } else {
-    new_function(exprs(x = ), body = expr((!!sym(.Generic))(!!e1, (!!e2$transform[[1L]])(x))))
   }
 
-  inverse <- if(all(is_dist)) {
-    invert_fail
-  } else if(is_dist[1]){
-    inverse_fun <- get_binary_inverse_1(.Generic, e2)
-    new_function(exprs(x = ), body = expr((!!e1$inverse[[1L]])((!!inverse_fun)(x))))
-  } else {
-    inverse_fun <- get_binary_inverse_2(.Generic, e1)
-    new_function(exprs(x = ), body = expr((!!e2$inverse[[1L]])((!!inverse_fun)(x))))
-  }
+  # The operands are paired by position (a size 1 operand is recycled)
+  n <- max(vec_size(e1), vec_size(e2))
+  e1 <- vec_recycle(e1, n)
+  e2 <- vec_recycle(e2, n)
 
-  dist_first_record(dist_transformed(list(e1,e2)[[which(is_dist)[1]]][["dist"]], trans, inverse))
+  generic <- .Generic
+  if (is_dist[1]) {
+    x <- e1
+    constant <- unname(e2)
+  } else {
+    x <- e2
+    constant <- unname(e1)
+  }
+  tf <- x[["transform"]]
+  inv <- x[["inverse"]]
+
+  # Compose the operation with each distinct transformation (and inverse) and
+  # constant
+  key_tf <- fn_group_id(tf)
+  key_inv <- fn_group_id(inv)
+  trans <- fns_by_group(function(i) {
+    if (is_dist[1]) {
+      new_function(exprs(x = ), body = expr((!!sym(generic))((!!tf[[i]])(x), !!constant[[i]])))
+    } else {
+      new_function(exprs(x = ), body = expr((!!sym(generic))(!!constant[[i]], (!!tf[[i]])(x))))
+    }
+  }, key_tf, key_inv, constant)
+  inverse <- fns_by_group(function(i) {
+    inverse_fun <- if (is_dist[1]) {
+      get_binary_inverse_1(generic, constant[[i]])
+    } else {
+      get_binary_inverse_2(generic, constant[[i]])
+    }
+    new_function(exprs(x = ), body = expr((!!inv[[i]])((!!inverse_fun)(x))))
+  }, key_tf, key_inv, constant)
+
+  dist_record(dist_transformed(x[["dist"]], trans, inverse))
 }
 
 # Direction of a transformation `f`, judged by probing it at quantiles of the

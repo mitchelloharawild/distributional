@@ -163,7 +163,7 @@ kurtosis.dist_lognormal <- function(x, ...) {
 # make a normal distribution from a lognormal distribution using the
 # specified base
 normal_dist_with_base <- function(x, base = exp(1)) {
-  dist_first_record(dist_normal(x[["mu"]], x[["sigma"]]) / log(base))
+  dist_record(dist_normal(x[["mu"]], x[["sigma"]])) / log(base)
 }
 
 #' @method Math dist_lognormal
