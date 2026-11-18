@@ -961,3 +961,11 @@ has_symmetry <- function(x, ...) {
 has_symmetry.distribution <- function(x, ...) {
   apply_dist(x, has_symmetry, ..., .ptype = logical())
 }
+
+#' @export
+as.character.distribution <- function(x, ...) format(x, ...)
+
+#' @export
+Summary.distribution <- function(..., na.rm = FALSE) {
+  abort(sprintf("`%s()` is not supported for distributions.", .Generic))
+}

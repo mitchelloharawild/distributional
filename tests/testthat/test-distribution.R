@@ -266,3 +266,18 @@ test_that("all.equal() compares distributions by family and parameters", {
   expect_match(all.equal(x, x[1:2]), "Lengths")
   expect_true(all.equal(dist_normal(1:2)[2:1], dist_normal(2:1)))
 })
+
+test_that("as.character() formats distributions", {
+  x <- c(dist_normal(1, 2), dist_poisson(3))
+  expect_equal(as.character(x), format(x))
+  expect_type(as.character(x), "character")
+})
+
+test_that("Summary functions other than sum() are not supported", {
+  x <- dist_normal(1:3)
+  expect_error(min(x), "not supported")
+  expect_error(max(x), "not supported")
+  expect_error(range(x), "not supported")
+  expect_error(prod(x), "not supported")
+  expect_equal(format(sum(x)), "N(6, 3)")
+})
