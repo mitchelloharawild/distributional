@@ -130,6 +130,9 @@ generate.dist_burr <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_burr <- point_mass_continuous
+
+#' @export
 support.dist_burr <- function(x, ...) {
   # The density at 0 is positive (or infinite) when shape2 <= 1
   n <- vctrs::vec_size(x)

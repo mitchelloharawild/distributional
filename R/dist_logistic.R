@@ -112,6 +112,9 @@ generate.dist_logistic <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_logistic <- point_mass_continuous
+
+#' @export
 support.dist_logistic <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

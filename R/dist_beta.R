@@ -124,6 +124,9 @@ generate.dist_beta <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_beta <- point_mass_continuous
+
+#' @export
 support.dist_beta <- function(x, ...) {
   # The density at 0 (1) is positive (or infinite) when shape1 (shape2) <= 1
   n <- vctrs::vec_size(x)

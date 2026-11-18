@@ -219,6 +219,9 @@ generate.dist_f <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_f <- point_mass_continuous
+
+#' @export
 support.dist_f <- function(x, ...) {
   # The density at 0 is positive (or infinite) when df1 <= 2
   n <- vctrs::vec_size(x)

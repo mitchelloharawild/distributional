@@ -127,6 +127,9 @@ mean.dist_quantile <- function(x, ...) {
 }
 
 #' @export
+point_mass.dist_quantile <- point_mass_continuous
+
+#' @export
 support.dist_quantile <- function(x, ...) {
   interp_support(x[["x"]], x[["quantile"]])
 }

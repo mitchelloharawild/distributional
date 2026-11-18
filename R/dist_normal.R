@@ -138,6 +138,9 @@ generate.dist_normal <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_normal <- point_mass_continuous
+
+#' @export
 support.dist_normal <- function(x, ...) {
   # Degenerate at mu when sigma = 0
   degenerate <- x[["sigma"]] == 0

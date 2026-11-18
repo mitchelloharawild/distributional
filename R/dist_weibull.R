@@ -161,6 +161,9 @@ generate.dist_weibull <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_weibull <- point_mass_continuous
+
+#' @export
 support.dist_weibull <- function(x, ...) {
   # The density at 0 is positive (or infinite) when shape <= 1
   n <- vec_size(x)

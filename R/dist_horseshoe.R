@@ -109,6 +109,9 @@ generate.dist_horseshoe <- function(x, times, ..., na.rm = FALSE) {
 }
 
 #' @export
+point_mass.dist_horseshoe <- point_mass_continuous
+
+#' @export
 support.dist_horseshoe <- function(x, ...) {
   n <- vec_size(x)
   new_support_region(

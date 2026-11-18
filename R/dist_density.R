@@ -344,6 +344,9 @@ kurtosis.dist_pdf <- function(x, ...) {
 }
 
 #' @export
+point_mass.dist_pdf <- point_mass_continuous
+
+#' @export
 support.dist_pdf <- function(x, ...) {
   new_support_region(
     rep_len(list(double()), length(vctrs::field(x, "x"))),

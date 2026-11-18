@@ -230,6 +230,9 @@ generate.dist_student_t <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_student_t <- point_mass_continuous
+
+#' @export
 support.dist_student_t <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

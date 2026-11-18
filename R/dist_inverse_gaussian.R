@@ -137,6 +137,9 @@ generate.dist_inverse_gaussian <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_inverse_gaussian <- point_mass_continuous
+
+#' @export
 support.dist_inverse_gaussian <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

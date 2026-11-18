@@ -216,7 +216,8 @@ point_mass.distribution <- function(x, at, ...) {
 # integers, given by `density()`. As in R's discrete p-functions (such as
 # `ppois()`), a value within 1e-7 (relative) of an integer is treated as that
 # integer, so that `cdf()` and `point_mass()` agree. Other distributions are
-# taken to be continuous.
+# taken to be continuous. Continuous families have their own (cheaper) method,
+# `point_mass_continuous()`.
 #' @export
 point_mass.dist_default <- function(x, at, ...) {
   n <- vctrs::vec_size(x)
@@ -226,6 +227,14 @@ point_mass.dist_default <- function(x, at, ...) {
   int <- lattice_integer(at, is_lattice(x))
   if (any(int)) out[int] <- density(vctrs::vec_slice(x, int), round(at[int]))
   out
+}
+
+# Continuous families have no point masses. They use this method rather than
+# the default, which would build their `support()` only to find that it isn't
+# on the integers (slow for many distributions).
+point_mass_continuous <- function(x, at, ...) {
+  at <- vctrs::vec_recycle(at, vctrs::vec_size(x))
+  ifelse(is.na(at), NA_real_, 0)
 }
 
 # Which values of `at` are integers, for the distributions on the integers

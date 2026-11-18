@@ -254,6 +254,19 @@ test_that("point_mass() gives the probability mass of each distribution", {
   expect_length(point_mass(x[0], 1), 0)
 })
 
+test_that("point_mass() of continuous families is 0 without building their support", {
+  x <- c(
+    dist_normal(), dist_gamma(2, 1), dist_uniform(0, 1), dist_student_t(3),
+    dist_beta(2, 2), dist_exponential(1), dist_lognormal(), dist_weibull(2, 1)
+  )
+  expect_equal(point_mass(x, 1), rep(0, 8))
+  expect_equal(point_mass(x, NA_real_), rep(NA_real_, 8))
+  expect_equal(point_mass(dist_normal(1:3), c(1, NA, 3)), c(0, NA, 0))
+  local_mocked_bindings(support.dist_normal = function(x, ...) stop("support() was built"))
+  expect_equal(prob(dist_normal(0:2) >= 1), pnorm(1, 0:2, lower.tail = FALSE))
+  expect_equal(prob(dist_normal(0:2) < 1), pnorm(1, 0:2))
+})
+
 test_that("point_mass() handles families with mass at a point of continuous support", {
   skip_if_not_installed("tweedieDistr")
   x <- dist_tweedie(1, 1, 1.5)

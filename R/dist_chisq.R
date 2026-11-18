@@ -178,6 +178,9 @@ generate.dist_chisq <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_chisq <- point_mass_continuous
+
+#' @export
 support.dist_chisq <- function(x, ...) {
   # The density at 0 is positive (or infinite) when df <= 2
   n <- vctrs::vec_size(x)

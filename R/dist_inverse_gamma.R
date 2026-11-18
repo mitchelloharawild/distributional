@@ -133,6 +133,9 @@ generate.dist_inverse_gamma <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_inverse_gamma <- point_mass_continuous
+
+#' @export
 support.dist_inverse_gamma <- function(x, ...) {
   n <- vctrs::vec_size(x)
   new_support_region(

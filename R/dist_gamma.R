@@ -131,6 +131,9 @@ generate.dist_gamma <- function(x, times, ...){
 }
 
 #' @export
+point_mass.dist_gamma <- point_mass_continuous
+
+#' @export
 support.dist_gamma <- function(x, ...) {
   # The density at 0 is positive (or infinite) when shape <= 1
   n <- vctrs::vec_size(x)
