@@ -6,7 +6,9 @@
 #' The ordering operators `<`, `<=`, `>` and `>=` give the probability that the
 #' comparison is true, as a [dist_bernoulli()] distribution. `==` and `!=`
 #' compare the structure of distributions: two distributions are equal when
-#' they are from the same family and have identical parameters.
+#' they are from the same family and have identical parameters. The logical
+#' operators `&`, `|` and `!` combine Bernoulli distributions (such as the
+#' results of comparisons) as independent events.
 #'
 #' @details
 #' **Ordering.** Comparing a distribution with a number gives a Bernoulli
@@ -28,6 +30,16 @@
 #' known (such as for two normal distributions) or [dist_convolved()]
 #' otherwise.
 #'
+#' **Logical operators.** `!x` is `Bernoulli(1 - p)`, `x & y` is
+#' `Bernoulli(px * py)` and `x | y` is `Bernoulli(px + py - px * py)`. These
+#' assume that the events are independent, **even when they are comparisons
+#' of the same distribution**. For example, `(x > -1) & (x < 1)` multiplies
+#' \eqn{P(X > -1)} and \eqn{P(X < 1)}, which is not \eqn{P(-1 < X < 1)}. Use
+#' `cdf(x, 1) - cdf(x, -1)` for the probability of an interval. A logical
+#' operand is treated as a certain event: `TRUE` has probability 1, `FALSE`
+#' probability 0, and `NA` gives a missing result. Distributions other than
+#' Bernoulli (or [dist_degenerate()] at 0 or 1) are an error.
+#'
 #' **Equality.** `x == y` is `TRUE` when `x` and `y` are the same family with
 #' the same parameters, and gives a logical vector. A number on either side is
 #' treated as a [dist_degenerate()] point mass, so `dist_degenerate(1) == 1` is
@@ -41,7 +53,8 @@
 #'
 #' @param e1,e2 Distributions, numbers or logicals.
 #'
-#' @return `<`, `<=`, `>` and `>=` give a vector of Bernoulli distributions.
+#' @return `<`, `<=`, `>`, `>=`, `&`, `|` and `!` give a vector of Bernoulli
+#' distributions.
 #' `==` and `!=` give a logical vector.
 #'
 #' @seealso [cdf()], [density()]
@@ -59,6 +72,14 @@
 #' # Comparing two independent distributions
 #' dist_normal(1) > dist_normal(0)
 #'
+#' # Logical operators treat events as independent
+#' !(x > 1.96)
+#' (x > -1) & (x < 1)
+#' # which is not the probability of the interval, as the events are dependent
+#' cdf(x, 1) - cdf(x, -1)
+#' (x > 1.96) | (dist_normal(5) < 3)
+#' (x > 0) & TRUE
+#'
 #' # Equality compares the family and parameters
 #' dist_normal(1:3) == dist_normal(1)
 #' dist_degenerate(1) == 1
@@ -70,6 +91,10 @@
 #' @aliases distribution-comparison
 #' @export
 Ops.distribution <- function(e1, e2) {
+  if (missing(e2)) {
+    if (.Generic == "!") return(new_bernoulli(1 - bernoulli_prob(e1, "!")))
+    return(NextMethod())
+  }
   switch(
     .Generic,
     `==` = dist_equal(e1, e2),
@@ -78,8 +103,54 @@ Ops.distribution <- function(e1, e2) {
     `<=` = ,
     `>` = ,
     `>=` = dist_order(e1, e2, .Generic),
+    `&` = ,
+    `|` = dist_logic(e1, e2, .Generic),
     NextMethod()
   )
+}
+
+# `&` and `|` of two independent events, given as Bernoulli distributions or
+# logicals, paired by position
+dist_logic <- function(e1, e2, op) {
+  p <- vctrs::vec_recycle_common(
+    e1 = bernoulli_prob(e1, op), e2 = bernoulli_prob(e2, op), .call = NULL
+  )
+  new_bernoulli(switch(
+    op,
+    `&` = p$e1 * p$e2,
+    `|` = p$e1 + p$e2 - p$e1 * p$e2
+  ))
+}
+
+# The probability of each event in `x`, an operand of a logical operator `op`:
+# a Bernoulli distribution, a degenerate distribution at 0 or 1, or a logical
+# (or number) that is 0 or 1. Missing values give `NA`.
+bernoulli_prob <- function(x, op) {
+  if (!is_distribution(x)) {
+    if (!is.logical(x) && !is.numeric(x)) {
+      abort(sprintf("Can't use `%s` with <%s>.", op, class(x)[1L]), call = NULL)
+    }
+    p <- as.double(unname(x))
+    if (any(!is.na(p) & p != 0 & p != 1)) {
+      abort(sprintf("Can't use `%s` with numbers other than 0 or 1.", op), call = NULL)
+    }
+    return(p)
+  }
+  fam <- family(x)
+  p <- rep_len(NA_real_, length(x))
+  ok <- fam %in% c("bernoulli", "degenerate")
+  if (any(ok)) p[ok] <- mean(x[ok])
+  # Missing distributions are stored without a family or as `dist_na`
+  miss <- is.na(fam) | fam == "na"
+  bad <- !miss & !(fam == "bernoulli" | (fam == "degenerate" & p %in% c(0, 1)))
+  if (any(bad)) {
+    abort(c(
+      sprintf("Can't use `%s` with distributions other than Bernoulli.", op),
+      x = sprintf("Element %i is %s.", which(bad)[1L], format(x[which(bad)[1L]])),
+      i = "Compare distributions with a number first, such as `x > 0`."
+    ), call = NULL)
+  }
+  p
 }
 
 # The probability that the ordering comparison `op` between `e1` and `e2` is

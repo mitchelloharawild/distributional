@@ -23,6 +23,10 @@
   distribution of the probability that the comparison is true (#16). For
   example, `mean(dist_normal() > 1.96)` is 0.025. These previously returned a
   transformed distribution. See `?Ops.distribution`.
+* `&`, `|` and `!` now combine Bernoulli distributions (such as the results of
+  comparisons) as independent events, with logicals treated as certain events.
+  For example `(x > 0) & (y > 0)` is a Bernoulli distribution of
+  P(X > 0) P(Y > 0).
 * `==` and `!=` now compare distributions by family and parameters, and give a
   logical vector. A number is compared as a `dist_degenerate()`, so
   `dist_degenerate(1) == 1` is `TRUE` and `dist_normal(1) == 1` is `FALSE`.

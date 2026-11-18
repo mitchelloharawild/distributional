@@ -204,3 +204,68 @@ test_that("ordering comparisons error for unsupported operands", {
   expect_error(dist_multivariate_normal(list(1:2), list(diag(2))) > 0, "multivariate")
   expect_error(hilo(dist_normal()) < dist_normal(), "Can't compare")
 })
+
+test_that("logical operators combine independent Bernoulli distributions", {
+  a <- dist_bernoulli(c(0.2, 0.5))
+  b <- dist_bernoulli(c(0.3, 0.4))
+  expect_equal(prob(!a), c(0.8, 0.5))
+  expect_equal(prob(a & b), c(0.2 * 0.3, 0.5 * 0.4))
+  expect_equal(prob(a | b), c(0.2 + 0.3 - 0.2 * 0.3, 0.5 + 0.4 - 0.5 * 0.4))
+  expect_equal(prob(a & dist_bernoulli(0.5)), c(0.1, 0.25))
+
+  x <- dist_normal()
+  expect_equal(prob((x > -1) & (x < 1)), pnorm(-1, lower.tail = FALSE) * pnorm(1))
+  expect_equal(prob(!(x > 1.96)), pnorm(1.96))
+  expect_identical(format(!dist_bernoulli(0.25)), "Bernoulli(0.75)")
+
+  # Degenerate distributions at 0 or 1 are certain events
+  expect_equal(prob(dist_degenerate(1) & a), c(0.2, 0.5))
+  expect_equal(prob(dist_degenerate(0) | a), c(0.2, 0.5))
+  expect_equal(prob(!dist_degenerate(0)), 1)
+})
+
+test_that("logical operators treat logicals as certain events", {
+  a <- dist_bernoulli(c(0.2, 0.5))
+  expect_equal(prob(a & TRUE), c(0.2, 0.5))
+  expect_equal(prob(TRUE & a), c(0.2, 0.5))
+  expect_equal(prob(a & FALSE), c(0, 0))
+  expect_equal(prob(FALSE | a), c(0.2, 0.5))
+  expect_equal(prob(a | TRUE), c(1, 1))
+  expect_equal(prob(a | c(TRUE, FALSE)), c(1, 0.5))
+  expect_equal(prob(c(FALSE, TRUE) & a), c(0, 0.5))
+  expect_equal(prob(a & 1), c(0.2, 0.5))
+
+  # Missing values give missing results
+  expect_identical(is.na(a & NA), c(TRUE, TRUE))
+  expect_identical(is.na(NA | a), c(TRUE, TRUE))
+  expect_identical(is.na(a & c(TRUE, NA)), c(FALSE, TRUE))
+  expect_identical(is.na(c(dist_bernoulli(0.3), NA) & dist_bernoulli(0.5)), c(FALSE, TRUE))
+  expect_identical(is.na(dist_missing(2) | a), c(TRUE, TRUE))
+  expect_identical(is.na(!c(a, NA)), c(FALSE, FALSE, TRUE))
+})
+
+test_that("logical operators handle zero-length and rep-compressed inputs", {
+  a <- dist_bernoulli(c(0.2, 0.5))
+  expect_length(a[0] & TRUE, 0)
+  expect_length(!a[0], 0)
+  expect_s3_class(!a[0], "distribution")
+  expect_equal(prob(rep(a, 2) & dist_bernoulli(0.5)), c(0.1, 0.25, 0.1, 0.25))
+  expect_equal(prob(!rep(a, each = 2)), c(0.8, 0.8, 0.5, 0.5))
+  expect_error(rep(a, 2) & a[c(1, 2, 1)], "recycle")
+})
+
+test_that("logical operators error for operands that aren't events", {
+  a <- dist_bernoulli(0.2)
+  expect_error(dist_normal() & a, "other than Bernoulli")
+  expect_error(a | dist_poisson(2), "Element 1 is Pois\\(2\\)")
+  expect_error(!dist_normal(), "other than Bernoulli")
+  expect_error(c(a, dist_normal()) & TRUE, "Element 2")
+  expect_error(dist_degenerate(2) & a, "other than Bernoulli")
+  expect_error(a & 2, "0 or 1")
+  expect_error(a & "a", "<character>")
+})
+
+test_that("unary minus and plus still dispatch through Ops", {
+  expect_identical(format(-dist_normal(1)), "N(-1, 1)")
+  expect_identical(format(+dist_normal(1)), "N(1, 1)")
+})

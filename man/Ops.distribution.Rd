@@ -11,7 +11,8 @@
 \item{e1, e2}{Distributions, numbers or logicals.}
 }
 \value{
-\code{<}, \code{<=}, \code{>} and \code{>=} give a vector of Bernoulli distributions.
+\code{<}, \code{<=}, \code{>}, \code{>=}, \code{&}, \code{|} and \code{!} give a vector of Bernoulli
+distributions.
 \code{==} and \code{!=} give a logical vector.
 }
 \description{
@@ -20,7 +21,9 @@
 The ordering operators \code{<}, \code{<=}, \code{>} and \code{>=} give the probability that the
 comparison is true, as a \code{\link[=dist_bernoulli]{dist_bernoulli()}} distribution. \code{==} and \code{!=}
 compare the structure of distributions: two distributions are equal when
-they are from the same family and have identical parameters.
+they are from the same family and have identical parameters. The logical
+operators \code{&}, \code{|} and \code{!} combine Bernoulli distributions (such as the
+results of comparisons) as independent events.
 }
 \details{
 \strong{Ordering.} Comparing a distribution with a number gives a Bernoulli
@@ -41,6 +44,16 @@ computed from \code{x - y}. This assumes that \code{x} and \code{y} are independ
 arithmetic between distributions does), and uses a closed form where one is
 known (such as for two normal distributions) or \code{\link[=dist_convolved]{dist_convolved()}}
 otherwise.
+
+\strong{Logical operators.} \code{!x} is \code{Bernoulli(1 - p)}, \code{x & y} is
+\code{Bernoulli(px * py)} and \code{x | y} is \code{Bernoulli(px + py - px * py)}. These
+assume that the events are independent, \strong{even when they are comparisons
+of the same distribution}. For example, \code{(x > -1) & (x < 1)} multiplies
+\eqn{P(X > -1)} and \eqn{P(X < 1)}, which is not \eqn{P(-1 < X < 1)}. Use
+\code{cdf(x, 1) - cdf(x, -1)} for the probability of an interval. A logical
+operand is treated as a certain event: \code{TRUE} has probability 1, \code{FALSE}
+probability 0, and \code{NA} gives a missing result. Distributions other than
+Bernoulli (or \code{\link[=dist_degenerate]{dist_degenerate()}} at 0 or 1) are an error.
 
 \strong{Equality.} \code{x == y} is \code{TRUE} when \code{x} and \code{y} are the same family with
 the same parameters, and gives a logical vector. A number on either side is
@@ -65,6 +78,14 @@ dist_poisson(1:3) >= 2
 
 # Comparing two independent distributions
 dist_normal(1) > dist_normal(0)
+
+# Logical operators treat events as independent
+!(x > 1.96)
+(x > -1) & (x < 1)
+# which is not the probability of the interval, as the events are dependent
+cdf(x, 1) - cdf(x, -1)
+(x > 1.96) | (dist_normal(5) < 3)
+(x > 0) & TRUE
 
 # Equality compares the family and parameters
 dist_normal(1:3) == dist_normal(1)
