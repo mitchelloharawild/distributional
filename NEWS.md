@@ -153,6 +153,11 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   preimage). For example, `mean((dist_poisson(3) - 3)^2 >= 4)` is now 0.384,
   and `density((dist_poisson(3) - 3)^2, 4)` is P(Y = 1) + P(Y = 5) = 0.250,
   where it was P(Y = 5) = 0.101.
+* `cdf()` of a quantile mixture of discrete distributions (and so comparisons
+  such as `x >= 3`) is now exact. The quantile function of such a mixture is
+  a step function, which `uniroot()` inverted to an arbitrary point of the
+  flat step. For an equal weight quantile mixture of `dist_poisson(3)` and
+  `dist_poisson(5)`, `cdf(x, 3)` is now 0.423, where it was 0.375.
 
 ## Other changes
 

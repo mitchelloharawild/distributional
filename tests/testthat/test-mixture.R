@@ -295,6 +295,37 @@ test_that("Quantile mixtures with different K in one vector", {
   expect_equal(lengths(generate(x, list(c(3, 6)))), c(3, 6))
 })
 
+test_that("cdf() of quantile mixtures of discrete distributions", {
+  # The truth is from the quantile function on a fine grid of probabilities
+  p <- (1:1e6 - 0.5) / 1e6
+  Q <- 0.5 * qpois(p, 3) + 0.5 * qpois(p, 5)
+  x <- dist_mixture(dist_poisson(3), dist_poisson(5), weights = c(0.5, 0.5), type = "quantile")
+  a <- c(-1, 0, 0.5, 3, 3.2, 7)
+  truth <- vapply(a, function(ai) mean(Q <= ai), numeric(1))
+  expect_equal(cdf(x, a)[[1]], truth, tolerance = 1e-5)
+  expect_equal(cdf(x, a, tail = "upper")[[1]], 1 - truth, tolerance = 1e-5)
+  expect_equal(cdf(x, 3), ppois(2, 3))
+  expect_equal(mean(x >= 3), mean(Q >= 3), tolerance = 1e-5)
+  expect_equal(mean(x < 3), mean(Q < 3), tolerance = 1e-5)
+  expect_equal(cdf(x, 1000), 1)
+
+  # Unequal weights and different families
+  Q <- (qbinom(p, 10, 0.3) + qpois(p, 2) + qbinom(p, 5, 0.5)) / 3
+  y <- dist_mixture(
+    dist_binomial(10, 0.3), dist_poisson(2), dist_binomial(5, 0.5),
+    weights = rep(1 / 3, 3), type = "quantile"
+  )
+  a <- c(0, 1, 7 / 3, 8 / 3, 20 / 3, 10)
+  truth <- vapply(a, function(ai) mean(Q <= ai + 1e-9), numeric(1))
+  expect_equal(cdf(y, a)[[1]], truth, tolerance = 1e-5)
+
+  # Vectors of mixtures, with continuous components and missing values
+  z <- c(x, dist_mixture(dist_normal(), dist_poisson(2), weights = c(0.5, 0.5), type = "quantile"))
+  expect_equal(cdf(z, 3), c(ppois(2, 3), cdf(z[2], 3)))
+  expect_equal(cdf(z[2], 3), 0.94735, tolerance = 1e-4)
+  expect_equal(cdf(z, NA_real_), c(NA_real_, NA_real_))
+})
+
 test_that("Multivariate mixtures in one vector", {
   mv <- function(mu, sigma = diag(2)) dist_multivariate_normal(mu = list(mu), sigma = list(sigma))
   x <- c(

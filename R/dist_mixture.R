@@ -490,13 +490,24 @@ cdf.dist_q_mixture <- function(x, q, ..., tail = "lower") {
   parts <- mixture_parts(x)
   n <- parts$n
   q <- vec_recycle(q, n)
+  out <- rep_len(NA_real_, n)
+
+  # Mixtures whose components are all on the integers have a step quantile
+  # function, which can't be inverted with `uniroot()`
+  lattice <- vapply(split(is_lattice(parts$flat), parts$idx), all, logical(1L))
+  disc <- which(lattice)
+  if (length(disc)) {
+    out[disc] <- cdf_q_mixture_discrete(parts, q, disc, ..., tail = tail)
+  }
+  cont <- which(!lattice)
+  if (!length(cont)) return(out)
 
   # Compute support bounds directly from the quantile function to avoid
   # calling support(x), which would trigger density() -> cdf() recursion.
   lims_lo <- q_mixture_quantile(parts, 0, ...)
   lims_hi <- q_mixture_quantile(parts, 1, ...)
 
-  vapply(seq_len(n), function(i) {
+  out[cont] <- vapply(cont, function(i) {
     qi <- q[i]
     if (is.na(qi)) return(NA_real_)
 
@@ -528,6 +539,46 @@ cdf.dist_q_mixture <- function(x, q, ..., tail = "lower") {
 
     stats::uniroot(fn, interval = c(eps, 1 - eps), tol = 1e-8)$root
   }, numeric(1L))
+  out
+}
+
+# The c.d.f. F(a) = sup{p : Q(p) <= a} of the quantile mixtures `which`, whose
+# components are all discrete. Q is then a step function, so a p_lo with
+# Q(p_lo) <= a just below the supremum is found by bisection on p. Q jumps
+# above `a` where the first of the components' quantiles does, so F(a) is
+# min(F_k(Q_k(p_lo))), which is exact. Steps shorter than about 2^-60 in p are
+# missed. The upper tail is 1 - F(a).
+cdf_q_mixture_discrete <- function(parts, q, which, ..., tail = "lower") {
+  n <- parts$n
+  todo <- which[!is.na(q[which])]
+  lo <- rep(0, n)
+  hi <- rep(1, n)
+  tol <- function(a) 1e-12 * pmax(1, abs(a))
+  for (iter in seq_len(60L)) {
+    if (!length(todo)) break
+    mid <- (lo + hi) / 2
+    qm <- q_mixture_quantile(parts, mid, ...)
+    below <- todo[qm[todo] <= q[todo] + tol(q[todo])]
+    above <- setdiff(todo, below)
+    lo[below] <- mid[below]
+    hi[above] <- mid[above]
+  }
+
+  out <- rep_len(NA_real_, n)
+  todo <- which[!is.na(q[which])]
+  out[todo] <- 0
+  found <- todo[lo[todo] > 0]
+  if (length(found)) {
+    use <- parts$idx %in% found
+    flat <- vec_slice(parts$flat, use)
+    idx <- parts$idx[use]
+    x_k <- dist_paired(quantile, flat, p = lo[idx], ...)
+    F_k <- dist_paired(cdf, flat, q = x_k, ...)
+    F_min <- vapply(split(F_k, idx), min, numeric(1L))
+    out[as.integer(names(F_min))] <- F_min
+  }
+  out <- out[which]
+  if (tail == "lower") out else 1 - out
 }
 
 # The quantile function Q(p) = sum(w * Q_k(p)) is a weighted average of the
