@@ -133,6 +133,11 @@ format.dist_truncated <- function(x, ...){
 is_lattice <- function(dist) {
   sup <- tryCatch(support(dist), error = function(e) NULL)
   if (is.null(sup)) return(rep(FALSE, vec_size(dist)))
+  support_is_lattice(sup)
+}
+
+# The same, from the `support()` of the distributions
+support_is_lattice <- function(sup) {
   vapply(field(sup, "x"), function(proto) is.integer(proto) || is.logical(proto), logical(1L))
 }
 

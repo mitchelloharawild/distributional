@@ -335,14 +335,24 @@ test_that("dist_convolved: support is derived from the components", {
 })
 
 test_that("dist_convolved: lattice components off the integer lattice warn", {
-  d <- dist_convolved(2 * dist_poisson(1), dist_poisson(1))
-  expect_warning(p <- cdf(d, 3.5), "integer lattice")
+  d <- dist_convolved(0.5 * dist_poisson(1), dist_poisson(1))
+  expect_warning(p <- cdf(d, 1.75), "integer lattice")
   # Approximated on the grid, so accurate away from the atoms
   expect_equal(
     p,
-    sum(outer(dpois(0:40, 1), dpois(0:40, 1))[outer(2 * (0:40), 0:40, `+`) <= 3]),
+    sum(outer(dpois(0:40, 1), dpois(0:40, 1))[outer(0.5 * (0:40), 0:40, `+`) <= 1.75]),
     tolerance = 1e-4
   )
+})
+
+test_that("dist_convolved: transformed components on a coarser integer lattice are exact", {
+  # The atoms of 2 * Pois(1) are the even integers, which are on the lattice
+  d <- dist_convolved(2 * dist_poisson(1), dist_poisson(1))
+  expect_no_warning(p <- cdf(d, 3.5))
+  pmf <- outer(dpois(0:40, 1), dpois(0:40, 1))
+  k <- outer(2 * (0:40), 0:40, `+`)
+  expect_equal(p, sum(pmf[k <= 3]))
+  expect_equal(density(d, 3), sum(pmf[k == 3]))
 })
 
 test_that("dist_convolved: exponential sums are accurate in the tails", {

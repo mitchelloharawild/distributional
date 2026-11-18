@@ -186,11 +186,11 @@ transformed_dir <- function(f, dist, p = seq(0, 1, length.out = 23L)[2:22]) {
   vapply(q, function(qi) monotonic_dir_q(f, qi), integer(1L))
 }
 
-# The support of the distributions `dist` transformed by `tf`
-transformed_support <- function(dist, tf, inv) {
-  support <- support(dist)
-  lim <- field(support, "lim")
-  closed <- field(support, "closed")
+# The support of the distributions `dist` transformed by `tf`, from the
+# support of `dist` (`base_sup`)
+transformed_support <- function(dist, tf, inv, base_sup = support(dist)) {
+  lim <- field(base_sup, "lim")
+  closed <- field(base_sup, "closed")
 
   # Mapping the support limits through the transform and sorting them only
   # gives the correct image when the transform is monotonic over the *whole*
@@ -216,7 +216,7 @@ transformed_support <- function(dist, tf, inv) {
     }
     lim[[i]] <- lim_i
   }
-  new_support_region(field(support, "x"), lim, closed)
+  new_support_region(field(base_sup, "x"), lim, closed)
 }
 
 #' @export
@@ -264,15 +264,34 @@ point_mass.dist_transformed <- function(x, at, ...){
   })
 }
 
+# The density of a continuous base distribution is transformed with the
+# Jacobian of the inverse. A discrete base distribution has a probability mass
+# rather than a density, which is the mass at the preimage of `at` (and 0 when
+# `at` isn't in the image of the support), without a Jacobian.
 #' @export
 density.dist_transformed <- function(x, at, ...){
   n <- vec_size(x)
   transformed_by_group(x, function(dist, tf, inv, idx) {
     at <- transformed_arg(at, idx, n)
-    inv_f <- function(v) suppressWarnings(inv(v))
-    jacobian <- vapply(at, numDeriv::jacobian, numeric(1L), func = inv_f)
-    d <- dist_paired(density, dist, at = inv_f(at), ...) * abs(jacobian)
-    sup <- transformed_support(dist, tf, inv)
+    # The support of the base distribution can be slow to compute (such as
+    # for `dist_wrap()`), so it is computed once
+    base_sup <- support(dist)
+    discrete <- support_is_lattice(base_sup)
+    # Usually every distribution in the group is discrete or none is, and
+    # they are then computed without subsetting
+    sub <- function(v, i) if (all(i)) v else v[i]
+    d <- numeric(length(at))
+    if (any(discrete)) {
+      d[discrete] <- transformed_mass(sub(dist, discrete), tf, inv, sub(at, discrete), ...)
+    }
+    if (!all(discrete)) {
+      cont <- !discrete
+      at_c <- sub(at, cont)
+      inv_f <- function(v) suppressWarnings(inv(v))
+      jacobian <- vapply(at_c, numDeriv::jacobian, numeric(1L), func = inv_f)
+      d[cont] <- dist_paired(density, sub(dist, cont), at = inv_f(at_c), ...) * abs(jacobian)
+    }
+    sup <- transformed_support(dist, tf, inv, base_sup)
     lim <- vec_c(!!!field(sup, "lim"))
     lo <- lim[c(TRUE, FALSE)]
     hi <- lim[c(FALSE, TRUE)]

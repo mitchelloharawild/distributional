@@ -126,6 +126,11 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
 * `cdf()` of a decreasing transformation of a discrete distribution now
   includes the probability mass at the threshold. `cdf(-dist_poisson(3), -2)`
   is now P(Y >= 2) = 0.80, where it was P(Y > 2) = 0.58.
+* `density()` of a transformation of a discrete distribution is now the
+  probability mass at the preimage, without the Jacobian of the inverse that
+  is used for continuous distributions. `density(2 * dist_poisson(3), 4)` is
+  now P(Y = 2) = 0.22, where it was half of that, and the `likelihood()` of
+  transformed counts is now that of the counts.
 
 ## Other changes
 

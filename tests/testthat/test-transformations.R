@@ -378,3 +378,33 @@ test_that("quantiles of transformed discrete distributions invert the cdf", {
   expect_equal(quantile(-dist_poisson(3), p, tail = "upper")[[1]], -qpois(p, 3))
 
 })
+
+test_that("density of transformed discrete distributions is the mass at the preimage", {
+  y <- 2 * dist_poisson(3)
+  expect_equal(density(y, 4), dpois(2, 3))
+  expect_equal(density(y, c(0, 2, 3, 4, -2))[[1]], c(dpois(0:2, 3)[c(1, 2)], 0, dpois(2, 3), 0))
+  expect_equal(density(0.1 * dist_poisson(3), c(0.1, 0.2, 0.3, 0.25))[[1]], c(dpois(1:3, 3), 0))
+  expect_equal(density(-dist_poisson(3), -(0:3))[[1]], dpois(0:3, 3))
+  expect_equal(density(exp(dist_poisson(3)), exp(2)), dpois(2, 3))
+  expect_equal(density(dist_binomial(5, 0.4) + 0.5, 2.5), dbinom(2, 5, 0.4))
+  expect_equal(log_density(y, 4), dpois(2, 3, log = TRUE))
+  expect_equal(density(y, 4, log = TRUE), dpois(2, 3, log = TRUE))
+
+  # The masses sum to 1 over the image of the support
+  expect_equal(sum(density(0.1 * dist_poisson(3), (0:50) / 10)[[1]]), 1)
+
+  # Continuous bases keep the Jacobian, also alongside discrete bases
+  d <- dist_transformed(c(dist_normal(0, 1), dist_poisson(3)), function(x) 2 * x, function(x) x / 2)
+  expect_equal(density(d, list(c(1, 4)))[[1]], c(dnorm(0.5) / 2, dpois(2, 3)))
+  expect_equal(density(exp(dist_normal()), 2), dlnorm(2))
+
+  # Vectors with rep(), missing distributions and other families
+  x <- rep(c(2 * dist_poisson(3), dist_normal()), 2)
+  expect_equal(density(x, list(c(4, 0, 3, 1)))[[1]], c(dpois(2, 3), dnorm(0), 0, dnorm(1)))
+  expect_equal(density(c(2 * dist_poisson(3), NA), 4), c(dpois(2, 3), NA))
+
+  # Likelihoods of transformed counts are those of the counts
+  expect_equal(likelihood(y, list(c(2, 4, 6))), prod(dpois(1:3, 3)))
+  expect_equal(likelihood(y, list(c(2, 4, 6)), log = TRUE), sum(dpois(1:3, 3, log = TRUE)))
+  expect_equal(likelihood(y, list(c(2, 3))), 0)
+})
