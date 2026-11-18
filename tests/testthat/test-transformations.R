@@ -253,6 +253,43 @@ test_that("non-monotonic transformations warn and return NA (#129)", {
   expect_true(all(is.na(unlist(p))))
 })
 
+test_that("non-monotonic transformations of discrete distributions enumerate the support", {
+  # (Y - 3)^2 >= 4 when Y <= 1 or Y >= 5
+  x <- (dist_poisson(3) - 3)^2
+  expect_equal(mean(x >= 4), ppois(1, 3) + ppois(4, 3, lower.tail = FALSE))
+  expect_equal(mean(x > 4), ppois(0, 3) + ppois(5, 3, lower.tail = FALSE))
+  expect_equal(mean(x < 4), ppois(4, 3) - ppois(1, 3))
+  expect_equal(cdf(x, c(0, 1, 4, 4.5, -1))[[1]], c(
+    dpois(3, 3), ppois(4, 3) - ppois(1, 3), ppois(5, 3) - ppois(0, 3),
+    ppois(5, 3) - ppois(0, 3), 0
+  ))
+  expect_equal(cdf(x, 4, tail = "upper"), ppois(0, 3) + ppois(5, 3, lower.tail = FALSE))
+  expect_equal(point_mass(x, c(0, 1, 2, 4)), c(dpois(3, 3), dpois(2, 3) + dpois(4, 3), 0, dpois(1, 3) + dpois(5, 3)))
+  expect_equal(density(x, 4), dpois(1, 3) + dpois(5, 3))
+  expect_equal(density(x, c(1, 2))[[1]], c(dpois(2, 3) + dpois(4, 3), 0))
+
+  # Finite support is enumerated exactly, and vectors of distributions
+  x <- (dist_binomial(10, c(0.5, 0.3)) - 5)^2
+  expect_equal(cdf(x, 4), c(sum(dbinom(3:7, 10, 0.5)), sum(dbinom(3:7, 10, 0.3))))
+  expect_equal(cdf(x, 4, tail = "upper"), 1 - c(sum(dbinom(3:7, 10, 0.5)), sum(dbinom(3:7, 10, 0.3))))
+  expect_equal(cdf(x, 25), c(1, 1))
+
+  # The far tails of an infinite support
+  x <- abs(dist_poisson(1e7) - 1e7)
+  expect_equal(cdf(x, 100), ppois(1e7 + 100, 1e7) - ppois(1e7 - 101, 1e7))
+
+  # Too many support points to enumerate
+  x <- abs(dist_poisson(1e13) - 1e13)
+  expect_warning(p <- cdf(x, 100), "non-monotonic")
+  expect_equal(p, NA_real_)
+  expect_equal(suppressWarnings(mean(x >= 100)), NA_real_)
+
+  # Continuous distributions are still NA
+  expect_warning(p <- cdf((dist_normal() - 1)^2, 4), "non-monotonic")
+  expect_equal(p, NA_real_)
+  expect_equal(point_mass((dist_normal() - 1)^2, 4), 0)
+})
+
 test_that("Ops between unrelated non-transformed distributions error", {
   expect_error(dist_poisson(2) * dist_gamma(2, 1), "not supported")
   expect_error(dist_poisson(2) / dist_gamma(2, 1), "not supported")

@@ -35,6 +35,22 @@
 #'   region of mass, `cdf()` and `quantile()` are not well-defined from the
 #'   single stored `inverse` and return `NA` with a warning.
 #'
+#'   The exception is a non-monotonic transformation of a distribution on the
+#'   integers (such as `(dist_poisson(3) - 3)^2`). Its `cdf()`, `density()`
+#'   (probability mass) and comparisons (such as `x >= 4`) are computed exactly
+#'   by summing over the support of \eqn{X}:
+#'   \deqn{
+#'     P(Y \in A) = \sum_{x} P(X = x) 1\{g(x) \in A\}.
+#'   }{
+#'     P(Y in A) = sum over x of P(X = x) 1{g(x) in A}.
+#'   }
+#'   A finite support is enumerated exactly. An infinite support is enumerated
+#'   between the lower and upper tail quantiles at \eqn{10^{-12}}, dropping a
+#'   mass of less than \eqn{2 \times 10^{-12}}{2e-12}. When this is more than
+#'   a million points (such as for `abs(dist_poisson(1e13) - 1e13)`), the
+#'   result is `NA` with a warning. Quantiles of non-monotonic transformations
+#'   are always `NA`.
+#'
 #'   **Support**: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}. When
 #'   \eqn{g} cannot be verified to be monotonic over the whole support, the
 #'   support limits are reported as unknown (`NA`). The support of a
@@ -293,10 +309,64 @@ transformed_preimage <- function(tf, inv, at) {
 # outside the image of the support has no preimage with mass, so its mass is 0.
 # Without an inverse the mass is unknown (`NA`) for discrete distributions, and
 # is taken to be 0 otherwise.
+#
+# A non-monotonic transformation of a distribution on the integers can map
+# several points to `at`, so its mass is found by enumerating the support of
+# the base distribution (see `transformed_enumerate()`).
 transformed_mass <- function(dist, tf, inv, at, ...) {
+  lattice <- is_lattice(dist)
   y <- tryCatch(transformed_preimage(tf, inv, at), error = function(e) NULL)
-  if (is.null(y)) return(ifelse(is_lattice(dist), NA_real_, 0))
-  dist_paired(point_mass, dist, at = y, ...)
+  out <- if (is.null(y)) {
+    ifelse(lattice, NA_real_, 0)
+  } else {
+    dist_paired(point_mass, dist, at = y, ...)
+  }
+  if (any(lattice)) {
+    nonmono <- which(lattice)
+    nonmono <- nonmono[transformed_dir(tf, dist[nonmono]) == 0L]
+    if (length(nonmono)) {
+      out[nonmono] <- transformed_enumerate(dist[nonmono], tf, vec_recycle(at, vec_size(dist))[nonmono], "mass")
+    }
+  }
+  out
+}
+
+# Probabilities of a transformation `g` (`tf`) of distributions `dist` on the
+# integers, found by enumerating their support:
+# P(g(Y) in A) = sum over y of P(Y = y) 1{g(y) in A}. `what` is "mass" for
+# P(g(Y) = a), "lower" for P(g(Y) <= a) and "upper" for P(g(Y) > a), with
+# `a` paired with `dist`. As in `transformed_preimage()`, g(y) within rounding
+# error of `a` is equal to it.
+#
+# A finite support is enumerated exactly. An infinite support is enumerated
+# from the quantile at 1e-12 to the upper tail quantile at 1e-12, which drops a
+# mass of less than 2e-12. Supports with more than `max_points` points (and
+# distributions that aren't on the integers) give `NA`.
+transformed_enumerate <- function(dist, tf, a, what, max_points = 1e6) {
+  lattice <- is_lattice(dist)
+  vapply(seq_len(vec_size(dist)), function(i) {
+    if (!lattice[i] || is.na(a[i])) return(NA_real_)
+    d <- dist[i]
+    lim <- quantile(d, c(0, 1))[[1L]]
+    if (!all(is.finite(lim))) {
+      lim <- c(quantile(d, 1e-12)[[1L]], quantile(d, 1e-12, tail = "upper")[[1L]])
+    }
+    if (!all(is.finite(lim)) || lim[2L] - lim[1L] + 1 > max_points) return(NA_real_)
+    y <- seq(lim[1L], lim[2L])
+    mass <- density(d, y)[[1L]]
+    g <- suppressWarnings(tf(y))
+    keep <- mass > 0
+    if (anyNA(g[keep])) return(NA_real_)
+    mass <- mass[keep]
+    g <- g[keep]
+    eq <- g == a[i] | abs(g - a[i]) <= 1e-12 * pmax(abs(g), abs(a[i]))
+    eq[is.na(eq)] <- FALSE
+    switch(what,
+      mass = sum(mass[eq]),
+      lower = sum(mass[eq | g < a[i]]),
+      upper = sum(mass[!eq & g > a[i]])
+    )
+  }, numeric(1L))
 }
 
 #' @export
@@ -357,16 +427,22 @@ density.dist_transformed <- function(x, at, ...){
 # `decreasing(dist, a, out, base_tail)`, where `out` is the result of `.f` in
 # the swapped tail `base_tail` (see `transformed_cdf_mass()` and
 # `transformed_quantile_atom()`).
-transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", decreasing = NULL) {
+#
+# Non-monotonic transformations are computed by `nonmonotonic(i)` for the
+# positions `i` of their distributions (returning `NA` where they can't be),
+# and are otherwise `NA`, with a warning.
+transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", decreasing = NULL, nonmonotonic = NULL) {
   dir <- transformed_dir(tf, dist)
-  if (any(dir == 0L)) {
+  swap <- c("lower" = "upper", "upper" = "lower")[[tail]]
+  out <- rep(NA_real_, vec_size(dist))
+  i <- which(dir == 0L)
+  if (length(i) && !is.null(nonmonotonic)) out[i] <- nonmonotonic(i)
+  if (anyNA(out[i])) {
     warning(sprintf(
       "Cannot compute %s of a non-monotonic transformation over the distribution's region of mass, returning `NA`.",
       name
     ))
   }
-  swap <- c("lower" = "upper", "upper" = "lower")[[tail]]
-  out <- rep(NA_real_, vec_size(dist))
   for (d in c(1L, -1L)) {
     i <- which(dir == d)
     if (!length(i)) next
@@ -407,9 +483,11 @@ cdf.dist_transformed <- function(x, q, ..., tail = "lower"){
   n <- vec_size(x)
   transformed_by_group(x, function(dist, tf, inv, idx) {
     q <- transformed_arg(q, idx, n)
+    q <- vec_recycle(q, vec_size(dist))
     p <- transformed_inner(
       cdf, dist, tf, transformed_preimage(tf, inv, q), "the cdf", ...,
-      tail = tail, decreasing = transformed_cdf_mass
+      tail = tail, decreasing = transformed_cdf_mass,
+      nonmonotonic = function(i) transformed_enumerate(dist[i], tf, q[i], tail)
     )
 
     # TODO: Rework for support of closed limits and prevent computation

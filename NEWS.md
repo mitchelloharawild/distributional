@@ -147,6 +147,12 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   also corrects truncating such distributions, which treated their bounds as
   integers. Integer support unbounded below now prints as `{...,-1,0}`, where
   `-dist_poisson(3)` printed as `{-Inf,-Inf,...,0}`.
+* `cdf()`, `density()` and comparisons of a non-monotonic transformation of
+  a distribution on the integers are now computed by summing over its
+  support, rather than being `NA` (or, for `density()`, the mass of only one
+  preimage). For example, `mean((dist_poisson(3) - 3)^2 >= 4)` is now 0.384,
+  and `density((dist_poisson(3) - 3)^2, 4)` is P(Y = 1) + P(Y = 5) = 0.250,
+  where it was P(Y = 5) = 0.101.
 
 ## Other changes
 

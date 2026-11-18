@@ -44,6 +44,22 @@ therefore treated as monotonic. When \eqn{g} is \emph{not} monotonic over the
 region of mass, \code{cdf()} and \code{quantile()} are not well-defined from the
 single stored \code{inverse} and return \code{NA} with a warning.
 
+The exception is a non-monotonic transformation of a distribution on the
+integers (such as \code{(dist_poisson(3) - 3)^2}). Its \code{cdf()}, \code{density()}
+(probability mass) and comparisons (such as \code{x >= 4}) are computed exactly
+by summing over the support of \eqn{X}:
+\deqn{
+    P(Y \in A) = \sum_{x} P(X = x) 1\{g(x) \in A\}.
+  }{
+    P(Y in A) = sum over x of P(X = x) 1{g(x) in A}.
+  }
+A finite support is enumerated exactly. An infinite support is enumerated
+between the lower and upper tail quantiles at \eqn{10^{-12}}, dropping a
+mass of less than \eqn{2 \times 10^{-12}}{2e-12}. When this is more than
+a million points (such as for \code{abs(dist_poisson(1e13) - 1e13)}), the
+result is \code{NA} with a warning. Quantiles of non-monotonic transformations
+are always \code{NA}.
+
 \strong{Support}: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}. When
 \eqn{g} cannot be verified to be monotonic over the whole support, the
 support limits are reported as unknown (\code{NA}). The support of a
