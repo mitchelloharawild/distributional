@@ -90,6 +90,7 @@ reference:
     - dist_pareto
     - dist_student_t
     - dist_studentized_range
+    - dist_tweedie
     - dist_uniform
     - dist_weibull
 
@@ -107,20 +108,28 @@ reference:
     - dist_poisson
     - dist_poisson_inverse_gaussian
 
+- subtitle: Empirical distributions
+  desc: >
+    Distributions characterised by observed or tabulated values.
+  contents:
+    - dist_cdf
+    - dist_density
+    - dist_quantile
+    - dist_sample
+
 - subtitle: Miscellaneous distributions
   desc: >
     Degenerate and non-standard probability distributions.
   contents:
     - dist_degenerate
     - dist_missing
-    - dist_percentile
-    - dist_sample
     - dist_wrap
 
 - subtitle: Distribution modifiers
   desc: >
     Modifiers which change the nature of a distribution.
   contents:
+    - dist_convolved
     - dist_inflated
     - dist_mixture
     - dist_transformed

@@ -119,5 +119,5 @@ quantile(dist, 0.7, kind = "marginal")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[mvtnorm:Mvt]{mvtnorm::dmvt}, \link[mvtnorm:pmvt]{mvtnorm::pmvt}, \link[mvtnorm:qmvt]{mvtnorm::qmvt}, \link[mvtnorm:Mvt]{mvtnorm::rmvt}
+\link[mvtnorm:dmvt]{mvtnorm::dmvt}, \link[mvtnorm:pmvt]{mvtnorm::pmvt}, \link[mvtnorm:qmvt]{mvtnorm::qmvt}, \link[mvtnorm:rmvt]{mvtnorm::rmvt}
 }

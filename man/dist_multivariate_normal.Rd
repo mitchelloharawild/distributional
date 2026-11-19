@@ -88,6 +88,6 @@ quantile(dist, 0.7, kind = "marginal")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[mvtnorm:Mvnorm]{mvtnorm::dmvnorm()}}, \code{\link[mvtnorm:pmvnorm]{mvtnorm::pmvnorm()}}, \code{\link[mvtnorm:qmvnorm]{mvtnorm::qmvnorm()}},
-\code{\link[mvtnorm:Mvnorm]{mvtnorm::rmvnorm()}}
+\code{\link[mvtnorm:dmvnorm]{mvtnorm::dmvnorm()}}, \code{\link[mvtnorm:pmvnorm]{mvtnorm::pmvnorm()}}, \code{\link[mvtnorm:qmvnorm]{mvtnorm::qmvnorm()}},
+\code{\link[mvtnorm:rmvnorm]{mvtnorm::rmvnorm()}}
 }

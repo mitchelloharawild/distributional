@@ -6,6 +6,8 @@
 \alias{distributional-package}
 \title{distributional: Vectorised Probability Distributions}
 \description{
+\if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
+
 Vectorised distribution objects with tools for manipulating, visualising, and using probability distributions. Designed to allow model prediction outputs to return distributions rather than their parameters, allowing users to directly interact with predictive distributions in a data-oriented workflow. In addition to providing generic replacements for p/d/q/r functions, other useful statistics can be computed including means, variances, intervals, and highest density regions.
 }
 \seealso{
@@ -22,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Mitchell O'Hara-Wild \email{mail@mitchelloharawild.com} (\href{https://orcid.org/0000-0001-6729-7695}{ORCID})
   \item Matthew Kay (\href{https://orcid.org/0000-0001-9446-0419}{ORCID})
   \item Alex Hayes (\href{https://orcid.org/0000-0002-4985-5160}{ORCID})
   \item Rob Hyndman (\href{https://orcid.org/0000-0002-2140-5352}{ORCID})
@@ -31,6 +34,7 @@ Other contributors:
 \itemize{
   \item Earo Wang (\href{https://orcid.org/0000-0001-6448-5260}{ORCID}) [contributor]
   \item Vencislav Popov (\href{https://orcid.org/0000-0002-8073-4199}{ORCID}) [contributor]
+  \item Stefano Damato (\href{https://orcid.org/0009-0001-0225-3736}{ORCID}) [contributor]
 }
 
 }

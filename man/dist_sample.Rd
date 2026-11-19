@@ -118,5 +118,5 @@ cdf(dist, matrix(c(0.3,9), nrow = 1))
 
 }
 \seealso{
-\code{\link[stats:density]{stats::density()}}, \code{\link[stats:quantile]{stats::quantile()}}, \code{\link[stats:cor]{stats::cov()}}
+\code{\link[stats:density]{stats::density()}}, \code{\link[stats:quantile]{stats::quantile()}}, \code{\link[stats:cov]{stats::cov()}}
 }

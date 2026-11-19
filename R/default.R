@@ -70,8 +70,25 @@ parameters.dist_default <- function(x, ...) {
 }
 
 #' @export
-family.dist_default <- function(object, ...) {
-  substring(class(object)[1], first = 6)
+family.dist_default <- function(object, recursive = FALSE, ...) {
+  fam <- substring(class(object)[1], first = 6)
+  if (!recursive) return(fam)
+
+  # Identify fields which hold embedded distribution(s), and recurse into
+  # them: either a single distribution (e.g. dist_inflated()'s `dist`), or a
+  # list of distributions (e.g. dist_mixture()'s `dist`).
+  nested <- lapply(unclass(object), function(z) {
+    if (inherits(z, "dist_default")) {
+      family(z, recursive = TRUE)
+    } else if (is.list(z) && length(z) && all(vapply(z, inherits, logical(1L), "dist_default"))) {
+      unname(lapply(z, family, recursive = TRUE))
+    } else {
+      NULL
+    }
+  })
+  nested <- nested[!vapply(nested, is.null, logical(1L))]
+
+  if (!length(nested)) fam else c(list(family = fam), nested)
 }
 
 #' @export
@@ -217,8 +234,9 @@ print.dist_default <- function(x, ...){
 
 #' @export
 dim.dist_default <- function(x){
-  # Quick and dirty dimension calculation
-  NCOL(generate(x, times = 1))
+  # Dimensions of random draws is the cheapest approach for the default dim().
+  # The RNG state is restored so it does not affect the global random state.
+  suppressWarnings(restore_rng(NCOL(generate(x, times = 1))))
 }
 
 invert_fail <- function(...) stop("Inverting transformations for distributions is not yet supported.")
@@ -317,6 +335,16 @@ Ops.dist_default <- function(e1, e2) {
     stop("Transformations of multivariate distributions are not yet supported.")
   }
 
+  # For + and - between two independent distributions use numerical convolution
+  if (all(is_dist) && .Generic %in% c("+", "-")) {
+    d1 <- wrap_dist(list(e1))
+    d2 <- wrap_dist(list(e2))
+    if (.Generic == "-") {
+      d2 <- -d2
+    }
+    return(vec_data(dist_convolved(d1, d2))[[1]])
+  }
+
   trans <- if(all(is_dist)) {
     if(identical(e1$dist, e2$dist)){
       new_function(exprs(x = ), expr((!!sym(.Generic))((!!e1$transform)(x), (!!e2$transform)(x))))
@@ -339,3 +367,6 @@ Ops.dist_default <- function(e1, e2) {
 
   vec_data(dist_transformed(wrap_dist(list(e1,e2)[which(is_dist)]), trans, inverse))[[1]]
 }
+
+# If there are mix of Ops with default, then use the default method
+chooseOpsMethod.dist_default <- function(x, y, mx, my, cl, reverse) TRUE

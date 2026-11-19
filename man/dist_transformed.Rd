@@ -10,7 +10,8 @@ dist_transformed(dist, transform, inverse)
 \item{dist}{A univariate distribution vector.}
 
 \item{transform}{A function used to transform the distribution. This
-transformation should be monotonic over appropriate domain.}
+transformation should be monotonic over the region of the base distribution's
+mass (see Details).}
 
 \item{inverse}{The inverse of the \code{transform} function.}
 }
@@ -31,9 +32,21 @@ We recommend reading this documentation on \href{https://pkg.mitchelloharawild.c
 
 Let \eqn{Y = g(X)} where \eqn{X} is the base distribution with
 transformation function \code{transform} = \eqn{g} and \code{inverse} = \eqn{g^{-1}}.
-The transformation \eqn{g} must be monotonic over the support of \eqn{X}.
+The transformation \eqn{g} must be monotonic so that the mapping between
+\eqn{X} and \eqn{Y} is invertible.
 
-\strong{Support}: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}
+The direction of the transformation (increasing or decreasing) is detected
+by probing \eqn{g} at quantiles spanning the region of mass of \eqn{X},
+rather than at the (frequently infinite) support limits. A transformation
+that is monotonic where \eqn{X} has mass but not in its far tails (for
+example \eqn{g(x) = x^2} applied to a Normal whose mass is positive) is
+therefore treated as monotonic. When \eqn{g} is \emph{not} monotonic over the
+region of mass, \code{cdf()} and \code{quantile()} are not well-defined from the
+single stored \code{inverse} and return \code{NA} with a warning.
+
+\strong{Support}: \eqn{g(S_X)} where \eqn{S_X} is the support of \eqn{X}. When
+\eqn{g} cannot be verified to be monotonic over the whole support, the
+support limits are reported as unknown (\code{NA}).
 
 \strong{Mean}: Approximated numerically using a second-order Taylor expansion:
 

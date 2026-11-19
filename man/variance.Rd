@@ -27,9 +27,9 @@ A generic function for computing the variance of an object.
 }
 \details{
 The implementation of \code{variance()} for numeric variables coerces the input to
-a vector then uses \code{\link[stats:cor]{stats::var()}} to compute the variance. This means that,
-unlike \code{\link[stats:cor]{stats::var()}}, if \code{variance()} is passed a matrix or a 2-dimensional
-array, it will still return the variance (\code{\link[stats:cor]{stats::var()}} returns the
+a vector then uses \code{\link[stats:var]{stats::var()}} to compute the variance. This means that,
+unlike \code{\link[stats:var]{stats::var()}}, if \code{variance()} is passed a matrix or a 2-dimensional
+array, it will still return the variance (\code{\link[stats:var]{stats::var()}} returns the
 covariance matrix in that case).
 }
 \seealso{

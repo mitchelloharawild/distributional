@@ -41,7 +41,7 @@ closed-form expression and is computed numerically.
 simple closed-form expression. For \eqn{n = 1} (single range), it involves
 integration over the joint distribution of the sample range and an
 independent chi-square variable. The general form is computed numerically
-using algorithms described in the references for \code{\link[stats:Tukey]{stats::ptukey()}}.
+using algorithms described in the references for \code{\link[stats:ptukey]{stats::ptukey()}}.
 
 \strong{Moment generating function (m.g.f)}: Does not exist in closed form.
 }

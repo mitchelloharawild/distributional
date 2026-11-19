@@ -169,3 +169,65 @@ test_that("Recycling rules and output for applying multiple inputs over multiple
     )
   )
 })
+
+test_that("Vector inputs to multivariate distributions are deprecated (#159)", {
+  skip_if_not_installed("mvtnorm")
+
+  # <dist> is a trivariate distribution vector of length 2.
+  sigma <- matrix(c(4,1,0, 1,3,1, 0,1,2), nrow = 3)
+  dist <- dist_multivariate_normal(
+    mu = list(c(1,2,3), c(4,5,6)), sigma = list(sigma, sigma*2)
+  )
+
+  # A bare vector is a deprecated way to write points, and is interpreted as a
+  # matrix with one column for each variate - matching the equivalent matrix.
+  lifecycle::expect_deprecated(v1 <- density(dist, c(1, 2, 3)))
+  expect_equal(v1, density(dist, cbind(1, 2, 3)))
+  lifecycle::expect_deprecated(v2 <- density(dist, c(1, 2, 3, 4, 5, 6)))
+  expect_equal(v2, density(dist, matrix(c(1, 2, 3, 4, 5, 6), ncol = 3)))
+
+  # Lengths which don't fill whole points are an error.
+  expect_error(
+    suppressWarnings(density(dist, c(1, 2))),
+    "input of length 2 as points of a distribution with 3 variates"
+  )
+
+  # Probabilities are not variate values, and so are unaffected.
+  expect_no_condition(quantile(dist, 0.5, kind = "marginal"))
+
+  # Vectors for univariate distributions describe many points, not one, and so
+  # are unaffected.
+  expect_no_condition(density(dist_normal(1:2, 1), c(0, 1)))
+})
+
+test_that("Vector inputs to generate()'s times are deprecated (#99)", {
+  # <dist> is a distribution vector of length 2.
+  dist <- dist_normal(c(0, 100), 1)
+
+  # A scalar broadcasts to every distribution (unaffected, no list wrapping).
+  expect_length(generate(dist, 5), 2)
+  expect_length(generate(dist, 5)[[1]], 5)
+
+  # The list() form pairwise-recycles a vector against the distributions,
+  # and is the only spelling for this that doesn't warn.
+  expect_no_condition(v <- generate(dist, list(c(5, 10))))
+  expect_equal(lengths(v), c(5, 10))
+
+  # A bare vector of length > 1 is ambiguous with mapping, so it is deprecated
+  # in favour of the list() form, but continues to pairwise-recycle for now.
+  lifecycle::expect_deprecated(v2 <- generate(dist, c(5, 10)))
+  expect_equal(lengths(v2), c(5, 10))
+
+  # A bare vector that can't pairwise-recycle against the distributions still
+  # errors (as it did before the deprecation), after the deprecation warning.
+  expect_error(
+    suppressWarnings(generate(dist_normal(0, 1), c(5, 10))),
+    "Can't recycle"
+  )
+
+  # A list with more than one element isn't a valid spelling of `times`.
+  expect_error(
+    generate(dist, list(5, 10)),
+    "single vector of per-distribution values"
+  )
+})

@@ -4,15 +4,38 @@
 \alias{family.distribution}
 \title{Extract the name of the distribution family}
 \usage{
-\method{family}{distribution}(object, ...)
+\method{family}{distribution}(object, recursive = FALSE, ...)
 }
 \arguments{
 \item{object}{The distribution(s).}
 
+\item{recursive}{If \code{TRUE}, the families of any distributions embedded
+within \code{object} (such as the components of a \code{\link[=dist_mixture]{dist_mixture()}}, or the
+base distribution of a \code{\link[=dist_inflated]{dist_inflated()}} or \code{\link[=dist_transformed]{dist_transformed()}}) are
+also identified, and returned as a nested list instead of a flat
+character vector.}
+
 \item{...}{Additional arguments used by methods.}
+}
+\value{
+If \code{recursive = FALSE} (the default), a character vector giving
+the family name of each distribution. If \code{recursive = TRUE}, a list with
+one element per distribution: a distribution with no embedded
+distributions is represented by a character scalar (as before), while a
+distribution built from others is represented by a named list with a
+\code{family} element and one element per embedded distribution (containing
+its recursive \code{family()} result, or a list of such results if that
+element holds more than one embedded distribution).
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Some distributions (such as \code{\link[=dist_mixture]{dist_mixture()}}, \code{\link[=dist_convolved]{dist_convolved()}},
+\code{\link[=dist_inflated]{dist_inflated()}} and \code{\link[=dist_transformed]{dist_transformed()}}) are defined in terms of one or
+more other distributions. By default, \code{family()} only identifies the
+outermost distribution. Setting \code{recursive = TRUE} will also identify the
+families of these embedded distributions, returning a nested list
+describing the full family tree of each distribution.
 }
 \examples{
 dist <- c(
@@ -22,5 +45,15 @@ dist <- c(
   prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
   )
 family(dist)
+
+# Distributions composed of other distributions (such as the mixture
+# below) only identify the outer family by default.
+mix_dist <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2),
+  weights = c(0.3, 0.7))
+family(mix_dist)
+
+# With recursive = TRUE, the families of the mixture's components are
+# also identified.
+family(mix_dist, recursive = TRUE)
 
 }

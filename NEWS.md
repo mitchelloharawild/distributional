@@ -1,5 +1,78 @@
 # distributional (development version)
 
+# distributional 0.9.0
+
+## New features
+
+* Added a `vignette("broadcasting")` to describe how statistics apply to vectors
+  of distributions differently based on the form of the statistical operation's
+  argument (scalar, vector, or list).
+  
+* Added `dist_density()`, a distribution characterised by the values of its
+  probability density function at a set of points. This is useful for
+  representing a distribution known only through its density, such as a kernel
+  density estimate or a posterior evaluated over a grid.
+
+* Added `dist_cdf()`, which describes a distribution by the cumulative
+  probabilities at a set of values. Interpolation is done linearly, and the
+  results are equivalent to `dist_quantile()` with swapped arguments.
+
+* Added `dist_tweedie()`, for the Tweedie compound Poisson-Gamma
+  distribution with power parameter in `(1, 2)`, using the `tweedieDistr`
+  package (@StefanoDamato).
+
+* Added `recursive` option for `parameters()`, which recursively extracts the
+  parameters of inner distributions to return a flat data frame (#161).
+
+* Added `recursive` option for `family()`, which identifies the families of
+  distributions embedded within another (e.g. `dist_mixture()`) returning a
+  nested list describing the full family tree (#110).
+  
+## Breaking changes
+
+* `generate()`'s `times` argument no longer accepts length-n vectors, and 
+  instead requires `times = list(c(...))` for consistency with other operations.
+
+# distributional 0.8.1
+
+## Bug fixes
+
+* Conditionalised `chooseOpsMethod()` S3 registration so the package can load
+  on R versions before 4.3.0 (#157).
+
+# distributional 0.8.0
+
+## New features
+
+* `dist_mixture()` gains a `type` argument supporting both probability mixtures
+  (`type = "probability"`, the default, existing behaviour) and quantile
+  mixtures (`type = "quantile"`). A quantile mixture (Vincentization) defines
+  the quantile function as a weighted average of the component quantile
+  functions: Q(p) = sum(w_i * Q_i(p)). Its CDF and density are computed
+  numerically from this quantile function.
+
+* Added `dist_convolved()` for the distribution of the sum of two independent
+  random variables, computed via FFT-based numerical convolution (#106).
+  The `+` and `-` operators now automatically produce a `dist_convolved` object
+  for distribution families without a known closed-form sum. Distributions with 
+  known closed-form sums (e.g. `dist_normal(1, 2) + dist_normal(3, 1)`) continue
+  to produce exact results.
+
+* Added `dist_quantile()` as the primary interface for the quantile/percentile 
+  distribution, accepting probabilities on the \[0, 1\] scale. 
+  `dist_percentile()` is now an alias that accepts the \[0, 100\] scale (#116).
+
+# distributional 0.7.1
+
+## Improvements
+
+* Non-finite boundaries for truncated distributions now use open brackets.
+* Added vectorised `p` support in `quantile()` for inflated distributions (#151).
+
+## Bug fixes
+
+* Fixed `density()` error when multivariate distribution parameters contain names (#150).
+
 # distributional 0.7.0
 
 ## Improvements

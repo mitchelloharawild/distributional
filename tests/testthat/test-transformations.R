@@ -139,6 +139,20 @@ test_that("transformed distributions' cdf is 0/1 outside of the support region",
   expect_equal(cdf(-1*exp(dist), 2)[[1]], 1)
 })
 
+test_that("decreasing transformations swap the closedness of the limits", {
+  # The Poisson has a closed lower limit at 0, which becomes a closed upper
+  # limit at 0 once negated (so the atom there isn't clamped away).
+  d <- -dist_poisson(3)
+  expect_equal(field(support(d), "lim")[[1]], c(-Inf, 0))
+  expect_equal(field(support(d), "closed")[[1]], c(FALSE, TRUE))
+  expect_equal(density(d, 0), density(dist_poisson(3), 0))
+
+  d <- -dist_exponential(1)
+  expect_equal(field(support(d), "lim")[[1]], c(-Inf, 0))
+  expect_equal(field(support(d), "closed")[[1]], c(FALSE, TRUE))
+  expect_equal(density(d, -1), density(dist_exponential(1), 1))
+})
+
 test_that("unary negation operator works", {
   dist <- dist_normal(1,1)
   expect_equal(density(-dist, 0.5), density(dist, -0.5))
@@ -203,4 +217,38 @@ test_that("monotonically decreasing transformations (#100)", {
   expect_equal(
     cdf(-1/dist, -2), cdf(dist, 1/2)
   )
+})
+
+test_that("monotonic_dir classifies transformation direction (#129)", {
+  base <- function(m, s) vec_data(dist_normal(m, s))[[1]]
+  expect_identical(monotonic_dir(exp, base(2, 1)), 1L)
+  expect_identical(monotonic_dir(function(x) x^2, base(2.3, 0.45)), 1L)
+  expect_identical(monotonic_dir(function(x) x^2, base(0.5, 1)), 0L)
+  expect_identical(monotonic_dir(function(x) -x, base(0, 1)), -1L)
+  expect_identical(monotonic_dir(function(x) x^3, base(0, 1)), 1L)
+  # identity shortcut used heavily by ggdist
+  expect_identical(monotonic_dir(function(x) x, base(0, 1)), 1L)
+})
+
+test_that("sqrt-scale transformed quantiles are ascending (fabletools#442)", {
+  d <- dist_transformed(dist_normal(2.3, 0.45), function(x) x^2, function(x) sqrt(x))
+  q <- unlist(quantile(d, c(0.001, 0.01, 0.5, 0.99, 0.999)))
+  expect_false(is.unsorted(q))
+})
+
+test_that("support and cdf of x^2 over a Normal (#129)", {
+  d <- dist_transformed(dist_normal(2.3, 0.45), function(x) x^2, function(x) sqrt(x))
+  # Monotonicity over the full support cannot be verified, so limits are unknown
+  # rather than the wrong (Inf, Inf) that mapping endpoints would give.
+  expect_equal(field(support(vec_data(d)[[1]]), "lim")[[1]], c(NA_real_, NA_real_))
+  # With clamping disabled, cdf is correct where the mass is.
+  expect_equal(unlist(cdf(d, c(1, 5, 10))), pnorm(sqrt(c(1, 5, 10)), 2.3, 0.45))
+})
+
+test_that("non-monotonic transformations warn and return NA (#129)", {
+  d <- dist_transformed(dist_normal(0.5, 1), function(x) x^2, function(x) sqrt(x))
+  expect_warning(q <- quantile(d, c(0.1, 0.5, 0.9)))
+  expect_true(all(is.na(unlist(q))))
+  expect_warning(p <- cdf(d, c(1, 2)))
+  expect_true(all(is.na(unlist(p))))
 })

@@ -78,6 +78,7 @@ dimnames.distribution <- function(x){
   attr(x, "vars")
 }
 
+#' @method [[ distribution
 #' @export
 `[[.distribution` <- `[`
 
@@ -94,9 +95,13 @@ dimnames.distribution <- function(x){
 #' @param ... Additional arguments passed to methods.
 #' @param log If `TRUE`, probabilities will be given as log probabilities.
 #'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `at` argument is combined with the distributions.
+#'
 #' @importFrom stats density
 #' @export
 density.distribution <- function(x, at, ..., log = FALSE){
+  at <- validate_arg_dim(x, at, arg = "at")
   if(log) return(log_density(x, at, ...))
   at <- arg_listable(at, .ptype = NULL)
   dist_apply(x, density, at = at, ...)
@@ -107,6 +112,7 @@ log_density <- function(x, at, ...) {
 }
 #' @export
 log_density.distribution <- function(x, at, ...){
+  at <- validate_arg_dim(x, at, arg = "at")
   at <- arg_listable(at, .ptype = NULL)
   dist_apply(x, log_density, at = at, ...)
 }
@@ -121,6 +127,9 @@ log_density.distribution <- function(x, at, ...){
 #' @inheritParams density.distribution
 #' @param p The probability of the quantile.
 #' @param ... Additional arguments passed to methods.
+#'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `p` argument is combined with the distributions.
 #'
 #' @importFrom stats quantile
 #' @export
@@ -147,6 +156,9 @@ log_quantile.distribution <- function(x, p, ...){
 #' @inheritParams density.distribution
 #' @param q The quantile at which the cdf is calculated.
 #'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `q` argument is combined with the distributions.
+#'
 #' @name cdf
 #' @export
 cdf <- function (x, q, ..., log = FALSE){
@@ -156,6 +168,7 @@ cdf <- function (x, q, ..., log = FALSE){
 #' @rdname cdf
 #' @export
 cdf.distribution <- function(x, q, ...){
+  q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
   dist_apply(x, cdf, q = q, ...)
 }
@@ -164,6 +177,7 @@ log_cdf <- function(x, q, ...) {
 }
 #' @export
 log_cdf.distribution <- function(x, q, ...){
+  q <- validate_arg_dim(x, q, arg = "q")
   q <- arg_listable(q, .ptype = NULL)
   dist_apply(x, log_cdf, q = q, ...)
 }
@@ -176,13 +190,34 @@ log_cdf.distribution <- function(x, q, ...){
 #' Generate random samples from probability distributions.
 #'
 #' @param x The distribution(s).
-#' @param times The number of samples.
+#' @param times The number of samples. A scalar is broadcast to every
+#' distribution. Per-distribution sample sizes must be given as a list
+#' containing a single vector (`list(c(...))`) recycled against the
+#' distributions (length 1 or `length(x)`) - a bare vector of length > 1 is
+#' deprecated for this, as it is ambiguous with mapping the same vector onto
+#' every distribution.
 #' @param ... Additional arguments used by methods.
+#'
+#' @seealso `vignette("broadcasting", package = "distributional")` for how the
+#' `times` argument is combined with the distributions.
 #'
 #' @export
 generate.distribution <- function(x, times, ...){
+  if (is.list(times)) {
+    if (length(times) != 1L) {
+      abort("`times` must be a scalar, a vector, or a list containing a single vector of per-distribution values (such as `times = list(c(...))`).")
+    }
+    times <- times[[1L]]
+  } else if (length(times) > 1L) {
+    lifecycle::deprecate_warn(
+      when = "0.9.0",
+      what = I("Using a vector for the `times` argument of `generate()`"),
+      with = I("a list (such as `times = list(<numeric[n]>)`) for sample sizes per distribution")
+    )
+  }
   times <- vec_cast(times, integer())
   times <- vec_recycle(times, size = length(x))
+
   dn <- dimnames(x)
   x <- vec_data(x)
   dist_is_na <- vapply(x, is.null, logical(1L))
@@ -195,8 +230,6 @@ generate.distribution <- function(x, times, ...){
     }, x, times = times, ...,
     SIMPLIFY = FALSE
   )
-  # dist_apply(x, generate, times = times, ...)
-  # Needs work to structure MV appropriately.
 }
 
 #' The (log) likelihood of a sample matching a distribution
@@ -245,8 +278,23 @@ log_likelihood.distribution <- function(x, sample, ...){
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
+#' Some distributions (such as [dist_inflated()] and [dist_transformed()])
+#' are defined in terms of another distribution, which returns a distribution
+#' as one of their parameters. By default, this underlying distribution is 
+#' returned as-is in a column of the `parameters()` result. Setting 
+#' `recursive = TRUE` will recursively compute the parameters of these inner
+#' distributions, returning a flat data frame of all parameters.
+#'
 #' @param x The distribution(s).
+#' @param recursive If `TRUE`, parameters which are themselves
+#' distributions (such as the base distribution of a
+#' [dist_inflated()] or [dist_transformed()]) are recursively expanded
+#' into their own parameters instead of being returned as a distribution.
 #' @param ... Additional arguments used by methods.
+#'
+#' @return A data frame of parameters, with one row per distribution and
+#' one column per parameter. The result never contains data frame (or
+#' distribution) columns.
 #'
 #' @name parameters
 #' @examples
@@ -257,6 +305,15 @@ log_likelihood.distribution <- function(x, sample, ...){
 #'   prob = list(c(0.3, 0.5, 0.2), c(0.1, 0.5, 0.4)))
 #'   )
 #' parameters(dist)
+#'
+#' # Distribution-valued parameters (such as the inflated distribution
+#' # below) are returned as-is by default.
+#' infl_dist <- dist_inflated(dist_negative_binomial(10, 0.6), prob = 0.5)
+#' parameters(infl_dist)
+#'
+#' # With recursive = TRUE, the inflated distribution's parameters are
+#' # expanded into a flat data frame.
+#' parameters(infl_dist, recursive = TRUE)
 #' @export
 parameters <- function(x, ...) {
   UseMethod("parameters")
@@ -264,10 +321,19 @@ parameters <- function(x, ...) {
 
 #' @rdname parameters
 #' @export
-parameters.distribution <- function(x, ...) {
+parameters.distribution <- function(x, recursive = FALSE, ...) {
   x <- lapply(vec_data(x), parameters)
   x <- lapply(x, function(z) data_frame(!!!z, .name_repair = "minimal"))
-  vec_rbind(!!!x)
+  x <- vec_rbind(!!!x)
+  if (recursive) {
+    # Identify distributions
+    dist_col <- which(vapply(x, inherits, logical(1L), what = "distribution"))
+    # Recurse parameters()
+    x[dist_col] <- lapply(x[dist_col], parameters, recursive = TRUE)
+    # Flatten result
+    x <- unpack(x, dist_col)
+  }
+  new_data_frame(x)
 }
 
 #' Extract the name of the distribution family
@@ -275,8 +341,29 @@ parameters.distribution <- function(x, ...) {
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
+#' Some distributions (such as [dist_mixture()], [dist_convolved()],
+#' [dist_inflated()] and [dist_transformed()]) are defined in terms of one or
+#' more other distributions. By default, `family()` only identifies the
+#' outermost distribution. Setting `recursive = TRUE` will also identify the
+#' families of these embedded distributions, returning a nested list
+#' describing the full family tree of each distribution.
+#'
 #' @param object The distribution(s).
+#' @param recursive If `TRUE`, the families of any distributions embedded
+#' within `object` (such as the components of a [dist_mixture()], or the
+#' base distribution of a [dist_inflated()] or [dist_transformed()]) are
+#' also identified, and returned as a nested list instead of a flat
+#' character vector.
 #' @param ... Additional arguments used by methods.
+#'
+#' @return If `recursive = FALSE` (the default), a character vector giving
+#' the family name of each distribution. If `recursive = TRUE`, a list with
+#' one element per distribution: a distribution with no embedded
+#' distributions is represented by a character scalar (as before), while a
+#' distribution built from others is represented by a named list with a
+#' `family` element and one element per embedded distribution (containing
+#' its recursive `family()` result, or a list of such results if that
+#' element holds more than one embedded distribution).
 #'
 #' @examples
 #' dist <- c(
@@ -287,10 +374,23 @@ parameters.distribution <- function(x, ...) {
 #'   )
 #' family(dist)
 #'
+#' # Distributions composed of other distributions (such as the mixture
+#' # below) only identify the outer family by default.
+#' mix_dist <- dist_mixture(dist_normal(0, 1), dist_normal(5, 2),
+#'   weights = c(0.3, 0.7))
+#' family(mix_dist)
+#'
+#' # With recursive = TRUE, the families of the mixture's components are
+#' # also identified.
+#' family(mix_dist, recursive = TRUE)
+#'
 #' @importFrom stats family
 #' @export
-family.distribution <- function(object, ...) {
-  vapply(vec_data(object), family, character(1L))
+family.distribution <- function(object, recursive = FALSE, ...) {
+  if (!recursive) {
+    return(vapply(vec_data(object), family, character(1L)))
+  }
+  lapply(vec_data(object), family, recursive = TRUE)
 }
 
 #' Region of support of a distribution

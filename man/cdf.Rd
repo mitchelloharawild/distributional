@@ -21,3 +21,7 @@ cdf(x, q, ..., log = FALSE)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
+\seealso{
+\code{vignette("broadcasting", package = "distributional")} for how the
+\code{q} argument is combined with the distributions.
+}

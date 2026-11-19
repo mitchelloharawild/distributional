@@ -110,13 +110,18 @@ dist_truncated <- function(dist, lower = -Inf, upper = Inf){
 
 #' @export
 format.dist_truncated <- function(x, ...){
+  lwr_bracket <- if (is.finite(x[["lower"]])) "[" else "("
+  upr_bracket <- if (is.finite(x[["upper"]])) "]" else ")"
   sprintf(
-    "%s[%s,%s]",
+    "%s%s%s,%s%s",
     format(x[["dist"]]),
+    lwr_bracket,
     x[["lower"]],
-    x[["upper"]]
+    x[["upper"]],
+    upr_bracket
   )
 }
+
 
 #' @export
 density.dist_truncated <- function(x, at, ...){

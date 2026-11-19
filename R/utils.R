@@ -19,6 +19,28 @@ transpose_c <- function(.l) {
   set_names(result, inner_names)
 }
 
+unpack <- function(data, cols, sep = ".") {
+  cols <- if (is.numeric(cols)) names(data)[cols] else cols
+  rn <- attr(data, "row.names")
+  data <- unclass(data)
+  is_target <- logical(length(data))
+  is_target[match(cols, names(data))] <- TRUE   # one vectorized position lookup
+  data[cols] <- lapply(cols, function(col) {
+    inner <- data[[col]]
+    stopifnot(is.data.frame(inner))
+    inner <- unclass(inner)
+    names(inner) <- paste(col, names(inner), sep = sep)
+    inner
+  })
+  pieces <- vector("list", length(data))
+  pieces[!is_target] <- lapply(which(!is_target), function(j) data[j])
+  pieces[is_target]  <- data[is_target]
+  data <- do.call(c, pieces)                    # one concatenation, not one per column
+  attr(data, "row.names") <- rn
+  class(data) <- "data.frame"
+  data
+}
+
 split_matrix_rows <- function(x) {
   lapply(seq_len(nrow(x)), function(i) x[i,,drop=FALSE])
 }
@@ -42,6 +64,41 @@ arg_listable <- function(x, .ptype) {
   # Declares list arguments to be unpacked for dist_apply()
   class(x) <- c("arg_listable", class(x))
   x
+}
+
+# Values of a multivariate distribution's variates (`at`, `q`) should be given
+# as a matrix with one column for each variate. A bare vector is ambiguous about
+# whether it describes one point or several, so it is deprecated and for now
+# interpreted as a matrix with one column for each variate.
+validate_arg_dim <- function(x, value, arg) {
+  # Matrices already describe the points, lists are unpacked by dist_apply()
+  if(is.matrix(value) || is.list(value) || is_empty(value)) return(value)
+
+  # Number of variates (dim() methods for distributions return a single number)
+  d <- dim(vec_data(x)[[1L]]) %||% 1L
+  # Vectors are unambiguous for univariate distributions (they are many points)
+  if(d == 1L) return(value)
+
+  lifecycle::deprecate_soft(
+    when = "0.9.0",
+    what = I(sprintf(
+      "Using a vector for the `%s` argument of a multivariate distribution", arg
+    )),
+    with = I(sprintf(
+      "a matrix with one column for each of the %i variates (such as `%s = cbind(...)`)",
+      d, arg
+    )),
+    # The user's frame is 2 calls up: <generic>() then <generic>.distribution()
+    user_env = caller_env(2)
+  )
+
+  if(length(value) != 1L && length(value) %% d != 0L) {
+    abort(sprintf(
+      "Cannot use an input of length %i as points of a distribution with %i variates.",
+      length(value), d
+    ))
+  }
+  matrix(value, ncol = d)
 }
 
 validate_recycling <- function(x, arg) {
@@ -95,7 +152,7 @@ dist_apply <- function(x, .f, ...){
   # } else if(length(out[[1]]) > 1) {
   #   out <- suppressMessages(vctrs::vec_rbind(!!!out))
   } else if(multi_arg) {
-    if(length(dn) > 1) out <- lapply(out, `colnames<-`, dn)
+    if(length(dn) > 1) out <- lapply(out, function(x) set_matrix_dimnames(x, dn))
   } else {
     out <- vec_c(!!!out)
     out <- if(vec_is_list(out))
@@ -163,12 +220,20 @@ pkgdown_doc_link <- function(name) {
   )
 }
 
-restore_rng <- function(expr, seed = NULL) {
+restore_rng <- function(expr, seed) {
+  # The RNG may not have been used yet, in which case it should be left unused
+  had_seed <- env_has(.GlobalEnv, ".Random.seed")
   old_seed <- .GlobalEnv$.Random.seed
-  # Set new temporary seed
-  set.seed(seed)
   # Restore previous seed
-  on.exit(.GlobalEnv$.Random.seed <- old_seed)
+  on.exit(
+    if (had_seed) {
+      .GlobalEnv$.Random.seed <- old_seed
+    } else {
+      env_unbind(.GlobalEnv, ".Random.seed")
+    }
+  )
+  # Set new temporary seed
+  if (!missing(seed)) set.seed(seed)
 
   expr
 }
