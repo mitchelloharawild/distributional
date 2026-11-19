@@ -168,3 +168,62 @@ Math.dist_lognormal <- function(x, ...) {
     NextMethod()
   )
 }
+
+#' @method Ops dist_lognormal
+#' @export
+Ops.dist_lognormal <- function(e1, e2){
+  ok <- switch(.Generic, `+` = , `-` = , `*` = , `/` = TRUE, FALSE)
+  if (!ok) {
+    return(NextMethod())
+  }
+
+  # Ops  plus log-normal and missing e2
+  if(inherits(e1, "dist_lognormal") && missing(e2) && .Generic == "+" ) {
+    return(e1)
+  }
+
+  # Ops minus log-normal and missing e2
+  if(inherits(e1, "dist_lognormal") && missing(e2) && .Generic == "-" ) {
+    return(NextMethod())
+  }
+
+  # Ops multiplication between two log-normals
+  if(inherits(e1, "dist_lognormal") && inherits(e2, "dist_lognormal") && .Generic == "*" ) {
+    e1$mu <- e1$mu + e2$mu
+    e1$sigma <- sqrt(e1$sigma^2 + e2$sigma^2)
+    return(e1)
+  }
+
+  # Ops division between two log-normals
+  if(inherits(e1, "dist_lognormal") && inherits(e2, "dist_lognormal") && .Generic == "/" ) {
+    e1$mu <- e1$mu - e2$mu
+    e1$sigma <- sqrt(e1$sigma^2 + e2$sigma^2)
+    return(e1)
+  }
+
+  # Ops multiplication log-normal and scalar
+  if(inherits(e1, "dist_lognormal") && is.numeric(e2) && .Generic == "*" ) {
+    e1$mu <- e1$mu + log(e2)
+    return(e1)
+  }
+
+  # Ops division log-normal and scalar
+  if(inherits(e1, "dist_lognormal") && is.numeric(e2) && .Generic == "/" ) {
+    e1$mu <- e1$mu - log(e2)
+    return(e1)
+  }
+
+  # Ops  multiplication scalar and log-normal
+  if(is.numeric(e1) && inherits(e2, "dist_lognormal") && .Generic == "*" ) {
+    e2$mu <- log(e1) + e2$mu
+    return(e2)
+  }
+
+  # Ops division scalar and log-normal
+  if(is.numeric(e1) && inherits(e2, "dist_lognormal") && .Generic == "/" ) {
+    e2$mu <- log(e1) - e2$mu
+    return(e2)
+  }
+
+  return(NextMethod())
+}
