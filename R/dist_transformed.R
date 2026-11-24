@@ -388,6 +388,15 @@ density.dist_transformed <- function(x, at, ...){
     at <- transformed_arg(at, idx, n)
     # The support of the base distribution can be slow to compute (such as
     # for `dist_wrap()`), so it is computed once
+    if (any(slot_dims(dist) > 1L)) {
+      # The density of a multivariate distribution is transformed with the
+      # determinant of the Jacobian of the inverse, for each point (row)
+      inv_f <- function(v) suppressWarnings(inv(v))
+      jacobian <- vapply(seq_len(vec_size(at)), function(i) {
+        abs(det(as.matrix(numDeriv::jacobian(inv_f, vec_slice(at, i)))))
+      }, numeric(1L))
+      return(dist_paired(density, dist, at = inv_f(at), ...) * jacobian)
+    }
     base_sup <- support(dist)
     discrete <- support_is_lattice(base_sup)
     # Usually every distribution in the group is discrete or none is, and
@@ -446,9 +455,17 @@ transformed_inner <- function(.f, dist, tf, a, name, ..., tail = "lower", decrea
   for (d in c(1L, -1L)) {
     i <- which(dir == d)
     if (!length(i)) next
-    out[i] <- dist_paired(.f, dist[i], a[i], ..., tail = if (d == 1L) tail else swap)
-    if (d == -1L && !is.null(decreasing)) {
-      out[i] <- decreasing(dist[i], a[i], out[i], swap)
+    res <- dist_paired(.f, dist[i], vec_slice(a, i), ..., tail = if (d == 1L) tail else swap)
+    if (is.matrix(res)) {
+      # Multivariate distributions give a row for each distribution, with a
+      # column for each variate
+      if (!is.matrix(out)) out <- matrix(out, nrow = length(out), ncol = ncol(res))
+      out[i, ] <- res
+    } else {
+      out[i] <- res
+      if (d == -1L && !is.null(decreasing)) {
+        out[i] <- decreasing(dist[i], a[i], out[i], swap)
+      }
     }
   }
   out
@@ -489,6 +506,9 @@ cdf.dist_transformed <- function(x, q, ..., tail = "lower"){
       tail = tail, decreasing = transformed_cdf_mass,
       nonmonotonic = function(i) transformed_enumerate(dist[i], tf, q[i], tail)
     )
+
+    # The support of a multivariate distribution has a limit for each variate
+    if (any(slot_dims(dist) > 1L)) return(p)
 
     # TODO: Rework for support of closed limits and prevent computation
     sup <- transformed_support(dist, tf, inv)

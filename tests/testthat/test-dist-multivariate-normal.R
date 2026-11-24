@@ -117,3 +117,16 @@ test_that("moments of mixed univariate and multivariate vectors are not padded",
   expect_equal(variance(x)[[2]], 1)
   expect_equal(quantile(x, .5), list(matrix(1:3, 1), 0))
 })
+
+test_that("identity transformations of multivariate normals match the base", {
+  m <- dist_multivariate_normal(list(1:3), list(diag(3)))
+  t <- dist_transformed(m, identity, identity)
+  at <- matrix(1:3, 1)
+
+  expect_no_warning(q <- quantile(t, .5))
+  expect_equal(q, quantile(m, .5))
+  expect_equal(median(t), median(m))
+  expect_equal(cdf(t, at), cdf(m, at))
+  expect_equal(density(t, at), density(m, at))
+  expect_equal(quantile(t, c(.25, .75)), quantile(m, c(.25, .75)))
+})
