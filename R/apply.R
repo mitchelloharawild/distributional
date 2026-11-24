@@ -86,7 +86,9 @@ apply_slots <- function(x, .f, args, pos = NULL, .ptype = NULL) {
       (is.null(pos) || vec_size(args[[pos]]) %in% c(1L, vec_size(x)))) {
     idx <- as.vector(vecvec:::vv_index(x))
     if (!anyNA(idx)) {
-      return(inject(.f(vec_slice(x@x[[1L]], idx), !!!args)))
+      slot <- x@x[[1L]]
+      if (!identical(idx, seq_len(vec_size(slot)))) slot <- vec_slice(slot, idx)
+      return(inject(.f(slot, !!!args)))
     }
   }
   .l <- if (is.null(pos)) list(x) else list(x, args[[pos]])
@@ -185,9 +187,28 @@ validate_arg_dim <- function(x, value, arg) {
 # a vector mixing numbers of variates is an error. Missing distributions have
 # no variates, so they are ignored.
 # The number of variates of each storage slot (missing distributions ignored).
+# Parametric families that are always univariate. Their dimension is known
+# without drawing a random value (the default `dim()` method generates one).
+univariate_dist_classes <- c(
+  "dist_bernoulli", "dist_beta", "dist_binomial", "dist_burr", "dist_cauchy",
+  "dist_chisq", "dist_degenerate", "dist_exponential", "dist_f", "dist_gamma",
+  "dist_geometric", "dist_gev", "dist_gh", "dist_gk", "dist_gpd",
+  "dist_gumbel", "dist_horseshoe", "dist_hypergeometric",
+  "dist_inverse_exponential", "dist_inverse_gamma", "dist_inverse_gaussian",
+  "dist_laplace", "dist_logarithmic", "dist_logistic", "dist_lognormal",
+  "dist_negative_binomial", "dist_normal", "dist_pareto", "dist_poisson",
+  "dist_poisson_inverse_gaussian", "dist_student_t", "dist_studentized_range",
+  "dist_tweedie", "dist_uniform", "dist_weibull"
+)
+
 slot_dims <- function(x) {
   slots <- Filter(function(s) !inherits(s, "dist_na"), x@x)
-  vapply(slots, function(s) as.integer(dim(s[1L]) %||% 1L), integer(1L))
+  vapply(slots, function(s) {
+    if (inherits(s, univariate_dist_classes)) return(1L)
+    # only the first element is needed (and slicing a length 1 slot is wasteful)
+    if (vec_size(s) > 1L) s <- vec_slice(s, 1L)
+    as.integer(dim(s) %||% 1L)
+  }, integer(1L))
 }
 
 n_variates <- function(x, arg) {
