@@ -109,3 +109,11 @@ test_that("quantiles of mixed univariate and multivariate vectors are not padded
   expect_equal(dim(q[[1]]), c(2L, 3L))
   expect_equal(q[[2]], quantile(x[2], c(.25, .75))[[1]])
 })
+
+test_that("moments of mixed univariate and multivariate vectors are not padded", {
+  x <- c(dist_multivariate_normal(list(1:3), list(diag(3))), dist_normal())
+  expect_equal(median(x), list(matrix(1:3, 1), 0))
+  expect_equal(mean(x), list(matrix(1:3, 1), 0))
+  expect_equal(variance(x)[[2]], 1)
+  expect_equal(quantile(x, .5), list(matrix(1:3, 1), 0))
+})

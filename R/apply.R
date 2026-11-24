@@ -56,9 +56,8 @@ broadcast_dist <- function(x, .f, ..., .ptype){
     n <- length(x)
     if (n == 0L) return(list())
     m <- vec_size(arg)
-    # Results of different dimension can't share one matrix (the narrower
-    # ones would be padded), so each distribution is evaluated separately.
     if (length(unique(slot_dims(x))) > 1L) {
+      # Results of different dimension are listed, one element per distribution
       out <- lapply(seq_len(n), function(i) {
         apply_slots(x[rep(i, m)], .f, args, 1L, .ptype)
       })
@@ -85,6 +84,20 @@ apply_slots <- function(x, .f, args, pos = NULL, .ptype = NULL) {
     inject(.f(vals, !!!args))
   })
   if (!length(out@x) && !is.null(.ptype)) return(vec_init(.ptype, length(x)))
+  # Results with different numbers of columns can't share one matrix (the
+  # narrower ones would be padded), so each distribution is evaluated
+  # separately and the results are listed.
+  widths <- vapply(out@x, function(s) {
+    if (is.matrix(s) || is.data.frame(s)) ncol(s) else 1L
+  }, integer(1L))
+  if (length(unique(widths)) > 1L) {
+    n <- vec_size(x)
+    return(lapply(seq_len(n), function(i) {
+      a <- args
+      if (!is.null(pos) && vec_size(a[[pos]]) == n) a[[pos]] <- vec_slice(a[[pos]], i)
+      apply_slots(x[i], .f, a, pos, .ptype)
+    }))
+  }
   vecvec::unvecvec(out)
 }
 
