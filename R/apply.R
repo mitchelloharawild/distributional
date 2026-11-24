@@ -78,6 +78,17 @@ broadcast_dist <- function(x, .f, ..., .ptype){
 # is nothing to compute (`x` is empty or all missing), the result is
 # `vec_init(.ptype, length(x))`.
 apply_slots <- function(x, .f, args, pos = NULL, .ptype = NULL) {
+  # Fast path: a vector stored in a single slot (the common case) has nothing
+  # to group or align, so slice the slot and call `.f` on it directly. This
+  # avoids building and unpacking an intermediate vecvec, which dominates the
+  # cost of calls on short vectors.
+  if (length(x@x) == 1L &&
+      (is.null(pos) || vec_size(args[[pos]]) %in% c(1L, vec_size(x)))) {
+    idx <- as.vector(vecvec:::vv_index(x))
+    if (!anyNA(idx)) {
+      return(inject(.f(vec_slice(x@x[[1L]], idx), !!!args)))
+    }
+  }
   .l <- if (is.null(pos)) list(x) else list(x, args[[pos]])
   out <- vecvec::vecvec_mapply(.l, function(vals, a) {
     if (!missing(a)) args[[pos]] <- a
