@@ -101,3 +101,11 @@ test_that("Multivariate normal distributions can differ in dimensionality", {
   expect_equal(vapply(generate(dist, c(2, 5)), ncol, 1L), c(2L, 3L))
   expect_equal(vec_size(support(dist)), 2L)
 })
+
+test_that("quantiles of mixed univariate and multivariate vectors are not padded", {
+  x <- c(dist_multivariate_normal(list(1:3), list(diag(3))), dist_normal())
+  q <- quantile(x, c(.25, .75))
+  expect_length(q, 2L)
+  expect_equal(dim(q[[1]]), c(2L, 3L))
+  expect_equal(q[[2]], quantile(x[2], c(.25, .75))[[1]])
+})

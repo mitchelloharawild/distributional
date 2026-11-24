@@ -56,6 +56,14 @@ broadcast_dist <- function(x, .f, ..., .ptype){
     n <- length(x)
     if (n == 0L) return(list())
     m <- vec_size(arg)
+    # Results of different dimension can't share one matrix (the narrower
+    # ones would be padded), so each distribution is evaluated separately.
+    if (length(unique(slot_dims(x))) > 1L) {
+      out <- lapply(seq_len(n), function(i) {
+        apply_slots(x[rep(i, m)], .f, args, 1L, .ptype)
+      })
+      return(set_variate_names(out, dn))
+    }
     args[[1L]] <- vec_rep(arg, n)
     out <- apply_slots(x[rep(seq_len(n), each = m)], .f, args, 1L, .ptype)
     return(set_variate_names(vec_chop(out, sizes = rep(m, n)), dn))
@@ -152,10 +160,15 @@ validate_arg_dim <- function(x, value, arg) {
 # Points can only describe distributions with the same number of variates, so
 # a vector mixing numbers of variates is an error. Missing distributions have
 # no variates, so they are ignored.
-n_variates <- function(x, arg) {
+# The number of variates of each storage slot (missing distributions ignored).
+slot_dims <- function(x) {
   slots <- Filter(function(s) !inherits(s, "dist_na"), x@x)
+  vapply(slots, function(s) as.integer(dim(s[1L]) %||% 1L), integer(1L))
+}
+
+n_variates <- function(x, arg) {
   # dim() methods for distributions return a single number
-  d <- unique(vapply(slots, function(s) as.integer(dim(s[1L]) %||% 1L), integer(1L)))
+  d <- unique(slot_dims(x))
   if(length(d) > 1L) {
     abort(sprintf(
       "Can't use `%s` with distributions that have different numbers of variates (%s).",
