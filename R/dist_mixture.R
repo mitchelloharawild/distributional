@@ -231,13 +231,28 @@ mixture_parts <- function(x) {
   comps <- field(x, "dist")
   w <- field(x, "w")
   list(
-    flat = vec_c(!!!comps),
+    flat = mixture_flatten(comps),
     w = unlist(w, use.names = FALSE),
     idx = rep(seq_along(w), lengths(w)),
     n = length(w),
     comps = comps,
     w_list = w
   )
+}
+
+# Combine the components of every mixture into one vector. Broadcasting repeats
+# a mixture's components as the same object, and `vec_c()` is costly for each
+# vector combined, so each run of repeated components is combined only once.
+mixture_flatten <- function(comps) {
+  n <- length(comps)
+  if (n < 2L) return(vec_c(!!!comps))
+  new_run <- c(TRUE, !vapply(2:n, function(i) identical(comps[[i]], comps[[i - 1L]]), logical(1L)))
+  if (all(new_run)) return(vec_c(!!!comps))
+  run <- cumsum(new_run)
+  sizes <- lengths(comps[new_run])
+  starts <- cumsum(c(0L, sizes))[-(length(sizes) + 1L)]
+  flat <- vec_c(!!!comps[new_run])
+  vec_slice(flat, unlist(lapply(run, function(r) starts[r] + seq_len(sizes[r])), use.names = FALSE))
 }
 
 # Repeat the broadcast argument (size `n` or 1) for each of the components
