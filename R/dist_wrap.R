@@ -14,7 +14,8 @@
 #'
 #' @param dist The name of the distribution used in the functions (name that is
 #' prefixed by p/d/q/r)
-#' @param ... Named arguments used to parameterise the distribution.
+#' @param ... Arguments used to parameterise the distribution. Unnamed arguments
+#' are passed to the p/d/q/r functions by position.
 #' @param package The package from which the distribution is provided. If NULL,
 #' the calling environment's search path is used to find the distribution
 #' functions. Alternatively, an arbitrary environment can also be provided here.
@@ -53,7 +54,17 @@ dist_wrap <- function(dist, ..., package = NULL){
     env <- as.environment(package)
   }
   par <- vec_recycle_common(dist = dist, env = list(env), ...)
+  # Record fields must be named, so name unnamed (positional) arguments by order
+  unnamed <- which(names(par) == "")
+  names(par)[unnamed] <- paste0(".arg", seq_along(unnamed))
   new_dist(!!!par, class = "dist_wrap")
+}
+
+# The wrapped distribution's parameters, as arguments for the p/d/q/r functions
+dist_wrap_args <- function(x){
+  par <- dist_fields_except(x, c("dist", "env"))
+  names(par)[grepl("^\\.arg[0-9]+$", names(par))] <- ""
+  par
 }
 
 # Elements wrapping the same functions (same distribution name and environment)
@@ -76,7 +87,7 @@ dist_wrap_groups <- function(x, prefix){
 # `call` is given the function, the group's first argument and its parameters.
 dist_wrap_apply <- function(x, prefix, arg, call){
   n <- vec_size(x)
-  par <- dist_fields_except(x, c("dist", "env"))
+  par <- dist_wrap_args(x)
   per_dist <- vec_size(arg) != 1L
   out <- vector("list", n)
   for (g in dist_wrap_groups(x, prefix)) {
@@ -145,7 +156,7 @@ quantile.dist_wrap <- function(x, p, ..., tail = "lower"){
 
 #' @export
 generate.dist_wrap <- function(x, times, ...){
-  par <- dist_fields_except(x, c("dist", "env"))
+  par <- dist_wrap_args(x)
   out <- vector("list", vec_size(x))
   for (g in dist_wrap_groups(x, "r")) {
     idx <- g$idx

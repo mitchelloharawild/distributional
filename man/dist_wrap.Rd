@@ -10,7 +10,8 @@ dist_wrap(dist, ..., package = NULL)
 \item{dist}{The name of the distribution used in the functions (name that is
 prefixed by p/d/q/r)}
 
-\item{...}{Named arguments used to parameterise the distribution.}
+\item{...}{Arguments used to parameterise the distribution. Unnamed arguments
+are passed to the p/d/q/r functions by position.}
 
 \item{package}{The package from which the distribution is provided. If NULL,
 the calling environment's search path is used to find the distribution

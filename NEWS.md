@@ -18,6 +18,8 @@
 * Arithmetic on an empty distribution vector now gives an empty distribution
   vector, such as `dist_normal(1:2)[0] + 1`.
 * `as.character()` now works for distributions, and returns `format()`.
+* `as.list()` now gives a list with one distribution for each element, so
+  `lapply()` and similar functions also apply to each distribution.
 * The ordering operators `<`, `<=`, `>` and `>=` between a distribution and a
   number, or between two (independent) distributions, now give a Bernoulli
   distribution of the probability that the comparison is true (#16). For

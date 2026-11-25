@@ -54,3 +54,26 @@ test_that("dist_wrap() has a numeric support, so mean() and variance() work", {
   expect_equal(variance(d), c(1, 4, 9), tolerance = 1e-6)
   expect_equal(mean(dist_wrap("norm")), 0, tolerance = 1e-6)
 })
+
+test_that("dist_wrap() passes unnamed arguments by position", {
+  x <- dist_wrap("norm", 1:2, 3)
+  expect_equal(format(x), c("norm(1, 3)", "norm(2, 3)"))
+  expect_equal(density(x, 0.5), dnorm(0.5, 1:2, 3))
+  expect_equal(cdf(x, 2, tail = "upper"), pnorm(2, 1:2, 3, lower.tail = FALSE))
+  expect_equal(quantile(x, 0.3), qnorm(0.3, 1:2, 3))
+  expect_equal(lengths(generate(x, 4)), c(4, 4))
+
+  # mixed with named arguments, and combined with other wrapped distributions
+  expect_equal(density(dist_wrap("norm", sd = 3, 1), 0), dnorm(0, 1, 3))
+  x <- c(dist_wrap("norm", 1, 2), dist_wrap("norm", mean = 3, sd = 4), dist_wrap("exp", 2))
+  expect_equal(density(x, 0.5), c(dnorm(0.5, 1, 2), dnorm(0.5, 3, 4), dexp(0.5, 2)))
+})
+
+test_that("as.list() gives individual distributions", {
+  x <- c(dist_normal(1:2), dist_missing(), dist_poisson(3))
+  out <- as.list(x)
+  expect_length(out, 4)
+  expect_true(all(vapply(out, is_distribution, logical(1L))))
+  expect_equal(vapply(x, mean, numeric(1L)), mean(x))
+  expect_identical(as.list(x[0]), list())
+})

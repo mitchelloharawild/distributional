@@ -962,6 +962,10 @@ has_symmetry.distribution <- function(x, ...) {
   apply_dist(x, has_symmetry, ..., .ptype = logical())
 }
 
+# One distribution per element, which is also used by lapply() and vapply()
+#' @export
+as.list.distribution <- function(x, ...) lapply(seq_along(x), function(i) x[i])
+
 #' @export
 as.character.distribution <- function(x, ...) format(x, ...)
 
