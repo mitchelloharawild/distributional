@@ -51,7 +51,7 @@ Imports:
     lifecycle,
     pillar,
     S7,
-    vecvec (>= 1.5.0)
+    vecvec (>= 2.0.0)
 Suggests: 
     testthat (>= 2.1.0),
     covr,

@@ -8,6 +8,7 @@
   `format()`, moments, `support()`, arithmetic, and so on) handles all
   distributions of a family in one call rather than looping over them one at a
   time. This makes working with long vectors of distributions much faster.
+  This requires vecvec (>= 2.0.0).
 * Arithmetic and mathematical functions on distributions (such as `x + 1`,
   `x * y` and `exp(x)`) are computed once for each family rather than once for
   each distribution.
@@ -67,7 +68,7 @@
   matrix with the wrong number of columns or points for distributions with
   different numbers of variates.
 * The class of a distribution is now an S7 class, so `class(x)` is
-  `c("distributional::distribution", "distribution", "vecvec::vecvec", "double", "S7_object")`.
+  `c("distributional::distribution", "distribution", "vecvec::vecvec", "S7_object")`.
   `inherits(x, "distribution")` and `is_distribution()` still work, but code
   that compares the whole class vector should be checked.
 * `vctrs::vec_data()` and `unclass()` no longer give a list with one object for
