@@ -3,7 +3,7 @@ url: https://pkg.mitchelloharawild.com/distributional
 template:
   opengraph:
     image:
-      src: pkgdown/social-card.png
+      src: social-card.png
       alt: "The distributional hex sticker"
     twitter:
       creator: "@mitchoharawild"
