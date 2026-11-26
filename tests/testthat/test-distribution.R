@@ -293,3 +293,43 @@ test_that("a missing operand gives a missing result in either order", {
   expect_equal(is.na(dist_normal(1) + dist_missing(2)), c(TRUE, TRUE))
   expect_equal(is.na(exp(x) + m), c(TRUE, TRUE))
 })
+
+test_that("variates() of distributions from mixed families", {
+  x <- c(a = dist_normal(1:2), b = dist_student_t(5), c = dist_normal(3))
+  x <- c(x, NA, dist_missing(1))
+  expect_null(variates(x))
+
+  y <- x
+  variates(y) <- "value"
+  expect_identical(variates(y), "value")
+  expect_identical(variates(y[2:3]), "value")
+  expect_identical(format(y), format(x))
+  expect_identical(mean(y), mean(x))
+  expect_identical(is.na(y), is.na(x))
+
+  variates(y) <- NULL
+  expect_null(variates(y))
+  expect_equal(y, x)
+
+  # Combining differently named distributions
+  a <- dist_normal(1)
+  b <- dist_normal(2)
+  variates(a) <- "a"
+  variates(b) <- "b"
+  z <- c(b, dist_poisson(3), a)
+  expect_null(variates(z))
+  variates(z) <- "value"
+  expect_identical(variates(z), "value")
+  expect_length(z@x, 2L)
+  expect_equal(mean(z), c(2, 3, 1))
+})
+
+test_that("variate names of mixed families name multivariate results", {
+  x <- c(
+    dist_multivariate_normal(list(c(1, 2)), list(diag(2))),
+    dist_multinomial(4, list(c(0.5, 0.5)))
+  )
+  variates(x) <- c("a", "b")
+  expect_identical(variates(x), c("a", "b"))
+  expect_identical(colnames(mean(x)), c("a", "b"))
+})

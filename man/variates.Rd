@@ -12,8 +12,20 @@ variates(x) <- value
 \arguments{
 \item{x}{The distribution(s).}
 
-\item{value}{A character vector of variate names.}
+\item{value}{A character vector of variate names, or \code{NULL} to remove them.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\details{
+Variate names are set for every distribution in \code{x}, whatever its family.
+\code{variates()} gives \code{NULL} if the distributions don't all have the same
+names, such as after combining named and unnamed distributions of different
+families, or if \code{x} is empty or only contains \code{NA}.
+}
+\examples{
+dist <- c(dist_normal(), dist_student_t(df = 5))
+variates(dist) <- "value"
+variates(dist)
+
 }

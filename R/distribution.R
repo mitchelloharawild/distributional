@@ -189,32 +189,38 @@ format.pillar_distribution <- function(x, width, ...) {
 # ------------------------------------------------------------------------
 # vecvec uses dim()/dimnames() for array shape, so the pre-migration meaning
 # (names of a multivariate distribution's variates) moves to variates().
-# `dimnames()`/`dimnames<-()` on a distribution become a deprecated shim,
-# supported only while the vector has a single family slot. See
-# `_dev/vecvec.md` #4.
+# `dimnames()`/`dimnames<-()` on a distribution become a deprecated shim.
+# The names are stored on every family slot. See `_dev/vecvec.md` #4.
 
 #' Names of a multivariate distribution's variates
 #'
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
+#' @details
+#' Variate names are set for every distribution in `x`, whatever its family.
+#' `variates()` gives `NULL` if the distributions don't all have the same
+#' names, such as after combining named and unnamed distributions of different
+#' families, or if `x` is empty or only contains `NA`.
+#'
 #' @param x The distribution(s).
-#' @param value A character vector of variate names.
+#' @param value A character vector of variate names, or `NULL` to remove them.
+#'
+#' @examples
+#' dist <- c(dist_normal(), dist_student_t(df = 5))
+#' variates(dist) <- "value"
+#' variates(dist)
 #'
 #' @export
 variates <- function(x) {
-  # Variate names live on the (sole) family slot; a mixed-family vector has
-  # no single place to store them, so it simply has none.
-  if (length(x@x) != 1L) return(NULL)
-  attr(x@x[[1L]], "vars")
+  vars <- unique(lapply(x@x, attr, "vars"))
+  if (length(vars) == 1L) vars[[1L]]
 }
 #' @rdname variates
 #' @export
 `variates<-` <- function(x, value) {
-  if (length(x@x) > 1L) {
-    abort("`variates<-()` currently only supports distributions with a single family.")
-  }
-  if (length(x@x) == 1L) attr(x@x[[1L]], "vars") <- value
+  # Replacing the slots also combines those which now only differ by name
+  x@x <- lapply(x@x, `attr<-`, "vars", value)
   x
 }
 

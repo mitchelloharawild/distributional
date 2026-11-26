@@ -74,7 +74,8 @@
 * `vctrs::vec_data()` and `unclass()` no longer give a list with one object for
   each distribution. Use `as.list()` to get the distributions individually.
 * `dimnames()` and `dimnames<-()` for distributions are deprecated in favour of
-  `variates()` and `variates<-()`.
+  `variates()` and `variates<-()`. Names are set for every distribution in a
+  vector, including those from different families.
 * `parameters()` now returns one row for every distribution, with `NA` in the
   rows of missing distributions and in the columns of other families.
   Previously it errored when the vector contained a missing distribution.
