@@ -36,6 +36,18 @@ test_that("Hypergeometric distribution", {
     kurtosis(dist_hypergeometric(c(10, 100, 2), c(15, 1, 2), c(7, 10, 2))),
     c(pmf_kurtosis(10, 15, 7), pmf_kurtosis(100, 1, 10), pmf_kurtosis(2, 2, 2))
   )
+
+  # fewer than four items, where the general formula is 0/0
+  expect_equal(
+    kurtosis(dist_hypergeometric(c(1, 1, 2), c(1, 2, 1), c(1, 1, 2))),
+    c(pmf_kurtosis(1, 1, 1), pmf_kurtosis(1, 2, 1), pmf_kurtosis(2, 1, 2))
+  )
+
+  # undefined for point masses
+  expect_identical(
+    kurtosis(dist_hypergeometric(c(0, 5, 5, 5, 1), c(5, 0, 5, 5, 0), c(2, 2, 0, 10, 1))),
+    rep(NaN, 5)
+  )
 })
 
 test_that("Hypergeometric methods are vectorised over distributions", {

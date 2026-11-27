@@ -175,12 +175,19 @@ skewness.dist_hypergeometric <- function(x, ...) {
 
 #' @export
 kurtosis.dist_hypergeometric <- function(x, ...) {
-  N <- as.double(x[["n"]] + x[["m"]])
   K <- as.double(x[["m"]])
+  N <- K + as.double(x[["n"]])
   n <- as.double(x[["k"]])
+  d <- n * K * (N - K) * (N - n)
 
   a <- (N - 1) * N^2 * (N * (N + 1) - 6 * K * (N - K) - 6 * n * (N - n)) +
-    6 * n * K * (N - K) * (N - n) * (5 * N - 6)
-  b <- n * K * (N - K) * (N - n) * (N - 2) * (N - 3)
-  a / b
+    6 * d * (5 * N - 6)
+  out <- a / (d * (N - 2) * (N - 3))
+
+  # 0/0 when N < 4, where the distribution takes only two values
+  small <- which(N < 4)
+  out[small] <- (N^2 * (N - 1) / d)[small] - 6
+  # undefined for a point mass
+  out[which(d == 0)] <- NaN
+  out
 }

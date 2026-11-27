@@ -168,6 +168,10 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   a step function, which `uniroot()` inverted to an arbitrary point of the
   flat step. For an equal weight quantile mixture of `dist_poisson(3)` and
   `dist_poisson(5)`, `cdf(x, 3)` is now 0.423, where it was 0.375.
+* `kurtosis()` of `dist_hypergeometric()` now gives the excess kurtosis, which
+  was missing the numerator of its formula. For example,
+  `kurtosis(dist_hypergeometric(100, 1, 10))` is now 5.21, where it was
+  1.13e-09. It is `NaN` for point masses, such as when `k = 0`.
 
 ## Other changes
 
