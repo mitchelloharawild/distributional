@@ -199,7 +199,15 @@ covariance.dist_chisq <- function(x, ...){
 }
 
 #' @export
-skewness.dist_chisq <- function(x, ...) sqrt(8 / x[["df"]])
+skewness.dist_chisq <- function(x, ...) {
+  df <- x[["df"]]
+  ncp <- x[["ncp"]]
+  2 * sqrt(2) * (df + 3 * ncp) / (df + 2 * ncp)^1.5
+}
 
 #' @export
-kurtosis.dist_chisq <- function(x, ...) 12 / x[["df"]]
+kurtosis.dist_chisq <- function(x, ...) {
+  df <- x[["df"]]
+  ncp <- x[["ncp"]]
+  12 * (df + 4 * ncp) / (df + 2 * ncp)^2
+}

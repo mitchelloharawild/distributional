@@ -23,6 +23,15 @@ test_that("Chisq distribution", {
   expect_equal(variance(dist), 2*9)
 })
 
+test_that("Non-central Chisq skewness and kurtosis use ncp", {
+  dist <- dist_chisq(c(5, 5), ncp = c(0, 2))
+  mu <- function(k, ncp) {
+    integrate(function(x) (x - 5 - ncp)^k * stats::dchisq(x, 5, ncp), 0, Inf)$value
+  }
+  expect_equal(skewness(dist), c(sqrt(8 / 5), mu(3, 2) / mu(2, 2)^1.5), tolerance = 1e-6)
+  expect_equal(kurtosis(dist), c(12 / 5, mu(4, 2) / mu(2, 2)^2 - 3), tolerance = 1e-6)
+})
+
 test_that("Chisq distribution is vectorised over distributions", {
   dist <- dist_chisq(c(1, 3, 5))
   n <- vctrs::vec_size(dist)

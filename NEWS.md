@@ -172,6 +172,9 @@ update their methods. `new_dist()` keeps its signature, and see `?new_dist`,
   was missing the numerator of its formula. For example,
   `kurtosis(dist_hypergeometric(100, 1, 10))` is now 5.21, where it was
   1.13e-09. It is `NaN` for point masses, such as when `k = 0`.
+* `skewness()` and `kurtosis()` of `dist_chisq()` now use `ncp`, as in the
+  documented formulas. `skewness(dist_chisq(5, ncp = 2))` is now 1.15, where
+  it was the central value 1.26.
 
 ## Other changes
 
