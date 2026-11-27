@@ -22,6 +22,20 @@ test_that("Hypergeometric distribution", {
   p <- 500/(500+50)
   expect_equal(mean(dist), 100*p)
   expect_equal(variance(dist), 100*p*(1-p)*(500+50-100)/(500+50-1))
+
+  # kurtosis against exact fourth central moment from stats::dhyper
+  pmf_kurtosis <- function(m, n, k) {
+    xs <- max(0L, k - n):min(k, m)
+    ps <- stats::dhyper(xs, m, n, k)
+    mu <- sum(xs * ps)
+    v <- sum((xs - mu)^2 * ps)
+    sum(((xs - mu) / sqrt(v))^4 * ps) - 3
+  }
+  expect_equal(kurtosis(dist), pmf_kurtosis(500, 50, 100))
+  expect_equal(
+    kurtosis(dist_hypergeometric(c(10, 100, 2), c(15, 1, 2), c(7, 10, 2))),
+    c(pmf_kurtosis(10, 15, 7), pmf_kurtosis(100, 1, 10), pmf_kurtosis(2, 2, 2))
+  )
 })
 
 test_that("Hypergeometric methods are vectorised over distributions", {

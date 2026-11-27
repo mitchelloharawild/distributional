@@ -179,5 +179,8 @@ kurtosis.dist_hypergeometric <- function(x, ...) {
   K <- as.double(x[["m"]])
   n <- as.double(x[["k"]])
 
-  1 / (n * K * (N - K) * (N - n) * (N - 2) * (N - 3))
+  a <- (N - 1) * N^2 * (N * (N + 1) - 6 * K * (N - K) - 6 * n * (N - n)) +
+    6 * n * K * (N - K) * (N - n) * (5 * N - 6)
+  b <- n * K * (N - K) * (N - n) * (N - 2) * (N - 3)
+  a / b
 }
